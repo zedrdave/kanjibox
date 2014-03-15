@@ -1,0 +1,574 @@
+/* Common */
+#session_frame
+{
+	padding-top: 15px;
+}
+
+.question
+{
+	margin-top: 0px;
+	margin-left: 5px;
+	margin-right: 5px;
+	margin-bottom: 30px;
+	text-align: center;
+}
+
+#end_of_wave_wait
+{
+	text-align: center;
+}
+
+#kb #end_of_wave_wait p
+{
+	text-align: center;
+	font-size: 20px;
+	font-weight: bold;
+	color: #444;
+	font-style: italic;
+}
+
+#kb .question .hint
+{
+	margin: 5px;
+	padding: 5px;
+	font-weight: bold;
+	font-size: 20px;
+	color: #444;
+	text-align: center;
+	clear: both;
+}
+
+#kb .japanese
+{
+	font-family: 'メイリオ', Meiryo, 'ヒラギノ角ゴ Pro W3', 'Hiragino Kaku Gothic Pro',  'MS Mincho', 'ＭＳ Ｐゴシック', sans-serif;
+	font-weight: normal;
+	text-decoration: none;
+}
+
+#kb .question
+{
+    margin-top: 0;
+}
+
+/* Japanese drill/quiz */
+
+.choices
+{
+	margin-top: 15px;
+	margin-bottom: 15px;
+	margin-left: auto;
+	margin-right: auto;
+	cursor: pointer;
+	
+}
+
+.choices .choice:hover
+{
+	color: white;
+	background-color: black;
+}
+
+.choices .choice:active
+{
+	color: black;
+	background-color: #03B;
+}
+
+.choices .choice
+{
+	border: 2px solid black;
+
+	text-align: center;
+	color: black;
+	background-color: white;
+
+	display: block;
+	float: left;
+	margin: 5px;
+}
+
+.choices a, .choices a:link, .choices a:hover
+{
+	text-decoration: none;
+	color: inherit;
+}
+
+#kb .question .choices .skip
+{
+	font-family: 'Palatino';
+	font-weight: bold;
+
+	font-size: 53px;
+	line-height: 53px;
+	padding: 7px 5px 3px 5px;
+	width: 53px;
+	height: 53px;
+}
+
+
+/* Kanji */
+
+.question_kanji .choices
+{
+	margin-top: 15px;
+	margin-bottom: 15px;
+	margin-left: auto;
+	margin-right: auto;
+	width: 386px;
+}
+
+#kb .question_kanji .choices .choice
+{
+	font-size: 40px;
+	width: 55px;
+	height: 55px;
+	padding: 4px;
+}
+
+#kb .question_kanji .choices .skip
+{
+	font-size: 48px;
+	padding-top: 6px;
+	padding-bottom: 2px;
+}
+
+/* Vocab */
+
+#kb .question_vocab .choices .choice, #kb .question_text .choices .choice
+{
+	font-size: 25px;
+	padding: 3px 6px 3px 6px; 
+	width: 140px;
+	min-height: 58px;
+}
+
+#kb .question_vocab .choices .skip, #kb .question_text .choices .skip
+{
+	width: 58px;
+	height: 58px;
+	font-size: 45px;
+	padding: 5px 6px 1px 6px; 
+}
+
+#kb .choices .furigana
+{
+	font-size: 50%;
+}
+
+/* Reading */
+
+
+#kb .question_reading .hint .japanese
+{
+	font-size: 40px;
+}
+
+#kb .question_kanji .hint .japanese
+{
+/*    font-family: 'ヒラギノ丸ゴシック Pro W3', 'Hiragino Maru Pro',  'MS Mincho', 'ＭＳ Ｐゴシック', serif;*/
+	font-size: 25px;
+	margin-bottom: 10px;
+}
+
+#kb .question_reading .choices .choice
+{
+	font-size: 20px;
+	width: 150px;
+	min-height: 40px;
+	padding-top: 10px;
+	padding-bottom: 0px;
+	padding-left: 3px;
+	padding-right: 3px;
+	
+}
+
+#kb .question_reading .choices .skip
+{
+	width: 50px;
+	height: 50px;
+	font-size: 45px;
+	padding-top: 0px;
+	padding-bottom: 0px;
+	padding-left: auto;
+	padding-right: auto;
+}
+
+/* Kana */
+
+.question_kana .choices
+{
+	width: 510px;
+}
+
+#kb .question_kana .choices .choice
+{
+	font-size: 40px;
+	width: 80px;
+	height: 55px;
+	padding: 4px;
+}
+
+
+/*** Solution ***/
+
+
+#kb .solution 
+{
+	padding: 15px 10px 25px 10px;
+	border-top-width: 2px;
+	border-top-style: solid;
+	border-bottom-width: 2px;
+	border-bottom-style: solid;
+	font-size: 20px;
+	font-weight: bold;
+	margin-bottom: 5px;
+}
+
+.solution:hover
+{
+	background-color: #EEE;
+}
+
+#kb .solution .main
+{
+	font-size: 140%;
+	font-weight: normal;
+}
+
+#kb .solution .secondary
+{
+	font-size: 100%;
+	font-style: italic;
+}
+
+#kb .solution span.main_reading
+{
+	font-weight: bold;
+}
+
+#kb .solution span.comment
+{
+	color: #888;
+	font-style: italic;
+	font-weight: normal;
+}
+
+#kb .solution span.wrong
+{
+	text-decoration: line-through;
+	color: #F77;
+}
+
+#kb .solution span.hilite
+{
+    font-weight: bold;
+    color: #333;
+/*    text-decoration: underline;*/
+}
+
+.correct 
+{
+	background-color: #CFB;
+	color: #0A0;
+	border-top-color: #0A0;
+	border-bottom-color: #0A0;
+}
+
+div.wrong 
+{
+	background-color: #FCC;
+	color: #F00;
+	border-top-color: #F00;
+	border-bottom-color: #F00;
+}
+
+.skipped
+{
+	background-color: #FC0;
+	color: #F30;
+	border-top-color: #F30;
+	border-bottom-color: #F30;
+}
+
+#kb .solution .example_str {
+    margin-top: 10px;
+}
+
+
+#kb .info
+{
+	color: #111;
+	font-size: 12px;
+}
+
+.kanji_detail
+{
+	color: #24C;
+}
+
+.correct .kanji_detail
+{
+	border: 1px solid #CFB;
+}
+
+div.wrong .kanji_detail
+{
+	border: 1px solid #FCC;
+}
+
+.skipped .kanji_detail
+{
+	border: 1px solid #FC0;
+}
+
+.kanji_detail:hover
+{
+	border: 1px dashed black;
+	background-color: white;
+	color: #00F;
+	cursor:pointer;
+}
+
+span.meaning
+{
+	font-style: italic;
+}
+
+/* dialog */
+
+.zoom
+{
+	font-size: 70px;
+	margin-left: 5px;
+	margin-right: 10px;
+	margin-bottom: 10px;
+	float: left;
+}
+
+.details
+{
+	float: left;
+	margin: 5px;
+	font-size: 15px;
+	clear: right;
+	width: 300px;
+	text-align: left;
+}
+
+/* quiz elements */
+
+#quiz-header
+{
+	margin-bottom: 0px;
+}
+
+#quiz_footer
+{
+	margin-top: 10px;
+}
+
+#kb #score
+{
+	color: #000;
+	font-size: 40px;
+	font-weight: bold;
+	margin-bottom: 5px;
+}
+
+#kb #countdown
+{
+	text-align: center;
+	font-weight: bold;
+	font-size: 20px;
+	padding: 2px 3px 2px 3px;
+	margin: 0;
+}
+
+/* quiz results */
+
+.result_screen
+{
+	border-top: 2px solid #228;
+	border-bottom: 2px solid #228;
+	margin-bottom: 3px;
+}
+
+#kb .result_screen p
+{
+	font-size: 18px;
+}
+
+.result_screen .big_japanese
+{
+	font-family: 'メイリオ', Meiryo, 'ヒラギノ角ゴ Pro W3', 'Hiragino Kaku Gothic Pro',  'MS Mincho', 'ＭＳ Ｐゴシック', sans-serif;
+}
+
+#kb .result_screen .title
+{
+	margin-top: 20px;
+	font-size: 120px;
+	font-weight: bold;
+	font-family: Impact, sans-serif;
+	text-align: center;
+}
+
+#kb .result_screen .highscore
+{
+	font-size: 25px;
+	color: #228;
+	font-weight: bold;
+}
+
+.play_again
+{
+    clear:both;
+	display: block;
+	text-align: center;
+	font-size:120%;
+	font-weight: bold;
+	margin-top: 5px;
+}
+
+.prog-bar
+{
+	margin-top: 0px;
+	padding-bottom: 40px;
+}
+
+.prog-bar .wave
+{
+	border:1px solid black;
+	float:left;
+	height: 6px; 
+	background-color: #FFF;
+}
+
+.prog-bar .completed { background-color: #222; }
+
+.prog-bar .ongoing { background-color: #555; }
+
+.prog-bar .pending { background-color: #04F; }
+
+.result_screen .rank
+{
+	text-align: center;
+}
+
+.result_screen .rank img
+{
+	margin: 5px auto 5px auto;
+}
+
+#kb div.keep-on-screen
+{
+    border-color: black;
+    background-color: #EEE;
+}
+
+.dismiss-warning
+{
+    margin: 2px;
+    padding: 2px;
+    text-align: center;
+    font-weight: bold;
+    color: black;
+}
+
+#kb .missing_lang
+{
+    color: #633;
+}
+
+#kb img.missing_lang_icon
+{
+    vertical-align: bottom;
+    opacity:0.4;
+    filter:alpha(opacity=40);
+    
+}
+
+#kb img.disabled {
+}
+
+ruby, .defined
+{
+    color: #348;
+	cursor: pointer;
+}
+
+#kb .solution ruby 
+{
+    color: inherit;
+}
+
+.defined:hover, ruby:hover
+{
+    color: red;	
+}
+
+ruby rp, ruby rt, .defined .definition
+{
+    display: none;
+}
+
+ruby:hover rt, .defined:hover .definition
+{
+    z-index: 25;
+    display: inline;
+    position: absolute;
+    top: 20px;
+    left: 20px;
+    background-color: #FF9;
+    border: 1px solid black;
+    padding: 3px 5px 3px 5px;
+    font-size: 90%;
+    text-align: left;
+    max-width: 300px;
+    color: #446;
+}
+
+ruby rt .level, .defined .definition .level
+{
+    font-style: italic;
+    font-size: 80%;
+}
+
+img.mascots {
+    float: left;
+    margin-right: 15px;
+}
+
+.icon-buttons {
+    clear:both;
+}
+
+p.example-sentence {
+    padding: 0;
+    margin: 5px 0 5px 0;
+    color: #555;
+    font-weight: normal;
+    font-family: 'ヒラギノ丸ゴシック Pro W3', 'Hiragino Maru Pro',  'MS Mincho', 'ＭＳ Ｐゴシック', serif;
+}
+
+p.example-sentence span {
+    color: #00A;
+}
+
+p.example-sentence .rei {
+color: #888;
+    border: 1px solid #888;
+    margin-right: 4px;
+    border-radius: 50%;
+    padding: 4px 4px 2px 4px;
+    background-color: white;
+}
+
+#kb .right p.example-sentence .hilite {
+    color: #0A0;
+    font-weight: bold;
+}
+
+#kb .wrong p.example-sentence .hilite, #kb .skipped p.example-sentence .hilite {
+    color: #F77;
+    font-weight: bold;
+}

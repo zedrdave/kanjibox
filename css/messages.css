@@ -1,0 +1,111 @@
+.kb-msg {
+    border: 1px solid black;
+    width: 680px;
+    padding: 3px;
+    margin: 10px auto 10px auto;
+}
+
+.kb-msg .msg-title {
+    font-size: 120%;
+    font-weight: bold;
+    margin: 3px 5px 5px 5px;
+}
+
+.kb-msg .date {
+    font-size: 70%;
+    color: #444;
+    text-align: right;
+    margin-bottom: 3px;
+}
+
+.kb-msg p {
+    padding: 6px;
+    margin: 0;
+}
+
+.kb-msg .msg-to, .kb-msg .msg-from {
+    float: left;
+    font-size: 70%;
+    color: #444;
+    margin-bottom: 5px;
+}
+
+.kb-msg .signature {
+    margin: 10px 50px 10px 5px;
+    text-align: right;
+}
+
+.kb-msg .signature a {
+    text-decoration: underline;
+}
+
+.kb-msg .signature a:hover {
+    color: #900;
+}
+
+.kb-msg .dismiss {
+    display: block;
+    text-align: right;
+    font-size: 90%;
+}
+
+.kb-msg .msg-to {
+    color: #666;
+}
+
+.kb-msg .signature a {
+    font-style: italic;
+}
+
+.kb-msg-notice {
+    background-color: #F4FA58;
+}
+
+.kb-msg-warning {
+    background-color: #FF0000;
+    font-weight: bold;
+}
+
+.kb-msg-warning .dismiss {
+   color: #333;
+}
+
+.kb-msg-important {
+    color: #FFF;
+    background-color: #000;
+}
+
+.kb-msg-thanks {
+    background-image: url("http://kanjibox.net/kb/img/bground_wide.png");
+    background-position: top center;
+    background-repeat: no-repeat;
+    background-color: #0C2E99;
+    color: #FFF;
+}
+
+.kb-msg-thanks a, .kb-msg-thanks a:visited {
+    color: #FCC;
+}
+
+.kb-msg-thanks p, .kb-msg-thanks .signature a {
+    font-size: 100%;
+    font-weight: bold;
+}
+
+.kb-msg-thanks .msg-title {
+    font-size: 200%;
+}
+
+.kb-msg-thanks .dismiss, .kb-msg-thanks .date, .kb-msg-thanks .msg-to {
+    color: #BBB;
+}
+
+.kb-msg-thanks .signature a {
+    color: #DDD;
+}
+
+.kb-msg blockquote {
+    background-color: #EEF;
+    padding: 10px;
+    margin: 5px 5px 5px 20px;
+}

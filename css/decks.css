@@ -1,0 +1,285 @@
+* {
+	-webkit-box-sizing: border-box;
+	-moz-box-sizing: border-box;
+	box-sizing: border-box;
+}
+
+html {
+	-ms-touch-action: none;
+}
+
+body,ul,li {
+	padding:0;
+	margin:0;
+	border:0;
+}
+
+body {
+	font-size: 12px;
+	font-family: ubuntu, helvetica, arial;
+	overflow: hidden; /* this is important to prevent the whole page to bounce */
+}
+
+#header {
+	position: absolute;
+	z-index: 2;
+	top: 0;
+	left: 0;
+	width: 100%;
+
+	height:25px;
+	line-height:25px;
+	background-image:-webkit-gradient(linear, 0 0, 0 100%, color-stop(0, #B8C8FF), color-stop(0.05, #1F53FF), color-stop(1, #0A0A7B));
+	background-image:-moz-linear-gradient(top, #B8C8FF, #1F53FF 5%, #0A0A7B);
+	background-image:-o-linear-gradient(top, #B8C8FF, #1F53FF 5%, #0A0A7B);
+	padding:0;
+	color:#eee;
+	font-size:15px;
+	text-align:center;
+	font-weight: bold;
+}
+
+#header a {
+	color:#f3f3f3;
+	text-decoration:none;
+	font-weight:bold;
+	text-shadow:0 -1px 0 rgba(0,0,0,0.5);
+}
+
+#wrapper {
+	position: absolute;
+	z-index: 1;
+	top: 25px;
+	bottom: 0px;
+	left: 0;
+	width: 100%;
+	background: #eee;
+	overflow: hidden;
+}
+
+#scroller {
+/*	width:800px;*/
+/*    float:left;*/
+/*	display:block;*/
+/*    width:100%;*/
+/*	height:100%;*/
+/*    padding:0;*/
+	
+    
+	position: absolute;
+	z-index: 1;
+	-webkit-tap-highlight-color: rgba(0,0,0,0);
+	width: 100%;
+	-webkit-transform: translateZ(0);
+	-moz-transform: translateZ(0);
+	-ms-transform: translateZ(0);
+	-o-transform: translateZ(0);
+	transform: translateZ(0);
+	-webkit-touch-callout: none;
+	-webkit-user-select: none;
+	-moz-user-select: none;
+	-ms-user-select: none;
+	user-select: none;
+	-webkit-text-size-adjust: none;
+	-moz-text-size-adjust: none;
+	-ms-text-size-adjust: none;
+	-o-text-size-adjust: none;
+	text-size-adjust: none;
+    
+    
+}
+
+#scroller ul {
+	list-style:none;
+	display:block;
+	float:left;
+	width:100%;
+	height:100%;
+	padding:0;
+	margin:0;
+	border:1px solid #aaa;
+}
+
+#scroller li {
+	display:block;
+	width:100%;
+	height:100%;
+	text-align:center;
+	border:1px solid #aaa;
+	background:#FFF;
+	overflow-y: auto;
+    position: relative;
+}
+
+#scroller li p.small {
+	font-size: 20%;
+	margin: 0;
+}
+
+li .kanji {
+/*	width: 100%;*/
+	font-family: 'ヒラギノ明朝 Pro W3', 'Hiragino Mincho ProN', 'MS P 明朝', 'MS PMincho', serif;
+	margin: 0;
+	padding: 0;
+}
+
+.front li .kanji {
+	font-size: 600%;
+	line-height:130%;
+	text-align: center;
+	margin: 0 0 0 0;
+/*	background-color: red;*/
+}
+
+.back li .kanji {
+	float: left;
+	font-size: 220%;
+	width: 1.2em;
+	line-height:1em;
+    margin:0.1em 0.1em 0 0.1em;
+/*    background-color: blue;*/
+}
+
+.back .showback, .front .showfront {
+	display: block;
+}
+.back span.showback, .front span.showfront {
+	display: inline;
+}
+
+.front .showback, .back .showfront {
+	display: none;
+}
+
+p {
+	margin: 0;
+	padding: 0;
+    font-size: 30%;
+}
+
+p.pron {
+    margin: 0.5em;
+	font-size: 40%;
+	text-align: left;
+}
+
+.pron {
+	font-family: 'メイリオ', Meiryo, 'ＭＳ Ｐゴシック', 'ヒラギノ角ゴ Pro W3', 'Hiragino Kaku Gothic ProN', sans-serif;
+    line-break: strict;
+}
+
+p.translation {
+	font-size: 45%;
+    margin: 0.5em;
+	text-align: left;
+/*    background-color: green;*/
+}
+
+.examples {
+	clear: both;
+	text-align: left;
+	padding: 5%;
+    margin-top: 0.3em;
+	font-family: serif;
+}
+
+.examples p {
+	font-size: 35%;
+	margin: 0 0 0.3em 0;
+    line-height: 130%;
+}
+
+.examples .main {
+	font-weight: bold;
+	font-size: 110%;
+}
+
+p.intro {
+	font-size: 50%;
+	padding: 4% 5% 2% 5%;
+	text-align: left;
+	font-family: serif;
+}
+
+input[type="checkbox"] {
+    margin-right: 6px;
+}
+
+li.intro {
+/*	padding: 3%;*/
+	width: 90%;
+}
+
+a, a:link, a:visited {
+	color: #232199;
+}
+
+div.statlevel {
+	width: 100%;
+    bottom: 0px;
+    right: 0px;
+    position: absolute;
+}
+
+div.statlevel .dot {
+	width: 20px;
+	height: 20px;
+	border-radius: 50%;
+/*    margin-left: auto;
+*/    margin-left: auto;
+    margin-right: 5px;
+    margin-bottom: 5px;
+    border: 1px solid black;
+}
+
+
+.statlevel .unknown {
+}
+
+.statlevel .verygood {
+	background-image: -moz-radial-gradient(45px 45px 45deg, circle cover, #38DF3A 0%, #22DA14 100%);
+	background-image: -webkit-radial-gradient(45px 45px, circle cover, #38DF3A, #22DA14);
+	background-image: radial-gradient(45px 45px 45deg, circle cover, #38DF3A 0%, #22DA14 100%);	
+}
+
+.statlevel .good {
+	background-image: -moz-radial-gradient(45px 45px 45deg, circle cover, #1F7620 0%, #1BA711 100%);
+	background-image: -webkit-radial-gradient(45px 45px, circle cover, #1F7620, #1BA711);
+	background-image: radial-gradient(45px 45px 45deg, circle cover, #1F7620 0%, #1BA711 100%);	
+}
+
+.statlevel .ok {
+	background-image: -moz-radial-gradient(45px 45px 45deg, circle cover, #BBB 0%, #FFF 100%);
+	background-image: -webkit-radial-gradient(45px 45px, circle cover, #BBB, #FFF);
+	background-image: radial-gradient(45px 45px 45deg, circle cover, #BBB 0%, #FFF 100%);	
+}
+
+.statlevel .bad {
+	background-image: -moz-radial-gradient(45px 45px 45deg, circle cover, yellow 0%, orange 100%, red 95%);
+	background-image: -webkit-radial-gradient(45px 45px, circle cover, yellow, orange);
+	background-image: radial-gradient(45px 45px 45deg, circle cover, yellow 0%, orange 100%, red 95%);	
+}
+
+.statlevel .verybad {
+	background-image: -moz-radial-gradient(45px 45px 45deg, circle cover, #EB1708 0%, #FF2D24 100%, #FF5103 95%);
+	background-image: -webkit-radial-gradient(45px 45px, circle cover, #EB1708, #FF2D24);
+	background-image: radial-gradient(45px 45px 45deg, circle cover, #EB1708 0%, #FF2D24 100%, #FF5103 95%);	
+}
+
+
+.missing-translation {
+    font-style: italic;
+    color: #555;
+}
+
+input[type="checkbox"]+label {
+    text-decoration:line-through;
+}
+
+input[type="checkbox"]:checked+label {
+    text-decoration:none;
+}
+
+.parambold {
+    font-weight: bold;
+}

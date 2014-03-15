@@ -1,0 +1,4 @@
+- Not much to the icons and workflow:
+1) arrows connect successive updates. Right-most arrow lets you update the entry yourself
+2) blue is awaiting moderation, green is approved, red is unapproved
+3) (~) is for entries that need more work (partly approved)

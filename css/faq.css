@@ -1,0 +1,37 @@
+#frame-faq h2 a 
+{
+    color: inherit;
+}
+
+#frame-faq ol.toc>li
+{
+	margin-top: 5px;
+}
+
+#frame-faq .content li
+{
+	font-size: 130%;
+	margin-top: 20px;
+}
+
+#frame-faq .content p
+{
+    margin-bottom: 10px;
+    text-indent: 15px;
+}
+
+
+#frame-faq .content li li, .content li p
+{
+	font-size: 13px;
+	margin: 3px;
+}
+
+#frame-faq .content li h2.anchor
+{
+	display: block;
+	font-size: 120%;
+	margin-bottom: 10px;
+	margin-top: 20px;
+	font-style: italic;
+}

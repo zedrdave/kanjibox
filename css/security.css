@@ -1,0 +1,35 @@
+/* Die Rik@ichan cheater, DIE ! */
+
+#kb .question_kanji .choice div.cheat-trick
+{
+	font-size: 30px;
+	line-height: 35px;
+}
+
+#kb .hint div.cheat-trick
+{
+	font-size: 50px;
+	line-height: 50px;
+}
+
+#kb div.cheat-trick
+{
+	width: 120%;
+	position: relative;
+	filter:alpha(opacity=0); opacity:.0;
+	color: black;
+	top: -5px;
+	left: -10px;
+	height: 0px;
+}
+
+#kb .question_kanji .choice, #kb .hint
+{
+	overflow: hidden;
+}
+
+#kb .question_text .choice div.cheat-trick
+{
+	font-size: 20px;
+	line-height: 20px;
+}

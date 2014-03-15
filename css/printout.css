@@ -1,0 +1,57 @@
+@page
+{
+	size: A4 portrait;
+}
+
+.printout_table
+{
+	border-collapse: collapse;
+	width: 180mm;
+}
+.printout_table td
+{
+	border: 1px solid black;
+	padding: 3px 6px 3px 6px;
+}
+
+.printout_table td.kanji
+{
+	font-size: 10mm;
+	font-family: 'メイリオ', Meiryo, 'ヒラギノ角ゴ Pro W3', 'Hiragino Kaku Gothic Pro',  'MS Mincho', 'ＭＳ Ｐゴシック', sans-serif;
+	width: 7%;
+	text-align: center;
+}
+
+.printout_table td.word
+{
+	font-size: 7mm;
+	font-family: 'メイリオ', Meiryo, 'ヒラギノ角ゴ Pro W3', 'Hiragino Kaku Gothic Pro',  'MS Mincho', 'ＭＳ Ｐゴシック', sans-serif;
+	width: 30%;
+	text-align: left;
+}
+
+.printout_table td.reading
+{
+	width: 20%;
+	font-size: 5mm;
+}
+
+.printout_table td.meaning_show_ex
+{
+	width:25%;
+}
+
+.printout_table td.meaning
+{
+	width:45%;
+}
+
+.printout_table td.examples
+{
+	width: 45%;
+}
+
+.printout_table td.examples span.example_kanji
+{
+	font-size: 120%;
+}
