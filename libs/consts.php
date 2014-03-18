@@ -1,6 +1,5 @@
 <?php
 
-
 define('DRILL_MODE', 'drill');
 define('QUIZ_MODE', 'quiz');
 define('SETS_MODE', 'sets');
@@ -46,5 +45,3 @@ define('LEVEL_N3', '3');
 define('LEVEL_N2', '2');
 define('LEVEL_N1', '1');
 define('LEVEL_SENSEI', '0');
-
-?>

@@ -18,7 +18,7 @@ if(@$hard_hat_db_down)
 	<div style="clear:both" ></div>
 		</div>
 		</body>
-		</html>	
+		</html>
 	<?php
 	die();
 }
@@ -59,7 +59,7 @@ if(!$public_page && !$logged_in)
 {
 	header('Cache-Control: private, no-store, no-cache, must-revalidate, post-check=0, pre-check=0');
 	header('Pragma: no-cache');
-	
+
 	require_once('libs/connect_lib.php');
 	display_login_page();
 	exit();
@@ -84,7 +84,7 @@ if(@$params['redirect'] == 'set_subscribe' || @$_REQUEST['redirect'] == 'set_sub
 if($redirect_to_url = @$_REQUEST['redirect_to_url']) {
 	if(md5($redirect_to_url . ' my secret sauce ' . date('D, d M Y')) == @$_REQUEST['redirect_token']) {
 		header('Location: ' . $redirect_to_url);
-		exit();		
+		exit();
 	}
 }
 
@@ -93,7 +93,7 @@ if($redirect_to_url = @$_REQUEST['redirect_to_url']) {
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en"  xmlns:fb="http://www.facebook.com/2008/fbml">
 	<head>
 		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-		<title><?php 
+		<title><?php
 		if(@$titles[$page])
 			echo @$titles[$page];
 		else
@@ -112,15 +112,15 @@ if($redirect_to_url = @$_REQUEST['redirect_to_url']) {
 	include_css('stats.css');
 	include_css('scores.css');
 	include_css('faq.css');
-	include_css('messages.css');	
-	include_css('tools.css');	
-	
+	include_css('messages.css');
+	include_css('tools.css');
+
 	if(@$params['mode'] == SETS_MODE || @$params['mode'] == GRAMMAR_SETS_MODE) {
 		include_css('sets.css');
 	}
-	
+
 	include_js('soundmanager2-nodebug-jsmin.js');
-	
+
 	include_js('general.js');
 	include_js('ajax.js');
 ?>
@@ -140,7 +140,7 @@ if(@$_SESSION['user'] && @$_SESSION['user']->get_id() > 0)
 	{
 		include('pandering.php');
 	}
-	
+
 }
 ?>
 
@@ -187,12 +187,12 @@ if(@$_SESSION['user'])
 	$lang = $_SESSION['user']->get_pref('lang', 'vocab_lang');
 else
 	$lang = 'en';
-	
+
 $tabs1 = array('home' => 'Home', 'highscores' => 'Highscores', 'stats' => 'Stats', 'faq' => 'FAQ');
 // if($lang != 'en')
 
 $tabs1['international'] = '<img src="' . SERVER_URL . 'img/flags/' . $lang . '.png" alt="' . $lang . '" style="padding:0; margin: -4px 0 -7px 0;" />';
-	
+
 $tabs2 = array('kana' => 'Kana', 'kanji' => 'Kanji', 'vocab' => 'Vocab', 'reading' => 'Reading', 'text' => 'Text');
 
 $tab_urls = array('home' => '', 'highscores' => 'highscores', 'stats' => 'stats', 'faq' => 'faq', 'international' => 'international', 'kana' => 'play/type/kana', 'kanji' => 'play/type/kanji', 'reading' => 'play/type/reading', 'vocab' => 'play/type/vocab', 'text' => 'play/type/text');
@@ -209,7 +209,7 @@ if(@$hard_hat_zone)
 	<p>I am in the midst of modifying some application files. You might experience transient errors while I do so. Please wait until this sign disappears before reporting any issues.<br/><br/>
 	Thanks for your patience!</p>
 	<div style="clear:both" ></div>
-		</div>	
+		</div>
 	<?php
 }
 ?>
@@ -217,7 +217,7 @@ if(@$hard_hat_zone)
 		<div class="tabs-frame">
 			<ul class="tabs">
 			<?php
-	
+
 				foreach ($tabs1 as $a_tab => $label)
 					echo "<li><a class=\"tab-item" . ($tab == $a_tab ? " selected" : "") . "\" href='". get_page_url($tab_urls[$a_tab]) . "'>$label</a></li>";
 				foreach (array_reverse($tabs2) as $a_tab => $label)
@@ -260,9 +260,9 @@ if(@$hard_hat_zone)
 	}
 
 	function facebook_onload() {
-		
+
 				    	 window.fbAsyncInit = function() {
-			
+
 				       FB.init({
 				         appId: '<?php echo $api_key ?>',
 				          cookie: true,
@@ -276,50 +276,50 @@ if(@$hard_hat_zone)
 				          window.location.reload();
 				        });
 				     };
-				
-				     (function() {		
+
+				     (function() {
 			var js, fjs = document.getElementsByTagName('script')[0];
 			if (document.getElementById('facebook-jssdk')) return;
-					
+
 				        var e = document.createElement('script');
 			e.async = true;
 				       e.src = document.location.protocol + '//connect.facebook.net/en_US/all.js';
 				       document.getElementById('fb-root').appendChild(e);
 				     }());
-	
+
 	}
-	
 
 
-	$(document).ready(function()  
+
+	$(document).ready(function()
 	{
 		$('#kb').corner('top');
 		$('#kbbottom').corner('bottom');
 		$('#kb .tabs .selected').corner('bevel tr 5px');
-			
+
 		$('.ui-state-default').hover(
-			function(){ 
-				$(this).addClass("ui-state-hover"); 
+			function(){
+				$(this).addClass("ui-state-hover");
 			},
-			function(){ 
-				$(this).removeClass("ui-state-hover"); 
+			function(){
+				$(this).removeClass("ui-state-hover");
 			}
 		);
 
 		<?php
 		if(@$_SESSION['user'] && ($_SESSION['user']->get_load_count() % 20 == 0))
 			echo "do_load('" . SERVER_URL . "ajax/get_messages/', 'new-kb-msgs');";
-		
+
 		// echo ' //' . $_SESSION['user']->get_load_count() . "\n";
 		?>
 	})
-		
-	
+
+
 	// window.google_analytics_uacct = "UA-52899-7";
-	// 
+	//
 	// var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
 	// document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));
-	// 
+	//
 	// try {
 	// var pageTracker = _gat._getTracker("UA-52899-7");
 	// pageTracker._trackPageview();
