@@ -1,13 +1,14 @@
 <?php
-define('ABS_PATH', dirname(dirname(__FILE__)) . '/');
-require_once(ABS_PATH . 'libs/consts.php');
-require_once(ABS_PATH . 'libs/util_lib.php');
-require_once(ABS_PATH . 'libs/log_lib.php');
-require_once(ABS_PATH . 'classes/User.php');
+define('ABS_PATH', dirname(__DIR__). '/');
+
+require_once ABS_PATH . 'libs/consts.php';
+require_once ABS_PATH . 'libs/util_lib.php';
+require_once ABS_PATH . 'libs/log_lib.php';
+require_once ABS_PATH . 'classes/User.php';
 
 function get_mode()
 {
-	return trim(strrchr(trim(str_replace('/htdocs', '', ABS_PATH), '/'), '/'), '/');
+    return trim(strrchr(trim(str_replace('/htdocs', '', ABS_PATH), '/'), '/'), '/');
 }
 
 function __autoload($class)
@@ -23,14 +24,14 @@ function init_app($ajax = false)
 
 	if(@$_REQUEST['sign_out'])
 	{
-		require_once(ABS_PATH . 'libs/account_lib.php');
+		require_once ABS_PATH . 'libs/account_lib.php';
 		display_log_out_page();
 		die();
 	}
 
 	ini_set('session.gc_maxlifetime', 36000);
 	ini_set('session.cookie_lifetime', 36000);
-	session_save_path('/var/lib/php5/web_kb_sessions');
+	//session_save_path('/var/lib/php5/web_kb_sessions');
 	setcookie("kanjibox", 'yatta', time()+36000, '/', '.kanjibox.net');
 	session_start();
 
@@ -156,7 +157,7 @@ function fb_connect_init($test_query = true)
         unset($_REQUEST['code']);
 
 
-	require_once(ABS_PATH . 'api/facebook.php');
+	require_once ABS_PATH . 'api/facebook.php';
 	try {
 		if(! is_object($facebook))
 			$facebook = new Facebook(array('appId'  =>  $api_key, 'secret' => $secret,  'cookie' => true));

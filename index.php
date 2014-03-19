@@ -1,38 +1,43 @@
 <?php
-
 require_once('libs/lib.php');
-require_once get_mode() .'.config.php';
 
-if(@$hard_hat_db_down)
-{
-	?><html>
-	<head>
-		<title>Temporarily Down</title>
-	    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-	</head>
-	<body>
-	     <div class="error_msg">
-	       <img src="<?php echo SERVER_URL . 'img/construction_jp.gif' ?>" class="justified" style="height: 150px; width: 150px;" />  <div class="title" title="Update Work in Progress">工事中</div>
-	<p>I am in the midst of modifying some application files. You might experience transient errors while I do so. Please wait until this sign disappears before reporting any issues.<br/><br/>
-	Thanks for your patience!</p>
-	<div style="clear:both" ></div>
-		</div>
-		</body>
-		</html>
-	<?php
-	die();
+$configFile = get_mode() . '.config.php';
+if (!is_file($configFile)) {
+    $configFile = get_mode() . '.default.config.php';
+}
+require_once $configFile;
+
+if (@$hard_hat_db_down) {
+    ?>
+    <html>
+        <head>
+            <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+            <title>Temporarily Down</title>
+        </head>
+        <body>
+            <div class="error_msg">
+                <img src="<?php echo SERVER_URL . 'img/construction_jp.gif' ?>" class="justified" style="height: 150px; width: 150px;" />
+                <div class="title" title="Update Work in Progress">工事中</div>
+                <p>I am in the midst of modifying some application files. You might experience transient errors while I do so. Please wait until this sign disappears before reporting any issues.<br/><br/>
+                    Thanks for your patience!</p>
+                <div style="clear:both"></div>
+            </div>
+        </body>
+    </html>
+    <?php
+    die();
 }
 
-if(@$_REQUEST['pwd_reset']) {
-	require_once('libs/connect_lib.php');
-	display_pwd_reset_page();
-	exit();
+if (filter_input(INPUT_GET, 'pwd_reset')) {
+    require_once 'libs/connect_lib.php';
+    display_pwd_reset_page();
+    exit();
 }
 
-if(@$_REQUEST['new_account']) {
-	require_once('libs/account_lib.php');
-	display_new_account_page();
-	exit();
+if (filter_input(INPUT_GET, 'new_account')) {
+    require_once 'libs/account_lib.php';
+    display_new_account_page();
+    exit();
 }
 
 stopwatch(); // Start bench timer
