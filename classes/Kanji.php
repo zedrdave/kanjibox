@@ -403,7 +403,7 @@ k.`njlpt`
 	
 	function get_kanji ($kanji) 
 	{	
-	  $query = "SELECT  `id`, `kanji`, `traditional`, `prons`, " . Kanji::get_query_meaning() . " FROM `kanjis` k LEFT JOIN kanjis_ext kx ON kx.kanji_id = k.id WHERE `kanji` = '" . mysql_real_escape_string($kanji) . "'";
+	  $query = "SELECT `id`, `kanji`, `traditional`, `prons`, " . Kanji::get_query_meaning() . " FROM `kanjis` k LEFT JOIN kanjis_ext kx ON kx.kanji_id = k.id WHERE `kanji` = '" . mysql_real_escape_string($kanji) . "'";
 	
 	  $res = mysql_query_debug($query) or log_db_error($query, true, true);
 	  return mysql_fetch_object($res);
