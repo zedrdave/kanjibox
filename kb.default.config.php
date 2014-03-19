@@ -18,12 +18,12 @@ define('SERVER_URL_HTTPS', 'https://kanjibox.net/kb/');
 
 if ($_SERVER['HTTPS']) {
     define('APP_URL', APP_URL_HTTPS);
-    $app_url = APP_URL;
+    //$app_url = APP_URL; This variable is never used (nowhere in the app)
     define('SERVER_URL', SERVER_URL_HTTPS);
     $server_url = SERVER_URL;
 } else {
     define('APP_URL', 'http://kanjibox.net/kb/');
-    $app_url = APP_URL;
+    //$app_url = APP_URL; This variable is never used (nowhere in the app)
     define('SERVER_URL', 'http://kanjibox.net/kb/');
     $server_url = SERVER_URL;
 }
