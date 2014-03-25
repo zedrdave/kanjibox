@@ -78,7 +78,7 @@ if ((!empty($params['redirect']) && $params['redirect'] === 'set_subscribe') || 
     header('Location: http://kanjibox.net/kb/set/' . $set_id . '/?redirected_subscribe=1');
     exit();
 }
-if ($redirect_to_url == $_REQUEST['redirect_to_url']) {
+if ($redirect_to_url = (isset($_REQUEST['redirect_to_url']) ? $_REQUEST['redirect_to_url'] : null)) {
     if (md5($redirect_to_url . ' my secret sauce ' . date('D, d M Y')) === $_REQUEST['redirect_token']) {
         header('Location: ' . $redirect_to_url);
         exit();
@@ -89,7 +89,7 @@ if ($redirect_to_url == $_REQUEST['redirect_to_url']) {
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
         <title><?php
-            if ($titles[$page]) {
+            if (!empty($titles[$page])) {
                 echo $titles[$page];
             } else {
                 echo 'KanjiBox: ' . ucfirst($page);
@@ -111,7 +111,7 @@ if ($redirect_to_url == $_REQUEST['redirect_to_url']) {
         include_css('messages.css');
         include_css('tools.css');
 
-        if ($params['mode'] == SETS_MODE || $params['mode'] == GRAMMAR_SETS_MODE) {
+        if (!empty($params['mode']) && ($params['mode'] == SETS_MODE || $params['mode'] == GRAMMAR_SETS_MODE)) {
             include_css('sets.css');
         }
 
@@ -124,7 +124,8 @@ if ($redirect_to_url == $_REQUEST['redirect_to_url']) {
     <body>
         <div id="msg-box"></div>
         <?php
-        if ($_SESSION['user'] && $_SESSION['user']->get_id() > 0) {
+        $two_columns = false;
+        if (!empty($_SESSION['user']) && $_SESSION['user']->get_id() > 0) {
             if ($_SESSION['user']->is_name_hidden() && $_SESSION['user']->get_load_count() < 2) {
                 echo '<div class="info-bar"><p>Due to your Facebook privacy settings, your name cannot be displayed to other users of this application and will therefore not appear in Global Highscores.</p><p>If you wish to appear in the global highscores: please <a href="//www.facebook.com/privacy/?view=profile">change your privacy settings</a>.</p></div>';
             }
@@ -161,7 +162,7 @@ if ($redirect_to_url == $_REQUEST['redirect_to_url']) {
                 $tab = $page;
                 break;
             default:
-                if ($tabs1[$page] || $tabs2[$page]) {
+                if (isset($tabs1[$page]) || isset($tabs2[$page])) {
                     $tab = $page;
                 } else {
                     $tab = 'home';
@@ -219,7 +220,7 @@ if ($redirect_to_url == $_REQUEST['redirect_to_url']) {
 
             <div class="content" id="frame-<?php echo $page; ?>">
                 <?php
-                if ($pages[$page]) {
+                if (!empty($pages[$page])) {
                     require_once ABS_PATH . 'pages/' . $pages[$page];
                 } elseif ($secret_pages[$page]) {
                     require_once ABS_PATH . 'pages/' . $secret_pages[$page];

@@ -73,7 +73,7 @@ function display_login_page($redirect_to_url = '', $header_msg = 'In order to us
                 <?php
                 fb_connect_init(false);
 
-                if (!$redirect_to_url && $redirect_to_url = @$_REQUEST['redirect_to_url']) {
+                if (!$redirect_to_url && $redirect_to_url = (isset($_REQUEST['redirect_to_url']) ? $_REQUEST['redirect_to_url'] : null)) {
                     if (md5($redirect_to_url . ' my secret sauce ' . date('D, d M Y')) != $_REQUEST['redirect_token']) {
                         $redirect_to_url = '';
                     }
@@ -104,7 +104,7 @@ function display_login_page($redirect_to_url = '', $header_msg = 'In order to us
                 </div>
 
                 <h2 style="text-align:center; font-size:40px">OR</h2>
-                <form class="login-box" method="post" action="<?php echo SERVER_URL_HTTPS ?>">
+                <form class="login-box" method="post" action="<?php echo SERVER_URL; ?>">
                     <?php
                     if (!empty($params['login']) && $params['login'] === 'cancelled') {
                         echo '<div class="error_msg">Facebook seems to have cancelled the login. Please contact me if this error persists.</div>';
