@@ -113,7 +113,7 @@ function display_new_account_page() {
                 <?php
                 $no_error = true;
 
-                if (@$_REQUEST['action'] == 'new_account') {
+                if ($_REQUEST['action'] == 'new_account') {
                     get_db_conn();
 
                     $riddle = str_replace(' ', '', strtolower($_REQUEST['spam_question']));

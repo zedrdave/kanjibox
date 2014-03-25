@@ -1,0 +1,1087 @@
+[25-Mar-2014 11:26:21 Asia/Tokyo] PHP Warning:  mysql_connect(): No such file or directory in /Users/sachatelgenhofoudekoehorst/NetBeansProjects/kb/libs/util_lib.php on line 7
+[25-Mar-2014 11:26:21 Asia/Tokyo] PHP Stack trace:
+[25-Mar-2014 11:26:21 Asia/Tokyo] PHP   1. {main}() /Users/sachatelgenhofoudekoehorst/NetBeansProjects/kb/index.php:0
+[25-Mar-2014 11:26:21 Asia/Tokyo] PHP   2. init_app() /Users/sachatelgenhofoudekoehorst/NetBeansProjects/kb/index.php:55
+[25-Mar-2014 11:26:21 Asia/Tokyo] PHP   3. get_db_conn() /Users/sachatelgenhofoudekoehorst/NetBeansProjects/kb/libs/lib.php:55
+[25-Mar-2014 11:26:21 Asia/Tokyo] PHP   4. mysql_connect() /Users/sachatelgenhofoudekoehorst/NetBeansProjects/kb/libs/util_lib.php:7
+[25-Mar-2014 11:26:21 Asia/Tokyo] PHP Notice:  Undefined index: user in /Users/sachatelgenhofoudekoehorst/NetBeansProjects/kb/libs/log_lib.php on line 12
+[25-Mar-2014 11:26:21 Asia/Tokyo] PHP Stack trace:
+[25-Mar-2014 11:26:21 Asia/Tokyo] PHP   1. {main}() /Users/sachatelgenhofoudekoehorst/NetBeansProjects/kb/index.php:0
+[25-Mar-2014 11:26:21 Asia/Tokyo] PHP   2. init_app() /Users/sachatelgenhofoudekoehorst/NetBeansProjects/kb/index.php:55
+[25-Mar-2014 11:26:21 Asia/Tokyo] PHP   3. get_db_conn() /Users/sachatelgenhofoudekoehorst/NetBeansProjects/kb/libs/lib.php:55
+[25-Mar-2014 11:26:21 Asia/Tokyo] PHP   4. log_error() /Users/sachatelgenhofoudekoehorst/NetBeansProjects/kb/libs/util_lib.php:7
+[25-Mar-2014 11:26:21 Asia/Tokyo] PHP Notice:  Undefined index: debug in /Users/sachatelgenhofoudekoehorst/NetBeansProjects/kb/libs/log_lib.php on line 29
+[25-Mar-2014 11:26:21 Asia/Tokyo] PHP Stack trace:
+[25-Mar-2014 11:26:21 Asia/Tokyo] PHP   1. {main}() /Users/sachatelgenhofoudekoehorst/NetBeansProjects/kb/index.php:0
+[25-Mar-2014 11:26:21 Asia/Tokyo] PHP   2. init_app() /Users/sachatelgenhofoudekoehorst/NetBeansProjects/kb/index.php:55
+[25-Mar-2014 11:26:21 Asia/Tokyo] PHP   3. get_db_conn() /Users/sachatelgenhofoudekoehorst/NetBeansProjects/kb/libs/lib.php:55
+[25-Mar-2014 11:26:21 Asia/Tokyo] PHP   4. log_error() /Users/sachatelgenhofoudekoehorst/NetBeansProjects/kb/libs/util_lib.php:7
+[25-Mar-2014 11:30:44 Asia/Tokyo] PHP Warning:  mysql_connect(): No such file or directory in /Users/sachatelgenhofoudekoehorst/NetBeansProjects/kb/libs/util_lib.php on line 7
+[25-Mar-2014 11:30:44 Asia/Tokyo] PHP Stack trace:
+[25-Mar-2014 11:30:44 Asia/Tokyo] PHP   1. {main}() /Users/sachatelgenhofoudekoehorst/NetBeansProjects/kb/index.php:0
+[25-Mar-2014 11:30:44 Asia/Tokyo] PHP   2. init_app() /Users/sachatelgenhofoudekoehorst/NetBeansProjects/kb/index.php:55
+[25-Mar-2014 11:30:44 Asia/Tokyo] PHP   3. get_db_conn() /Users/sachatelgenhofoudekoehorst/NetBeansProjects/kb/libs/lib.php:55
+[25-Mar-2014 11:30:44 Asia/Tokyo] PHP   4. mysql_connect() /Users/sachatelgenhofoudekoehorst/NetBeansProjects/kb/libs/util_lib.php:7
+[25-Mar-2014 11:30:44 Asia/Tokyo] PHP Notice:  Undefined index: user in /Users/sachatelgenhofoudekoehorst/NetBeansProjects/kb/libs/log_lib.php on line 12
+[25-Mar-2014 11:30:44 Asia/Tokyo] PHP Stack trace:
+[25-Mar-2014 11:30:44 Asia/Tokyo] PHP   1. {main}() /Users/sachatelgenhofoudekoehorst/NetBeansProjects/kb/index.php:0
+[25-Mar-2014 11:30:44 Asia/Tokyo] PHP   2. init_app() /Users/sachatelgenhofoudekoehorst/NetBeansProjects/kb/index.php:55
+[25-Mar-2014 11:30:44 Asia/Tokyo] PHP   3. get_db_conn() /Users/sachatelgenhofoudekoehorst/NetBeansProjects/kb/libs/lib.php:55
+[25-Mar-2014 11:30:44 Asia/Tokyo] PHP   4. log_error() /Users/sachatelgenhofoudekoehorst/NetBeansProjects/kb/libs/util_lib.php:7
+[25-Mar-2014 11:30:44 Asia/Tokyo] PHP Notice:  Undefined index: debug in /Users/sachatelgenhofoudekoehorst/NetBeansProjects/kb/libs/log_lib.php on line 29
+[25-Mar-2014 11:30:44 Asia/Tokyo] PHP Stack trace:
+[25-Mar-2014 11:30:44 Asia/Tokyo] PHP   1. {main}() /Users/sachatelgenhofoudekoehorst/NetBeansProjects/kb/index.php:0
+[25-Mar-2014 11:30:44 Asia/Tokyo] PHP   2. init_app() /Users/sachatelgenhofoudekoehorst/NetBeansProjects/kb/index.php:55
+[25-Mar-2014 11:30:44 Asia/Tokyo] PHP   3. get_db_conn() /Users/sachatelgenhofoudekoehorst/NetBeansProjects/kb/libs/lib.php:55
+[25-Mar-2014 11:30:44 Asia/Tokyo] PHP   4. log_error() /Users/sachatelgenhofoudekoehorst/NetBeansProjects/kb/libs/util_lib.php:7
+[25-Mar-2014 11:31:11 Asia/Tokyo] PHP Warning:  mysql_connect(): No such file or directory in /Users/sachatelgenhofoudekoehorst/NetBeansProjects/kb/libs/util_lib.php on line 7
+[25-Mar-2014 11:31:11 Asia/Tokyo] PHP Stack trace:
+[25-Mar-2014 11:31:11 Asia/Tokyo] PHP   1. {main}() /Users/sachatelgenhofoudekoehorst/NetBeansProjects/kb/index.php:0
+[25-Mar-2014 11:31:11 Asia/Tokyo] PHP   2. init_app() /Users/sachatelgenhofoudekoehorst/NetBeansProjects/kb/index.php:55
+[25-Mar-2014 11:31:11 Asia/Tokyo] PHP   3. get_db_conn() /Users/sachatelgenhofoudekoehorst/NetBeansProjects/kb/libs/lib.php:55
+[25-Mar-2014 11:31:11 Asia/Tokyo] PHP   4. mysql_connect() /Users/sachatelgenhofoudekoehorst/NetBeansProjects/kb/libs/util_lib.php:7
+[25-Mar-2014 11:31:11 Asia/Tokyo] PHP Notice:  Undefined index: debug in /Users/sachatelgenhofoudekoehorst/NetBeansProjects/kb/libs/log_lib.php on line 29
+[25-Mar-2014 11:31:11 Asia/Tokyo] PHP Stack trace:
+[25-Mar-2014 11:31:11 Asia/Tokyo] PHP   1. {main}() /Users/sachatelgenhofoudekoehorst/NetBeansProjects/kb/index.php:0
+[25-Mar-2014 11:31:11 Asia/Tokyo] PHP   2. init_app() /Users/sachatelgenhofoudekoehorst/NetBeansProjects/kb/index.php:55
+[25-Mar-2014 11:31:11 Asia/Tokyo] PHP   3. get_db_conn() /Users/sachatelgenhofoudekoehorst/NetBeansProjects/kb/libs/lib.php:55
+[25-Mar-2014 11:31:11 Asia/Tokyo] PHP   4. log_error() /Users/sachatelgenhofoudekoehorst/NetBeansProjects/kb/libs/util_lib.php:7
+[25-Mar-2014 11:32:42 Asia/Tokyo] PHP Warning:  mysql_connect(): No such file or directory in /Users/sachatelgenhofoudekoehorst/NetBeansProjects/kb/libs/util_lib.php on line 7
+[25-Mar-2014 11:32:42 Asia/Tokyo] PHP Stack trace:
+[25-Mar-2014 11:32:42 Asia/Tokyo] PHP   1. {main}() /Users/sachatelgenhofoudekoehorst/NetBeansProjects/kb/index.php:0
+[25-Mar-2014 11:32:42 Asia/Tokyo] PHP   2. init_app() /Users/sachatelgenhofoudekoehorst/NetBeansProjects/kb/index.php:55
+[25-Mar-2014 11:32:42 Asia/Tokyo] PHP   3. get_db_conn() /Users/sachatelgenhofoudekoehorst/NetBeansProjects/kb/libs/lib.php:55
+[25-Mar-2014 11:32:42 Asia/Tokyo] PHP   4. mysql_connect() /Users/sachatelgenhofoudekoehorst/NetBeansProjects/kb/libs/util_lib.php:7
+[25-Mar-2014 11:37:14 Asia/Tokyo] PHP Warning:  mysql_connect(): No such file or directory in /Users/sachatelgenhofoudekoehorst/NetBeansProjects/kb/libs/util_lib.php on line 7
+[25-Mar-2014 11:37:14 Asia/Tokyo] PHP Stack trace:
+[25-Mar-2014 11:37:14 Asia/Tokyo] PHP   1. {main}() /Users/sachatelgenhofoudekoehorst/NetBeansProjects/kb/index.php:0
+[25-Mar-2014 11:37:14 Asia/Tokyo] PHP   2. init_app() /Users/sachatelgenhofoudekoehorst/NetBeansProjects/kb/index.php:55
+[25-Mar-2014 11:37:14 Asia/Tokyo] PHP   3. get_db_conn() /Users/sachatelgenhofoudekoehorst/NetBeansProjects/kb/libs/lib.php:55
+[25-Mar-2014 11:37:14 Asia/Tokyo] PHP   4. mysql_connect() /Users/sachatelgenhofoudekoehorst/NetBeansProjects/kb/libs/util_lib.php:7
+[25-Mar-2014 11:37:14 Asia/Tokyo] PHP Notice:  Undefined index: user in /Users/sachatelgenhofoudekoehorst/NetBeansProjects/kb/libs/log_lib.php on line 13
+[25-Mar-2014 11:37:14 Asia/Tokyo] PHP Stack trace:
+[25-Mar-2014 11:37:14 Asia/Tokyo] PHP   1. {main}() /Users/sachatelgenhofoudekoehorst/NetBeansProjects/kb/index.php:0
+[25-Mar-2014 11:37:14 Asia/Tokyo] PHP   2. init_app() /Users/sachatelgenhofoudekoehorst/NetBeansProjects/kb/index.php:55
+[25-Mar-2014 11:37:14 Asia/Tokyo] PHP   3. get_db_conn() /Users/sachatelgenhofoudekoehorst/NetBeansProjects/kb/libs/lib.php:55
+[25-Mar-2014 11:37:14 Asia/Tokyo] PHP   4. log_error() /Users/sachatelgenhofoudekoehorst/NetBeansProjects/kb/libs/util_lib.php:7
+[25-Mar-2014 11:37:14 Asia/Tokyo] PHP Fatal error:  Call to a member function get_id() on a non-object in /Users/sachatelgenhofoudekoehorst/NetBeansProjects/kb/libs/log_lib.php on line 13
+[25-Mar-2014 11:37:14 Asia/Tokyo] PHP Stack trace:
+[25-Mar-2014 11:37:14 Asia/Tokyo] PHP   1. {main}() /Users/sachatelgenhofoudekoehorst/NetBeansProjects/kb/index.php:0
+[25-Mar-2014 11:37:14 Asia/Tokyo] PHP   2. init_app() /Users/sachatelgenhofoudekoehorst/NetBeansProjects/kb/index.php:55
+[25-Mar-2014 11:37:14 Asia/Tokyo] PHP   3. get_db_conn() /Users/sachatelgenhofoudekoehorst/NetBeansProjects/kb/libs/lib.php:55
+[25-Mar-2014 11:37:14 Asia/Tokyo] PHP   4. log_error() /Users/sachatelgenhofoudekoehorst/NetBeansProjects/kb/libs/util_lib.php:7
+[25-Mar-2014 11:37:15 Asia/Tokyo] PHP Warning:  mysql_connect(): No such file or directory in /Users/sachatelgenhofoudekoehorst/NetBeansProjects/kb/libs/util_lib.php on line 7
+[25-Mar-2014 11:37:15 Asia/Tokyo] PHP Stack trace:
+[25-Mar-2014 11:37:15 Asia/Tokyo] PHP   1. {main}() /Users/sachatelgenhofoudekoehorst/NetBeansProjects/kb/index.php:0
+[25-Mar-2014 11:37:15 Asia/Tokyo] PHP   2. init_app() /Users/sachatelgenhofoudekoehorst/NetBeansProjects/kb/index.php:55
+[25-Mar-2014 11:37:15 Asia/Tokyo] PHP   3. get_db_conn() /Users/sachatelgenhofoudekoehorst/NetBeansProjects/kb/libs/lib.php:55
+[25-Mar-2014 11:37:15 Asia/Tokyo] PHP   4. mysql_connect() /Users/sachatelgenhofoudekoehorst/NetBeansProjects/kb/libs/util_lib.php:7
+[25-Mar-2014 11:37:15 Asia/Tokyo] PHP Notice:  Undefined index: user in /Users/sachatelgenhofoudekoehorst/NetBeansProjects/kb/libs/log_lib.php on line 13
+[25-Mar-2014 11:37:15 Asia/Tokyo] PHP Stack trace:
+[25-Mar-2014 11:37:15 Asia/Tokyo] PHP   1. {main}() /Users/sachatelgenhofoudekoehorst/NetBeansProjects/kb/index.php:0
+[25-Mar-2014 11:37:15 Asia/Tokyo] PHP   2. init_app() /Users/sachatelgenhofoudekoehorst/NetBeansProjects/kb/index.php:55
+[25-Mar-2014 11:37:15 Asia/Tokyo] PHP   3. get_db_conn() /Users/sachatelgenhofoudekoehorst/NetBeansProjects/kb/libs/lib.php:55
+[25-Mar-2014 11:37:15 Asia/Tokyo] PHP   4. log_error() /Users/sachatelgenhofoudekoehorst/NetBeansProjects/kb/libs/util_lib.php:7
+[25-Mar-2014 11:37:15 Asia/Tokyo] PHP Fatal error:  Call to a member function get_id() on a non-object in /Users/sachatelgenhofoudekoehorst/NetBeansProjects/kb/libs/log_lib.php on line 13
+[25-Mar-2014 11:37:15 Asia/Tokyo] PHP Stack trace:
+[25-Mar-2014 11:37:15 Asia/Tokyo] PHP   1. {main}() /Users/sachatelgenhofoudekoehorst/NetBeansProjects/kb/index.php:0
+[25-Mar-2014 11:37:15 Asia/Tokyo] PHP   2. init_app() /Users/sachatelgenhofoudekoehorst/NetBeansProjects/kb/index.php:55
+[25-Mar-2014 11:37:15 Asia/Tokyo] PHP   3. get_db_conn() /Users/sachatelgenhofoudekoehorst/NetBeansProjects/kb/libs/lib.php:55
+[25-Mar-2014 11:37:15 Asia/Tokyo] PHP   4. log_error() /Users/sachatelgenhofoudekoehorst/NetBeansProjects/kb/libs/util_lib.php:7
+[25-Mar-2014 11:38:27 Asia/Tokyo] PHP Warning:  mysql_connect(): No such file or directory in /Users/sachatelgenhofoudekoehorst/NetBeansProjects/kb/libs/util_lib.php on line 7
+[25-Mar-2014 11:38:27 Asia/Tokyo] PHP Stack trace:
+[25-Mar-2014 11:38:27 Asia/Tokyo] PHP   1. {main}() /Users/sachatelgenhofoudekoehorst/NetBeansProjects/kb/index.php:0
+[25-Mar-2014 11:38:27 Asia/Tokyo] PHP   2. init_app() /Users/sachatelgenhofoudekoehorst/NetBeansProjects/kb/index.php:55
+[25-Mar-2014 11:38:27 Asia/Tokyo] PHP   3. get_db_conn() /Users/sachatelgenhofoudekoehorst/NetBeansProjects/kb/libs/lib.php:55
+[25-Mar-2014 11:38:27 Asia/Tokyo] PHP   4. mysql_connect() /Users/sachatelgenhofoudekoehorst/NetBeansProjects/kb/libs/util_lib.php:7
+[25-Mar-2014 11:39:29 Asia/Tokyo] PHP Warning:  mysql_connect(): No such file or directory in /Users/sachatelgenhofoudekoehorst/NetBeansProjects/kb/libs/util_lib.php on line 7
+[25-Mar-2014 11:39:29 Asia/Tokyo] PHP Stack trace:
+[25-Mar-2014 11:39:29 Asia/Tokyo] PHP   1. {main}() /Users/sachatelgenhofoudekoehorst/NetBeansProjects/kb/index.php:0
+[25-Mar-2014 11:39:29 Asia/Tokyo] PHP   2. init_app() /Users/sachatelgenhofoudekoehorst/NetBeansProjects/kb/index.php:50
+[25-Mar-2014 11:39:29 Asia/Tokyo] PHP   3. get_db_conn() /Users/sachatelgenhofoudekoehorst/NetBeansProjects/kb/libs/lib.php:55
+[25-Mar-2014 11:39:29 Asia/Tokyo] PHP   4. mysql_connect() /Users/sachatelgenhofoudekoehorst/NetBeansProjects/kb/libs/util_lib.php:7
+[25-Mar-2014 11:39:52 Asia/Tokyo] PHP Notice:  Undefined index: action in /Users/sachatelgenhofoudekoehorst/NetBeansProjects/kb/libs/connect_lib.php on line 217
+[25-Mar-2014 11:39:52 Asia/Tokyo] PHP Stack trace:
+[25-Mar-2014 11:39:52 Asia/Tokyo] PHP   1. {main}() /Users/sachatelgenhofoudekoehorst/NetBeansProjects/kb/index.php:0
+[25-Mar-2014 11:39:52 Asia/Tokyo] PHP   2. display_pwd_reset_page() /Users/sachatelgenhofoudekoehorst/NetBeansProjects/kb/index.php:28
+[25-Mar-2014 11:39:52 Asia/Tokyo] PHP Notice:  Undefined index: action in /Users/sachatelgenhofoudekoehorst/NetBeansProjects/kb/libs/connect_lib.php on line 243
+[25-Mar-2014 11:39:52 Asia/Tokyo] PHP Stack trace:
+[25-Mar-2014 11:39:52 Asia/Tokyo] PHP   1. {main}() /Users/sachatelgenhofoudekoehorst/NetBeansProjects/kb/index.php:0
+[25-Mar-2014 11:39:52 Asia/Tokyo] PHP   2. display_pwd_reset_page() /Users/sachatelgenhofoudekoehorst/NetBeansProjects/kb/index.php:28
+[25-Mar-2014 11:40:14 Asia/Tokyo] PHP Warning:  mysql_connect(): No such file or directory in /Users/sachatelgenhofoudekoehorst/NetBeansProjects/kb/libs/util_lib.php on line 7
+[25-Mar-2014 11:40:14 Asia/Tokyo] PHP Stack trace:
+[25-Mar-2014 11:40:14 Asia/Tokyo] PHP   1. {main}() /Users/sachatelgenhofoudekoehorst/NetBeansProjects/kb/index.php:0
+[25-Mar-2014 11:40:14 Asia/Tokyo] PHP   2. init_app() /Users/sachatelgenhofoudekoehorst/NetBeansProjects/kb/index.php:50
+[25-Mar-2014 11:40:14 Asia/Tokyo] PHP   3. get_db_conn() /Users/sachatelgenhofoudekoehorst/NetBeansProjects/kb/libs/lib.php:55
+[25-Mar-2014 11:40:14 Asia/Tokyo] PHP   4. mysql_connect() /Users/sachatelgenhofoudekoehorst/NetBeansProjects/kb/libs/util_lib.php:7
+[25-Mar-2014 11:47:03 Asia/Tokyo] PHP Warning:  session_start(): open(/var/lib/php5/web_kb_sessions/sess_pg7pgtadt4o98oop8ojbj74443, O_RDWR) failed: No such file or directory (2) in /Users/sachatelgenhofoudekoehorst/NetBeansProjects/kb/libs/lib.php on line 32
+[25-Mar-2014 11:47:03 Asia/Tokyo] PHP Stack trace:
+[25-Mar-2014 11:47:03 Asia/Tokyo] PHP   1. {main}() /Users/sachatelgenhofoudekoehorst/NetBeansProjects/kb/index.php:0
+[25-Mar-2014 11:47:03 Asia/Tokyo] PHP   2. init_app() /Users/sachatelgenhofoudekoehorst/NetBeansProjects/kb/index.php:50
+[25-Mar-2014 11:47:03 Asia/Tokyo] PHP   3. session_start() /Users/sachatelgenhofoudekoehorst/NetBeansProjects/kb/libs/lib.php:32
+[25-Mar-2014 11:47:03 Asia/Tokyo] PHP Warning:  mysql_connect(): No such file or directory in /Users/sachatelgenhofoudekoehorst/NetBeansProjects/kb/libs/util_lib.php on line 7
+[25-Mar-2014 11:47:03 Asia/Tokyo] PHP Stack trace:
+[25-Mar-2014 11:47:03 Asia/Tokyo] PHP   1. {main}() /Users/sachatelgenhofoudekoehorst/NetBeansProjects/kb/index.php:0
+[25-Mar-2014 11:47:03 Asia/Tokyo] PHP   2. init_app() /Users/sachatelgenhofoudekoehorst/NetBeansProjects/kb/index.php:50
+[25-Mar-2014 11:47:03 Asia/Tokyo] PHP   3. get_db_conn() /Users/sachatelgenhofoudekoehorst/NetBeansProjects/kb/libs/lib.php:50
+[25-Mar-2014 11:47:03 Asia/Tokyo] PHP   4. mysql_connect() /Users/sachatelgenhofoudekoehorst/NetBeansProjects/kb/libs/util_lib.php:7
+[25-Mar-2014 11:47:12 Asia/Tokyo] PHP Warning:  mysql_connect(): No such file or directory in /Users/sachatelgenhofoudekoehorst/NetBeansProjects/kb/libs/util_lib.php on line 7
+[25-Mar-2014 11:47:12 Asia/Tokyo] PHP Stack trace:
+[25-Mar-2014 11:47:12 Asia/Tokyo] PHP   1. {main}() /Users/sachatelgenhofoudekoehorst/NetBeansProjects/kb/index.php:0
+[25-Mar-2014 11:47:12 Asia/Tokyo] PHP   2. init_app() /Users/sachatelgenhofoudekoehorst/NetBeansProjects/kb/index.php:50
+[25-Mar-2014 11:47:12 Asia/Tokyo] PHP   3. get_db_conn() /Users/sachatelgenhofoudekoehorst/NetBeansProjects/kb/libs/lib.php:50
+[25-Mar-2014 11:47:12 Asia/Tokyo] PHP   4. mysql_connect() /Users/sachatelgenhofoudekoehorst/NetBeansProjects/kb/libs/util_lib.php:7
+[25-Mar-2014 11:50:41 Asia/Tokyo] PHP Warning:  mysql_connect(): No such file or directory in /Users/sachatelgenhofoudekoehorst/NetBeansProjects/kb/libs/util_lib.php on line 7
+[25-Mar-2014 11:50:41 Asia/Tokyo] PHP Stack trace:
+[25-Mar-2014 11:50:41 Asia/Tokyo] PHP   1. {main}() /Users/sachatelgenhofoudekoehorst/NetBeansProjects/kb/index.php:0
+[25-Mar-2014 11:50:41 Asia/Tokyo] PHP   2. init_app() /Users/sachatelgenhofoudekoehorst/NetBeansProjects/kb/index.php:50
+[25-Mar-2014 11:50:41 Asia/Tokyo] PHP   3. get_db_conn() /Users/sachatelgenhofoudekoehorst/NetBeansProjects/kb/libs/lib.php:47
+[25-Mar-2014 11:50:41 Asia/Tokyo] PHP   4. mysql_connect() /Users/sachatelgenhofoudekoehorst/NetBeansProjects/kb/libs/util_lib.php:7
+[25-Mar-2014 11:50:42 Asia/Tokyo] PHP Warning:  mysql_connect(): No such file or directory in /Users/sachatelgenhofoudekoehorst/NetBeansProjects/kb/libs/util_lib.php on line 7
+[25-Mar-2014 11:50:42 Asia/Tokyo] PHP Stack trace:
+[25-Mar-2014 11:50:42 Asia/Tokyo] PHP   1. {main}() /Users/sachatelgenhofoudekoehorst/NetBeansProjects/kb/index.php:0
+[25-Mar-2014 11:50:42 Asia/Tokyo] PHP   2. init_app() /Users/sachatelgenhofoudekoehorst/NetBeansProjects/kb/index.php:50
+[25-Mar-2014 11:50:42 Asia/Tokyo] PHP   3. get_db_conn() /Users/sachatelgenhofoudekoehorst/NetBeansProjects/kb/libs/lib.php:47
+[25-Mar-2014 11:50:42 Asia/Tokyo] PHP   4. mysql_connect() /Users/sachatelgenhofoudekoehorst/NetBeansProjects/kb/libs/util_lib.php:7
+[25-Mar-2014 11:51:01 Asia/Tokyo] PHP Notice:  Undefined index: device in /Users/sachatelgenhofoudekoehorst/NetBeansProjects/kb/libs/lib.php on line 56
+[25-Mar-2014 11:51:01 Asia/Tokyo] PHP Stack trace:
+[25-Mar-2014 11:51:01 Asia/Tokyo] PHP   1. {main}() /Users/sachatelgenhofoudekoehorst/NetBeansProjects/kb/index.php:0
+[25-Mar-2014 11:51:01 Asia/Tokyo] PHP   2. init_app() /Users/sachatelgenhofoudekoehorst/NetBeansProjects/kb/index.php:50
+[25-Mar-2014 11:51:01 Asia/Tokyo] PHP Notice:  Undefined index: user in /Users/sachatelgenhofoudekoehorst/NetBeansProjects/kb/libs/lib.php on line 60
+[25-Mar-2014 11:51:01 Asia/Tokyo] PHP Stack trace:
+[25-Mar-2014 11:51:01 Asia/Tokyo] PHP   1. {main}() /Users/sachatelgenhofoudekoehorst/NetBeansProjects/kb/index.php:0
+[25-Mar-2014 11:51:01 Asia/Tokyo] PHP   2. init_app() /Users/sachatelgenhofoudekoehorst/NetBeansProjects/kb/index.php:50
+[25-Mar-2014 11:51:01 Asia/Tokyo] PHP Notice:  Undefined variable: params in /Users/sachatelgenhofoudekoehorst/NetBeansProjects/kb/libs/connect_lib.php on line 108
+[25-Mar-2014 11:51:01 Asia/Tokyo] PHP Stack trace:
+[25-Mar-2014 11:51:01 Asia/Tokyo] PHP   1. {main}() /Users/sachatelgenhofoudekoehorst/NetBeansProjects/kb/index.php:0
+[25-Mar-2014 11:51:01 Asia/Tokyo] PHP   2. display_login_page() /Users/sachatelgenhofoudekoehorst/NetBeansProjects/kb/index.php:62
+[25-Mar-2014 11:51:01 Asia/Tokyo] PHP Notice:  Undefined index: login in /Users/sachatelgenhofoudekoehorst/NetBeansProjects/kb/libs/connect_lib.php on line 112
+[25-Mar-2014 11:51:01 Asia/Tokyo] PHP Stack trace:
+[25-Mar-2014 11:51:01 Asia/Tokyo] PHP   1. {main}() /Users/sachatelgenhofoudekoehorst/NetBeansProjects/kb/index.php:0
+[25-Mar-2014 11:51:01 Asia/Tokyo] PHP   2. display_login_page() /Users/sachatelgenhofoudekoehorst/NetBeansProjects/kb/index.php:62
+[25-Mar-2014 11:51:01 Asia/Tokyo] PHP Notice:  Undefined index: redirect in /Users/sachatelgenhofoudekoehorst/NetBeansProjects/kb/libs/connect_lib.php on line 132
+[25-Mar-2014 11:51:01 Asia/Tokyo] PHP Stack trace:
+[25-Mar-2014 11:51:01 Asia/Tokyo] PHP   1. {main}() /Users/sachatelgenhofoudekoehorst/NetBeansProjects/kb/index.php:0
+[25-Mar-2014 11:51:01 Asia/Tokyo] PHP   2. display_login_page() /Users/sachatelgenhofoudekoehorst/NetBeansProjects/kb/index.php:62
+[25-Mar-2014 11:51:01 Asia/Tokyo] PHP Notice:  Undefined index: redirect in /Users/sachatelgenhofoudekoehorst/NetBeansProjects/kb/libs/connect_lib.php on line 132
+[25-Mar-2014 11:51:01 Asia/Tokyo] PHP Stack trace:
+[25-Mar-2014 11:51:01 Asia/Tokyo] PHP   1. {main}() /Users/sachatelgenhofoudekoehorst/NetBeansProjects/kb/index.php:0
+[25-Mar-2014 11:51:01 Asia/Tokyo] PHP   2. display_login_page() /Users/sachatelgenhofoudekoehorst/NetBeansProjects/kb/index.php:62
+[25-Mar-2014 11:51:01 Asia/Tokyo] PHP Notice:  Undefined index: redirect in /Users/sachatelgenhofoudekoehorst/NetBeansProjects/kb/libs/connect_lib.php on line 135
+[25-Mar-2014 11:51:01 Asia/Tokyo] PHP Stack trace:
+[25-Mar-2014 11:51:01 Asia/Tokyo] PHP   1. {main}() /Users/sachatelgenhofoudekoehorst/NetBeansProjects/kb/index.php:0
+[25-Mar-2014 11:51:01 Asia/Tokyo] PHP   2. display_login_page() /Users/sachatelgenhofoudekoehorst/NetBeansProjects/kb/index.php:62
+[25-Mar-2014 11:51:59 Asia/Tokyo] PHP Notice:  Undefined index: user in /Users/sachatelgenhofoudekoehorst/NetBeansProjects/kb/libs/lib.php on line 60
+[25-Mar-2014 11:51:59 Asia/Tokyo] PHP Stack trace:
+[25-Mar-2014 11:51:59 Asia/Tokyo] PHP   1. {main}() /Users/sachatelgenhofoudekoehorst/NetBeansProjects/kb/index.php:0
+[25-Mar-2014 11:51:59 Asia/Tokyo] PHP   2. init_app() /Users/sachatelgenhofoudekoehorst/NetBeansProjects/kb/index.php:50
+[25-Mar-2014 11:51:59 Asia/Tokyo] PHP Notice:  Undefined index: crawler in /Users/sachatelgenhofoudekoehorst/NetBeansProjects/kb/index.php on line 52
+[25-Mar-2014 11:51:59 Asia/Tokyo] PHP Stack trace:
+[25-Mar-2014 11:51:59 Asia/Tokyo] PHP   1. {main}() /Users/sachatelgenhofoudekoehorst/NetBeansProjects/kb/index.php:0
+[25-Mar-2014 11:51:59 Asia/Tokyo] PHP Notice:  Undefined variable: params in /Users/sachatelgenhofoudekoehorst/NetBeansProjects/kb/libs/connect_lib.php on line 108
+[25-Mar-2014 11:51:59 Asia/Tokyo] PHP Stack trace:
+[25-Mar-2014 11:51:59 Asia/Tokyo] PHP   1. {main}() /Users/sachatelgenhofoudekoehorst/NetBeansProjects/kb/index.php:0
+[25-Mar-2014 11:51:59 Asia/Tokyo] PHP   2. display_login_page() /Users/sachatelgenhofoudekoehorst/NetBeansProjects/kb/index.php:62
+[25-Mar-2014 11:51:59 Asia/Tokyo] PHP Notice:  Undefined index: login in /Users/sachatelgenhofoudekoehorst/NetBeansProjects/kb/libs/connect_lib.php on line 112
+[25-Mar-2014 11:51:59 Asia/Tokyo] PHP Stack trace:
+[25-Mar-2014 11:51:59 Asia/Tokyo] PHP   1. {main}() /Users/sachatelgenhofoudekoehorst/NetBeansProjects/kb/index.php:0
+[25-Mar-2014 11:51:59 Asia/Tokyo] PHP   2. display_login_page() /Users/sachatelgenhofoudekoehorst/NetBeansProjects/kb/index.php:62
+[25-Mar-2014 11:51:59 Asia/Tokyo] PHP Notice:  Undefined index: redirect in /Users/sachatelgenhofoudekoehorst/NetBeansProjects/kb/libs/connect_lib.php on line 132
+[25-Mar-2014 11:51:59 Asia/Tokyo] PHP Stack trace:
+[25-Mar-2014 11:51:59 Asia/Tokyo] PHP   1. {main}() /Users/sachatelgenhofoudekoehorst/NetBeansProjects/kb/index.php:0
+[25-Mar-2014 11:51:59 Asia/Tokyo] PHP   2. display_login_page() /Users/sachatelgenhofoudekoehorst/NetBeansProjects/kb/index.php:62
+[25-Mar-2014 11:51:59 Asia/Tokyo] PHP Notice:  Undefined index: redirect in /Users/sachatelgenhofoudekoehorst/NetBeansProjects/kb/libs/connect_lib.php on line 132
+[25-Mar-2014 11:51:59 Asia/Tokyo] PHP Stack trace:
+[25-Mar-2014 11:51:59 Asia/Tokyo] PHP   1. {main}() /Users/sachatelgenhofoudekoehorst/NetBeansProjects/kb/index.php:0
+[25-Mar-2014 11:51:59 Asia/Tokyo] PHP   2. display_login_page() /Users/sachatelgenhofoudekoehorst/NetBeansProjects/kb/index.php:62
+[25-Mar-2014 11:51:59 Asia/Tokyo] PHP Notice:  Undefined index: redirect in /Users/sachatelgenhofoudekoehorst/NetBeansProjects/kb/libs/connect_lib.php on line 135
+[25-Mar-2014 11:51:59 Asia/Tokyo] PHP Stack trace:
+[25-Mar-2014 11:51:59 Asia/Tokyo] PHP   1. {main}() /Users/sachatelgenhofoudekoehorst/NetBeansProjects/kb/index.php:0
+[25-Mar-2014 11:51:59 Asia/Tokyo] PHP   2. display_login_page() /Users/sachatelgenhofoudekoehorst/NetBeansProjects/kb/index.php:62
+[25-Mar-2014 11:52:18 Asia/Tokyo] PHP Notice:  Undefined index: crawler in /Users/sachatelgenhofoudekoehorst/NetBeansProjects/kb/index.php on line 52
+[25-Mar-2014 11:52:18 Asia/Tokyo] PHP Stack trace:
+[25-Mar-2014 11:52:18 Asia/Tokyo] PHP   1. {main}() /Users/sachatelgenhofoudekoehorst/NetBeansProjects/kb/index.php:0
+[25-Mar-2014 11:52:18 Asia/Tokyo] PHP Notice:  Undefined variable: params in /Users/sachatelgenhofoudekoehorst/NetBeansProjects/kb/libs/connect_lib.php on line 108
+[25-Mar-2014 11:52:18 Asia/Tokyo] PHP Stack trace:
+[25-Mar-2014 11:52:18 Asia/Tokyo] PHP   1. {main}() /Users/sachatelgenhofoudekoehorst/NetBeansProjects/kb/index.php:0
+[25-Mar-2014 11:52:18 Asia/Tokyo] PHP   2. display_login_page() /Users/sachatelgenhofoudekoehorst/NetBeansProjects/kb/index.php:62
+[25-Mar-2014 11:52:18 Asia/Tokyo] PHP Notice:  Undefined index: login in /Users/sachatelgenhofoudekoehorst/NetBeansProjects/kb/libs/connect_lib.php on line 112
+[25-Mar-2014 11:52:18 Asia/Tokyo] PHP Stack trace:
+[25-Mar-2014 11:52:18 Asia/Tokyo] PHP   1. {main}() /Users/sachatelgenhofoudekoehorst/NetBeansProjects/kb/index.php:0
+[25-Mar-2014 11:52:18 Asia/Tokyo] PHP   2. display_login_page() /Users/sachatelgenhofoudekoehorst/NetBeansProjects/kb/index.php:62
+[25-Mar-2014 11:52:18 Asia/Tokyo] PHP Notice:  Undefined index: redirect in /Users/sachatelgenhofoudekoehorst/NetBeansProjects/kb/libs/connect_lib.php on line 132
+[25-Mar-2014 11:52:18 Asia/Tokyo] PHP Stack trace:
+[25-Mar-2014 11:52:18 Asia/Tokyo] PHP   1. {main}() /Users/sachatelgenhofoudekoehorst/NetBeansProjects/kb/index.php:0
+[25-Mar-2014 11:52:18 Asia/Tokyo] PHP   2. display_login_page() /Users/sachatelgenhofoudekoehorst/NetBeansProjects/kb/index.php:62
+[25-Mar-2014 11:52:18 Asia/Tokyo] PHP Notice:  Undefined index: redirect in /Users/sachatelgenhofoudekoehorst/NetBeansProjects/kb/libs/connect_lib.php on line 132
+[25-Mar-2014 11:52:18 Asia/Tokyo] PHP Stack trace:
+[25-Mar-2014 11:52:18 Asia/Tokyo] PHP   1. {main}() /Users/sachatelgenhofoudekoehorst/NetBeansProjects/kb/index.php:0
+[25-Mar-2014 11:52:18 Asia/Tokyo] PHP   2. display_login_page() /Users/sachatelgenhofoudekoehorst/NetBeansProjects/kb/index.php:62
+[25-Mar-2014 11:52:18 Asia/Tokyo] PHP Notice:  Undefined index: redirect in /Users/sachatelgenhofoudekoehorst/NetBeansProjects/kb/libs/connect_lib.php on line 135
+[25-Mar-2014 11:52:18 Asia/Tokyo] PHP Stack trace:
+[25-Mar-2014 11:52:18 Asia/Tokyo] PHP   1. {main}() /Users/sachatelgenhofoudekoehorst/NetBeansProjects/kb/index.php:0
+[25-Mar-2014 11:52:18 Asia/Tokyo] PHP   2. display_login_page() /Users/sachatelgenhofoudekoehorst/NetBeansProjects/kb/index.php:62
+[25-Mar-2014 11:52:40 Asia/Tokyo] PHP Notice:  Undefined index: crawler in /Users/sachatelgenhofoudekoehorst/NetBeansProjects/kb/index.php on line 52
+[25-Mar-2014 11:52:40 Asia/Tokyo] PHP Stack trace:
+[25-Mar-2014 11:52:40 Asia/Tokyo] PHP   1. {main}() /Users/sachatelgenhofoudekoehorst/NetBeansProjects/kb/index.php:0
+[25-Mar-2014 11:52:40 Asia/Tokyo] PHP Notice:  Undefined variable: params in /Users/sachatelgenhofoudekoehorst/NetBeansProjects/kb/libs/connect_lib.php on line 108
+[25-Mar-2014 11:52:40 Asia/Tokyo] PHP Stack trace:
+[25-Mar-2014 11:52:40 Asia/Tokyo] PHP   1. {main}() /Users/sachatelgenhofoudekoehorst/NetBeansProjects/kb/index.php:0
+[25-Mar-2014 11:52:40 Asia/Tokyo] PHP   2. display_login_page() /Users/sachatelgenhofoudekoehorst/NetBeansProjects/kb/index.php:62
+[25-Mar-2014 11:52:40 Asia/Tokyo] PHP Notice:  Undefined index: login in /Users/sachatelgenhofoudekoehorst/NetBeansProjects/kb/libs/connect_lib.php on line 112
+[25-Mar-2014 11:52:40 Asia/Tokyo] PHP Stack trace:
+[25-Mar-2014 11:52:40 Asia/Tokyo] PHP   1. {main}() /Users/sachatelgenhofoudekoehorst/NetBeansProjects/kb/index.php:0
+[25-Mar-2014 11:52:40 Asia/Tokyo] PHP   2. display_login_page() /Users/sachatelgenhofoudekoehorst/NetBeansProjects/kb/index.php:62
+[25-Mar-2014 11:52:40 Asia/Tokyo] PHP Notice:  Undefined index: redirect in /Users/sachatelgenhofoudekoehorst/NetBeansProjects/kb/libs/connect_lib.php on line 132
+[25-Mar-2014 11:52:40 Asia/Tokyo] PHP Stack trace:
+[25-Mar-2014 11:52:40 Asia/Tokyo] PHP   1. {main}() /Users/sachatelgenhofoudekoehorst/NetBeansProjects/kb/index.php:0
+[25-Mar-2014 11:52:40 Asia/Tokyo] PHP   2. display_login_page() /Users/sachatelgenhofoudekoehorst/NetBeansProjects/kb/index.php:62
+[25-Mar-2014 11:52:40 Asia/Tokyo] PHP Notice:  Undefined index: redirect in /Users/sachatelgenhofoudekoehorst/NetBeansProjects/kb/libs/connect_lib.php on line 132
+[25-Mar-2014 11:52:40 Asia/Tokyo] PHP Stack trace:
+[25-Mar-2014 11:52:40 Asia/Tokyo] PHP   1. {main}() /Users/sachatelgenhofoudekoehorst/NetBeansProjects/kb/index.php:0
+[25-Mar-2014 11:52:40 Asia/Tokyo] PHP   2. display_login_page() /Users/sachatelgenhofoudekoehorst/NetBeansProjects/kb/index.php:62
+[25-Mar-2014 11:52:40 Asia/Tokyo] PHP Notice:  Undefined index: redirect in /Users/sachatelgenhofoudekoehorst/NetBeansProjects/kb/libs/connect_lib.php on line 135
+[25-Mar-2014 11:52:40 Asia/Tokyo] PHP Stack trace:
+[25-Mar-2014 11:52:40 Asia/Tokyo] PHP   1. {main}() /Users/sachatelgenhofoudekoehorst/NetBeansProjects/kb/index.php:0
+[25-Mar-2014 11:52:40 Asia/Tokyo] PHP   2. display_login_page() /Users/sachatelgenhofoudekoehorst/NetBeansProjects/kb/index.php:62
+[25-Mar-2014 11:53:00 Asia/Tokyo] PHP Notice:  Undefined variable: params in /Users/sachatelgenhofoudekoehorst/NetBeansProjects/kb/libs/connect_lib.php on line 108
+[25-Mar-2014 11:53:00 Asia/Tokyo] PHP Stack trace:
+[25-Mar-2014 11:53:00 Asia/Tokyo] PHP   1. {main}() /Users/sachatelgenhofoudekoehorst/NetBeansProjects/kb/index.php:0
+[25-Mar-2014 11:53:00 Asia/Tokyo] PHP   2. display_login_page() /Users/sachatelgenhofoudekoehorst/NetBeansProjects/kb/index.php:62
+[25-Mar-2014 11:53:00 Asia/Tokyo] PHP Notice:  Undefined index: login in /Users/sachatelgenhofoudekoehorst/NetBeansProjects/kb/libs/connect_lib.php on line 112
+[25-Mar-2014 11:53:00 Asia/Tokyo] PHP Stack trace:
+[25-Mar-2014 11:53:00 Asia/Tokyo] PHP   1. {main}() /Users/sachatelgenhofoudekoehorst/NetBeansProjects/kb/index.php:0
+[25-Mar-2014 11:53:00 Asia/Tokyo] PHP   2. display_login_page() /Users/sachatelgenhofoudekoehorst/NetBeansProjects/kb/index.php:62
+[25-Mar-2014 11:53:00 Asia/Tokyo] PHP Notice:  Undefined index: redirect in /Users/sachatelgenhofoudekoehorst/NetBeansProjects/kb/libs/connect_lib.php on line 132
+[25-Mar-2014 11:53:00 Asia/Tokyo] PHP Stack trace:
+[25-Mar-2014 11:53:00 Asia/Tokyo] PHP   1. {main}() /Users/sachatelgenhofoudekoehorst/NetBeansProjects/kb/index.php:0
+[25-Mar-2014 11:53:00 Asia/Tokyo] PHP   2. display_login_page() /Users/sachatelgenhofoudekoehorst/NetBeansProjects/kb/index.php:62
+[25-Mar-2014 11:53:00 Asia/Tokyo] PHP Notice:  Undefined index: redirect in /Users/sachatelgenhofoudekoehorst/NetBeansProjects/kb/libs/connect_lib.php on line 132
+[25-Mar-2014 11:53:00 Asia/Tokyo] PHP Stack trace:
+[25-Mar-2014 11:53:00 Asia/Tokyo] PHP   1. {main}() /Users/sachatelgenhofoudekoehorst/NetBeansProjects/kb/index.php:0
+[25-Mar-2014 11:53:00 Asia/Tokyo] PHP   2. display_login_page() /Users/sachatelgenhofoudekoehorst/NetBeansProjects/kb/index.php:62
+[25-Mar-2014 11:53:00 Asia/Tokyo] PHP Notice:  Undefined index: redirect in /Users/sachatelgenhofoudekoehorst/NetBeansProjects/kb/libs/connect_lib.php on line 135
+[25-Mar-2014 11:53:00 Asia/Tokyo] PHP Stack trace:
+[25-Mar-2014 11:53:00 Asia/Tokyo] PHP   1. {main}() /Users/sachatelgenhofoudekoehorst/NetBeansProjects/kb/index.php:0
+[25-Mar-2014 11:53:00 Asia/Tokyo] PHP   2. display_login_page() /Users/sachatelgenhofoudekoehorst/NetBeansProjects/kb/index.php:62
+[25-Mar-2014 11:53:15 Asia/Tokyo] PHP Notice:  Undefined index: action in /Users/sachatelgenhofoudekoehorst/NetBeansProjects/kb/libs/connect_lib.php on line 217
+[25-Mar-2014 11:53:15 Asia/Tokyo] PHP Stack trace:
+[25-Mar-2014 11:53:15 Asia/Tokyo] PHP   1. {main}() /Users/sachatelgenhofoudekoehorst/NetBeansProjects/kb/index.php:0
+[25-Mar-2014 11:53:15 Asia/Tokyo] PHP   2. display_pwd_reset_page() /Users/sachatelgenhofoudekoehorst/NetBeansProjects/kb/index.php:28
+[25-Mar-2014 11:53:15 Asia/Tokyo] PHP Notice:  Undefined index: action in /Users/sachatelgenhofoudekoehorst/NetBeansProjects/kb/libs/connect_lib.php on line 243
+[25-Mar-2014 11:53:15 Asia/Tokyo] PHP Stack trace:
+[25-Mar-2014 11:53:15 Asia/Tokyo] PHP   1. {main}() /Users/sachatelgenhofoudekoehorst/NetBeansProjects/kb/index.php:0
+[25-Mar-2014 11:53:15 Asia/Tokyo] PHP   2. display_pwd_reset_page() /Users/sachatelgenhofoudekoehorst/NetBeansProjects/kb/index.php:28
+[25-Mar-2014 11:53:40 Asia/Tokyo] PHP Notice:  Undefined variable: params in /Users/sachatelgenhofoudekoehorst/NetBeansProjects/kb/libs/connect_lib.php on line 108
+[25-Mar-2014 11:53:40 Asia/Tokyo] PHP Stack trace:
+[25-Mar-2014 11:53:40 Asia/Tokyo] PHP   1. {main}() /Users/sachatelgenhofoudekoehorst/NetBeansProjects/kb/index.php:0
+[25-Mar-2014 11:53:40 Asia/Tokyo] PHP   2. display_login_page() /Users/sachatelgenhofoudekoehorst/NetBeansProjects/kb/index.php:62
+[25-Mar-2014 11:53:40 Asia/Tokyo] PHP Notice:  Undefined index: login in /Users/sachatelgenhofoudekoehorst/NetBeansProjects/kb/libs/connect_lib.php on line 112
+[25-Mar-2014 11:53:40 Asia/Tokyo] PHP Stack trace:
+[25-Mar-2014 11:53:40 Asia/Tokyo] PHP   1. {main}() /Users/sachatelgenhofoudekoehorst/NetBeansProjects/kb/index.php:0
+[25-Mar-2014 11:53:40 Asia/Tokyo] PHP   2. display_login_page() /Users/sachatelgenhofoudekoehorst/NetBeansProjects/kb/index.php:62
+[25-Mar-2014 11:53:40 Asia/Tokyo] PHP Notice:  Undefined index: redirect in /Users/sachatelgenhofoudekoehorst/NetBeansProjects/kb/libs/connect_lib.php on line 132
+[25-Mar-2014 11:53:40 Asia/Tokyo] PHP Stack trace:
+[25-Mar-2014 11:53:40 Asia/Tokyo] PHP   1. {main}() /Users/sachatelgenhofoudekoehorst/NetBeansProjects/kb/index.php:0
+[25-Mar-2014 11:53:40 Asia/Tokyo] PHP   2. display_login_page() /Users/sachatelgenhofoudekoehorst/NetBeansProjects/kb/index.php:62
+[25-Mar-2014 11:53:40 Asia/Tokyo] PHP Notice:  Undefined index: redirect in /Users/sachatelgenhofoudekoehorst/NetBeansProjects/kb/libs/connect_lib.php on line 132
+[25-Mar-2014 11:53:40 Asia/Tokyo] PHP Stack trace:
+[25-Mar-2014 11:53:40 Asia/Tokyo] PHP   1. {main}() /Users/sachatelgenhofoudekoehorst/NetBeansProjects/kb/index.php:0
+[25-Mar-2014 11:53:40 Asia/Tokyo] PHP   2. display_login_page() /Users/sachatelgenhofoudekoehorst/NetBeansProjects/kb/index.php:62
+[25-Mar-2014 11:53:40 Asia/Tokyo] PHP Notice:  Undefined index: redirect in /Users/sachatelgenhofoudekoehorst/NetBeansProjects/kb/libs/connect_lib.php on line 135
+[25-Mar-2014 11:53:40 Asia/Tokyo] PHP Stack trace:
+[25-Mar-2014 11:53:40 Asia/Tokyo] PHP   1. {main}() /Users/sachatelgenhofoudekoehorst/NetBeansProjects/kb/index.php:0
+[25-Mar-2014 11:53:40 Asia/Tokyo] PHP   2. display_login_page() /Users/sachatelgenhofoudekoehorst/NetBeansProjects/kb/index.php:62
+[25-Mar-2014 11:55:18 Asia/Tokyo] PHP Notice:  Undefined index: redirect in /Users/sachatelgenhofoudekoehorst/NetBeansProjects/kb/libs/connect_lib.php on line 83
+[25-Mar-2014 11:55:18 Asia/Tokyo] PHP Stack trace:
+[25-Mar-2014 11:55:18 Asia/Tokyo] PHP   1. {main}() /Users/sachatelgenhofoudekoehorst/NetBeansProjects/kb/index.php:0
+[25-Mar-2014 11:55:18 Asia/Tokyo] PHP   2. display_login_page() /Users/sachatelgenhofoudekoehorst/NetBeansProjects/kb/index.php:62
+[25-Mar-2014 11:55:18 Asia/Tokyo] PHP Notice:  Undefined index: redirect in /Users/sachatelgenhofoudekoehorst/NetBeansProjects/kb/libs/connect_lib.php on line 83
+[25-Mar-2014 11:55:18 Asia/Tokyo] PHP Stack trace:
+[25-Mar-2014 11:55:18 Asia/Tokyo] PHP   1. {main}() /Users/sachatelgenhofoudekoehorst/NetBeansProjects/kb/index.php:0
+[25-Mar-2014 11:55:18 Asia/Tokyo] PHP   2. display_login_page() /Users/sachatelgenhofoudekoehorst/NetBeansProjects/kb/index.php:62
+[25-Mar-2014 11:55:18 Asia/Tokyo] PHP Notice:  Undefined index: login in /Users/sachatelgenhofoudekoehorst/NetBeansProjects/kb/libs/connect_lib.php on line 113
+[25-Mar-2014 11:55:18 Asia/Tokyo] PHP Stack trace:
+[25-Mar-2014 11:55:18 Asia/Tokyo] PHP   1. {main}() /Users/sachatelgenhofoudekoehorst/NetBeansProjects/kb/index.php:0
+[25-Mar-2014 11:55:18 Asia/Tokyo] PHP   2. display_login_page() /Users/sachatelgenhofoudekoehorst/NetBeansProjects/kb/index.php:62
+[25-Mar-2014 11:55:18 Asia/Tokyo] PHP Notice:  Undefined index: redirect in /Users/sachatelgenhofoudekoehorst/NetBeansProjects/kb/libs/connect_lib.php on line 134
+[25-Mar-2014 11:55:18 Asia/Tokyo] PHP Stack trace:
+[25-Mar-2014 11:55:18 Asia/Tokyo] PHP   1. {main}() /Users/sachatelgenhofoudekoehorst/NetBeansProjects/kb/index.php:0
+[25-Mar-2014 11:55:18 Asia/Tokyo] PHP   2. display_login_page() /Users/sachatelgenhofoudekoehorst/NetBeansProjects/kb/index.php:62
+[25-Mar-2014 11:55:18 Asia/Tokyo] PHP Notice:  Undefined index: redirect in /Users/sachatelgenhofoudekoehorst/NetBeansProjects/kb/libs/connect_lib.php on line 134
+[25-Mar-2014 11:55:18 Asia/Tokyo] PHP Stack trace:
+[25-Mar-2014 11:55:18 Asia/Tokyo] PHP   1. {main}() /Users/sachatelgenhofoudekoehorst/NetBeansProjects/kb/index.php:0
+[25-Mar-2014 11:55:18 Asia/Tokyo] PHP   2. display_login_page() /Users/sachatelgenhofoudekoehorst/NetBeansProjects/kb/index.php:62
+[25-Mar-2014 11:55:18 Asia/Tokyo] PHP Notice:  Undefined index: redirect in /Users/sachatelgenhofoudekoehorst/NetBeansProjects/kb/libs/connect_lib.php on line 137
+[25-Mar-2014 11:55:18 Asia/Tokyo] PHP Stack trace:
+[25-Mar-2014 11:55:18 Asia/Tokyo] PHP   1. {main}() /Users/sachatelgenhofoudekoehorst/NetBeansProjects/kb/index.php:0
+[25-Mar-2014 11:55:18 Asia/Tokyo] PHP   2. display_login_page() /Users/sachatelgenhofoudekoehorst/NetBeansProjects/kb/index.php:62
+[25-Mar-2014 11:56:10 Asia/Tokyo] PHP Notice:  Undefined index: redirect in /Users/sachatelgenhofoudekoehorst/NetBeansProjects/kb/libs/connect_lib.php on line 83
+[25-Mar-2014 11:56:10 Asia/Tokyo] PHP Stack trace:
+[25-Mar-2014 11:56:10 Asia/Tokyo] PHP   1. {main}() /Users/sachatelgenhofoudekoehorst/NetBeansProjects/kb/index.php:0
+[25-Mar-2014 11:56:10 Asia/Tokyo] PHP   2. display_login_page() /Users/sachatelgenhofoudekoehorst/NetBeansProjects/kb/index.php:62
+[25-Mar-2014 11:56:10 Asia/Tokyo] PHP Notice:  Undefined index: login in /Users/sachatelgenhofoudekoehorst/NetBeansProjects/kb/libs/connect_lib.php on line 113
+[25-Mar-2014 11:56:10 Asia/Tokyo] PHP Stack trace:
+[25-Mar-2014 11:56:10 Asia/Tokyo] PHP   1. {main}() /Users/sachatelgenhofoudekoehorst/NetBeansProjects/kb/index.php:0
+[25-Mar-2014 11:56:10 Asia/Tokyo] PHP   2. display_login_page() /Users/sachatelgenhofoudekoehorst/NetBeansProjects/kb/index.php:62
+[25-Mar-2014 11:56:10 Asia/Tokyo] PHP Notice:  Undefined index: redirect in /Users/sachatelgenhofoudekoehorst/NetBeansProjects/kb/libs/connect_lib.php on line 134
+[25-Mar-2014 11:56:10 Asia/Tokyo] PHP Stack trace:
+[25-Mar-2014 11:56:10 Asia/Tokyo] PHP   1. {main}() /Users/sachatelgenhofoudekoehorst/NetBeansProjects/kb/index.php:0
+[25-Mar-2014 11:56:10 Asia/Tokyo] PHP   2. display_login_page() /Users/sachatelgenhofoudekoehorst/NetBeansProjects/kb/index.php:62
+[25-Mar-2014 11:56:10 Asia/Tokyo] PHP Notice:  Undefined index: redirect in /Users/sachatelgenhofoudekoehorst/NetBeansProjects/kb/libs/connect_lib.php on line 134
+[25-Mar-2014 11:56:10 Asia/Tokyo] PHP Stack trace:
+[25-Mar-2014 11:56:10 Asia/Tokyo] PHP   1. {main}() /Users/sachatelgenhofoudekoehorst/NetBeansProjects/kb/index.php:0
+[25-Mar-2014 11:56:10 Asia/Tokyo] PHP   2. display_login_page() /Users/sachatelgenhofoudekoehorst/NetBeansProjects/kb/index.php:62
+[25-Mar-2014 11:56:10 Asia/Tokyo] PHP Notice:  Undefined index: redirect in /Users/sachatelgenhofoudekoehorst/NetBeansProjects/kb/libs/connect_lib.php on line 137
+[25-Mar-2014 11:56:10 Asia/Tokyo] PHP Stack trace:
+[25-Mar-2014 11:56:10 Asia/Tokyo] PHP   1. {main}() /Users/sachatelgenhofoudekoehorst/NetBeansProjects/kb/index.php:0
+[25-Mar-2014 11:56:10 Asia/Tokyo] PHP   2. display_login_page() /Users/sachatelgenhofoudekoehorst/NetBeansProjects/kb/index.php:62
+[25-Mar-2014 11:56:31 Asia/Tokyo] PHP Notice:  Undefined index: login in /Users/sachatelgenhofoudekoehorst/NetBeansProjects/kb/libs/connect_lib.php on line 113
+[25-Mar-2014 11:56:31 Asia/Tokyo] PHP Stack trace:
+[25-Mar-2014 11:56:31 Asia/Tokyo] PHP   1. {main}() /Users/sachatelgenhofoudekoehorst/NetBeansProjects/kb/index.php:0
+[25-Mar-2014 11:56:31 Asia/Tokyo] PHP   2. display_login_page() /Users/sachatelgenhofoudekoehorst/NetBeansProjects/kb/index.php:62
+[25-Mar-2014 11:56:31 Asia/Tokyo] PHP Notice:  Undefined index: redirect in /Users/sachatelgenhofoudekoehorst/NetBeansProjects/kb/libs/connect_lib.php on line 134
+[25-Mar-2014 11:56:31 Asia/Tokyo] PHP Stack trace:
+[25-Mar-2014 11:56:31 Asia/Tokyo] PHP   1. {main}() /Users/sachatelgenhofoudekoehorst/NetBeansProjects/kb/index.php:0
+[25-Mar-2014 11:56:31 Asia/Tokyo] PHP   2. display_login_page() /Users/sachatelgenhofoudekoehorst/NetBeansProjects/kb/index.php:62
+[25-Mar-2014 11:56:31 Asia/Tokyo] PHP Notice:  Undefined index: redirect in /Users/sachatelgenhofoudekoehorst/NetBeansProjects/kb/libs/connect_lib.php on line 134
+[25-Mar-2014 11:56:31 Asia/Tokyo] PHP Stack trace:
+[25-Mar-2014 11:56:31 Asia/Tokyo] PHP   1. {main}() /Users/sachatelgenhofoudekoehorst/NetBeansProjects/kb/index.php:0
+[25-Mar-2014 11:56:31 Asia/Tokyo] PHP   2. display_login_page() /Users/sachatelgenhofoudekoehorst/NetBeansProjects/kb/index.php:62
+[25-Mar-2014 11:56:31 Asia/Tokyo] PHP Notice:  Undefined index: redirect in /Users/sachatelgenhofoudekoehorst/NetBeansProjects/kb/libs/connect_lib.php on line 137
+[25-Mar-2014 11:56:31 Asia/Tokyo] PHP Stack trace:
+[25-Mar-2014 11:56:31 Asia/Tokyo] PHP   1. {main}() /Users/sachatelgenhofoudekoehorst/NetBeansProjects/kb/index.php:0
+[25-Mar-2014 11:56:31 Asia/Tokyo] PHP   2. display_login_page() /Users/sachatelgenhofoudekoehorst/NetBeansProjects/kb/index.php:62
+[25-Mar-2014 11:57:15 Asia/Tokyo] PHP Notice:  Undefined index: redirect in /Users/sachatelgenhofoudekoehorst/NetBeansProjects/kb/libs/connect_lib.php on line 134
+[25-Mar-2014 11:57:15 Asia/Tokyo] PHP Stack trace:
+[25-Mar-2014 11:57:15 Asia/Tokyo] PHP   1. {main}() /Users/sachatelgenhofoudekoehorst/NetBeansProjects/kb/index.php:0
+[25-Mar-2014 11:57:15 Asia/Tokyo] PHP   2. display_login_page() /Users/sachatelgenhofoudekoehorst/NetBeansProjects/kb/index.php:62
+[25-Mar-2014 11:57:15 Asia/Tokyo] PHP Notice:  Undefined index: redirect in /Users/sachatelgenhofoudekoehorst/NetBeansProjects/kb/libs/connect_lib.php on line 134
+[25-Mar-2014 11:57:15 Asia/Tokyo] PHP Stack trace:
+[25-Mar-2014 11:57:15 Asia/Tokyo] PHP   1. {main}() /Users/sachatelgenhofoudekoehorst/NetBeansProjects/kb/index.php:0
+[25-Mar-2014 11:57:15 Asia/Tokyo] PHP   2. display_login_page() /Users/sachatelgenhofoudekoehorst/NetBeansProjects/kb/index.php:62
+[25-Mar-2014 11:57:15 Asia/Tokyo] PHP Notice:  Undefined index: redirect in /Users/sachatelgenhofoudekoehorst/NetBeansProjects/kb/libs/connect_lib.php on line 137
+[25-Mar-2014 11:57:15 Asia/Tokyo] PHP Stack trace:
+[25-Mar-2014 11:57:15 Asia/Tokyo] PHP   1. {main}() /Users/sachatelgenhofoudekoehorst/NetBeansProjects/kb/index.php:0
+[25-Mar-2014 11:57:15 Asia/Tokyo] PHP   2. display_login_page() /Users/sachatelgenhofoudekoehorst/NetBeansProjects/kb/index.php:62
+[25-Mar-2014 11:58:35 Asia/Tokyo] PHP Notice:  Undefined index: action in /Users/sachatelgenhofoudekoehorst/NetBeansProjects/kb/libs/connect_lib.php on line 219
+[25-Mar-2014 11:58:35 Asia/Tokyo] PHP Stack trace:
+[25-Mar-2014 11:58:35 Asia/Tokyo] PHP   1. {main}() /Users/sachatelgenhofoudekoehorst/NetBeansProjects/kb/index.php:0
+[25-Mar-2014 11:58:35 Asia/Tokyo] PHP   2. display_pwd_reset_page() /Users/sachatelgenhofoudekoehorst/NetBeansProjects/kb/index.php:28
+[25-Mar-2014 11:58:35 Asia/Tokyo] PHP Notice:  Undefined index: action in /Users/sachatelgenhofoudekoehorst/NetBeansProjects/kb/libs/connect_lib.php on line 245
+[25-Mar-2014 11:58:35 Asia/Tokyo] PHP Stack trace:
+[25-Mar-2014 11:58:35 Asia/Tokyo] PHP   1. {main}() /Users/sachatelgenhofoudekoehorst/NetBeansProjects/kb/index.php:0
+[25-Mar-2014 11:58:35 Asia/Tokyo] PHP   2. display_pwd_reset_page() /Users/sachatelgenhofoudekoehorst/NetBeansProjects/kb/index.php:28
+[25-Mar-2014 11:58:39 Asia/Tokyo] PHP Notice:  Undefined index: action in /Users/sachatelgenhofoudekoehorst/NetBeansProjects/kb/libs/account_lib.php on line 116
+[25-Mar-2014 11:58:39 Asia/Tokyo] PHP Stack trace:
+[25-Mar-2014 11:58:39 Asia/Tokyo] PHP   1. {main}() /Users/sachatelgenhofoudekoehorst/NetBeansProjects/kb/index.php:0
+[25-Mar-2014 11:58:39 Asia/Tokyo] PHP   2. display_new_account_page() /Users/sachatelgenhofoudekoehorst/NetBeansProjects/kb/index.php:34
+[25-Mar-2014 11:58:43 Asia/Tokyo] PHP Notice:  Undefined index: action in /Users/sachatelgenhofoudekoehorst/NetBeansProjects/kb/libs/connect_lib.php on line 219
+[25-Mar-2014 11:58:43 Asia/Tokyo] PHP Stack trace:
+[25-Mar-2014 11:58:43 Asia/Tokyo] PHP   1. {main}() /Users/sachatelgenhofoudekoehorst/NetBeansProjects/kb/index.php:0
+[25-Mar-2014 11:58:43 Asia/Tokyo] PHP   2. display_pwd_reset_page() /Users/sachatelgenhofoudekoehorst/NetBeansProjects/kb/index.php:28
+[25-Mar-2014 11:58:43 Asia/Tokyo] PHP Notice:  Undefined index: action in /Users/sachatelgenhofoudekoehorst/NetBeansProjects/kb/libs/connect_lib.php on line 245
+[25-Mar-2014 11:58:43 Asia/Tokyo] PHP Stack trace:
+[25-Mar-2014 11:58:43 Asia/Tokyo] PHP   1. {main}() /Users/sachatelgenhofoudekoehorst/NetBeansProjects/kb/index.php:0
+[25-Mar-2014 11:58:43 Asia/Tokyo] PHP   2. display_pwd_reset_page() /Users/sachatelgenhofoudekoehorst/NetBeansProjects/kb/index.php:28
+[25-Mar-2014 12:04:41 Asia/Tokyo] PHP Notice:  Undefined index: redirect in /Users/sachatelgenhofoudekoehorst/NetBeansProjects/kb/index.php on line 72
+[25-Mar-2014 12:04:41 Asia/Tokyo] PHP Stack trace:
+[25-Mar-2014 12:04:41 Asia/Tokyo] PHP   1. {main}() /Users/sachatelgenhofoudekoehorst/NetBeansProjects/kb/index.php:0
+[25-Mar-2014 12:04:41 Asia/Tokyo] PHP Notice:  Undefined index: redirect in /Users/sachatelgenhofoudekoehorst/NetBeansProjects/kb/index.php on line 72
+[25-Mar-2014 12:04:41 Asia/Tokyo] PHP Stack trace:
+[25-Mar-2014 12:04:41 Asia/Tokyo] PHP   1. {main}() /Users/sachatelgenhofoudekoehorst/NetBeansProjects/kb/index.php:0
+[25-Mar-2014 12:04:41 Asia/Tokyo] PHP Notice:  Undefined index: redirect in /Users/sachatelgenhofoudekoehorst/NetBeansProjects/kb/index.php on line 76
+[25-Mar-2014 12:04:41 Asia/Tokyo] PHP Stack trace:
+[25-Mar-2014 12:04:42 Asia/Tokyo] PHP   1. {main}() /Users/sachatelgenhofoudekoehorst/NetBeansProjects/kb/index.php:0
+[25-Mar-2014 12:04:42 Asia/Tokyo] PHP Notice:  Undefined index: redirect in /Users/sachatelgenhofoudekoehorst/NetBeansProjects/kb/index.php on line 76
+[25-Mar-2014 12:04:42 Asia/Tokyo] PHP Stack trace:
+[25-Mar-2014 12:04:42 Asia/Tokyo] PHP   1. {main}() /Users/sachatelgenhofoudekoehorst/NetBeansProjects/kb/index.php:0
+[25-Mar-2014 12:04:42 Asia/Tokyo] PHP Notice:  Undefined index: redirect_to_url in /Users/sachatelgenhofoudekoehorst/NetBeansProjects/kb/index.php on line 81
+[25-Mar-2014 12:04:42 Asia/Tokyo] PHP Stack trace:
+[25-Mar-2014 12:04:42 Asia/Tokyo] PHP   1. {main}() /Users/sachatelgenhofoudekoehorst/NetBeansProjects/kb/index.php:0
+[25-Mar-2014 12:04:42 Asia/Tokyo] PHP Notice:  Undefined index: faq in /Users/sachatelgenhofoudekoehorst/NetBeansProjects/kb/index.php on line 92
+[25-Mar-2014 12:04:42 Asia/Tokyo] PHP Stack trace:
+[25-Mar-2014 12:04:42 Asia/Tokyo] PHP   1. {main}() /Users/sachatelgenhofoudekoehorst/NetBeansProjects/kb/index.php:0
+[25-Mar-2014 12:04:42 Asia/Tokyo] PHP Notice:  Undefined index: mode in /Users/sachatelgenhofoudekoehorst/NetBeansProjects/kb/index.php on line 114
+[25-Mar-2014 12:04:42 Asia/Tokyo] PHP Stack trace:
+[25-Mar-2014 12:04:42 Asia/Tokyo] PHP   1. {main}() /Users/sachatelgenhofoudekoehorst/NetBeansProjects/kb/index.php:0
+[25-Mar-2014 12:04:42 Asia/Tokyo] PHP Notice:  Undefined index: mode in /Users/sachatelgenhofoudekoehorst/NetBeansProjects/kb/index.php on line 114
+[25-Mar-2014 12:04:42 Asia/Tokyo] PHP Stack trace:
+[25-Mar-2014 12:04:42 Asia/Tokyo] PHP   1. {main}() /Users/sachatelgenhofoudekoehorst/NetBeansProjects/kb/index.php:0
+[25-Mar-2014 12:04:42 Asia/Tokyo] PHP Notice:  Undefined index: user in /Users/sachatelgenhofoudekoehorst/NetBeansProjects/kb/index.php on line 127
+[25-Mar-2014 12:04:42 Asia/Tokyo] PHP Stack trace:
+[25-Mar-2014 12:04:42 Asia/Tokyo] PHP   1. {main}() /Users/sachatelgenhofoudekoehorst/NetBeansProjects/kb/index.php:0
+[25-Mar-2014 12:04:42 Asia/Tokyo] PHP Notice:  Undefined variable: two_columns in /Users/sachatelgenhofoudekoehorst/NetBeansProjects/kb/index.php on line 139
+[25-Mar-2014 12:04:42 Asia/Tokyo] PHP Stack trace:
+[25-Mar-2014 12:04:42 Asia/Tokyo] PHP   1. {main}() /Users/sachatelgenhofoudekoehorst/NetBeansProjects/kb/index.php:0
+[25-Mar-2014 12:04:42 Asia/Tokyo] PHP Notice:  Undefined index: user in /Users/sachatelgenhofoudekoehorst/NetBeansProjects/kb/index.php on line 143
+[25-Mar-2014 12:04:42 Asia/Tokyo] PHP Stack trace:
+[25-Mar-2014 12:04:42 Asia/Tokyo] PHP   1. {main}() /Users/sachatelgenhofoudekoehorst/NetBeansProjects/kb/index.php:0
+[25-Mar-2014 12:04:42 Asia/Tokyo] PHP Notice:  Undefined index: user in /Users/sachatelgenhofoudekoehorst/NetBeansProjects/kb/index.php on line 303
+[25-Mar-2014 12:04:42 Asia/Tokyo] PHP Stack trace:
+[25-Mar-2014 12:04:42 Asia/Tokyo] PHP   1. {main}() /Users/sachatelgenhofoudekoehorst/NetBeansProjects/kb/index.php:0
+[25-Mar-2014 12:05:01 Asia/Tokyo] PHP Notice:  Undefined index: redirect in /Users/sachatelgenhofoudekoehorst/NetBeansProjects/kb/index.php on line 72
+[25-Mar-2014 12:05:01 Asia/Tokyo] PHP Stack trace:
+[25-Mar-2014 12:05:01 Asia/Tokyo] PHP   1. {main}() /Users/sachatelgenhofoudekoehorst/NetBeansProjects/kb/index.php:0
+[25-Mar-2014 12:05:01 Asia/Tokyo] PHP Notice:  Undefined index: redirect in /Users/sachatelgenhofoudekoehorst/NetBeansProjects/kb/index.php on line 72
+[25-Mar-2014 12:05:01 Asia/Tokyo] PHP Stack trace:
+[25-Mar-2014 12:05:01 Asia/Tokyo] PHP   1. {main}() /Users/sachatelgenhofoudekoehorst/NetBeansProjects/kb/index.php:0
+[25-Mar-2014 12:05:01 Asia/Tokyo] PHP Notice:  Undefined index: redirect in /Users/sachatelgenhofoudekoehorst/NetBeansProjects/kb/index.php on line 76
+[25-Mar-2014 12:05:01 Asia/Tokyo] PHP Stack trace:
+[25-Mar-2014 12:05:01 Asia/Tokyo] PHP   1. {main}() /Users/sachatelgenhofoudekoehorst/NetBeansProjects/kb/index.php:0
+[25-Mar-2014 12:05:01 Asia/Tokyo] PHP Notice:  Undefined index: redirect in /Users/sachatelgenhofoudekoehorst/NetBeansProjects/kb/index.php on line 76
+[25-Mar-2014 12:05:01 Asia/Tokyo] PHP Stack trace:
+[25-Mar-2014 12:05:01 Asia/Tokyo] PHP   1. {main}() /Users/sachatelgenhofoudekoehorst/NetBeansProjects/kb/index.php:0
+[25-Mar-2014 12:05:01 Asia/Tokyo] PHP Notice:  Undefined index: redirect_to_url in /Users/sachatelgenhofoudekoehorst/NetBeansProjects/kb/index.php on line 81
+[25-Mar-2014 12:05:01 Asia/Tokyo] PHP Stack trace:
+[25-Mar-2014 12:05:01 Asia/Tokyo] PHP   1. {main}() /Users/sachatelgenhofoudekoehorst/NetBeansProjects/kb/index.php:0
+[25-Mar-2014 12:05:01 Asia/Tokyo] PHP Notice:  Undefined index: faq in /Users/sachatelgenhofoudekoehorst/NetBeansProjects/kb/index.php on line 92
+[25-Mar-2014 12:05:01 Asia/Tokyo] PHP Stack trace:
+[25-Mar-2014 12:05:01 Asia/Tokyo] PHP   1. {main}() /Users/sachatelgenhofoudekoehorst/NetBeansProjects/kb/index.php:0
+[25-Mar-2014 12:05:01 Asia/Tokyo] PHP Notice:  Undefined index: mode in /Users/sachatelgenhofoudekoehorst/NetBeansProjects/kb/index.php on line 114
+[25-Mar-2014 12:05:01 Asia/Tokyo] PHP Stack trace:
+[25-Mar-2014 12:05:01 Asia/Tokyo] PHP   1. {main}() /Users/sachatelgenhofoudekoehorst/NetBeansProjects/kb/index.php:0
+[25-Mar-2014 12:05:01 Asia/Tokyo] PHP Notice:  Undefined index: mode in /Users/sachatelgenhofoudekoehorst/NetBeansProjects/kb/index.php on line 114
+[25-Mar-2014 12:05:01 Asia/Tokyo] PHP Stack trace:
+[25-Mar-2014 12:05:01 Asia/Tokyo] PHP   1. {main}() /Users/sachatelgenhofoudekoehorst/NetBeansProjects/kb/index.php:0
+[25-Mar-2014 12:05:01 Asia/Tokyo] PHP Notice:  Undefined index: user in /Users/sachatelgenhofoudekoehorst/NetBeansProjects/kb/index.php on line 127
+[25-Mar-2014 12:05:01 Asia/Tokyo] PHP Stack trace:
+[25-Mar-2014 12:05:01 Asia/Tokyo] PHP   1. {main}() /Users/sachatelgenhofoudekoehorst/NetBeansProjects/kb/index.php:0
+[25-Mar-2014 12:05:01 Asia/Tokyo] PHP Notice:  Undefined variable: two_columns in /Users/sachatelgenhofoudekoehorst/NetBeansProjects/kb/index.php on line 139
+[25-Mar-2014 12:05:01 Asia/Tokyo] PHP Stack trace:
+[25-Mar-2014 12:05:01 Asia/Tokyo] PHP   1. {main}() /Users/sachatelgenhofoudekoehorst/NetBeansProjects/kb/index.php:0
+[25-Mar-2014 12:05:01 Asia/Tokyo] PHP Notice:  Undefined index: user in /Users/sachatelgenhofoudekoehorst/NetBeansProjects/kb/index.php on line 143
+[25-Mar-2014 12:05:01 Asia/Tokyo] PHP Stack trace:
+[25-Mar-2014 12:05:01 Asia/Tokyo] PHP   1. {main}() /Users/sachatelgenhofoudekoehorst/NetBeansProjects/kb/index.php:0
+[25-Mar-2014 12:05:01 Asia/Tokyo] PHP Notice:  Undefined index: user in /Users/sachatelgenhofoudekoehorst/NetBeansProjects/kb/index.php on line 303
+[25-Mar-2014 12:05:01 Asia/Tokyo] PHP Stack trace:
+[25-Mar-2014 12:05:01 Asia/Tokyo] PHP   1. {main}() /Users/sachatelgenhofoudekoehorst/NetBeansProjects/kb/index.php:0
+[25-Mar-2014 12:07:21 Asia/Tokyo] PHP Notice:  Undefined index: redirect in /Users/sachatelgenhofoudekoehorst/NetBeansProjects/kb/index.php on line 72
+[25-Mar-2014 12:07:21 Asia/Tokyo] PHP Stack trace:
+[25-Mar-2014 12:07:21 Asia/Tokyo] PHP   1. {main}() /Users/sachatelgenhofoudekoehorst/NetBeansProjects/kb/index.php:0
+[25-Mar-2014 12:07:21 Asia/Tokyo] PHP Notice:  Undefined index: redirect in /Users/sachatelgenhofoudekoehorst/NetBeansProjects/kb/index.php on line 76
+[25-Mar-2014 12:07:21 Asia/Tokyo] PHP Stack trace:
+[25-Mar-2014 12:07:21 Asia/Tokyo] PHP   1. {main}() /Users/sachatelgenhofoudekoehorst/NetBeansProjects/kb/index.php:0
+[25-Mar-2014 12:07:21 Asia/Tokyo] PHP Notice:  Undefined index: redirect in /Users/sachatelgenhofoudekoehorst/NetBeansProjects/kb/index.php on line 76
+[25-Mar-2014 12:07:21 Asia/Tokyo] PHP Stack trace:
+[25-Mar-2014 12:07:21 Asia/Tokyo] PHP   1. {main}() /Users/sachatelgenhofoudekoehorst/NetBeansProjects/kb/index.php:0
+[25-Mar-2014 12:07:21 Asia/Tokyo] PHP Notice:  Undefined index: redirect_to_url in /Users/sachatelgenhofoudekoehorst/NetBeansProjects/kb/index.php on line 81
+[25-Mar-2014 12:07:21 Asia/Tokyo] PHP Stack trace:
+[25-Mar-2014 12:07:21 Asia/Tokyo] PHP   1. {main}() /Users/sachatelgenhofoudekoehorst/NetBeansProjects/kb/index.php:0
+[25-Mar-2014 12:07:21 Asia/Tokyo] PHP Notice:  Undefined index: faq in /Users/sachatelgenhofoudekoehorst/NetBeansProjects/kb/index.php on line 92
+[25-Mar-2014 12:07:21 Asia/Tokyo] PHP Stack trace:
+[25-Mar-2014 12:07:21 Asia/Tokyo] PHP   1. {main}() /Users/sachatelgenhofoudekoehorst/NetBeansProjects/kb/index.php:0
+[25-Mar-2014 12:07:21 Asia/Tokyo] PHP Notice:  Undefined index: mode in /Users/sachatelgenhofoudekoehorst/NetBeansProjects/kb/index.php on line 114
+[25-Mar-2014 12:07:21 Asia/Tokyo] PHP Stack trace:
+[25-Mar-2014 12:07:21 Asia/Tokyo] PHP   1. {main}() /Users/sachatelgenhofoudekoehorst/NetBeansProjects/kb/index.php:0
+[25-Mar-2014 12:07:21 Asia/Tokyo] PHP Notice:  Undefined index: mode in /Users/sachatelgenhofoudekoehorst/NetBeansProjects/kb/index.php on line 114
+[25-Mar-2014 12:07:21 Asia/Tokyo] PHP Stack trace:
+[25-Mar-2014 12:07:21 Asia/Tokyo] PHP   1. {main}() /Users/sachatelgenhofoudekoehorst/NetBeansProjects/kb/index.php:0
+[25-Mar-2014 12:07:21 Asia/Tokyo] PHP Notice:  Undefined index: user in /Users/sachatelgenhofoudekoehorst/NetBeansProjects/kb/index.php on line 127
+[25-Mar-2014 12:07:21 Asia/Tokyo] PHP Stack trace:
+[25-Mar-2014 12:07:21 Asia/Tokyo] PHP   1. {main}() /Users/sachatelgenhofoudekoehorst/NetBeansProjects/kb/index.php:0
+[25-Mar-2014 12:07:21 Asia/Tokyo] PHP Notice:  Undefined variable: two_columns in /Users/sachatelgenhofoudekoehorst/NetBeansProjects/kb/index.php on line 139
+[25-Mar-2014 12:07:21 Asia/Tokyo] PHP Stack trace:
+[25-Mar-2014 12:07:21 Asia/Tokyo] PHP   1. {main}() /Users/sachatelgenhofoudekoehorst/NetBeansProjects/kb/index.php:0
+[25-Mar-2014 12:07:21 Asia/Tokyo] PHP Notice:  Undefined index: user in /Users/sachatelgenhofoudekoehorst/NetBeansProjects/kb/index.php on line 143
+[25-Mar-2014 12:07:21 Asia/Tokyo] PHP Stack trace:
+[25-Mar-2014 12:07:21 Asia/Tokyo] PHP   1. {main}() /Users/sachatelgenhofoudekoehorst/NetBeansProjects/kb/index.php:0
+[25-Mar-2014 12:07:21 Asia/Tokyo] PHP Notice:  Undefined index: user in /Users/sachatelgenhofoudekoehorst/NetBeansProjects/kb/index.php on line 303
+[25-Mar-2014 12:07:21 Asia/Tokyo] PHP Stack trace:
+[25-Mar-2014 12:07:21 Asia/Tokyo] PHP   1. {main}() /Users/sachatelgenhofoudekoehorst/NetBeansProjects/kb/index.php:0
+[25-Mar-2014 12:08:32 Asia/Tokyo] PHP Notice:  Undefined index: redirect in /Users/sachatelgenhofoudekoehorst/NetBeansProjects/kb/index.php on line 76
+[25-Mar-2014 12:08:32 Asia/Tokyo] PHP Stack trace:
+[25-Mar-2014 12:08:32 Asia/Tokyo] PHP   1. {main}() /Users/sachatelgenhofoudekoehorst/NetBeansProjects/kb/index.php:0
+[25-Mar-2014 12:08:32 Asia/Tokyo] PHP Notice:  Undefined index: redirect in /Users/sachatelgenhofoudekoehorst/NetBeansProjects/kb/index.php on line 76
+[25-Mar-2014 12:08:32 Asia/Tokyo] PHP Stack trace:
+[25-Mar-2014 12:08:32 Asia/Tokyo] PHP   1. {main}() /Users/sachatelgenhofoudekoehorst/NetBeansProjects/kb/index.php:0
+[25-Mar-2014 12:08:32 Asia/Tokyo] PHP Notice:  Undefined index: redirect_to_url in /Users/sachatelgenhofoudekoehorst/NetBeansProjects/kb/index.php on line 81
+[25-Mar-2014 12:08:32 Asia/Tokyo] PHP Stack trace:
+[25-Mar-2014 12:08:32 Asia/Tokyo] PHP   1. {main}() /Users/sachatelgenhofoudekoehorst/NetBeansProjects/kb/index.php:0
+[25-Mar-2014 12:08:32 Asia/Tokyo] PHP Notice:  Undefined index: faq in /Users/sachatelgenhofoudekoehorst/NetBeansProjects/kb/index.php on line 92
+[25-Mar-2014 12:08:32 Asia/Tokyo] PHP Stack trace:
+[25-Mar-2014 12:08:32 Asia/Tokyo] PHP   1. {main}() /Users/sachatelgenhofoudekoehorst/NetBeansProjects/kb/index.php:0
+[25-Mar-2014 12:08:32 Asia/Tokyo] PHP Notice:  Undefined index: mode in /Users/sachatelgenhofoudekoehorst/NetBeansProjects/kb/index.php on line 114
+[25-Mar-2014 12:08:32 Asia/Tokyo] PHP Stack trace:
+[25-Mar-2014 12:08:32 Asia/Tokyo] PHP   1. {main}() /Users/sachatelgenhofoudekoehorst/NetBeansProjects/kb/index.php:0
+[25-Mar-2014 12:08:32 Asia/Tokyo] PHP Notice:  Undefined index: mode in /Users/sachatelgenhofoudekoehorst/NetBeansProjects/kb/index.php on line 114
+[25-Mar-2014 12:08:32 Asia/Tokyo] PHP Stack trace:
+[25-Mar-2014 12:08:32 Asia/Tokyo] PHP   1. {main}() /Users/sachatelgenhofoudekoehorst/NetBeansProjects/kb/index.php:0
+[25-Mar-2014 12:08:32 Asia/Tokyo] PHP Notice:  Undefined index: user in /Users/sachatelgenhofoudekoehorst/NetBeansProjects/kb/index.php on line 127
+[25-Mar-2014 12:08:32 Asia/Tokyo] PHP Stack trace:
+[25-Mar-2014 12:08:32 Asia/Tokyo] PHP   1. {main}() /Users/sachatelgenhofoudekoehorst/NetBeansProjects/kb/index.php:0
+[25-Mar-2014 12:08:32 Asia/Tokyo] PHP Notice:  Undefined variable: two_columns in /Users/sachatelgenhofoudekoehorst/NetBeansProjects/kb/index.php on line 139
+[25-Mar-2014 12:08:32 Asia/Tokyo] PHP Stack trace:
+[25-Mar-2014 12:08:32 Asia/Tokyo] PHP   1. {main}() /Users/sachatelgenhofoudekoehorst/NetBeansProjects/kb/index.php:0
+[25-Mar-2014 12:08:32 Asia/Tokyo] PHP Notice:  Undefined index: user in /Users/sachatelgenhofoudekoehorst/NetBeansProjects/kb/index.php on line 143
+[25-Mar-2014 12:08:32 Asia/Tokyo] PHP Stack trace:
+[25-Mar-2014 12:08:32 Asia/Tokyo] PHP   1. {main}() /Users/sachatelgenhofoudekoehorst/NetBeansProjects/kb/index.php:0
+[25-Mar-2014 12:08:32 Asia/Tokyo] PHP Notice:  Undefined index: user in /Users/sachatelgenhofoudekoehorst/NetBeansProjects/kb/index.php on line 302
+[25-Mar-2014 12:08:32 Asia/Tokyo] PHP Stack trace:
+[25-Mar-2014 12:08:32 Asia/Tokyo] PHP   1. {main}() /Users/sachatelgenhofoudekoehorst/NetBeansProjects/kb/index.php:0
+[25-Mar-2014 12:09:59 Asia/Tokyo] PHP Notice:  Undefined index: redirect_to_url in /Users/sachatelgenhofoudekoehorst/NetBeansProjects/kb/index.php on line 81
+[25-Mar-2014 12:09:59 Asia/Tokyo] PHP Stack trace:
+[25-Mar-2014 12:09:59 Asia/Tokyo] PHP   1. {main}() /Users/sachatelgenhofoudekoehorst/NetBeansProjects/kb/index.php:0
+[25-Mar-2014 12:09:59 Asia/Tokyo] PHP Notice:  Undefined variable: redirect_to_url in /Users/sachatelgenhofoudekoehorst/NetBeansProjects/kb/index.php on line 81
+[25-Mar-2014 12:09:59 Asia/Tokyo] PHP Stack trace:
+[25-Mar-2014 12:09:59 Asia/Tokyo] PHP   1. {main}() /Users/sachatelgenhofoudekoehorst/NetBeansProjects/kb/index.php:0
+[25-Mar-2014 12:09:59 Asia/Tokyo] PHP Notice:  Undefined variable: redirect_to_url in /Users/sachatelgenhofoudekoehorst/NetBeansProjects/kb/index.php on line 82
+[25-Mar-2014 12:09:59 Asia/Tokyo] PHP Stack trace:
+[25-Mar-2014 12:09:59 Asia/Tokyo] PHP   1. {main}() /Users/sachatelgenhofoudekoehorst/NetBeansProjects/kb/index.php:0
+[25-Mar-2014 12:09:59 Asia/Tokyo] PHP Notice:  Undefined index: redirect_token in /Users/sachatelgenhofoudekoehorst/NetBeansProjects/kb/index.php on line 82
+[25-Mar-2014 12:09:59 Asia/Tokyo] PHP Stack trace:
+[25-Mar-2014 12:09:59 Asia/Tokyo] PHP   1. {main}() /Users/sachatelgenhofoudekoehorst/NetBeansProjects/kb/index.php:0
+[25-Mar-2014 12:09:59 Asia/Tokyo] PHP Notice:  Undefined index: faq in /Users/sachatelgenhofoudekoehorst/NetBeansProjects/kb/index.php on line 92
+[25-Mar-2014 12:09:59 Asia/Tokyo] PHP Stack trace:
+[25-Mar-2014 12:09:59 Asia/Tokyo] PHP   1. {main}() /Users/sachatelgenhofoudekoehorst/NetBeansProjects/kb/index.php:0
+[25-Mar-2014 12:09:59 Asia/Tokyo] PHP Notice:  Undefined index: mode in /Users/sachatelgenhofoudekoehorst/NetBeansProjects/kb/index.php on line 114
+[25-Mar-2014 12:09:59 Asia/Tokyo] PHP Stack trace:
+[25-Mar-2014 12:09:59 Asia/Tokyo] PHP   1. {main}() /Users/sachatelgenhofoudekoehorst/NetBeansProjects/kb/index.php:0
+[25-Mar-2014 12:09:59 Asia/Tokyo] PHP Notice:  Undefined index: mode in /Users/sachatelgenhofoudekoehorst/NetBeansProjects/kb/index.php on line 114
+[25-Mar-2014 12:09:59 Asia/Tokyo] PHP Stack trace:
+[25-Mar-2014 12:09:59 Asia/Tokyo] PHP   1. {main}() /Users/sachatelgenhofoudekoehorst/NetBeansProjects/kb/index.php:0
+[25-Mar-2014 12:09:59 Asia/Tokyo] PHP Notice:  Undefined index: user in /Users/sachatelgenhofoudekoehorst/NetBeansProjects/kb/index.php on line 127
+[25-Mar-2014 12:09:59 Asia/Tokyo] PHP Stack trace:
+[25-Mar-2014 12:09:59 Asia/Tokyo] PHP   1. {main}() /Users/sachatelgenhofoudekoehorst/NetBeansProjects/kb/index.php:0
+[25-Mar-2014 12:09:59 Asia/Tokyo] PHP Notice:  Undefined variable: two_columns in /Users/sachatelgenhofoudekoehorst/NetBeansProjects/kb/index.php on line 139
+[25-Mar-2014 12:09:59 Asia/Tokyo] PHP Stack trace:
+[25-Mar-2014 12:09:59 Asia/Tokyo] PHP   1. {main}() /Users/sachatelgenhofoudekoehorst/NetBeansProjects/kb/index.php:0
+[25-Mar-2014 12:09:59 Asia/Tokyo] PHP Notice:  Undefined index: user in /Users/sachatelgenhofoudekoehorst/NetBeansProjects/kb/index.php on line 143
+[25-Mar-2014 12:09:59 Asia/Tokyo] PHP Stack trace:
+[25-Mar-2014 12:09:59 Asia/Tokyo] PHP   1. {main}() /Users/sachatelgenhofoudekoehorst/NetBeansProjects/kb/index.php:0
+[25-Mar-2014 12:09:59 Asia/Tokyo] PHP Notice:  Undefined index: user in /Users/sachatelgenhofoudekoehorst/NetBeansProjects/kb/index.php on line 302
+[25-Mar-2014 12:09:59 Asia/Tokyo] PHP Stack trace:
+[25-Mar-2014 12:09:59 Asia/Tokyo] PHP   1. {main}() /Users/sachatelgenhofoudekoehorst/NetBeansProjects/kb/index.php:0
+[25-Mar-2014 12:12:22 Asia/Tokyo] PHP Notice:  Undefined index: mode in /Users/sachatelgenhofoudekoehorst/NetBeansProjects/kb/set.php on line 14
+[25-Mar-2014 12:12:22 Asia/Tokyo] PHP Stack trace:
+[25-Mar-2014 12:12:22 Asia/Tokyo] PHP   1. {main}() /Users/sachatelgenhofoudekoehorst/NetBeansProjects/kb/set.php:0
+[25-Mar-2014 12:12:22 Asia/Tokyo] PHP Notice:  Undefined index: mode in /Users/sachatelgenhofoudekoehorst/NetBeansProjects/kb/set.php on line 17
+[25-Mar-2014 12:12:22 Asia/Tokyo] PHP Stack trace:
+[25-Mar-2014 12:12:22 Asia/Tokyo] PHP   1. {main}() /Users/sachatelgenhofoudekoehorst/NetBeansProjects/kb/set.php:0
+[25-Mar-2014 12:12:22 Asia/Tokyo] PHP Notice:  Undefined index: set_id in /Users/sachatelgenhofoudekoehorst/NetBeansProjects/kb/set.php on line 32
+[25-Mar-2014 12:12:22 Asia/Tokyo] PHP Stack trace:
+[25-Mar-2014 12:12:22 Asia/Tokyo] PHP   1. {main}() /Users/sachatelgenhofoudekoehorst/NetBeansProjects/kb/set.php:0
+[25-Mar-2014 12:13:30 Asia/Tokyo] PHP Notice:  Undefined index: mode in /Users/sachatelgenhofoudekoehorst/NetBeansProjects/kb/set.php on line 14
+[25-Mar-2014 12:13:30 Asia/Tokyo] PHP Stack trace:
+[25-Mar-2014 12:13:30 Asia/Tokyo] PHP   1. {main}() /Users/sachatelgenhofoudekoehorst/NetBeansProjects/kb/set.php:0
+[25-Mar-2014 12:13:30 Asia/Tokyo] PHP Notice:  Undefined index: mode in /Users/sachatelgenhofoudekoehorst/NetBeansProjects/kb/set.php on line 21
+[25-Mar-2014 12:13:30 Asia/Tokyo] PHP Stack trace:
+[25-Mar-2014 12:13:30 Asia/Tokyo] PHP   1. {main}() /Users/sachatelgenhofoudekoehorst/NetBeansProjects/kb/set.php:0
+[25-Mar-2014 12:13:30 Asia/Tokyo] PHP Notice:  Undefined index: set_id in /Users/sachatelgenhofoudekoehorst/NetBeansProjects/kb/set.php on line 36
+[25-Mar-2014 12:13:30 Asia/Tokyo] PHP Stack trace:
+[25-Mar-2014 12:13:30 Asia/Tokyo] PHP   1. {main}() /Users/sachatelgenhofoudekoehorst/NetBeansProjects/kb/set.php:0
+[25-Mar-2014 12:14:01 Asia/Tokyo] PHP Notice:  Undefined index: mode in /Users/sachatelgenhofoudekoehorst/NetBeansProjects/kb/set.php on line 21
+[25-Mar-2014 12:14:01 Asia/Tokyo] PHP Stack trace:
+[25-Mar-2014 12:14:01 Asia/Tokyo] PHP   1. {main}() /Users/sachatelgenhofoudekoehorst/NetBeansProjects/kb/set.php:0
+[25-Mar-2014 12:14:01 Asia/Tokyo] PHP Notice:  Undefined index: set_id in /Users/sachatelgenhofoudekoehorst/NetBeansProjects/kb/set.php on line 36
+[25-Mar-2014 12:14:01 Asia/Tokyo] PHP Stack trace:
+[25-Mar-2014 12:14:01 Asia/Tokyo] PHP   1. {main}() /Users/sachatelgenhofoudekoehorst/NetBeansProjects/kb/set.php:0
+[25-Mar-2014 12:14:28 Asia/Tokyo] PHP Notice:  Undefined index: set_id in /Users/sachatelgenhofoudekoehorst/NetBeansProjects/kb/set.php on line 36
+[25-Mar-2014 12:14:28 Asia/Tokyo] PHP Stack trace:
+[25-Mar-2014 12:14:28 Asia/Tokyo] PHP   1. {main}() /Users/sachatelgenhofoudekoehorst/NetBeansProjects/kb/set.php:0
+[25-Mar-2014 12:25:32 Asia/Tokyo] PHP Notice:  Undefined variable: result in /Users/sachatelgenhofoudekoehorst/NetBeansProjects/kb/classes/LearningSet.php on line 579
+[25-Mar-2014 12:25:32 Asia/Tokyo] PHP Stack trace:
+[25-Mar-2014 12:25:32 Asia/Tokyo] PHP   1. {main}() /Users/sachatelgenhofoudekoehorst/NetBeansProjects/kb/set.php:0
+[25-Mar-2014 12:25:32 Asia/Tokyo] PHP   2. LearningSet::get_all_tags() /Users/sachatelgenhofoudekoehorst/NetBeansProjects/kb/set.php:34
+[25-Mar-2014 12:25:32 Asia/Tokyo] PHP Warning:  mysql_fetch_array() expects parameter 1 to be resource, null given in /Users/sachatelgenhofoudekoehorst/NetBeansProjects/kb/classes/LearningSet.php on line 579
+[25-Mar-2014 12:25:32 Asia/Tokyo] PHP Stack trace:
+[25-Mar-2014 12:25:32 Asia/Tokyo] PHP   1. {main}() /Users/sachatelgenhofoudekoehorst/NetBeansProjects/kb/set.php:0
+[25-Mar-2014 12:25:32 Asia/Tokyo] PHP   2. LearningSet::get_all_tags() /Users/sachatelgenhofoudekoehorst/NetBeansProjects/kb/set.php:34
+[25-Mar-2014 12:25:32 Asia/Tokyo] PHP   3. mysql_fetch_array() /Users/sachatelgenhofoudekoehorst/NetBeansProjects/kb/classes/LearningSet.php:579
+[25-Mar-2014 12:29:08 Asia/Tokyo] PHP Notice:  Trying to get property of non-object in /Users/sachatelgenhofoudekoehorst/NetBeansProjects/kb/classes/LearningSet.php on line 576
+[25-Mar-2014 12:29:08 Asia/Tokyo] PHP Stack trace:
+[25-Mar-2014 12:29:08 Asia/Tokyo] PHP   1. {main}() /Users/sachatelgenhofoudekoehorst/NetBeansProjects/kb/set.php:0
+[25-Mar-2014 12:29:08 Asia/Tokyo] PHP   2. LearningSet::get_all_tags() /Users/sachatelgenhofoudekoehorst/NetBeansProjects/kb/set.php:34
+[25-Mar-2014 12:29:08 Asia/Tokyo] PHP Notice:  Trying to get property of non-object in /Users/sachatelgenhofoudekoehorst/NetBeansProjects/kb/classes/LearningSet.php on line 576
+[25-Mar-2014 12:29:08 Asia/Tokyo] PHP Stack trace:
+[25-Mar-2014 12:29:08 Asia/Tokyo] PHP   1. {main}() /Users/sachatelgenhofoudekoehorst/NetBeansProjects/kb/set.php:0
+[25-Mar-2014 12:29:08 Asia/Tokyo] PHP   2. LearningSet::get_all_tags() /Users/sachatelgenhofoudekoehorst/NetBeansProjects/kb/set.php:34
+[25-Mar-2014 12:29:08 Asia/Tokyo] PHP Notice:  Trying to get property of non-object in /Users/sachatelgenhofoudekoehorst/NetBeansProjects/kb/classes/LearningSet.php on line 576
+[25-Mar-2014 12:29:08 Asia/Tokyo] PHP Stack trace:
+[25-Mar-2014 12:29:08 Asia/Tokyo] PHP   1. {main}() /Users/sachatelgenhofoudekoehorst/NetBeansProjects/kb/set.php:0
+[25-Mar-2014 12:29:08 Asia/Tokyo] PHP   2. LearningSet::get_all_tags() /Users/sachatelgenhofoudekoehorst/NetBeansProjects/kb/set.php:34
+[25-Mar-2014 12:29:08 Asia/Tokyo] PHP Notice:  Trying to get property of non-object in /Users/sachatelgenhofoudekoehorst/NetBeansProjects/kb/classes/LearningSet.php on line 576
+[25-Mar-2014 12:29:08 Asia/Tokyo] PHP Stack trace:
+[25-Mar-2014 12:29:08 Asia/Tokyo] PHP   1. {main}() /Users/sachatelgenhofoudekoehorst/NetBeansProjects/kb/set.php:0
+[25-Mar-2014 12:29:08 Asia/Tokyo] PHP   2. LearningSet::get_all_tags() /Users/sachatelgenhofoudekoehorst/NetBeansProjects/kb/set.php:34
+[25-Mar-2014 12:29:08 Asia/Tokyo] PHP Notice:  Trying to get property of non-object in /Users/sachatelgenhofoudekoehorst/NetBeansProjects/kb/classes/LearningSet.php on line 576
+[25-Mar-2014 12:29:08 Asia/Tokyo] PHP Stack trace:
+[25-Mar-2014 12:29:08 Asia/Tokyo] PHP   1. {main}() /Users/sachatelgenhofoudekoehorst/NetBeansProjects/kb/set.php:0
+[25-Mar-2014 12:29:08 Asia/Tokyo] PHP   2. LearningSet::get_all_tags() /Users/sachatelgenhofoudekoehorst/NetBeansProjects/kb/set.php:34
+[25-Mar-2014 12:29:08 Asia/Tokyo] PHP Notice:  Trying to get property of non-object in /Users/sachatelgenhofoudekoehorst/NetBeansProjects/kb/classes/LearningSet.php on line 576
+[25-Mar-2014 12:29:08 Asia/Tokyo] PHP Stack trace:
+[25-Mar-2014 12:29:08 Asia/Tokyo] PHP   1. {main}() /Users/sachatelgenhofoudekoehorst/NetBeansProjects/kb/set.php:0
+[25-Mar-2014 12:29:08 Asia/Tokyo] PHP   2. LearningSet::get_all_tags() /Users/sachatelgenhofoudekoehorst/NetBeansProjects/kb/set.php:34
+[25-Mar-2014 12:29:08 Asia/Tokyo] PHP Notice:  Trying to get property of non-object in /Users/sachatelgenhofoudekoehorst/NetBeansProjects/kb/classes/LearningSet.php on line 576
+[25-Mar-2014 12:29:08 Asia/Tokyo] PHP Stack trace:
+[25-Mar-2014 12:29:08 Asia/Tokyo] PHP   1. {main}() /Users/sachatelgenhofoudekoehorst/NetBeansProjects/kb/set.php:0
+[25-Mar-2014 12:29:08 Asia/Tokyo] PHP   2. LearningSet::get_all_tags() /Users/sachatelgenhofoudekoehorst/NetBeansProjects/kb/set.php:34
+[25-Mar-2014 12:29:08 Asia/Tokyo] PHP Notice:  Trying to get property of non-object in /Users/sachatelgenhofoudekoehorst/NetBeansProjects/kb/classes/LearningSet.php on line 576
+[25-Mar-2014 12:29:08 Asia/Tokyo] PHP Stack trace:
+[25-Mar-2014 12:29:08 Asia/Tokyo] PHP   1. {main}() /Users/sachatelgenhofoudekoehorst/NetBeansProjects/kb/set.php:0
+[25-Mar-2014 12:29:08 Asia/Tokyo] PHP   2. LearningSet::get_all_tags() /Users/sachatelgenhofoudekoehorst/NetBeansProjects/kb/set.php:34
+[25-Mar-2014 12:29:08 Asia/Tokyo] PHP Notice:  Trying to get property of non-object in /Users/sachatelgenhofoudekoehorst/NetBeansProjects/kb/classes/LearningSet.php on line 576
+[25-Mar-2014 12:29:08 Asia/Tokyo] PHP Stack trace:
+[25-Mar-2014 12:29:08 Asia/Tokyo] PHP   1. {main}() /Users/sachatelgenhofoudekoehorst/NetBeansProjects/kb/set.php:0
+[25-Mar-2014 12:29:08 Asia/Tokyo] PHP   2. LearningSet::get_all_tags() /Users/sachatelgenhofoudekoehorst/NetBeansProjects/kb/set.php:34
+[25-Mar-2014 12:29:08 Asia/Tokyo] PHP Notice:  Trying to get property of non-object in /Users/sachatelgenhofoudekoehorst/NetBeansProjects/kb/classes/LearningSet.php on line 576
+[25-Mar-2014 12:29:08 Asia/Tokyo] PHP Stack trace:
+[25-Mar-2014 12:29:08 Asia/Tokyo] PHP   1. {main}() /Users/sachatelgenhofoudekoehorst/NetBeansProjects/kb/set.php:0
+[25-Mar-2014 12:29:08 Asia/Tokyo] PHP   2. LearningSet::get_all_tags() /Users/sachatelgenhofoudekoehorst/NetBeansProjects/kb/set.php:34
+[25-Mar-2014 12:29:08 Asia/Tokyo] PHP Notice:  Trying to get property of non-object in /Users/sachatelgenhofoudekoehorst/NetBeansProjects/kb/classes/LearningSet.php on line 576
+[25-Mar-2014 12:29:08 Asia/Tokyo] PHP Stack trace:
+[25-Mar-2014 12:29:08 Asia/Tokyo] PHP   1. {main}() /Users/sachatelgenhofoudekoehorst/NetBeansProjects/kb/set.php:0
+[25-Mar-2014 12:29:08 Asia/Tokyo] PHP   2. LearningSet::get_all_tags() /Users/sachatelgenhofoudekoehorst/NetBeansProjects/kb/set.php:34
+[25-Mar-2014 12:29:08 Asia/Tokyo] PHP Notice:  Trying to get property of non-object in /Users/sachatelgenhofoudekoehorst/NetBeansProjects/kb/classes/LearningSet.php on line 576
+[25-Mar-2014 12:29:08 Asia/Tokyo] PHP Stack trace:
+[25-Mar-2014 12:29:08 Asia/Tokyo] PHP   1. {main}() /Users/sachatelgenhofoudekoehorst/NetBeansProjects/kb/set.php:0
+[25-Mar-2014 12:29:08 Asia/Tokyo] PHP   2. LearningSet::get_all_tags() /Users/sachatelgenhofoudekoehorst/NetBeansProjects/kb/set.php:34
+[25-Mar-2014 12:29:08 Asia/Tokyo] PHP Notice:  Trying to get property of non-object in /Users/sachatelgenhofoudekoehorst/NetBeansProjects/kb/classes/LearningSet.php on line 576
+[25-Mar-2014 12:29:08 Asia/Tokyo] PHP Stack trace:
+[25-Mar-2014 12:29:08 Asia/Tokyo] PHP   1. {main}() /Users/sachatelgenhofoudekoehorst/NetBeansProjects/kb/set.php:0
+[25-Mar-2014 12:29:08 Asia/Tokyo] PHP   2. LearningSet::get_all_tags() /Users/sachatelgenhofoudekoehorst/NetBeansProjects/kb/set.php:34
+[25-Mar-2014 12:29:08 Asia/Tokyo] PHP Notice:  Trying to get property of non-object in /Users/sachatelgenhofoudekoehorst/NetBeansProjects/kb/classes/LearningSet.php on line 576
+[25-Mar-2014 12:29:08 Asia/Tokyo] PHP Stack trace:
+[25-Mar-2014 12:29:08 Asia/Tokyo] PHP   1. {main}() /Users/sachatelgenhofoudekoehorst/NetBeansProjects/kb/set.php:0
+[25-Mar-2014 12:29:08 Asia/Tokyo] PHP   2. LearningSet::get_all_tags() /Users/sachatelgenhofoudekoehorst/NetBeansProjects/kb/set.php:34
+[25-Mar-2014 12:29:08 Asia/Tokyo] PHP Notice:  Trying to get property of non-object in /Users/sachatelgenhofoudekoehorst/NetBeansProjects/kb/classes/LearningSet.php on line 576
+[25-Mar-2014 12:29:08 Asia/Tokyo] PHP Stack trace:
+[25-Mar-2014 12:29:08 Asia/Tokyo] PHP   1. {main}() /Users/sachatelgenhofoudekoehorst/NetBeansProjects/kb/set.php:0
+[25-Mar-2014 12:29:08 Asia/Tokyo] PHP   2. LearningSet::get_all_tags() /Users/sachatelgenhofoudekoehorst/NetBeansProjects/kb/set.php:34
+[25-Mar-2014 12:29:08 Asia/Tokyo] PHP Notice:  Trying to get property of non-object in /Users/sachatelgenhofoudekoehorst/NetBeansProjects/kb/classes/LearningSet.php on line 576
+[25-Mar-2014 12:29:08 Asia/Tokyo] PHP Stack trace:
+[25-Mar-2014 12:29:08 Asia/Tokyo] PHP   1. {main}() /Users/sachatelgenhofoudekoehorst/NetBeansProjects/kb/set.php:0
+[25-Mar-2014 12:29:08 Asia/Tokyo] PHP   2. LearningSet::get_all_tags() /Users/sachatelgenhofoudekoehorst/NetBeansProjects/kb/set.php:34
+[25-Mar-2014 12:29:08 Asia/Tokyo] PHP Notice:  Trying to get property of non-object in /Users/sachatelgenhofoudekoehorst/NetBeansProjects/kb/classes/LearningSet.php on line 576
+[25-Mar-2014 12:29:08 Asia/Tokyo] PHP Stack trace:
+[25-Mar-2014 12:29:08 Asia/Tokyo] PHP   1. {main}() /Users/sachatelgenhofoudekoehorst/NetBeansProjects/kb/set.php:0
+[25-Mar-2014 12:29:08 Asia/Tokyo] PHP   2. LearningSet::get_all_tags() /Users/sachatelgenhofoudekoehorst/NetBeansProjects/kb/set.php:34
+[25-Mar-2014 12:29:08 Asia/Tokyo] PHP Notice:  Trying to get property of non-object in /Users/sachatelgenhofoudekoehorst/NetBeansProjects/kb/classes/LearningSet.php on line 576
+[25-Mar-2014 12:29:08 Asia/Tokyo] PHP Stack trace:
+[25-Mar-2014 12:29:08 Asia/Tokyo] PHP   1. {main}() /Users/sachatelgenhofoudekoehorst/NetBeansProjects/kb/set.php:0
+[25-Mar-2014 12:29:08 Asia/Tokyo] PHP   2. LearningSet::get_all_tags() /Users/sachatelgenhofoudekoehorst/NetBeansProjects/kb/set.php:34
+[25-Mar-2014 12:29:08 Asia/Tokyo] PHP Notice:  Trying to get property of non-object in /Users/sachatelgenhofoudekoehorst/NetBeansProjects/kb/classes/LearningSet.php on line 576
+[25-Mar-2014 12:29:08 Asia/Tokyo] PHP Stack trace:
+[25-Mar-2014 12:29:08 Asia/Tokyo] PHP   1. {main}() /Users/sachatelgenhofoudekoehorst/NetBeansProjects/kb/set.php:0
+[25-Mar-2014 12:29:08 Asia/Tokyo] PHP   2. LearningSet::get_all_tags() /Users/sachatelgenhofoudekoehorst/NetBeansProjects/kb/set.php:34
+[25-Mar-2014 12:29:08 Asia/Tokyo] PHP Notice:  Trying to get property of non-object in /Users/sachatelgenhofoudekoehorst/NetBeansProjects/kb/classes/LearningSet.php on line 576
+[25-Mar-2014 12:29:08 Asia/Tokyo] PHP Stack trace:
+[25-Mar-2014 12:29:08 Asia/Tokyo] PHP   1. {main}() /Users/sachatelgenhofoudekoehorst/NetBeansProjects/kb/set.php:0
+[25-Mar-2014 12:29:08 Asia/Tokyo] PHP   2. LearningSet::get_all_tags() /Users/sachatelgenhofoudekoehorst/NetBeansProjects/kb/set.php:34
+[25-Mar-2014 12:29:08 Asia/Tokyo] PHP Notice:  Trying to get property of non-object in /Users/sachatelgenhofoudekoehorst/NetBeansProjects/kb/classes/LearningSet.php on line 576
+[25-Mar-2014 12:29:08 Asia/Tokyo] PHP Stack trace:
+[25-Mar-2014 12:29:08 Asia/Tokyo] PHP   1. {main}() /Users/sachatelgenhofoudekoehorst/NetBeansProjects/kb/set.php:0
+[25-Mar-2014 12:29:08 Asia/Tokyo] PHP   2. LearningSet::get_all_tags() /Users/sachatelgenhofoudekoehorst/NetBeansProjects/kb/set.php:34
+[25-Mar-2014 12:29:08 Asia/Tokyo] PHP Notice:  Trying to get property of non-object in /Users/sachatelgenhofoudekoehorst/NetBeansProjects/kb/classes/LearningSet.php on line 576
+[25-Mar-2014 12:29:08 Asia/Tokyo] PHP Stack trace:
+[25-Mar-2014 12:29:08 Asia/Tokyo] PHP   1. {main}() /Users/sachatelgenhofoudekoehorst/NetBeansProjects/kb/set.php:0
+[25-Mar-2014 12:29:08 Asia/Tokyo] PHP   2. LearningSet::get_all_tags() /Users/sachatelgenhofoudekoehorst/NetBeansProjects/kb/set.php:34
+[25-Mar-2014 12:29:08 Asia/Tokyo] PHP Notice:  Trying to get property of non-object in /Users/sachatelgenhofoudekoehorst/NetBeansProjects/kb/classes/LearningSet.php on line 576
+[25-Mar-2014 12:29:08 Asia/Tokyo] PHP Stack trace:
+[25-Mar-2014 12:29:08 Asia/Tokyo] PHP   1. {main}() /Users/sachatelgenhofoudekoehorst/NetBeansProjects/kb/set.php:0
+[25-Mar-2014 12:29:08 Asia/Tokyo] PHP   2. LearningSet::get_all_tags() /Users/sachatelgenhofoudekoehorst/NetBeansProjects/kb/set.php:34
+[25-Mar-2014 12:29:08 Asia/Tokyo] PHP Notice:  Trying to get property of non-object in /Users/sachatelgenhofoudekoehorst/NetBeansProjects/kb/classes/LearningSet.php on line 576
+[25-Mar-2014 12:29:08 Asia/Tokyo] PHP Stack trace:
+[25-Mar-2014 12:29:08 Asia/Tokyo] PHP   1. {main}() /Users/sachatelgenhofoudekoehorst/NetBeansProjects/kb/set.php:0
+[25-Mar-2014 12:29:08 Asia/Tokyo] PHP   2. LearningSet::get_all_tags() /Users/sachatelgenhofoudekoehorst/NetBeansProjects/kb/set.php:34
+[25-Mar-2014 12:29:08 Asia/Tokyo] PHP Notice:  Trying to get property of non-object in /Users/sachatelgenhofoudekoehorst/NetBeansProjects/kb/classes/LearningSet.php on line 576
+[25-Mar-2014 12:29:08 Asia/Tokyo] PHP Stack trace:
+[25-Mar-2014 12:29:08 Asia/Tokyo] PHP   1. {main}() /Users/sachatelgenhofoudekoehorst/NetBeansProjects/kb/set.php:0
+[25-Mar-2014 12:29:08 Asia/Tokyo] PHP   2. LearningSet::get_all_tags() /Users/sachatelgenhofoudekoehorst/NetBeansProjects/kb/set.php:34
+[25-Mar-2014 12:29:08 Asia/Tokyo] PHP Notice:  Trying to get property of non-object in /Users/sachatelgenhofoudekoehorst/NetBeansProjects/kb/classes/LearningSet.php on line 576
+[25-Mar-2014 12:29:08 Asia/Tokyo] PHP Stack trace:
+[25-Mar-2014 12:29:08 Asia/Tokyo] PHP   1. {main}() /Users/sachatelgenhofoudekoehorst/NetBeansProjects/kb/set.php:0
+[25-Mar-2014 12:29:08 Asia/Tokyo] PHP   2. LearningSet::get_all_tags() /Users/sachatelgenhofoudekoehorst/NetBeansProjects/kb/set.php:34
+[25-Mar-2014 12:29:08 Asia/Tokyo] PHP Notice:  Trying to get property of non-object in /Users/sachatelgenhofoudekoehorst/NetBeansProjects/kb/classes/LearningSet.php on line 576
+[25-Mar-2014 12:29:08 Asia/Tokyo] PHP Stack trace:
+[25-Mar-2014 12:29:08 Asia/Tokyo] PHP   1. {main}() /Users/sachatelgenhofoudekoehorst/NetBeansProjects/kb/set.php:0
+[25-Mar-2014 12:29:08 Asia/Tokyo] PHP   2. LearningSet::get_all_tags() /Users/sachatelgenhofoudekoehorst/NetBeansProjects/kb/set.php:34
+[25-Mar-2014 12:29:08 Asia/Tokyo] PHP Notice:  Trying to get property of non-object in /Users/sachatelgenhofoudekoehorst/NetBeansProjects/kb/classes/LearningSet.php on line 576
+[25-Mar-2014 12:29:08 Asia/Tokyo] PHP Stack trace:
+[25-Mar-2014 12:29:08 Asia/Tokyo] PHP   1. {main}() /Users/sachatelgenhofoudekoehorst/NetBeansProjects/kb/set.php:0
+[25-Mar-2014 12:29:08 Asia/Tokyo] PHP   2. LearningSet::get_all_tags() /Users/sachatelgenhofoudekoehorst/NetBeansProjects/kb/set.php:34
+[25-Mar-2014 12:29:08 Asia/Tokyo] PHP Notice:  Trying to get property of non-object in /Users/sachatelgenhofoudekoehorst/NetBeansProjects/kb/classes/LearningSet.php on line 576
+[25-Mar-2014 12:29:08 Asia/Tokyo] PHP Stack trace:
+[25-Mar-2014 12:29:08 Asia/Tokyo] PHP   1. {main}() /Users/sachatelgenhofoudekoehorst/NetBeansProjects/kb/set.php:0
+[25-Mar-2014 12:29:08 Asia/Tokyo] PHP   2. LearningSet::get_all_tags() /Users/sachatelgenhofoudekoehorst/NetBeansProjects/kb/set.php:34
+[25-Mar-2014 12:29:08 Asia/Tokyo] PHP Notice:  Trying to get property of non-object in /Users/sachatelgenhofoudekoehorst/NetBeansProjects/kb/classes/LearningSet.php on line 576
+[25-Mar-2014 12:29:08 Asia/Tokyo] PHP Stack trace:
+[25-Mar-2014 12:29:08 Asia/Tokyo] PHP   1. {main}() /Users/sachatelgenhofoudekoehorst/NetBeansProjects/kb/set.php:0
+[25-Mar-2014 12:29:08 Asia/Tokyo] PHP   2. LearningSet::get_all_tags() /Users/sachatelgenhofoudekoehorst/NetBeansProjects/kb/set.php:34
+[25-Mar-2014 12:29:27 Asia/Tokyo] PHP Notice:  Trying to get property of non-object in /Users/sachatelgenhofoudekoehorst/NetBeansProjects/kb/classes/LearningSet.php on line 576
+[25-Mar-2014 12:29:27 Asia/Tokyo] PHP Stack trace:
+[25-Mar-2014 12:29:27 Asia/Tokyo] PHP   1. {main}() /Users/sachatelgenhofoudekoehorst/NetBeansProjects/kb/set.php:0
+[25-Mar-2014 12:29:27 Asia/Tokyo] PHP   2. LearningSet::get_all_tags() /Users/sachatelgenhofoudekoehorst/NetBeansProjects/kb/set.php:34
+[25-Mar-2014 12:29:27 Asia/Tokyo] PHP Notice:  Trying to get property of non-object in /Users/sachatelgenhofoudekoehorst/NetBeansProjects/kb/classes/LearningSet.php on line 576
+[25-Mar-2014 12:29:27 Asia/Tokyo] PHP Stack trace:
+[25-Mar-2014 12:29:27 Asia/Tokyo] PHP   1. {main}() /Users/sachatelgenhofoudekoehorst/NetBeansProjects/kb/set.php:0
+[25-Mar-2014 12:29:27 Asia/Tokyo] PHP   2. LearningSet::get_all_tags() /Users/sachatelgenhofoudekoehorst/NetBeansProjects/kb/set.php:34
+[25-Mar-2014 12:29:27 Asia/Tokyo] PHP Notice:  Trying to get property of non-object in /Users/sachatelgenhofoudekoehorst/NetBeansProjects/kb/classes/LearningSet.php on line 576
+[25-Mar-2014 12:29:27 Asia/Tokyo] PHP Stack trace:
+[25-Mar-2014 12:29:27 Asia/Tokyo] PHP   1. {main}() /Users/sachatelgenhofoudekoehorst/NetBeansProjects/kb/set.php:0
+[25-Mar-2014 12:29:27 Asia/Tokyo] PHP   2. LearningSet::get_all_tags() /Users/sachatelgenhofoudekoehorst/NetBeansProjects/kb/set.php:34
+[25-Mar-2014 12:29:27 Asia/Tokyo] PHP Notice:  Trying to get property of non-object in /Users/sachatelgenhofoudekoehorst/NetBeansProjects/kb/classes/LearningSet.php on line 576
+[25-Mar-2014 12:29:27 Asia/Tokyo] PHP Stack trace:
+[25-Mar-2014 12:29:27 Asia/Tokyo] PHP   1. {main}() /Users/sachatelgenhofoudekoehorst/NetBeansProjects/kb/set.php:0
+[25-Mar-2014 12:29:27 Asia/Tokyo] PHP   2. LearningSet::get_all_tags() /Users/sachatelgenhofoudekoehorst/NetBeansProjects/kb/set.php:34
+[25-Mar-2014 12:29:27 Asia/Tokyo] PHP Notice:  Trying to get property of non-object in /Users/sachatelgenhofoudekoehorst/NetBeansProjects/kb/classes/LearningSet.php on line 576
+[25-Mar-2014 12:29:27 Asia/Tokyo] PHP Stack trace:
+[25-Mar-2014 12:29:27 Asia/Tokyo] PHP   1. {main}() /Users/sachatelgenhofoudekoehorst/NetBeansProjects/kb/set.php:0
+[25-Mar-2014 12:29:27 Asia/Tokyo] PHP   2. LearningSet::get_all_tags() /Users/sachatelgenhofoudekoehorst/NetBeansProjects/kb/set.php:34
+[25-Mar-2014 12:29:27 Asia/Tokyo] PHP Notice:  Trying to get property of non-object in /Users/sachatelgenhofoudekoehorst/NetBeansProjects/kb/classes/LearningSet.php on line 576
+[25-Mar-2014 12:29:27 Asia/Tokyo] PHP Stack trace:
+[25-Mar-2014 12:29:27 Asia/Tokyo] PHP   1. {main}() /Users/sachatelgenhofoudekoehorst/NetBeansProjects/kb/set.php:0
+[25-Mar-2014 12:29:27 Asia/Tokyo] PHP   2. LearningSet::get_all_tags() /Users/sachatelgenhofoudekoehorst/NetBeansProjects/kb/set.php:34
+[25-Mar-2014 12:29:27 Asia/Tokyo] PHP Notice:  Trying to get property of non-object in /Users/sachatelgenhofoudekoehorst/NetBeansProjects/kb/classes/LearningSet.php on line 576
+[25-Mar-2014 12:29:27 Asia/Tokyo] PHP Stack trace:
+[25-Mar-2014 12:29:27 Asia/Tokyo] PHP   1. {main}() /Users/sachatelgenhofoudekoehorst/NetBeansProjects/kb/set.php:0
+[25-Mar-2014 12:29:27 Asia/Tokyo] PHP   2. LearningSet::get_all_tags() /Users/sachatelgenhofoudekoehorst/NetBeansProjects/kb/set.php:34
+[25-Mar-2014 12:29:27 Asia/Tokyo] PHP Notice:  Trying to get property of non-object in /Users/sachatelgenhofoudekoehorst/NetBeansProjects/kb/classes/LearningSet.php on line 576
+[25-Mar-2014 12:29:27 Asia/Tokyo] PHP Stack trace:
+[25-Mar-2014 12:29:27 Asia/Tokyo] PHP   1. {main}() /Users/sachatelgenhofoudekoehorst/NetBeansProjects/kb/set.php:0
+[25-Mar-2014 12:29:27 Asia/Tokyo] PHP   2. LearningSet::get_all_tags() /Users/sachatelgenhofoudekoehorst/NetBeansProjects/kb/set.php:34
+[25-Mar-2014 12:29:27 Asia/Tokyo] PHP Notice:  Trying to get property of non-object in /Users/sachatelgenhofoudekoehorst/NetBeansProjects/kb/classes/LearningSet.php on line 576
+[25-Mar-2014 12:29:27 Asia/Tokyo] PHP Stack trace:
+[25-Mar-2014 12:29:27 Asia/Tokyo] PHP   1. {main}() /Users/sachatelgenhofoudekoehorst/NetBeansProjects/kb/set.php:0
+[25-Mar-2014 12:29:27 Asia/Tokyo] PHP   2. LearningSet::get_all_tags() /Users/sachatelgenhofoudekoehorst/NetBeansProjects/kb/set.php:34
+[25-Mar-2014 12:29:27 Asia/Tokyo] PHP Notice:  Trying to get property of non-object in /Users/sachatelgenhofoudekoehorst/NetBeansProjects/kb/classes/LearningSet.php on line 576
+[25-Mar-2014 12:29:27 Asia/Tokyo] PHP Stack trace:
+[25-Mar-2014 12:29:27 Asia/Tokyo] PHP   1. {main}() /Users/sachatelgenhofoudekoehorst/NetBeansProjects/kb/set.php:0
+[25-Mar-2014 12:29:27 Asia/Tokyo] PHP   2. LearningSet::get_all_tags() /Users/sachatelgenhofoudekoehorst/NetBeansProjects/kb/set.php:34
+[25-Mar-2014 12:29:27 Asia/Tokyo] PHP Notice:  Trying to get property of non-object in /Users/sachatelgenhofoudekoehorst/NetBeansProjects/kb/classes/LearningSet.php on line 576
+[25-Mar-2014 12:29:27 Asia/Tokyo] PHP Stack trace:
+[25-Mar-2014 12:29:27 Asia/Tokyo] PHP   1. {main}() /Users/sachatelgenhofoudekoehorst/NetBeansProjects/kb/set.php:0
+[25-Mar-2014 12:29:27 Asia/Tokyo] PHP   2. LearningSet::get_all_tags() /Users/sachatelgenhofoudekoehorst/NetBeansProjects/kb/set.php:34
+[25-Mar-2014 12:29:27 Asia/Tokyo] PHP Notice:  Trying to get property of non-object in /Users/sachatelgenhofoudekoehorst/NetBeansProjects/kb/classes/LearningSet.php on line 576
+[25-Mar-2014 12:29:27 Asia/Tokyo] PHP Stack trace:
+[25-Mar-2014 12:29:27 Asia/Tokyo] PHP   1. {main}() /Users/sachatelgenhofoudekoehorst/NetBeansProjects/kb/set.php:0
+[25-Mar-2014 12:29:27 Asia/Tokyo] PHP   2. LearningSet::get_all_tags() /Users/sachatelgenhofoudekoehorst/NetBeansProjects/kb/set.php:34
+[25-Mar-2014 12:29:27 Asia/Tokyo] PHP Notice:  Trying to get property of non-object in /Users/sachatelgenhofoudekoehorst/NetBeansProjects/kb/classes/LearningSet.php on line 576
+[25-Mar-2014 12:29:27 Asia/Tokyo] PHP Stack trace:
+[25-Mar-2014 12:29:27 Asia/Tokyo] PHP   1. {main}() /Users/sachatelgenhofoudekoehorst/NetBeansProjects/kb/set.php:0
+[25-Mar-2014 12:29:27 Asia/Tokyo] PHP   2. LearningSet::get_all_tags() /Users/sachatelgenhofoudekoehorst/NetBeansProjects/kb/set.php:34
+[25-Mar-2014 12:29:27 Asia/Tokyo] PHP Notice:  Trying to get property of non-object in /Users/sachatelgenhofoudekoehorst/NetBeansProjects/kb/classes/LearningSet.php on line 576
+[25-Mar-2014 12:29:27 Asia/Tokyo] PHP Stack trace:
+[25-Mar-2014 12:29:27 Asia/Tokyo] PHP   1. {main}() /Users/sachatelgenhofoudekoehorst/NetBeansProjects/kb/set.php:0
+[25-Mar-2014 12:29:27 Asia/Tokyo] PHP   2. LearningSet::get_all_tags() /Users/sachatelgenhofoudekoehorst/NetBeansProjects/kb/set.php:34
+[25-Mar-2014 12:29:27 Asia/Tokyo] PHP Notice:  Trying to get property of non-object in /Users/sachatelgenhofoudekoehorst/NetBeansProjects/kb/classes/LearningSet.php on line 576
+[25-Mar-2014 12:29:27 Asia/Tokyo] PHP Stack trace:
+[25-Mar-2014 12:29:27 Asia/Tokyo] PHP   1. {main}() /Users/sachatelgenhofoudekoehorst/NetBeansProjects/kb/set.php:0
+[25-Mar-2014 12:29:27 Asia/Tokyo] PHP   2. LearningSet::get_all_tags() /Users/sachatelgenhofoudekoehorst/NetBeansProjects/kb/set.php:34
+[25-Mar-2014 12:29:27 Asia/Tokyo] PHP Notice:  Trying to get property of non-object in /Users/sachatelgenhofoudekoehorst/NetBeansProjects/kb/classes/LearningSet.php on line 576
+[25-Mar-2014 12:29:27 Asia/Tokyo] PHP Stack trace:
+[25-Mar-2014 12:29:27 Asia/Tokyo] PHP   1. {main}() /Users/sachatelgenhofoudekoehorst/NetBeansProjects/kb/set.php:0
+[25-Mar-2014 12:29:27 Asia/Tokyo] PHP   2. LearningSet::get_all_tags() /Users/sachatelgenhofoudekoehorst/NetBeansProjects/kb/set.php:34
+[25-Mar-2014 12:29:27 Asia/Tokyo] PHP Notice:  Trying to get property of non-object in /Users/sachatelgenhofoudekoehorst/NetBeansProjects/kb/classes/LearningSet.php on line 576
+[25-Mar-2014 12:29:27 Asia/Tokyo] PHP Stack trace:
+[25-Mar-2014 12:29:27 Asia/Tokyo] PHP   1. {main}() /Users/sachatelgenhofoudekoehorst/NetBeansProjects/kb/set.php:0
+[25-Mar-2014 12:29:27 Asia/Tokyo] PHP   2. LearningSet::get_all_tags() /Users/sachatelgenhofoudekoehorst/NetBeansProjects/kb/set.php:34
+[25-Mar-2014 12:29:27 Asia/Tokyo] PHP Notice:  Trying to get property of non-object in /Users/sachatelgenhofoudekoehorst/NetBeansProjects/kb/classes/LearningSet.php on line 576
+[25-Mar-2014 12:29:27 Asia/Tokyo] PHP Stack trace:
+[25-Mar-2014 12:29:27 Asia/Tokyo] PHP   1. {main}() /Users/sachatelgenhofoudekoehorst/NetBeansProjects/kb/set.php:0
+[25-Mar-2014 12:29:27 Asia/Tokyo] PHP   2. LearningSet::get_all_tags() /Users/sachatelgenhofoudekoehorst/NetBeansProjects/kb/set.php:34
+[25-Mar-2014 12:29:27 Asia/Tokyo] PHP Notice:  Trying to get property of non-object in /Users/sachatelgenhofoudekoehorst/NetBeansProjects/kb/classes/LearningSet.php on line 576
+[25-Mar-2014 12:29:27 Asia/Tokyo] PHP Stack trace:
+[25-Mar-2014 12:29:27 Asia/Tokyo] PHP   1. {main}() /Users/sachatelgenhofoudekoehorst/NetBeansProjects/kb/set.php:0
+[25-Mar-2014 12:29:27 Asia/Tokyo] PHP   2. LearningSet::get_all_tags() /Users/sachatelgenhofoudekoehorst/NetBeansProjects/kb/set.php:34
+[25-Mar-2014 12:29:27 Asia/Tokyo] PHP Notice:  Trying to get property of non-object in /Users/sachatelgenhofoudekoehorst/NetBeansProjects/kb/classes/LearningSet.php on line 576
+[25-Mar-2014 12:29:27 Asia/Tokyo] PHP Stack trace:
+[25-Mar-2014 12:29:27 Asia/Tokyo] PHP   1. {main}() /Users/sachatelgenhofoudekoehorst/NetBeansProjects/kb/set.php:0
+[25-Mar-2014 12:29:27 Asia/Tokyo] PHP   2. LearningSet::get_all_tags() /Users/sachatelgenhofoudekoehorst/NetBeansProjects/kb/set.php:34
+[25-Mar-2014 12:29:27 Asia/Tokyo] PHP Notice:  Trying to get property of non-object in /Users/sachatelgenhofoudekoehorst/NetBeansProjects/kb/classes/LearningSet.php on line 576
+[25-Mar-2014 12:29:27 Asia/Tokyo] PHP Stack trace:
+[25-Mar-2014 12:29:27 Asia/Tokyo] PHP   1. {main}() /Users/sachatelgenhofoudekoehorst/NetBeansProjects/kb/set.php:0
+[25-Mar-2014 12:29:27 Asia/Tokyo] PHP   2. LearningSet::get_all_tags() /Users/sachatelgenhofoudekoehorst/NetBeansProjects/kb/set.php:34
+[25-Mar-2014 12:29:27 Asia/Tokyo] PHP Notice:  Trying to get property of non-object in /Users/sachatelgenhofoudekoehorst/NetBeansProjects/kb/classes/LearningSet.php on line 576
+[25-Mar-2014 12:29:27 Asia/Tokyo] PHP Stack trace:
+[25-Mar-2014 12:29:27 Asia/Tokyo] PHP   1. {main}() /Users/sachatelgenhofoudekoehorst/NetBeansProjects/kb/set.php:0
+[25-Mar-2014 12:29:27 Asia/Tokyo] PHP   2. LearningSet::get_all_tags() /Users/sachatelgenhofoudekoehorst/NetBeansProjects/kb/set.php:34
+[25-Mar-2014 12:29:27 Asia/Tokyo] PHP Notice:  Trying to get property of non-object in /Users/sachatelgenhofoudekoehorst/NetBeansProjects/kb/classes/LearningSet.php on line 576
+[25-Mar-2014 12:29:27 Asia/Tokyo] PHP Stack trace:
+[25-Mar-2014 12:29:27 Asia/Tokyo] PHP   1. {main}() /Users/sachatelgenhofoudekoehorst/NetBeansProjects/kb/set.php:0
+[25-Mar-2014 12:29:27 Asia/Tokyo] PHP   2. LearningSet::get_all_tags() /Users/sachatelgenhofoudekoehorst/NetBeansProjects/kb/set.php:34
+[25-Mar-2014 12:29:27 Asia/Tokyo] PHP Notice:  Trying to get property of non-object in /Users/sachatelgenhofoudekoehorst/NetBeansProjects/kb/classes/LearningSet.php on line 576
+[25-Mar-2014 12:29:27 Asia/Tokyo] PHP Stack trace:
+[25-Mar-2014 12:29:27 Asia/Tokyo] PHP   1. {main}() /Users/sachatelgenhofoudekoehorst/NetBeansProjects/kb/set.php:0
+[25-Mar-2014 12:29:27 Asia/Tokyo] PHP   2. LearningSet::get_all_tags() /Users/sachatelgenhofoudekoehorst/NetBeansProjects/kb/set.php:34
+[25-Mar-2014 12:29:27 Asia/Tokyo] PHP Notice:  Trying to get property of non-object in /Users/sachatelgenhofoudekoehorst/NetBeansProjects/kb/classes/LearningSet.php on line 576
+[25-Mar-2014 12:29:27 Asia/Tokyo] PHP Stack trace:
+[25-Mar-2014 12:29:27 Asia/Tokyo] PHP   1. {main}() /Users/sachatelgenhofoudekoehorst/NetBeansProjects/kb/set.php:0
+[25-Mar-2014 12:29:27 Asia/Tokyo] PHP   2. LearningSet::get_all_tags() /Users/sachatelgenhofoudekoehorst/NetBeansProjects/kb/set.php:34
+[25-Mar-2014 12:29:27 Asia/Tokyo] PHP Notice:  Trying to get property of non-object in /Users/sachatelgenhofoudekoehorst/NetBeansProjects/kb/classes/LearningSet.php on line 576
+[25-Mar-2014 12:29:27 Asia/Tokyo] PHP Stack trace:
+[25-Mar-2014 12:29:27 Asia/Tokyo] PHP   1. {main}() /Users/sachatelgenhofoudekoehorst/NetBeansProjects/kb/set.php:0
+[25-Mar-2014 12:29:27 Asia/Tokyo] PHP   2. LearningSet::get_all_tags() /Users/sachatelgenhofoudekoehorst/NetBeansProjects/kb/set.php:34
+[25-Mar-2014 12:29:27 Asia/Tokyo] PHP Notice:  Trying to get property of non-object in /Users/sachatelgenhofoudekoehorst/NetBeansProjects/kb/classes/LearningSet.php on line 576
+[25-Mar-2014 12:29:27 Asia/Tokyo] PHP Stack trace:
+[25-Mar-2014 12:29:27 Asia/Tokyo] PHP   1. {main}() /Users/sachatelgenhofoudekoehorst/NetBeansProjects/kb/set.php:0
+[25-Mar-2014 12:29:27 Asia/Tokyo] PHP   2. LearningSet::get_all_tags() /Users/sachatelgenhofoudekoehorst/NetBeansProjects/kb/set.php:34
+[25-Mar-2014 12:29:27 Asia/Tokyo] PHP Notice:  Trying to get property of non-object in /Users/sachatelgenhofoudekoehorst/NetBeansProjects/kb/classes/LearningSet.php on line 576
+[25-Mar-2014 12:29:27 Asia/Tokyo] PHP Stack trace:
+[25-Mar-2014 12:29:27 Asia/Tokyo] PHP   1. {main}() /Users/sachatelgenhofoudekoehorst/NetBeansProjects/kb/set.php:0
+[25-Mar-2014 12:29:27 Asia/Tokyo] PHP   2. LearningSet::get_all_tags() /Users/sachatelgenhofoudekoehorst/NetBeansProjects/kb/set.php:34
+[25-Mar-2014 12:29:27 Asia/Tokyo] PHP Notice:  Trying to get property of non-object in /Users/sachatelgenhofoudekoehorst/NetBeansProjects/kb/classes/LearningSet.php on line 576
+[25-Mar-2014 12:29:27 Asia/Tokyo] PHP Stack trace:
+[25-Mar-2014 12:29:27 Asia/Tokyo] PHP   1. {main}() /Users/sachatelgenhofoudekoehorst/NetBeansProjects/kb/set.php:0
+[25-Mar-2014 12:29:27 Asia/Tokyo] PHP   2. LearningSet::get_all_tags() /Users/sachatelgenhofoudekoehorst/NetBeansProjects/kb/set.php:34
+[25-Mar-2014 12:29:27 Asia/Tokyo] PHP Notice:  Trying to get property of non-object in /Users/sachatelgenhofoudekoehorst/NetBeansProjects/kb/classes/LearningSet.php on line 576
+[25-Mar-2014 12:29:27 Asia/Tokyo] PHP Stack trace:
+[25-Mar-2014 12:29:27 Asia/Tokyo] PHP   1. {main}() /Users/sachatelgenhofoudekoehorst/NetBeansProjects/kb/set.php:0
+[25-Mar-2014 12:29:27 Asia/Tokyo] PHP   2. LearningSet::get_all_tags() /Users/sachatelgenhofoudekoehorst/NetBeansProjects/kb/set.php:34
+[25-Mar-2014 12:29:49 Asia/Tokyo] PHP Notice:  Trying to get property of non-object in /Users/sachatelgenhofoudekoehorst/NetBeansProjects/kb/classes/LearningSet.php on line 576
+[25-Mar-2014 12:29:49 Asia/Tokyo] PHP Stack trace:
+[25-Mar-2014 12:29:49 Asia/Tokyo] PHP   1. {main}() /Users/sachatelgenhofoudekoehorst/NetBeansProjects/kb/set.php:0
+[25-Mar-2014 12:29:49 Asia/Tokyo] PHP   2. LearningSet::get_all_tags() /Users/sachatelgenhofoudekoehorst/NetBeansProjects/kb/set.php:34
+[25-Mar-2014 12:29:49 Asia/Tokyo] PHP Notice:  Trying to get property of non-object in /Users/sachatelgenhofoudekoehorst/NetBeansProjects/kb/classes/LearningSet.php on line 576
+[25-Mar-2014 12:29:49 Asia/Tokyo] PHP Stack trace:
+[25-Mar-2014 12:29:49 Asia/Tokyo] PHP   1. {main}() /Users/sachatelgenhofoudekoehorst/NetBeansProjects/kb/set.php:0
+[25-Mar-2014 12:29:49 Asia/Tokyo] PHP   2. LearningSet::get_all_tags() /Users/sachatelgenhofoudekoehorst/NetBeansProjects/kb/set.php:34
+[25-Mar-2014 12:29:49 Asia/Tokyo] PHP Notice:  Trying to get property of non-object in /Users/sachatelgenhofoudekoehorst/NetBeansProjects/kb/classes/LearningSet.php on line 576
+[25-Mar-2014 12:29:49 Asia/Tokyo] PHP Stack trace:
+[25-Mar-2014 12:29:49 Asia/Tokyo] PHP   1. {main}() /Users/sachatelgenhofoudekoehorst/NetBeansProjects/kb/set.php:0
+[25-Mar-2014 12:29:49 Asia/Tokyo] PHP   2. LearningSet::get_all_tags() /Users/sachatelgenhofoudekoehorst/NetBeansProjects/kb/set.php:34
+[25-Mar-2014 12:29:49 Asia/Tokyo] PHP Notice:  Trying to get property of non-object in /Users/sachatelgenhofoudekoehorst/NetBeansProjects/kb/classes/LearningSet.php on line 576
+[25-Mar-2014 12:29:49 Asia/Tokyo] PHP Stack trace:
+[25-Mar-2014 12:29:49 Asia/Tokyo] PHP   1. {main}() /Users/sachatelgenhofoudekoehorst/NetBeansProjects/kb/set.php:0
+[25-Mar-2014 12:29:49 Asia/Tokyo] PHP   2. LearningSet::get_all_tags() /Users/sachatelgenhofoudekoehorst/NetBeansProjects/kb/set.php:34
+[25-Mar-2014 12:29:49 Asia/Tokyo] PHP Notice:  Trying to get property of non-object in /Users/sachatelgenhofoudekoehorst/NetBeansProjects/kb/classes/LearningSet.php on line 576
+[25-Mar-2014 12:29:49 Asia/Tokyo] PHP Stack trace:
+[25-Mar-2014 12:29:49 Asia/Tokyo] PHP   1. {main}() /Users/sachatelgenhofoudekoehorst/NetBeansProjects/kb/set.php:0
+[25-Mar-2014 12:29:49 Asia/Tokyo] PHP   2. LearningSet::get_all_tags() /Users/sachatelgenhofoudekoehorst/NetBeansProjects/kb/set.php:34
+[25-Mar-2014 12:29:49 Asia/Tokyo] PHP Notice:  Trying to get property of non-object in /Users/sachatelgenhofoudekoehorst/NetBeansProjects/kb/classes/LearningSet.php on line 576
+[25-Mar-2014 12:29:49 Asia/Tokyo] PHP Stack trace:
+[25-Mar-2014 12:29:49 Asia/Tokyo] PHP   1. {main}() /Users/sachatelgenhofoudekoehorst/NetBeansProjects/kb/set.php:0
+[25-Mar-2014 12:29:49 Asia/Tokyo] PHP   2. LearningSet::get_all_tags() /Users/sachatelgenhofoudekoehorst/NetBeansProjects/kb/set.php:34
+[25-Mar-2014 12:29:49 Asia/Tokyo] PHP Notice:  Trying to get property of non-object in /Users/sachatelgenhofoudekoehorst/NetBeansProjects/kb/classes/LearningSet.php on line 576
+[25-Mar-2014 12:29:49 Asia/Tokyo] PHP Stack trace:
+[25-Mar-2014 12:29:49 Asia/Tokyo] PHP   1. {main}() /Users/sachatelgenhofoudekoehorst/NetBeansProjects/kb/set.php:0
+[25-Mar-2014 12:29:49 Asia/Tokyo] PHP   2. LearningSet::get_all_tags() /Users/sachatelgenhofoudekoehorst/NetBeansProjects/kb/set.php:34
+[25-Mar-2014 12:29:49 Asia/Tokyo] PHP Notice:  Trying to get property of non-object in /Users/sachatelgenhofoudekoehorst/NetBeansProjects/kb/classes/LearningSet.php on line 576
+[25-Mar-2014 12:29:49 Asia/Tokyo] PHP Stack trace:
+[25-Mar-2014 12:29:49 Asia/Tokyo] PHP   1. {main}() /Users/sachatelgenhofoudekoehorst/NetBeansProjects/kb/set.php:0
+[25-Mar-2014 12:29:49 Asia/Tokyo] PHP   2. LearningSet::get_all_tags() /Users/sachatelgenhofoudekoehorst/NetBeansProjects/kb/set.php:34
+[25-Mar-2014 12:29:49 Asia/Tokyo] PHP Notice:  Trying to get property of non-object in /Users/sachatelgenhofoudekoehorst/NetBeansProjects/kb/classes/LearningSet.php on line 576
+[25-Mar-2014 12:29:49 Asia/Tokyo] PHP Stack trace:
+[25-Mar-2014 12:29:49 Asia/Tokyo] PHP   1. {main}() /Users/sachatelgenhofoudekoehorst/NetBeansProjects/kb/set.php:0
+[25-Mar-2014 12:29:49 Asia/Tokyo] PHP   2. LearningSet::get_all_tags() /Users/sachatelgenhofoudekoehorst/NetBeansProjects/kb/set.php:34
+[25-Mar-2014 12:29:49 Asia/Tokyo] PHP Notice:  Trying to get property of non-object in /Users/sachatelgenhofoudekoehorst/NetBeansProjects/kb/classes/LearningSet.php on line 576
+[25-Mar-2014 12:29:49 Asia/Tokyo] PHP Stack trace:
+[25-Mar-2014 12:29:49 Asia/Tokyo] PHP   1. {main}() /Users/sachatelgenhofoudekoehorst/NetBeansProjects/kb/set.php:0
+[25-Mar-2014 12:29:49 Asia/Tokyo] PHP   2. LearningSet::get_all_tags() /Users/sachatelgenhofoudekoehorst/NetBeansProjects/kb/set.php:34
+[25-Mar-2014 12:29:49 Asia/Tokyo] PHP Notice:  Trying to get property of non-object in /Users/sachatelgenhofoudekoehorst/NetBeansProjects/kb/classes/LearningSet.php on line 576
+[25-Mar-2014 12:29:49 Asia/Tokyo] PHP Stack trace:
+[25-Mar-2014 12:29:49 Asia/Tokyo] PHP   1. {main}() /Users/sachatelgenhofoudekoehorst/NetBeansProjects/kb/set.php:0
+[25-Mar-2014 12:29:49 Asia/Tokyo] PHP   2. LearningSet::get_all_tags() /Users/sachatelgenhofoudekoehorst/NetBeansProjects/kb/set.php:34
+[25-Mar-2014 12:29:49 Asia/Tokyo] PHP Notice:  Trying to get property of non-object in /Users/sachatelgenhofoudekoehorst/NetBeansProjects/kb/classes/LearningSet.php on line 576
+[25-Mar-2014 12:29:49 Asia/Tokyo] PHP Stack trace:
+[25-Mar-2014 12:29:49 Asia/Tokyo] PHP   1. {main}() /Users/sachatelgenhofoudekoehorst/NetBeansProjects/kb/set.php:0
+[25-Mar-2014 12:29:49 Asia/Tokyo] PHP   2. LearningSet::get_all_tags() /Users/sachatelgenhofoudekoehorst/NetBeansProjects/kb/set.php:34
+[25-Mar-2014 12:29:49 Asia/Tokyo] PHP Notice:  Trying to get property of non-object in /Users/sachatelgenhofoudekoehorst/NetBeansProjects/kb/classes/LearningSet.php on line 576
+[25-Mar-2014 12:29:49 Asia/Tokyo] PHP Stack trace:
+[25-Mar-2014 12:29:49 Asia/Tokyo] PHP   1. {main}() /Users/sachatelgenhofoudekoehorst/NetBeansProjects/kb/set.php:0
+[25-Mar-2014 12:29:49 Asia/Tokyo] PHP   2. LearningSet::get_all_tags() /Users/sachatelgenhofoudekoehorst/NetBeansProjects/kb/set.php:34
+[25-Mar-2014 12:29:49 Asia/Tokyo] PHP Notice:  Trying to get property of non-object in /Users/sachatelgenhofoudekoehorst/NetBeansProjects/kb/classes/LearningSet.php on line 576
+[25-Mar-2014 12:29:49 Asia/Tokyo] PHP Stack trace:
+[25-Mar-2014 12:29:49 Asia/Tokyo] PHP   1. {main}() /Users/sachatelgenhofoudekoehorst/NetBeansProjects/kb/set.php:0
+[25-Mar-2014 12:29:49 Asia/Tokyo] PHP   2. LearningSet::get_all_tags() /Users/sachatelgenhofoudekoehorst/NetBeansProjects/kb/set.php:34
+[25-Mar-2014 12:29:49 Asia/Tokyo] PHP Notice:  Trying to get property of non-object in /Users/sachatelgenhofoudekoehorst/NetBeansProjects/kb/classes/LearningSet.php on line 576
+[25-Mar-2014 12:29:49 Asia/Tokyo] PHP Stack trace:
+[25-Mar-2014 12:29:49 Asia/Tokyo] PHP   1. {main}() /Users/sachatelgenhofoudekoehorst/NetBeansProjects/kb/set.php:0
+[25-Mar-2014 12:29:49 Asia/Tokyo] PHP   2. LearningSet::get_all_tags() /Users/sachatelgenhofoudekoehorst/NetBeansProjects/kb/set.php:34
+[25-Mar-2014 12:29:49 Asia/Tokyo] PHP Notice:  Trying to get property of non-object in /Users/sachatelgenhofoudekoehorst/NetBeansProjects/kb/classes/LearningSet.php on line 576
+[25-Mar-2014 12:29:49 Asia/Tokyo] PHP Stack trace:
+[25-Mar-2014 12:29:49 Asia/Tokyo] PHP   1. {main}() /Users/sachatelgenhofoudekoehorst/NetBeansProjects/kb/set.php:0
+[25-Mar-2014 12:29:49 Asia/Tokyo] PHP   2. LearningSet::get_all_tags() /Users/sachatelgenhofoudekoehorst/NetBeansProjects/kb/set.php:34
+[25-Mar-2014 12:29:49 Asia/Tokyo] PHP Notice:  Trying to get property of non-object in /Users/sachatelgenhofoudekoehorst/NetBeansProjects/kb/classes/LearningSet.php on line 576
+[25-Mar-2014 12:29:49 Asia/Tokyo] PHP Stack trace:
+[25-Mar-2014 12:29:49 Asia/Tokyo] PHP   1. {main}() /Users/sachatelgenhofoudekoehorst/NetBeansProjects/kb/set.php:0
+[25-Mar-2014 12:29:49 Asia/Tokyo] PHP   2. LearningSet::get_all_tags() /Users/sachatelgenhofoudekoehorst/NetBeansProjects/kb/set.php:34
+[25-Mar-2014 12:29:49 Asia/Tokyo] PHP Notice:  Trying to get property of non-object in /Users/sachatelgenhofoudekoehorst/NetBeansProjects/kb/classes/LearningSet.php on line 576
+[25-Mar-2014 12:29:49 Asia/Tokyo] PHP Stack trace:
+[25-Mar-2014 12:29:49 Asia/Tokyo] PHP   1. {main}() /Users/sachatelgenhofoudekoehorst/NetBeansProjects/kb/set.php:0
+[25-Mar-2014 12:29:49 Asia/Tokyo] PHP   2. LearningSet::get_all_tags() /Users/sachatelgenhofoudekoehorst/NetBeansProjects/kb/set.php:34
+[25-Mar-2014 12:29:49 Asia/Tokyo] PHP Notice:  Trying to get property of non-object in /Users/sachatelgenhofoudekoehorst/NetBeansProjects/kb/classes/LearningSet.php on line 576
+[25-Mar-2014 12:29:49 Asia/Tokyo] PHP Stack trace:
+[25-Mar-2014 12:29:49 Asia/Tokyo] PHP   1. {main}() /Users/sachatelgenhofoudekoehorst/NetBeansProjects/kb/set.php:0
+[25-Mar-2014 12:29:49 Asia/Tokyo] PHP   2. LearningSet::get_all_tags() /Users/sachatelgenhofoudekoehorst/NetBeansProjects/kb/set.php:34
+[25-Mar-2014 12:29:49 Asia/Tokyo] PHP Notice:  Trying to get property of non-object in /Users/sachatelgenhofoudekoehorst/NetBeansProjects/kb/classes/LearningSet.php on line 576
+[25-Mar-2014 12:29:49 Asia/Tokyo] PHP Stack trace:
+[25-Mar-2014 12:29:49 Asia/Tokyo] PHP   1. {main}() /Users/sachatelgenhofoudekoehorst/NetBeansProjects/kb/set.php:0
+[25-Mar-2014 12:29:49 Asia/Tokyo] PHP   2. LearningSet::get_all_tags() /Users/sachatelgenhofoudekoehorst/NetBeansProjects/kb/set.php:34
+[25-Mar-2014 12:29:49 Asia/Tokyo] PHP Notice:  Trying to get property of non-object in /Users/sachatelgenhofoudekoehorst/NetBeansProjects/kb/classes/LearningSet.php on line 576
+[25-Mar-2014 12:29:49 Asia/Tokyo] PHP Stack trace:
+[25-Mar-2014 12:29:49 Asia/Tokyo] PHP   1. {main}() /Users/sachatelgenhofoudekoehorst/NetBeansProjects/kb/set.php:0
+[25-Mar-2014 12:29:49 Asia/Tokyo] PHP   2. LearningSet::get_all_tags() /Users/sachatelgenhofoudekoehorst/NetBeansProjects/kb/set.php:34
+[25-Mar-2014 12:29:49 Asia/Tokyo] PHP Notice:  Trying to get property of non-object in /Users/sachatelgenhofoudekoehorst/NetBeansProjects/kb/classes/LearningSet.php on line 576
+[25-Mar-2014 12:29:49 Asia/Tokyo] PHP Stack trace:
+[25-Mar-2014 12:29:49 Asia/Tokyo] PHP   1. {main}() /Users/sachatelgenhofoudekoehorst/NetBeansProjects/kb/set.php:0
+[25-Mar-2014 12:29:49 Asia/Tokyo] PHP   2. LearningSet::get_all_tags() /Users/sachatelgenhofoudekoehorst/NetBeansProjects/kb/set.php:34
+[25-Mar-2014 12:29:49 Asia/Tokyo] PHP Notice:  Trying to get property of non-object in /Users/sachatelgenhofoudekoehorst/NetBeansProjects/kb/classes/LearningSet.php on line 576
+[25-Mar-2014 12:29:49 Asia/Tokyo] PHP Stack trace:
+[25-Mar-2014 12:29:49 Asia/Tokyo] PHP   1. {main}() /Users/sachatelgenhofoudekoehorst/NetBeansProjects/kb/set.php:0
+[25-Mar-2014 12:29:49 Asia/Tokyo] PHP   2. LearningSet::get_all_tags() /Users/sachatelgenhofoudekoehorst/NetBeansProjects/kb/set.php:34
+[25-Mar-2014 12:29:49 Asia/Tokyo] PHP Notice:  Trying to get property of non-object in /Users/sachatelgenhofoudekoehorst/NetBeansProjects/kb/classes/LearningSet.php on line 576
+[25-Mar-2014 12:29:49 Asia/Tokyo] PHP Stack trace:
+[25-Mar-2014 12:29:49 Asia/Tokyo] PHP   1. {main}() /Users/sachatelgenhofoudekoehorst/NetBeansProjects/kb/set.php:0
+[25-Mar-2014 12:29:49 Asia/Tokyo] PHP   2. LearningSet::get_all_tags() /Users/sachatelgenhofoudekoehorst/NetBeansProjects/kb/set.php:34
+[25-Mar-2014 12:29:49 Asia/Tokyo] PHP Notice:  Trying to get property of non-object in /Users/sachatelgenhofoudekoehorst/NetBeansProjects/kb/classes/LearningSet.php on line 576
+[25-Mar-2014 12:29:49 Asia/Tokyo] PHP Stack trace:
+[25-Mar-2014 12:29:49 Asia/Tokyo] PHP   1. {main}() /Users/sachatelgenhofoudekoehorst/NetBeansProjects/kb/set.php:0
+[25-Mar-2014 12:29:49 Asia/Tokyo] PHP   2. LearningSet::get_all_tags() /Users/sachatelgenhofoudekoehorst/NetBeansProjects/kb/set.php:34
+[25-Mar-2014 12:29:49 Asia/Tokyo] PHP Notice:  Trying to get property of non-object in /Users/sachatelgenhofoudekoehorst/NetBeansProjects/kb/classes/LearningSet.php on line 576
+[25-Mar-2014 12:29:49 Asia/Tokyo] PHP Stack trace:
+[25-Mar-2014 12:29:49 Asia/Tokyo] PHP   1. {main}() /Users/sachatelgenhofoudekoehorst/NetBeansProjects/kb/set.php:0
+[25-Mar-2014 12:29:49 Asia/Tokyo] PHP   2. LearningSet::get_all_tags() /Users/sachatelgenhofoudekoehorst/NetBeansProjects/kb/set.php:34
+[25-Mar-2014 12:29:49 Asia/Tokyo] PHP Notice:  Trying to get property of non-object in /Users/sachatelgenhofoudekoehorst/NetBeansProjects/kb/classes/LearningSet.php on line 576
+[25-Mar-2014 12:29:49 Asia/Tokyo] PHP Stack trace:
+[25-Mar-2014 12:29:49 Asia/Tokyo] PHP   1. {main}() /Users/sachatelgenhofoudekoehorst/NetBeansProjects/kb/set.php:0
+[25-Mar-2014 12:29:49 Asia/Tokyo] PHP   2. LearningSet::get_all_tags() /Users/sachatelgenhofoudekoehorst/NetBeansProjects/kb/set.php:34
+[25-Mar-2014 12:29:49 Asia/Tokyo] PHP Notice:  Trying to get property of non-object in /Users/sachatelgenhofoudekoehorst/NetBeansProjects/kb/classes/LearningSet.php on line 576
+[25-Mar-2014 12:29:49 Asia/Tokyo] PHP Stack trace:
+[25-Mar-2014 12:29:49 Asia/Tokyo] PHP   1. {main}() /Users/sachatelgenhofoudekoehorst/NetBeansProjects/kb/set.php:0
+[25-Mar-2014 12:29:49 Asia/Tokyo] PHP   2. LearningSet::get_all_tags() /Users/sachatelgenhofoudekoehorst/NetBeansProjects/kb/set.php:34
+[25-Mar-2014 12:29:49 Asia/Tokyo] PHP Notice:  Trying to get property of non-object in /Users/sachatelgenhofoudekoehorst/NetBeansProjects/kb/classes/LearningSet.php on line 576
+[25-Mar-2014 12:29:49 Asia/Tokyo] PHP Stack trace:
+[25-Mar-2014 12:29:49 Asia/Tokyo] PHP   1. {main}() /Users/sachatelgenhofoudekoehorst/NetBeansProjects/kb/set.php:0
+[25-Mar-2014 12:29:49 Asia/Tokyo] PHP   2. LearningSet::get_all_tags() /Users/sachatelgenhofoudekoehorst/NetBeansProjects/kb/set.php:34
+[25-Mar-2014 12:29:49 Asia/Tokyo] PHP Notice:  Trying to get property of non-object in /Users/sachatelgenhofoudekoehorst/NetBeansProjects/kb/classes/LearningSet.php on line 576
+[25-Mar-2014 12:29:49 Asia/Tokyo] PHP Stack trace:
+[25-Mar-2014 12:29:49 Asia/Tokyo] PHP   1. {main}() /Users/sachatelgenhofoudekoehorst/NetBeansProjects/kb/set.php:0
+[25-Mar-2014 12:29:49 Asia/Tokyo] PHP   2. LearningSet::get_all_tags() /Users/sachatelgenhofoudekoehorst/NetBeansProjects/kb/set.php:34
+[25-Mar-2014 12:30:06 Asia/Tokyo] PHP Notice:  Trying to get property of non-object in /Users/sachatelgenhofoudekoehorst/NetBeansProjects/kb/classes/LearningSet.php on line 576
+[25-Mar-2014 12:30:06 Asia/Tokyo] PHP Stack trace:
+[25-Mar-2014 12:30:06 Asia/Tokyo] PHP   1. {main}() /Users/sachatelgenhofoudekoehorst/NetBeansProjects/kb/set.php:0
+[25-Mar-2014 12:30:06 Asia/Tokyo] PHP   2. LearningSet::get_all_tags() /Users/sachatelgenhofoudekoehorst/NetBeansProjects/kb/set.php:34
+[25-Mar-2014 12:30:06 Asia/Tokyo] PHP Notice:  Trying to get property of non-object in /Users/sachatelgenhofoudekoehorst/NetBeansProjects/kb/classes/LearningSet.php on line 576
+[25-Mar-2014 12:30:06 Asia/Tokyo] PHP Stack trace:
+[25-Mar-2014 12:30:06 Asia/Tokyo] PHP   1. {main}() /Users/sachatelgenhofoudekoehorst/NetBeansProjects/kb/set.php:0
+[25-Mar-2014 12:30:06 Asia/Tokyo] PHP   2. LearningSet::get_all_tags() /Users/sachatelgenhofoudekoehorst/NetBeansProjects/kb/set.php:34
+[25-Mar-2014 12:30:06 Asia/Tokyo] PHP Notice:  Trying to get property of non-object in /Users/sachatelgenhofoudekoehorst/NetBeansProjects/kb/classes/LearningSet.php on line 576
+[25-Mar-2014 12:30:06 Asia/Tokyo] PHP Stack trace:
+[25-Mar-2014 12:30:06 Asia/Tokyo] PHP   1. {main}() /Users/sachatelgenhofoudekoehorst/NetBeansProjects/kb/set.php:0
+[25-Mar-2014 12:30:06 Asia/Tokyo] PHP   2. LearningSet::get_all_tags() /Users/sachatelgenhofoudekoehorst/NetBeansProjects/kb/set.php:34
+[25-Mar-2014 12:30:06 Asia/Tokyo] PHP Notice:  Trying to get property of non-object in /Users/sachatelgenhofoudekoehorst/NetBeansProjects/kb/classes/LearningSet.php on line 576
+[25-Mar-2014 12:30:06 Asia/Tokyo] PHP Stack trace:
+[25-Mar-2014 12:30:06 Asia/Tokyo] PHP   1. {main}() /Users/sachatelgenhofoudekoehorst/NetBeansProjects/kb/set.php:0
+[25-Mar-2014 12:30:06 Asia/Tokyo] PHP   2. LearningSet::get_all_tags() /Users/sachatelgenhofoudekoehorst/NetBeansProjects/kb/set.php:34
+[25-Mar-2014 12:30:06 Asia/Tokyo] PHP Notice:  Trying to get property of non-object in /Users/sachatelgenhofoudekoehorst/NetBeansProjects/kb/classes/LearningSet.php on line 576
+[25-Mar-2014 12:30:06 Asia/Tokyo] PHP Stack trace:
+[25-Mar-2014 12:30:06 Asia/Tokyo] PHP   1. {main}() /Users/sachatelgenhofoudekoehorst/NetBeansProjects/kb/set.php:0
+[25-Mar-2014 12:30:06 Asia/Tokyo] PHP   2. LearningSet::get_all_tags() /Users/sachatelgenhofoudekoehorst/NetBeansProjects/kb/set.php:34
+[25-Mar-2014 12:30:06 Asia/Tokyo] PHP Notice:  Trying to get property of non-object in /Users/sachatelgenhofoudekoehorst/NetBeansProjects/kb/classes/LearningSet.php on line 576
+[25-Mar-2014 12:30:06 Asia/Tokyo] PHP Stack trace:
+[25-Mar-2014 12:30:06 Asia/Tokyo] PHP   1. {main}() /Users/sachatelgenhofoudekoehorst/NetBeansProjects/kb/set.php:0
+[25-Mar-2014 12:30:06 Asia/Tokyo] PHP   2. LearningSet::get_all_tags() /Users/sachatelgenhofoudekoehorst/NetBeansProjects/kb/set.php:34
+[25-Mar-2014 12:30:06 Asia/Tokyo] PHP Notice:  Trying to get property of non-object in /Users/sachatelgenhofoudekoehorst/NetBeansProjects/kb/classes/LearningSet.php on line 576
+[25-Mar-2014 12:30:06 Asia/Tokyo] PHP Stack trace:
+[25-Mar-2014 12:30:06 Asia/Tokyo] PHP   1. {main}() /Users/sachatelgenhofoudekoehorst/NetBeansProjects/kb/set.php:0
+[25-Mar-2014 12:30:06 Asia/Tokyo] PHP   2. LearningSet::get_all_tags() /Users/sachatelgenhofoudekoehorst/NetBeansProjects/kb/set.php:34
+[25-Mar-2014 12:30:06 Asia/Tokyo] PHP Notice:  Trying to get property of non-object in /Users/sachatelgenhofoudekoehorst/NetBeansProjects/kb/classes/LearningSet.php on line 576
+[25-Mar-2014 12:30:06 Asia/Tokyo] PHP Stack trace:
+[25-Mar-2014 12:30:06 Asia/Tokyo] PHP   1. {main}() /Users/sachatelgenhofoudekoehorst/NetBeansProjects/kb/set.php:0
+[25-Mar-2014 12:30:06 Asia/Tokyo] PHP   2. LearningSet::get_all_tags() /Users/sachatelgenhofoudekoehorst/NetBeansProjects/kb/set.php:34
+[25-Mar-2014 12:30:06 Asia/Tokyo] PHP Notice:  Trying to get property of non-object in /Users/sachatelgenhofoudekoehorst/NetBeansProjects/kb/classes/LearningSet.php on line 576
+[25-Mar-2014 12:30:06 Asia/Tokyo] PHP Stack trace:
+[25-Mar-2014 12:30:06 Asia/Tokyo] PHP   1. {main}() /Users/sachatelgenhofoudekoehorst/NetBeansProjects/kb/set.php:0
+[25-Mar-2014 12:30:06 Asia/Tokyo] PHP   2. LearningSet::get_all_tags() /Users/sachatelgenhofoudekoehorst/NetBeansProjects/kb/set.php:34
+[25-Mar-2014 12:30:06 Asia/Tokyo] PHP Notice:  Trying to get property of non-object in /Users/sachatelgenhofoudekoehorst/NetBeansProjects/kb/classes/LearningSet.php on line 576
+[25-Mar-2014 12:30:06 Asia/Tokyo] PHP Stack trace:
+[25-Mar-2014 12:30:06 Asia/Tokyo] PHP   1. {main}() /Users/sachatelgenhofoudekoehorst/NetBeansProjects/kb/set.php:0
+[25-Mar-2014 12:30:06 Asia/Tokyo] PHP   2. LearningSet::get_all_tags() /Users/sachatelgenhofoudekoehorst/NetBeansProjects/kb/set.php:34
+[25-Mar-2014 12:30:06 Asia/Tokyo] PHP Notice:  Trying to get property of non-object in /Users/sachatelgenhofoudekoehorst/NetBeansProjects/kb/classes/LearningSet.php on line 576
+[25-Mar-2014 12:30:06 Asia/Tokyo] PHP Stack trace:
+[25-Mar-2014 12:30:06 Asia/Tokyo] PHP   1. {main}() /Users/sachatelgenhofoudekoehorst/NetBeansProjects/kb/set.php:0
+[25-Mar-2014 12:30:06 Asia/Tokyo] PHP   2. LearningSet::get_all_tags() /Users/sachatelgenhofoudekoehorst/NetBeansProjects/kb/set.php:34
+[25-Mar-2014 12:30:06 Asia/Tokyo] PHP Notice:  Trying to get property of non-object in /Users/sachatelgenhofoudekoehorst/NetBeansProjects/kb/classes/LearningSet.php on line 576
+[25-Mar-2014 12:30:06 Asia/Tokyo] PHP Stack trace:
+[25-Mar-2014 12:30:06 Asia/Tokyo] PHP   1. {main}() /Users/sachatelgenhofoudekoehorst/NetBeansProjects/kb/set.php:0
+[25-Mar-2014 12:30:06 Asia/Tokyo] PHP   2. LearningSet::get_all_tags() /Users/sachatelgenhofoudekoehorst/NetBeansProjects/kb/set.php:34
+[25-Mar-2014 12:30:06 Asia/Tokyo] PHP Notice:  Trying to get property of non-object in /Users/sachatelgenhofoudekoehorst/NetBeansProjects/kb/classes/LearningSet.php on line 576
+[25-Mar-2014 12:30:06 Asia/Tokyo] PHP Stack trace:
+[25-Mar-2014 12:30:06 Asia/Tokyo] PHP   1. {main}() /Users/sachatelgenhofoudekoehorst/NetBeansProjects/kb/set.php:0
+[25-Mar-2014 12:30:06 Asia/Tokyo] PHP   2. LearningSet::get_all_tags() /Users/sachatelgenhofoudekoehorst/NetBeansProjects/kb/set.php:34
+[25-Mar-2014 12:30:06 Asia/Tokyo] PHP Notice:  Trying to get property of non-object in /Users/sachatelgenhofoudekoehorst/NetBeansProjects/kb/classes/LearningSet.php on line 576
+[25-Mar-2014 12:30:06 Asia/Tokyo] PHP Stack trace:
+[25-Mar-2014 12:30:06 Asia/Tokyo] PHP   1. {main}() /Users/sachatelgenhofoudekoehorst/NetBeansProjects/kb/set.php:0
+[25-Mar-2014 12:30:06 Asia/Tokyo] PHP   2. LearningSet::get_all_tags() /Users/sachatelgenhofoudekoehorst/NetBeansProjects/kb/set.php:34
+[25-Mar-2014 12:30:06 Asia/Tokyo] PHP Notice:  Trying to get property of non-object in /Users/sachatelgenhofoudekoehorst/NetBeansProjects/kb/classes/LearningSet.php on line 576
+[25-Mar-2014 12:30:06 Asia/Tokyo] PHP Stack trace:
+[25-Mar-2014 12:30:06 Asia/Tokyo] PHP   1. {main}() /Users/sachatelgenhofoudekoehorst/NetBeansProjects/kb/set.php:0
+[25-Mar-2014 12:30:06 Asia/Tokyo] PHP   2. LearningSet::get_all_tags() /Users/sachatelgenhofoudekoehorst/NetBeansProjects/kb/set.php:34
+[25-Mar-2014 12:30:06 Asia/Tokyo] PHP Notice:  Trying to get property of non-object in /Users/sachatelgenhofoudekoehorst/NetBeansProjects/kb/classes/LearningSet.php on line 576
+[25-Mar-2014 12:30:06 Asia/Tokyo] PHP Stack trace:
+[25-Mar-2014 12:30:06 Asia/Tokyo] PHP   1. {main}() /Users/sachatelgenhofoudekoehorst/NetBeansProjects/kb/set.php:0
+[25-Mar-2014 12:30:06 Asia/Tokyo] PHP   2. LearningSet::get_all_tags() /Users/sachatelgenhofoudekoehorst/NetBeansProjects/kb/set.php:34
+[25-Mar-2014 12:30:06 Asia/Tokyo] PHP Notice:  Trying to get property of non-object in /Users/sachatelgenhofoudekoehorst/NetBeansProjects/kb/classes/LearningSet.php on line 576
+[25-Mar-2014 12:30:06 Asia/Tokyo] PHP Stack trace:
+[25-Mar-2014 12:30:06 Asia/Tokyo] PHP   1. {main}() /Users/sachatelgenhofoudekoehorst/NetBeansProjects/kb/set.php:0
+[25-Mar-2014 12:30:06 Asia/Tokyo] PHP   2. LearningSet::get_all_tags() /Users/sachatelgenhofoudekoehorst/NetBeansProjects/kb/set.php:34
+[25-Mar-2014 12:30:06 Asia/Tokyo] PHP Notice:  Trying to get property of non-object in /Users/sachatelgenhofoudekoehorst/NetBeansProjects/kb/classes/LearningSet.php on line 576
+[25-Mar-2014 12:30:06 Asia/Tokyo] PHP Stack trace:
+[25-Mar-2014 12:30:06 Asia/Tokyo] PHP   1. {main}() /Users/sachatelgenhofoudekoehorst/NetBeansProjects/kb/set.php:0
+[25-Mar-2014 12:30:06 Asia/Tokyo] PHP   2. LearningSet::get_all_tags() /Users/sachatelgenhofoudekoehorst/NetBeansProjects/kb/set.php:34
+[25-Mar-2014 12:30:06 Asia/Tokyo] PHP Notice:  Trying to get property of non-object in /Users/sachatelgenhofoudekoehorst/NetBeansProjects/kb/classes/LearningSet.php on line 576
+[25-Mar-2014 12:30:06 Asia/Tokyo] PHP Stack trace:
+[25-Mar-2014 12:30:06 Asia/Tokyo] PHP   1. {main}() /Users/sachatelgenhofoudekoehorst/NetBeansProjects/kb/set.php:0
+[25-Mar-2014 12:30:06 Asia/Tokyo] PHP   2. LearningSet::get_all_tags() /Users/sachatelgenhofoudekoehorst/NetBeansProjects/kb/set.php:34
+[25-Mar-2014 12:30:06 Asia/Tokyo] PHP Notice:  Trying to get property of non-object in /Users/sachatelgenhofoudekoehorst/NetBeansProjects/kb/classes/LearningSet.php on line 576
+[25-Mar-2014 12:30:06 Asia/Tokyo] PHP Stack trace:
+[25-Mar-2014 12:30:06 Asia/Tokyo] PHP   1. {main}() /Users/sachatelgenhofoudekoehorst/NetBeansProjects/kb/set.php:0
+[25-Mar-2014 12:30:06 Asia/Tokyo] PHP   2. LearningSet::get_all_tags() /Users/sachatelgenhofoudekoehorst/NetBeansProjects/kb/set.php:34
+[25-Mar-2014 12:30:06 Asia/Tokyo] PHP Notice:  Trying to get property of non-object in /Users/sachatelgenhofoudekoehorst/NetBeansProjects/kb/classes/LearningSet.php on line 576
+[25-Mar-2014 12:30:06 Asia/Tokyo] PHP Stack trace:
+[25-Mar-2014 12:30:06 Asia/Tokyo] PHP   1. {main}() /Users/sachatelgenhofoudekoehorst/NetBeansProjects/kb/set.php:0
+[25-Mar-2014 12:30:06 Asia/Tokyo] PHP   2. LearningSet::get_all_tags() /Users/sachatelgenhofoudekoehorst/NetBeansProjects/kb/set.php:34
+[25-Mar-2014 12:30:06 Asia/Tokyo] PHP Notice:  Trying to get property of non-object in /Users/sachatelgenhofoudekoehorst/NetBeansProjects/kb/classes/LearningSet.php on line 576
+[25-Mar-2014 12:30:06 Asia/Tokyo] PHP Stack trace:
+[25-Mar-2014 12:30:06 Asia/Tokyo] PHP   1. {main}() /Users/sachatelgenhofoudekoehorst/NetBeansProjects/kb/set.php:0
+[25-Mar-2014 12:30:06 Asia/Tokyo] PHP   2. LearningSet::get_all_tags() /Users/sachatelgenhofoudekoehorst/NetBeansProjects/kb/set.php:34
+[25-Mar-2014 12:30:06 Asia/Tokyo] PHP Notice:  Trying to get property of non-object in /Users/sachatelgenhofoudekoehorst/NetBeansProjects/kb/classes/LearningSet.php on line 576
+[25-Mar-2014 12:30:06 Asia/Tokyo] PHP Stack trace:
+[25-Mar-2014 12:30:06 Asia/Tokyo] PHP   1. {main}() /Users/sachatelgenhofoudekoehorst/NetBeansProjects/kb/set.php:0
+[25-Mar-2014 12:30:06 Asia/Tokyo] PHP   2. LearningSet::get_all_tags() /Users/sachatelgenhofoudekoehorst/NetBeansProjects/kb/set.php:34
+[25-Mar-2014 12:30:06 Asia/Tokyo] PHP Notice:  Trying to get property of non-object in /Users/sachatelgenhofoudekoehorst/NetBeansProjects/kb/classes/LearningSet.php on line 576
+[25-Mar-2014 12:30:06 Asia/Tokyo] PHP Stack trace:
+[25-Mar-2014 12:30:06 Asia/Tokyo] PHP   1. {main}() /Users/sachatelgenhofoudekoehorst/NetBeansProjects/kb/set.php:0
+[25-Mar-2014 12:30:06 Asia/Tokyo] PHP   2. LearningSet::get_all_tags() /Users/sachatelgenhofoudekoehorst/NetBeansProjects/kb/set.php:34
+[25-Mar-2014 12:30:06 Asia/Tokyo] PHP Notice:  Trying to get property of non-object in /Users/sachatelgenhofoudekoehorst/NetBeansProjects/kb/classes/LearningSet.php on line 576
+[25-Mar-2014 12:30:06 Asia/Tokyo] PHP Stack trace:
+[25-Mar-2014 12:30:06 Asia/Tokyo] PHP   1. {main}() /Users/sachatelgenhofoudekoehorst/NetBeansProjects/kb/set.php:0
+[25-Mar-2014 12:30:06 Asia/Tokyo] PHP   2. LearningSet::get_all_tags() /Users/sachatelgenhofoudekoehorst/NetBeansProjects/kb/set.php:34
+[25-Mar-2014 12:30:06 Asia/Tokyo] PHP Notice:  Trying to get property of non-object in /Users/sachatelgenhofoudekoehorst/NetBeansProjects/kb/classes/LearningSet.php on line 576
+[25-Mar-2014 12:30:06 Asia/Tokyo] PHP Stack trace:
+[25-Mar-2014 12:30:06 Asia/Tokyo] PHP   1. {main}() /Users/sachatelgenhofoudekoehorst/NetBeansProjects/kb/set.php:0
+[25-Mar-2014 12:30:06 Asia/Tokyo] PHP   2. LearningSet::get_all_tags() /Users/sachatelgenhofoudekoehorst/NetBeansProjects/kb/set.php:34
+[25-Mar-2014 12:30:06 Asia/Tokyo] PHP Notice:  Trying to get property of non-object in /Users/sachatelgenhofoudekoehorst/NetBeansProjects/kb/classes/LearningSet.php on line 576
+[25-Mar-2014 12:30:06 Asia/Tokyo] PHP Stack trace:
+[25-Mar-2014 12:30:06 Asia/Tokyo] PHP   1. {main}() /Users/sachatelgenhofoudekoehorst/NetBeansProjects/kb/set.php:0
+[25-Mar-2014 12:30:06 Asia/Tokyo] PHP   2. LearningSet::get_all_tags() /Users/sachatelgenhofoudekoehorst/NetBeansProjects/kb/set.php:34
+[25-Mar-2014 12:30:06 Asia/Tokyo] PHP Notice:  Trying to get property of non-object in /Users/sachatelgenhofoudekoehorst/NetBeansProjects/kb/classes/LearningSet.php on line 576
+[25-Mar-2014 12:30:06 Asia/Tokyo] PHP Stack trace:
+[25-Mar-2014 12:30:06 Asia/Tokyo] PHP   1. {main}() /Users/sachatelgenhofoudekoehorst/NetBeansProjects/kb/set.php:0
+[25-Mar-2014 12:30:06 Asia/Tokyo] PHP   2. LearningSet::get_all_tags() /Users/sachatelgenhofoudekoehorst/NetBeansProjects/kb/set.php:34
+[25-Mar-2014 12:30:06 Asia/Tokyo] PHP Notice:  Trying to get property of non-object in /Users/sachatelgenhofoudekoehorst/NetBeansProjects/kb/classes/LearningSet.php on line 576
+[25-Mar-2014 12:30:06 Asia/Tokyo] PHP Stack trace:
+[25-Mar-2014 12:30:06 Asia/Tokyo] PHP   1. {main}() /Users/sachatelgenhofoudekoehorst/NetBeansProjects/kb/set.php:0
+[25-Mar-2014 12:30:06 Asia/Tokyo] PHP   2. LearningSet::get_all_tags() /Users/sachatelgenhofoudekoehorst/NetBeansProjects/kb/set.php:34
+[25-Mar-2014 12:30:06 Asia/Tokyo] PHP Notice:  Trying to get property of non-object in /Users/sachatelgenhofoudekoehorst/NetBeansProjects/kb/classes/LearningSet.php on line 576
+[25-Mar-2014 12:30:06 Asia/Tokyo] PHP Stack trace:
+[25-Mar-2014 12:30:06 Asia/Tokyo] PHP   1. {main}() /Users/sachatelgenhofoudekoehorst/NetBeansProjects/kb/set.php:0
+[25-Mar-2014 12:30:06 Asia/Tokyo] PHP   2. LearningSet::get_all_tags() /Users/sachatelgenhofoudekoehorst/NetBeansProjects/kb/set.php:34
+[25-Mar-2014 12:35:48 Asia/Tokyo] PHP Notice:  Undefined index: action in /Users/sachatelgenhofoudekoehorst/NetBeansProjects/kb/libs/connect_lib.php on line 219
+[25-Mar-2014 12:35:48 Asia/Tokyo] PHP Stack trace:
+[25-Mar-2014 12:35:48 Asia/Tokyo] PHP   1. {main}() /Users/sachatelgenhofoudekoehorst/NetBeansProjects/kb/index.php:0
+[25-Mar-2014 12:35:48 Asia/Tokyo] PHP   2. display_pwd_reset_page() /Users/sachatelgenhofoudekoehorst/NetBeansProjects/kb/index.php:28
+[25-Mar-2014 12:35:48 Asia/Tokyo] PHP Notice:  Undefined index: action in /Users/sachatelgenhofoudekoehorst/NetBeansProjects/kb/libs/connect_lib.php on line 245
+[25-Mar-2014 12:35:48 Asia/Tokyo] PHP Stack trace:
+[25-Mar-2014 12:35:48 Asia/Tokyo] PHP   1. {main}() /Users/sachatelgenhofoudekoehorst/NetBeansProjects/kb/index.php:0
+[25-Mar-2014 12:35:48 Asia/Tokyo] PHP   2. display_pwd_reset_page() /Users/sachatelgenhofoudekoehorst/NetBeansProjects/kb/index.php:28
+[25-Mar-2014 12:38:33 Asia/Tokyo] PHP Notice:  Undefined index: action in /Users/sachatelgenhofoudekoehorst/NetBeansProjects/kb/libs/connect_lib.php on line 245
+[25-Mar-2014 12:38:33 Asia/Tokyo] PHP Stack trace:
+[25-Mar-2014 12:38:33 Asia/Tokyo] PHP   1. {main}() /Users/sachatelgenhofoudekoehorst/NetBeansProjects/kb/index.php:0
+[25-Mar-2014 12:38:33 Asia/Tokyo] PHP   2. display_pwd_reset_page() /Users/sachatelgenhofoudekoehorst/NetBeansProjects/kb/index.php:28
+[25-Mar-2014 12:40:03 Asia/Tokyo] PHP Notice:  Undefined variable: _SESSION in /Users/sachatelgenhofoudekoehorst/NetBeansProjects/kb/libs/log_lib.php on line 86
+[25-Mar-2014 12:40:03 Asia/Tokyo] PHP Stack trace:
+[25-Mar-2014 12:40:03 Asia/Tokyo] PHP   1. {main}() /Users/sachatelgenhofoudekoehorst/NetBeansProjects/kb/index.php:0
+[25-Mar-2014 12:40:03 Asia/Tokyo] PHP   2. display_pwd_reset_page() /Users/sachatelgenhofoudekoehorst/NetBeansProjects/kb/index.php:28
+[25-Mar-2014 12:40:03 Asia/Tokyo] PHP   3. log_pwd_reset() /Users/sachatelgenhofoudekoehorst/NetBeansProjects/kb/libs/connect_lib.php:222
