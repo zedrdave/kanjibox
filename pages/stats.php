@@ -2,7 +2,7 @@
 
 force_logged_in_app('stats');
 
-require_once(ABS_PATH . 'libs/stats_lib.php');
+require_once ABS_PATH . 'libs/stats_lib.php';
 include_css('stats.css');
 include_js('ajax.js');
 

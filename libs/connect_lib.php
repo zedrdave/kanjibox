@@ -142,7 +142,7 @@ function display_login_page($redirect_to_url = '', $header_msg = 'In order to us
                     <div class="submit-btn"><input type="submit" name="Log in" value="Log in"></input></div>
                     <p style="text-align:center; margin: 10px 0 0 0; padding: 0;"><a href="<?php echo SERVER_URL ?>?new_account=1">[Create new account]</a>&nbsp;&nbsp;&nbsp;<a href="<?php echo SERVER_URL ?>?pwd_reset=1">[Recover lost password]</a></p>
                 </form>
-                <p>You can also consult <a href="<?php echo SERVER_URL; ?>page/faq/">KanjiBox's FAQ</a>, browse <a href="<?php echo SERVER_URL; ?>sets/">public Japanese study sets</a> or check out the <a href="http://kanjibox.net/ios/">KanjiBox app for iOS (iPhone/iPod/iPad)</a>.</p>
+                <p>You can also consult <a href="<?php echo get_page_url('faq'); ?>">KanjiBox's FAQ</a>, browse <a href="<?php echo SERVER_URL; ?>sets/">public Japanese study sets</a> or check out the <a href="http://kanjibox.net/ios/">KanjiBox app for iOS (iPhone/iPod/iPad)</a>.</p>
             </div>
             <script type="text/javascript">
                 if (top != self) {

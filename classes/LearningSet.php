@@ -562,18 +562,14 @@ class LearningSet {
     }
 
     static function get_all_tags($has_public_sets = false) {
-        $tags = array();
-        $query = 'SELECT tags.tag, tags.tag_id FROM tags ';
-
+        global $dbh;
+        $query = 'SELECT tags.tag_id, tags.tag FROM tags ';
         if ($has_public_sets) {
             $query .= ' JOIN learning_set_tags lst ON lst.tag_id = tags.tag_id JOIN learning_sets ls ON ls.set_id = lst.set_id AND ls.public = 1 AND deleted = 0 GROUP BY tags.tag_id';
         }
         $query .= ' ORDER BY tags.tag';
 
-        $res = mysql_query($query) or print_r(mysql_error());
-        while ($row = mysql_fetch_object($res)) {
-            $tags[$row->tag_id] = $row->tag;
-        }
+        $tags = $dbh->query($query)->fetchAll(PDO::FETCH_KEY_PAIR);
 
         return $tags;
     }
