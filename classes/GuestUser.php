@@ -6,11 +6,11 @@ class GuestUser extends User {
         
     }
 
-    function is_admin() {
+    function isAdministrator() {
         return false;
     }
 
-    function is_editor() {
+    function isEditor() {
         return false;
     }
 

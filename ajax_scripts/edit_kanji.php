@@ -8,7 +8,7 @@ if(!@$_SESSION['user'])
 if(isset($params['id'])) {
 	$kanji_id = $params['id'];
 	
-	if($_SESSION['user']->is_editor()) {
+	if($_SESSION['user']->isEditor()) {
 	
 		if(isset($_REQUEST['njlpt']))
 			echo post_db_correction('kanjis', 'id', $kanji_id, 'njlpt', (int) $_REQUEST['njlpt'], true);

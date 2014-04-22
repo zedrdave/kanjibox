@@ -1,6 +1,6 @@
 <?php
 
-if(!@$_SESSION['user'] || !$_SESSION['user']->is_editor())
+if(!@$_SESSION['user'] || !$_SESSION['user']->isEditor())
 	die("editors only");
 
 

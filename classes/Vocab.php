@@ -498,7 +498,7 @@ class Vocab extends Question
 		if($_SESSION['user']->is_on_translator_probation() && !$_SESSION['user']->get_pref('lang', 'translator_mode'))
 			return '';
 		
-		if($_SESSION['user']->get_pref('lang', 'vocab_lang') != 'en' || $_SESSION['user']->is_editor()) {
+		if($_SESSION['user']->get_pref('lang', 'vocab_lang') != 'en' || $_SESSION['user']->isEditor()) {
 			$solution = $this->get_solution();
 		
 			return '<a class="icon-button ui-state-default ui-corner-all" title="Languages..." href="#" onclick="show_vocab_translate_dialog(\'' . SERVER_URL . '\', \'' . $solution->id . '\', \'' . $this->data['sid'] .'\'); return false;">✍</a>';

@@ -1,6 +1,6 @@
 <?php
 
-if(!@$_SESSION['user'] || !$_SESSION['user']->is_editor())
+if(!@$_SESSION['user'] || !$_SESSION['user']->isEditor())
 	die("editors only");
 
 $pretty_numbers = array(1 => '①', 2 => '②', 3 => '③', 4 => '④', 5 => '⑤', 6 => '⑥', 7 => '⑦', 8 => '⑧', 9 => '⑨', 10 => '⑩', 11 => '⑪', 12 => '⑫', 13 => '⑬', 14 => '⑭', 15 => '⑮', 16 => '⑯', 17 => '⑰', 18 => '⑱', 19 => '⑲', 20 => '⑳', 21 => '○', 22 => '○', 23 => '○', 24 => '○', 25 => '○', 26 => '○', 27 => '○', 28 => '○',  29 => '○', 30 => '○', 31 => '○',  32 => '○', 33 => '○', 34 => '○',  35 => '○', 36 => '###');
@@ -59,7 +59,7 @@ else {
 		while($word = mysql_fetch_object($res)) {
 			echo "<div class=\"word-block\">$word->id";
 			
-			if($_SESSION['user']->is_admin()) {
+			if($_SESSION['user']->isAdministrator()) {
 				echo " <a href=\"#\" onclick=\"\$(this).hide(); \$('#copy_jmdict_$word->id').show(); return false;\" style=\"font-size:80%;\">[copy entry &raquo;]</a><form id=\"copy_jmdict_$word->id\" class=\"copy_ajaxform\" action=\"" . SERVER_URL . "/ajax/edit_jmdict/\" method=\"post\" style=\"display:none;\"><input type=\"hidden\" name=\"copy_jmdict_id\" value=\"$word->id\"></input><p>Create a new word record using these information:</p><p>ID: <input name=\"new_jmdict_id\" type=\"text\"></input></p><p>Word: <input name=\"word\" type=\"text\" value=\"$word->word\"></input></p><p>Reading: <input name=\"reading\" type=\"text\" value=\"$word->reading\"></input></p><p><input type=\"submit\" name=\"create\" value=\"Create\"></input></p></form>";
 			
 				echo " <a href=\"#\" onclick=\"\$(this).hide();\$('#archive_jmdict_$word->id').show(); return false;\" style=\"font-size:80%;\">[archive entry &raquo;]</a><div id=\"archive_jmdict_$word->id\" class=\"archive_form\" style=\"display:none;\">Replace by ID (optional): <input type=\"text\" name=\"replace_id\" id=\"replace_id_$word->id\"></input><br/> <button onclick=\"archive_entry($word->id, \$('#replace_id_$word->id').val(), '?submit=Find&show_disabled=on&id=$word->id'); return false;\">Archive</button></div>";

@@ -1,6 +1,6 @@
 <?php
 
-if(!@$_SESSION['user'] || !$_SESSION['user']->is_editor())
+if(!@$_SESSION['user'] || !$_SESSION['user']->isEditor())
 	die("editors only");
 
 if(! empty($_REQUEST['delete_id'])) {
@@ -201,7 +201,7 @@ if(isset($params['question_id'])) {
 	?></p>
 	<p>JLPT: N<input type="text" size="1" name="njlpt" value="<?php echo $question->njlpt ?>" onchange="show_question_save_button();" /></p>
 	<?php
-	if($_SESSION['user']->is_admin())
+	if($_SESSION['user']->isAdministrator())
 		echo '<p>User id: <input type="text" size="10" name="user_id" value="' . $question->user_id .  '" onchange="show_question_save_button();" /></p>';
 	else
 		echo '<input type="hidden" name="user_id" value="' . $question->user_id .  '" />';

@@ -1,10 +1,10 @@
 <?php
 
 
-if(!@$_SESSION['user'] || !$_SESSION['user']->is_editor())
+if(!@$_SESSION['user'] || !$_SESSION['user']->isEditor())
 	die("editors only");
 
-if(!$_SESSION['user']->is_admin() && $_SESSION['user']->get_id() != 46796) {
+if(!$_SESSION['user']->isAdministrator() && $_SESSION['user']->get_id() != 46796) {
 	$user_id = $_SESSION['user']->get_id();
     $set_id = 0;
 }

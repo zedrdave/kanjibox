@@ -5,7 +5,7 @@ if(!@$_SESSION['user'])
 	die('need to be logged in');
 
 if(@$_REQUEST['delete_id']) {
-	if(!$_SESSION['user']->is_admin())
+	if(!$_SESSION['user']->isAdministrator())
 		die("admins only");
 
 	$delete_id = (int) $_REQUEST['delete_id'];
@@ -15,7 +15,7 @@ if(@$_REQUEST['delete_id']) {
 	echo '<br/>';
 }
 if(@$_REQUEST['reimport_id']) {
-	if(!$_SESSION['user']->is_editor())
+	if(!$_SESSION['user']->isEditor())
 		die("editors only");
 
 	$reimport_id = (int) $_REQUEST['reimport_id'];
@@ -29,7 +29,7 @@ if(@$_REQUEST['reimport_id']) {
 	echo '<br/>';
 }
 if(@$_REQUEST['archive_id']) {
-	if(!$_SESSION['user']->is_editor())
+	if(!$_SESSION['user']->isEditor())
 		die("editors only");
 
 	$archive_id = (int) $_REQUEST['archive_id'];
@@ -51,28 +51,28 @@ if(@$_REQUEST['archive_id']) {
 }
 elseif(isset($_REQUEST['jmdict_id'])) {
 	if(isset($_REQUEST['njlpt'])) {
-		echo post_db_correction('jmdict', 'id', (int) $_REQUEST['jmdict_id'], 'njlpt', (int) $_REQUEST['njlpt'], $_SESSION['user']->is_editor(), '', '', false, @$_REQUEST['user_cmt']);
+		echo post_db_correction('jmdict', 'id', (int) $_REQUEST['jmdict_id'], 'njlpt', (int) $_REQUEST['njlpt'], $_SESSION['user']->isEditor(), '', '', false, @$_REQUEST['user_cmt']);
 	}
 	elseif(isset($_REQUEST['njlpt_r'])) {
-		echo post_db_correction('jmdict', 'id', (int) $_REQUEST['jmdict_id'], 'njlpt_r', (int) $_REQUEST['njlpt_r'], $_SESSION['user']->is_editor(), '', '', false, @$_REQUEST['user_cmt']);
+		echo post_db_correction('jmdict', 'id', (int) $_REQUEST['jmdict_id'], 'njlpt_r', (int) $_REQUEST['njlpt_r'], $_SESSION['user']->isEditor(), '', '', false, @$_REQUEST['user_cmt']);
 	}
 	elseif(isset($_REQUEST['katakana'])) {
-		echo post_db_correction('jmdict', 'id', (int) $_REQUEST['jmdict_id'], 'katakana', (int) ($_REQUEST['katakana'] == 'true'), $_SESSION['user']->is_editor(), '', '', false, @$_REQUEST['user_cmt']);
+		echo post_db_correction('jmdict', 'id', (int) $_REQUEST['jmdict_id'], 'katakana', (int) ($_REQUEST['katakana'] == 'true'), $_SESSION['user']->isEditor(), '', '', false, @$_REQUEST['user_cmt']);
 	}
 	elseif(isset($_REQUEST['usually_kana'])) {
-		echo post_db_correction('jmdict', 'id', (int) $_REQUEST['jmdict_id'], 'usually_kana', (int) ($_REQUEST['usually_kana'] == 'true'), $_SESSION['user']->is_editor(), '', '', false, @$_REQUEST['user_cmt']);
+		echo post_db_correction('jmdict', 'id', (int) $_REQUEST['jmdict_id'], 'usually_kana', (int) ($_REQUEST['usually_kana'] == 'true'), $_SESSION['user']->isEditor(), '', '', false, @$_REQUEST['user_cmt']);
 	}
 	elseif(isset($_REQUEST['word'])) {
-		echo post_db_correction('jmdict', 'id', (int) $_REQUEST['jmdict_id'], 'word', $_REQUEST['word'], $_SESSION['user']->is_editor(), '', '', false, @$_REQUEST['user_cmt']);
+		echo post_db_correction('jmdict', 'id', (int) $_REQUEST['jmdict_id'], 'word', $_REQUEST['word'], $_SESSION['user']->isEditor(), '', '', false, @$_REQUEST['user_cmt']);
 	}
 	elseif(isset($_REQUEST['reading'])) {
-		echo post_db_correction('jmdict', 'id', (int) $_REQUEST['jmdict_id'], 'reading', $_REQUEST['reading'], $_SESSION['user']->is_editor(), '', '', false, @$_REQUEST['user_cmt']);
+		echo post_db_correction('jmdict', 'id', (int) $_REQUEST['jmdict_id'], 'reading', $_REQUEST['reading'], $_SESSION['user']->isEditor(), '', '', false, @$_REQUEST['user_cmt']);
 	}
 	else
 		echo "Need a jlpt/jlp_r/katakana value";
 }
 elseif(@$_POST['copy_jmdict_id']) {
-	if(!$_SESSION['user']->is_editor())
+	if(!$_SESSION['user']->isEditor())
 		die("editors only");
 	
 	if((int) @$_POST['new_jmdict_id'])

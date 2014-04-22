@@ -4,10 +4,10 @@ if(!@$_SESSION['user'] || !$_SESSION['user']->is_elite())
 	die('need to be at least elite');
 mb_internal_encoding('UTF-8');
 	
-$apply = $_SESSION['user']->is_editor();
+$apply = $_SESSION['user']->isEditor();
 
 if(isset($_REQUEST['delete_id']) ) {
-	if(!$_SESSION['user']->is_admin())
+	if(!$_SESSION['user']->isAdministrator())
 		die("Not allowed to delete entries...");
 	if(@$_REQUEST['delete_jmdict_id']) {
 		$sent_id = (int) $_REQUEST['delete_id'];

@@ -82,25 +82,28 @@ function init_app($ajax = false) {
                 return false;
             }
 
-            $res = mysql_query("SELECT COUNT(*) AS c FROM `users` u LEFT JOIN users_ext ux ON ux.user_id = u.id WHERE ux.login_email = '" . mysql_real_escape_string($_POST['login']) . "' AND ux.login_pwd = MD5('" . mysql_real_escape_string($_POST['pwd']) . "')") or die(mysql_error());
-            $row = mysql_fetch_object($res);
-            if ($row->c == 0) {
-                return false;
+            $query = 'SELECT COUNT(*) FROM `users` u LEFT JOIN users_ext ux ON ux.user_id = u.id WHERE ux.login_email = :login AND ux.login_pwd = :pwd';
+            try {
+                global $dbh;
+
+                $stmt = $dbh->prepare($query);
+                $stmt->bindValue(':login', $_POST['login']);
+                $stmt->bindValue(':pwd', md5($_POST['pwd']));
+                $stmt->execute();
+
+                $users = (int) $stmt->fetchColumn();
+                if ($users == 0) {
+                    return false;
+                }
+            } catch (PDOException $e) {
+                log_db_error($query, mysql_error(), false, true);
             }
 
             $_SESSION['user'] = new User(array('ux.login_email' => $_POST['login'], 'ux.login_pwd' => md5($_POST['pwd'])), false);
 
             return true;
         } else {
-
-            // if(($_SERVER['REMOTE_ADDR'] == '153.161.71.120')) {
-            // 	if (! $fb_id = fb_connect_init(false))
-            // 		return false;
-            // 	$fb_info = NULL;
-            // }
-            // else {
-
-            if (!empty($_SESSION['user']) && $_SESSION['user']->is_admin()) {
+            if (!empty($_SESSION['user']) && $_SESSION['user']->isAdministrator()) {
                 echo '### calling fb_connect_init';
             }
 
@@ -116,20 +119,8 @@ function init_app($ajax = false) {
             $_SESSION['user'] = new User(array('fb_id' => $fb_id), true, $fb_info);
 
             if (empty($_SESSION['user'])) {
-                log_error("User class creation failed", true, true);
+                log_error('User class creation failed', true, true);
             }
-
-            // if($_SESSION['user']->is_admin()) {
-            // 	$cookiename = 'fbsr_'. $facebook->getAppId();
-            // 	echo $cookiename;
-            // 	echo 'signed: ';
-            // 	print_r($facebook->getSignedRequest(), true);
-            // 	echo ' | getPersistentData(user_id): ' . $facebook->myGetPersistentData('user_id', $default = 0);
-            // 	echo ' | getPersistentData(access_token): ' . $facebook->myGetPersistentData('access_token');
-            // 	echo ' | access_token: ' . $facebook->myGetAccessToken();
-            // 	echo ' | getApplicationAccessToken: ' . $facebook->myGetApplicationAccessToken();
-            // }
-            // $_SESSION['user']->store_fb_friends();
 
             return true;
         }
@@ -159,7 +150,7 @@ function fb_connect_init($test_query = true) {
         }
     } catch (Exception $e) {
         // print_r($session);
-        if ($_SESSION['user']->is_admin()) {
+        if ($_SESSION['user']->isAdministrator()) {
             echo "EXCEPTION ###";
             echo $fb_id;
             echo($e->getMessage());
@@ -183,7 +174,7 @@ function fb_connect_init($test_query = true) {
 
         // $fql_result = $facebook->api_client->fql_query('SELECT uid, first_name, last_name, email FROM user WHERE uid=' . $fb_id);
     } catch (Exception $e) {
-        if (@$_SESSION['user'] && $_SESSION['user']->is_admin()) {
+        if ($_SESSION['user'] && $_SESSION['user']->isAdministrator()) {
             echo "EXCEPTION ###";
             echo($e->getMessage());
             echo '[fb id: ' . $fb_id . ']';
@@ -201,8 +192,9 @@ function fb_connect_init($test_query = true) {
         return false;
     }
 
-    if (!is_array($fql_result))
+    if (!is_array($fql_result)) {
         return false;
+    }
 
     return $fql_result;
 }
@@ -250,7 +242,7 @@ function print_prefs($cat) {
 function is_admin() {
     if (!isset($_SESSION['user']))
         return false;
-    return $_SESSION['user']->is_admin();
+    return $_SESSION['user']->isAdministrator();
 }
 
 function array2obj($data) {
@@ -342,7 +334,7 @@ function post_db_correction($table_name, $id_name, $id_value, $col_name, $new_va
         if (!$res)
             return 'Can\'t apply: ' . mysql_error();
 
-        $reviewed = (int) ($_SESSION['user'] && $_SESSION['user']->is_editor());
+        $reviewed = (int) ($_SESSION['user'] && $_SESSION['user']->isEditor());
         mysql_query("UPDATE data_updates SET applied = 1, reviewed = $reviewed, need_work = $need_work WHERE update_id = $update_id") or die(mysql_error());
 
         return 'Update successfully logged and applied';

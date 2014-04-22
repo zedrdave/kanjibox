@@ -84,12 +84,12 @@ if($can_edit) {
 ?>
 <script type="text/javascript">
 	
-	var update_color = '<?php echo ($_SESSION['user']->is_editor() ? '#6FA' : 'orange')?>';
-	var extra_text = '<?php echo ($_SESSION['user']->is_editor() ? '' : ' <span style="font-weight:bold;">It will be applied after an editor reviews it.</span>')?>';
+	var update_color = '<?php echo ($_SESSION['user']->isEditor() ? '#6FA' : 'orange')?>';
+	var extra_text = '<?php echo ($_SESSION['user']->isEditor() ? '' : ' <span style="font-weight:bold;">It will be applied after an editor reviews it.</span>')?>';
 
 	function get_user_cmt() {
 		<?php
-			if(!$_SESSION['user']->is_editor())
+			if(!$_SESSION['user']->isEditor())
 				echo 'return prompt("Please enter a comment for this suggested update (source etc.): ", "");';
 			else
 				echo "return '';";

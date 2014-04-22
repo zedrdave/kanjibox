@@ -33,7 +33,7 @@ include_js('ajax.js');
 		{
 		ini_set('display_errors', true);
 
-		if(!@$_SESSION['user'] || !$_SESSION['user']->is_editor())
+		if(!@$_SESSION['user'] || !$_SESSION['user']->isEditor())
 			die("editors only");
 
 

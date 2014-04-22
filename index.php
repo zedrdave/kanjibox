@@ -130,7 +130,7 @@ if ($redirect_to_url = (isset($_REQUEST['redirect_to_url']) ? $_REQUEST['redirec
                 echo '<div class="info-bar"><p>Due to your Facebook privacy settings, your name cannot be displayed to other users of this application and will therefore not appear in Global Highscores.</p><p>If you wish to appear in the global highscores: please <a href="//www.facebook.com/privacy/?view=profile">change your privacy settings</a>.</p></div>';
             }
             // if(! defined('ADDING') && $_SESSION['user']->get_load_count() == 0)
-            elseif (!defined('ADDING') && (!$_SESSION['user']->is_elite() || $_SESSION['user']->is_admin())) {
+            elseif (!defined('ADDING') && (!$_SESSION['user']->is_elite() || $_SESSION['user']->isAdministrator())) {
                 include('pandering.php');
             }
         }

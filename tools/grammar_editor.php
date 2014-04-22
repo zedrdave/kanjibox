@@ -5,7 +5,7 @@
 // print_r(mysql_fetch_array($res));
 
 
-if(!@$_SESSION['user'] || !$_SESSION['user']->is_editor())
+if(!@$_SESSION['user'] || !$_SESSION['user']->isEditor())
 	die("editors only");
 
 mb_internal_encoding('UTF-8');

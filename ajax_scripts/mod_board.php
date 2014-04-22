@@ -1,6 +1,6 @@
 <div>
 <?php
-if(!@$_SESSION['user'] || !$_SESSION['user']->is_editor())
+if(!@$_SESSION['user'] || !$_SESSION['user']->isEditor())
 	die("editors only");
 
 if(@$params['action'] == 'save' && isset($_REQUEST['board_content'])) {

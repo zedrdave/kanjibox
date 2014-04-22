@@ -3,7 +3,7 @@
 if(! @$_SESSION['user'])
 	log_error('You need to be logged to access this function.', false, true);
 
-if(@$params['type'] != 'general' && !@$_SESSION['cur_session'] && !$_SESSION['user']->is_editor())
+if(@$params['type'] != 'general' && !@$_SESSION['cur_session'] && !$_SESSION['user']->isEditor())
 	log_error('You need to be using Drill or Quiz mode to send this type of feedback.', false, true);
 
 if(isset($_REQUEST['update'])) {

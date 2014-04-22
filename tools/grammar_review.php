@@ -1,7 +1,7 @@
 <?php
 
 
-if(!@$_SESSION['user'] || !$_SESSION['user']->is_editor())
+if(!@$_SESSION['user'] || !$_SESSION['user']->isEditor())
 	die("only editors");
 
 mb_internal_encoding("UTF-8");
@@ -50,7 +50,7 @@ while($question = mysql_fetch_object($res)) {
         }
 		echo '<div class="db-group' . ($displayed_status_header ? ' already-reviewed' : '') . '" style="padding: 3px;">';
         
-        echo '<p>' . mb_substr($str, 0, $question->pos_start) . '<span class="highlighted-correct">' .  mb_substr($str, $question->pos_start, $question->pos_end - $question->pos_start) . '</span>' . mb_substr($str, $question->pos_end) . "<span style=\"font-size:90%;color:#777;\">#<a href=\"http://kanjibox.net/kb/tools/grammar_editor/?edit_question_id=$question->question_id\">$question->question_id</a></span>" . ($displayed_status_header && $_SESSION['user']->is_admin() ? ' <a href="#" onclick="delete_question(' . $question->question_id . ', this); return false;" style="color:red;">[delete]</a>' : '' ) . '</p>';
+        echo '<p>' . mb_substr($str, 0, $question->pos_start) . '<span class="highlighted-correct">' .  mb_substr($str, $question->pos_start, $question->pos_end - $question->pos_start) . '</span>' . mb_substr($str, $question->pos_end) . "<span style=\"font-size:90%;color:#777;\">#<a href=\"http://kanjibox.net/kb/tools/grammar_editor/?edit_question_id=$question->question_id\">$question->question_id</a></span>" . ($displayed_status_header && $_SESSION['user']->isAdministrator() ? ' <a href="#" onclick="delete_question(' . $question->question_id . ', this); return false;" style="color:red;">[delete]</a>' : '' ) . '</p>';
 
         
 		$last_qid = $question->question_id;
@@ -64,7 +64,7 @@ while($question = mysql_fetch_object($res)) {
     
     echo " <span style=\"font-size:90%;color:#777;\">#<a href=\"http://kanjibox.net/kb/tools/grammar_editor/?edit_question_id=$question->question_id\">$question->question_id</a>-$question->answer_jmdict_id</span>" . ' <input id="' . "flag[$question->question_id][$question->answer_jmdict_id]" . '" type="checkbox" class="flag-button" onchange="update_review_status(' . $question->question_id . ', ' . $question->answer_jmdict_id . ',  this.checked ? \'problem\' : \'\')" ' . ($question->review_status == 'problem' ? 'checked="checked"' : '') . '></input><label for="' . "flag[$question->question_id][$question->answer_jmdict_id]" . '">Flag</label>';
 
-    if($displayed_status_header && $_SESSION['user']->is_admin() && $question->review_status == 'problem')
+    if($displayed_status_header && $_SESSION['user']->isAdministrator() && $question->review_status == 'problem')
 		 echo ' <a href="#" onclick="delete_answer(' . $question->question_id . ', ' . $question->answer_jmdict_id  . ', this); return false;" style="color:red;">[delete]</a>';
 	 
     echo "</p>\n";

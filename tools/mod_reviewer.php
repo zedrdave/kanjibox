@@ -1,6 +1,6 @@
 <?php
 
-if(!@$_SESSION['user'] || !$_SESSION['user']->is_editor())
+if(!@$_SESSION['user'] || !$_SESSION['user']->isEditor())
 	die("editors only");
 
 
@@ -180,7 +180,7 @@ $query .= " GROUP BY du.update_id ORDER BY du.table_name, du.col_name, du.id_nam
 				else
 					echo " id:$update->user_id ";
 					
-				if($_SESSION['user']->is_admin())
+				if($_SESSION['user']->isAdministrator())
 					echo "<a href=\"" . SERVER_URL . "admin/send_msg/?prefill_user_id_to=" . $update->user_id . "&prefill_msg_class=&prefill_msg_code=user_update&prefill_msg_title=Contribution&prefill_msg_text=" . urlencode("Hi " . $update->first_name . "\n\nAbout your suggested update: <blockquote>" . $update->new_value . "</blockquote>\n\n\nCheers!") . "\" title=\"$update->first_name $update->last_name\">" . ($update->user_privs > 0 ? ($update->user_privs > 1 ? '☆' : '〒') : '〒') . "</a>";
 				else
 					echo "<a href=\"https://www.facebook.com/?compose&sk=messages&id=$update->fb_id\" title=\"$update->first_name $update->last_name\">" . ($update->user_privs > 0 ? ($update->user_privs > 1 ? '☆' : '〒') : '〒') . "</a>";

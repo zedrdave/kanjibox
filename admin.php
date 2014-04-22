@@ -43,7 +43,7 @@ include_js('soundmanager2-nodebug-jsmin.js');
 		{
 		ini_set('display_errors', true);
 		
-		if(!@$_SESSION['user'] || ! $_SESSION['user']->is_admin())
+		if(!@$_SESSION['user'] || ! $_SESSION['user']->isAdministrator())
 			die("admins only");
 
 

@@ -182,7 +182,7 @@ if($set->can_admin()) {
 	echo " <form style=\"display:inline;\" action=\"". get_page_url(PAGE_PLAY, array('mode' => SETS_MODE, 'type' => $set->get_type(), 'editor' => 'open')) ."\" onsubmit=\"return confirm('Are you sure you want to delete this set?')\" method=\"post\"><input type=\"hidden\" name=\"delete_set_id\" value=\"$set->set_id\"></input><input class=\"delete\" type=\"submit\" value=\"Delete set\"></submit></form> ";
 }
 
-if(@$_SESSION['user']->is_admin() && !$set->is_public_domain()) {
+if(@$_SESSION['user']->isAdministrator() && !$set->is_public_domain()) {
 	echo " <form style=\"display:inline;\" action=\"". get_page_url(PAGE_PLAY, array('mode' => SETS_MODE, 'type' => $set->get_type(), 'editor' => 'open')) ."\" method=\"post\"><input type=\"hidden\" name=\"public_domain_set_id\" value=\"$set->set_id\"></input><input type=\"submit\" value=\"Make public domain\"></submit></form> ";
 }
 

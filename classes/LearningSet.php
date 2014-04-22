@@ -16,7 +16,7 @@ class LearningSet {
             return;
 
         $query = 'SELECT ls.*, IFNULL(subs.user_id, 0) AS sub_id FROM learning_sets ls LEFT JOIN learning_set_subs subs ON subs.set_id = ls.set_id AND subs.user_id = ' . $_SESSION['user']->get_id() . ' WHERE ls.set_id = ' . (int) $set_id;
-        if (!$_SESSION['user']->is_admin())
+        if (!$_SESSION['user']->isAdministrator())
             $query .= ' AND (ls.public = 1 OR ls.user_id = ' . $_SESSION['user']->get_id() . ')';
         $res = mysql_query($query) or log_db_error($query, '', false, true); //print_r(mysql_error());
         if (mysql_num_rows($res) == 0)
@@ -90,7 +90,7 @@ class LearningSet {
 
     function can_admin() {
         // return $this->is_owner();
-        return $this->is_owner() || $_SESSION['user']->is_admin();
+        return $this->is_owner() || $_SESSION['user']->isAdministrator();
     }
 
     function can_edit() {
@@ -116,7 +116,7 @@ class LearningSet {
     }
 
     function set_public($val) {
-        if ((int) $val == 0 && $this->get_subs_count() && !$_SESSION['user']->is_admin())
+        if ((int) $val == 0 && $this->get_subs_count() && !$_SESSION['user']->isAdministrator())
             return false;
 
         if ($this->can_admin())

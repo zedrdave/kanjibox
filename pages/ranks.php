@@ -13,7 +13,7 @@ foreach ($levels as $level => $level_name) {
 }
 
 function get_rank_pop_table($level) {
-    $is_admin = $_SESSION['user']->is_admin();
+    $is_admin = $_SESSION['user']->isAdministrator();
 
 
     $table = '<br/><table class="rankstats"><caption>' . Session::$level_names[$level] . '</caption>';

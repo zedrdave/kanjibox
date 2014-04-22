@@ -139,7 +139,7 @@ if($count == 1) {
 			while($alt_part = mysql_fetch_object($res_alt))
 				$parts_html .=  "<li id=\"alt_part_$sentence->example_id" . "_$part->pos_start" . "_$alt_part->id\" style=\"display:none;\"><a href=\"#\" onclick=\"update_sentence_part($sentence->example_id, $part->pos_start, $alt_part->id); return false;\">Replace by:</a> $alt_part->word 【" . $alt_part->reading . "】[N$alt_part->njlpt, R-N$alt_part->njlpt_r]: $alt_part->gloss</li>";
 
-			if($_SESSION['user']->is_editor())
+			if($_SESSION['user']->isEditor())
 				$parts_html .=  "<li style=\"display:none;\" id=\"alt_part_free_text_" . $sentence->example_id . "_" . $part->pos_start . "\">Replace by <input type=\"text\" size=\"10\" onchange=\"add_alt_sentence_part(this.value, " . $sentence->example_id . "," . $part->pos_start . ");\"/> <div id=\"replace_sel_$sentence->example_id" . "_$part->pos_start\"></div></li>";
 			$parts_html .=  '</ul>';
 			
@@ -187,7 +187,7 @@ if($count == 1) {
 
 		echo $parts_html;
 		
-		if($_SESSION['user']->is_editor()) {
+		if($_SESSION['user']->isEditor()) {
 
 			echo "<p>Status: " . get_select_menu(array('unknown' => 'Unknown','reviewed' => 'Reviewed','modified' => 'Modified','need_work' => 'Need work', 'reimport_06_2011' => 'reimport_06_2011', 'kanjibox' => 'KanjiBox'), 'status_' . $sentence->example_id, $sentence->status, "update_sentence_status($sentence->example_id, this.value); return false;");
 			echo '<br/><a href="#" onclick="confirm_delete_sentence(' . $sentence->example_id . '); return false;">[delete sentence]</a>';

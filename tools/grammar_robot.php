@@ -1,7 +1,7 @@
 <?php
 
 
-if(!@$_SESSION['user'] || !$_SESSION['user']->is_editor())
+if(!@$_SESSION['user'] || !$_SESSION['user']->isEditor())
 	die("only editors");
 
 mb_internal_encoding("UTF-8");

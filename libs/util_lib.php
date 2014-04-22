@@ -36,7 +36,7 @@ function include_jquery($jquery_plugin) {
 }
 
 function include_class($class) {
-    require_once(ABS_PATH . 'classes/' . ucfirst($class) . '.php');
+    require_once ABS_PATH . 'classes/' . ucfirst($class) . '.php';
 }
 
 function insert_js_msg($msg) {
@@ -93,8 +93,9 @@ function pretty_print($array) {
             }
             echo '</ol>';
         }
-    } else
+    } else {
         echo htmlentities($array);
+    }
 }
 
 function draw_table($title, $sql_results, $extras = array()) {
