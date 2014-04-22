@@ -53,7 +53,7 @@ function init_app($ajax = false) {
         }
     }
 
-    if (!empty($params['device']) &&  $params['device'] === 'tablet') {
+    if (!empty($params['device']) && $params['device'] === 'tablet') {
         $_SESSION['params']['device'] = 'tablet';
     }
 
@@ -280,30 +280,6 @@ function mysql_query_debug($query) {
     return $ret;
 }
 
-function cached_query_value($query) {
-    $file = fopen('/srv/www/kanjibox.net/logs/cached_queries.txt', 'a');
-    fwrite($file, "\n" . @$_SERVER['REMOTE_ADDR'] . ' - ' . date('m/d/Y H:i:s') . "\n" . $elapsed . " s.\n" . $query . "\n***********************************\n");
-
-    define('CACHE_EXPIRATION', 3600);
-    if (isset($_SESSION['cache'][$query]))
-        if ($_SESSION['cache'][$query]['ts'] + CACHE_EXPIRATION > time())
-            return $_SESSION['cache'][$query]['value'];
-
-    $res = mysql_query($query) or log_db_error($query, '', false, true);
-    $val = mysql_fetch_field($res);
-
-    if (isset($_SESSION['cache'][$query]))
-        mysql_query("UPDATE cache SET value = " . (int) $val . ", ts = NOW() WHERE cache_id = " . $_SESSION['cache'][$query]['cache_id']);
-    else
-        mysql_query("INSERT INTO cache SET query = '" . mysql_real_escape_string($query) . "', value = " . (int) $val . ", ts = NOW()");
-
-    fwrite($file, "Queried and cached value: $val\n");
-
-    $_SESSION['cache'][$query] = array('ts' => time(), 'value' => $val, 'query' => $query);
-
-    return $val;
-}
-
 function require_elite_user() {
     if (@$_SESSION['user'] && $_SESSION['user']->is_elite())
         return true;
@@ -320,8 +296,9 @@ function j2n($j) {
 }
 
 function post_db_correction($table_name, $id_name, $id_value, $col_name, $new_value, $apply = false, $id_name_2 = '', $id_value_2 = '', $reviewed = false, $user_cmt = '', $need_work = false) {
-    if (!@$_SESSION['user'])
+    if (!$_SESSION['user']) {
         return 'no logged-in user';
+    }
     $table_name = mysql_real_escape_string($table_name);
     $col_name = mysql_real_escape_string($col_name);
     $id_name = mysql_real_escape_string($id_name);
