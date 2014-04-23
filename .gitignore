@@ -1,5 +1,7 @@
 #KanjiBox
 /kb.config.php
+*.log
+*.txt
 
 #OSX
 .DS_Store
