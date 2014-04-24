@@ -48,7 +48,7 @@ FROM
 	) AS k
 	LEFT JOIN jmdict ex ON ex.id = k.word_id
 	LEFT JOIN jmdict_ext jx ON jx.jmdict_id = ex.id
-	LEFT JOIN learning l ON l.kanji_id = k.id AND l.user_id = '" . mysql_real_escape_string($_SESSION['user']->get_id()) . "'
+	LEFT JOIN learning l ON l.kanji_id = k.id AND l.user_id = '" . mysql_real_escape_string($_SESSION['user']->getID()) . "'
 	LEFT JOIN pron p ON p.kanji_id = k.id AND p.type != 'nanori'
 	LEFT JOIN english e ON e.kanji_id = k.id
 WHERE (
@@ -58,9 +58,9 @@ GROUP BY k.id
 ORDER BY p.type DESC , l.curve DESC";
     $show_ex = true;
 } elseif ($_REQUEST['type'] == 'kanji') {
-    $query = 'SELECT k.kanji, l.curve, GROUP_CONCAT(DISTINCT p.pron SEPARATOR \', \') AS pron, GROUP_CONCAT(DISTINCT e.meaning SEPARATOR \', \') AS mean FROM kanjis k LEFT JOIN learning l ON l.kanji_id = k.id AND l.user_id = \'' . $_SESSION['user']->get_id() . '\' RIGHT JOIN pron p ON p.kanji_id = k.id AND p.type != \'nanori\' RIGHT JOIN english e ON e.kanji_id = k.id WHERE k.njlpt >= \'' . mysql_real_escape_string((int) $_REQUEST['njlpt']) . '\' AND (l.curve > \'' . mysql_real_escape_string((int) $_REQUEST['curve']) . '\') GROUP BY k.id ORDER BY p.type DESC, l.curve DESC';
+    $query = 'SELECT k.kanji, l.curve, GROUP_CONCAT(DISTINCT p.pron SEPARATOR \', \') AS pron, GROUP_CONCAT(DISTINCT e.meaning SEPARATOR \', \') AS mean FROM kanjis k LEFT JOIN learning l ON l.kanji_id = k.id AND l.user_id = \'' . $_SESSION['user']->getID() . '\' RIGHT JOIN pron p ON p.kanji_id = k.id AND p.type != \'nanori\' RIGHT JOIN english e ON e.kanji_id = k.id WHERE k.njlpt >= \'' . mysql_real_escape_string((int) $_REQUEST['njlpt']) . '\' AND (l.curve > \'' . mysql_real_escape_string((int) $_REQUEST['curve']) . '\') GROUP BY k.id ORDER BY p.type DESC, l.curve DESC';
 } elseif ($_REQUEST['type'] == 'vocab') {
-    $query = 'SELECT j.word, j.reading, l.curve, jx.gloss_english AS gloss FROM jmdict j LEFT JOIN jmdict_learning l ON l.jmdict_id = j.id AND l.user_id = ' . $_SESSION['user']->get_id() . ' RIGHT JOIN jmdict_ext jx ON jx.jmdict_id = j.id WHERE j.njlpt >= \'' . mysql_real_escape_string((int) $_REQUEST['njlpt']) . '\' AND (l.curve > \'' . mysql_real_escape_string((int) $_REQUEST['curve']) . '\'' . $extra . ') GROUP BY j.id ORDER BY l.curve DESC';
+    $query = 'SELECT j.word, j.reading, l.curve, jx.gloss_english AS gloss FROM jmdict j LEFT JOIN jmdict_learning l ON l.jmdict_id = j.id AND l.user_id = ' . $_SESSION['user']->getID() . ' RIGHT JOIN jmdict_ext jx ON jx.jmdict_id = j.id WHERE j.njlpt >= \'' . mysql_real_escape_string((int) $_REQUEST['njlpt']) . '\' AND (l.curve > \'' . mysql_real_escape_string((int) $_REQUEST['curve']) . '\'' . $extra . ') GROUP BY j.id ORDER BY l.curve DESC';
 } else {
     die('unknown list type');
 }

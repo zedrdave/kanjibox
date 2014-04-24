@@ -37,13 +37,13 @@ $levels = Session::$level_names;
 </fb:error>
 */
 
-$query = 'SELECT COUNT(*) AS c FROM learning l WHERE l.user_id = \'' . $_SESSION['user']->get_id() . '\' LIMIT 1';
+$query = 'SELECT COUNT(*) AS c FROM learning l WHERE l.user_id = \'' . $_SESSION['user']->getID() . '\' LIMIT 1';
 $res = mysql_query($query) or log_db_error($query);
 $row = mysql_fetch_object($res);
-$query = 'SELECT COUNT(*) AS c FROM jmdict_learning jl WHERE jl.user_id=\'' . $_SESSION['user']->get_id() . '\' LIMIT 1';
+$query = 'SELECT COUNT(*) AS c FROM jmdict_learning jl WHERE jl.user_id=\'' . $_SESSION['user']->getID() . '\' LIMIT 1';
 $res = mysql_query($query) or log_db_error($query);
 $row2 = mysql_fetch_object($res);
-$query = 'SELECT COUNT(*) AS c FROM reading_learning rl WHERE rl.user_id=\'' . $_SESSION['user']->get_id() . '\' LIMIT 1';
+$query = 'SELECT COUNT(*) AS c FROM reading_learning rl WHERE rl.user_id=\'' . $_SESSION['user']->getID() . '\' LIMIT 1';
 $res = mysql_query($query) or log_db_error($query);
 $row3 = mysql_fetch_object($res);
 	
@@ -75,7 +75,7 @@ if(@$_POST['reset-stats']) {
 		break;
 	}
 	
-	$sql .= ' WHERE user_id = ' . (int) $_SESSION['user']->get_id();
+	$sql .= ' WHERE user_id = ' . (int) $_SESSION['user']->getID();
 
 	if(! mysql_query($sql))
 		echo '<div class="error_msg">SQL error: ' . mysql_error() .  '</div>';
@@ -95,51 +95,51 @@ switch($cur_type)
 ?>
 		<table class="resultbox" >
 		<tr><td class="kyuu">
-		<?php echo print_jlpt_levels($_SESSION['user']->get_id(), 5); ?>
+		<?php echo print_jlpt_levels($_SESSION['user']->getID(), 5); ?>
 		</td>
 		<td>
 	<?php
-		echo print_grades_levels($_SESSION['user']->get_id(), 1);
+		echo print_grades_levels($_SESSION['user']->getID(), 1);
 	?>
 		</td>
 		</tr>
 		<tr><td class="kyuu">
-		<?php echo print_jlpt_levels($_SESSION['user']->get_id(), 4); ?>
+		<?php echo print_jlpt_levels($_SESSION['user']->getID(), 4); ?>
 		</td>
 		<td>
 		<?php
-		echo print_grades_levels($_SESSION['user']->get_id(), 2);
+		echo print_grades_levels($_SESSION['user']->getID(), 2);
 		?>
 		</td>
 		</tr>
 		<tr><td class="kyuu">
-		<?php echo print_jlpt_levels($_SESSION['user']->get_id(), 3); ?>
+		<?php echo print_jlpt_levels($_SESSION['user']->getID(), 3); ?>
 		</td>
 		<td>
 		<?php
-		echo print_grades_levels($_SESSION['user']->get_id(), 3);
-		echo print_grades_levels($_SESSION['user']->get_id(), 4);
+		echo print_grades_levels($_SESSION['user']->getID(), 3);
+		echo print_grades_levels($_SESSION['user']->getID(), 4);
 		?>
 		</td>
 		</tr>
 		<tr><td class="kyuu">
-		<?php echo print_jlpt_levels($_SESSION['user']->get_id(), 2); ?>
+		<?php echo print_jlpt_levels($_SESSION['user']->getID(), 2); ?>
 		</td>
 		<td>
 		<?php
-		echo print_grades_levels($_SESSION['user']->get_id(), 5);
-		echo print_grades_levels($_SESSION['user']->get_id(), 6);
+		echo print_grades_levels($_SESSION['user']->getID(), 5);
+		echo print_grades_levels($_SESSION['user']->getID(), 6);
 		?>
 		</td>
 		</tr>
 		<tr><td class="kyuu">
-		<?php echo print_jlpt_levels($_SESSION['user']->get_id(), 1); ?>
+		<?php echo print_jlpt_levels($_SESSION['user']->getID(), 1); ?>
 		</td>
 		<td>
 		<?php
-		echo print_grades_levels($_SESSION['user']->get_id(), 7);
-		echo print_grades_levels($_SESSION['user']->get_id(), 8);
-		echo print_grades_levels($_SESSION['user']->get_id(), 9);
+		echo print_grades_levels($_SESSION['user']->getID(), 7);
+		echo print_grades_levels($_SESSION['user']->getID(), 8);
+		echo print_grades_levels($_SESSION['user']->getID(), 9);
 		?>
 		</td>
 		</tr>
@@ -151,11 +151,11 @@ switch($cur_type)
 			echo '<legend>Vocabulary</legend>';
 			if ($row2->c == 0)
 				echo "<div class=\"mynotice\">You do not have any learning statistics for vocabulary yet. You need to <a href=\"" . get_page_url(PAGE_PLAY, array('type' => 'vocab')) . "\">practice</a> a little bit before the charts get updated.</div>";
-			echo print_vocab_jlpt_levels($_SESSION['user']->get_id(), 5);
-			echo print_vocab_jlpt_levels($_SESSION['user']->get_id(), 4);
-			echo print_vocab_jlpt_levels($_SESSION['user']->get_id(), 3);
-			echo print_vocab_jlpt_levels($_SESSION['user']->get_id(), 2);
-			echo print_vocab_jlpt_levels($_SESSION['user']->get_id(), 1);
+			echo print_vocab_jlpt_levels($_SESSION['user']->getID(), 5);
+			echo print_vocab_jlpt_levels($_SESSION['user']->getID(), 4);
+			echo print_vocab_jlpt_levels($_SESSION['user']->getID(), 3);
+			echo print_vocab_jlpt_levels($_SESSION['user']->getID(), 2);
+			echo print_vocab_jlpt_levels($_SESSION['user']->getID(), 1);
 		break;
 	
 		case 'reading':
@@ -164,16 +164,16 @@ switch($cur_type)
 			if ($row3->c == 0)
 				echo "<div class=\"mynotice\">You do not have any reading statistics for vocabulary yet. You need to <a href=\"" . get_page_url(PAGE_PLAY, array('type' => 'reading')) . "\">practice</a> a little bit before the charts get updated.</div>";
 
-			echo print_reading_jlpt_levels($_SESSION['user']->get_id(), 5);
-			echo print_reading_jlpt_levels($_SESSION['user']->get_id(), 4);
-			echo print_reading_jlpt_levels($_SESSION['user']->get_id(), 3);
-			echo print_reading_jlpt_levels($_SESSION['user']->get_id(), 2);
-			echo print_reading_jlpt_levels($_SESSION['user']->get_id(), 1);
+			echo print_reading_jlpt_levels($_SESSION['user']->getID(), 5);
+			echo print_reading_jlpt_levels($_SESSION['user']->getID(), 4);
+			echo print_reading_jlpt_levels($_SESSION['user']->getID(), 3);
+			echo print_reading_jlpt_levels($_SESSION['user']->getID(), 2);
+			echo print_reading_jlpt_levels($_SESSION['user']->getID(), 1);
 		break;
 		
 		case 'kana':
 			echo '<legend>Kana</legend>';
-			echo print_kana_levels($_SESSION['user']->get_id());
+			echo print_kana_levels($_SESSION['user']->getID());
 		break;
 		
 		case 'main':
@@ -192,26 +192,26 @@ switch($cur_type)
 			echo '<legend>' . $levels[$level] . ($level != $jlpt_level ? '/' . $levels[$jlpt_level] : '') . '</legend>';
 
 			if($jlpt_level == LEVEL_J4 || $jlpt_level == LEVEL_N5)
-				echo print_kana_levels($_SESSION['user']->get_id(), 710, 'Kana');
+				echo print_kana_levels($_SESSION['user']->getID(), 710, 'Kana');
 			if($level == $jlpt_level)
 			{
 				$num = Question::level_to_grade($level);
 				$num = $num[1];
-				echo print_jlpt_levels($_SESSION['user']->get_id(), $num, 710, 'Kanji');
-				echo print_vocab_jlpt_levels($_SESSION['user']->get_id(), $num, 710, 'Vocab');
-				echo print_reading_jlpt_levels($_SESSION['user']->get_id(), $num, 710, 'Reading');
+				echo print_jlpt_levels($_SESSION['user']->getID(), $num, 710, 'Kanji');
+				echo print_vocab_jlpt_levels($_SESSION['user']->getID(), $num, 710, 'Vocab');
+				echo print_reading_jlpt_levels($_SESSION['user']->getID(), $num, 710, 'Reading');
 			}
 			else
 			{
 				$num = (int) Question::level_to_grade($level);
 				if($num > 0)
-					echo print_grades_levels($_SESSION['user']->get_id(), $num, 710, 'Kanji - Grade ' . $num);
+					echo print_grades_levels($_SESSION['user']->getID(), $num, 710, 'Kanji - Grade ' . $num);
 				else
-					echo print_jlpt_levels($_SESSION['user']->get_id(), 1, 710, 'Kanji - N1');
+					echo print_jlpt_levels($_SESSION['user']->getID(), 1, 710, 'Kanji - N1');
 				$num = Question::level_to_grade($jlpt_level);
 				$num = $num[1];
-				echo print_vocab_jlpt_levels($_SESSION['user']->get_id(), $num, 710, 'Vocab - '. $levels[$jlpt_level]);
-				echo print_reading_jlpt_levels($_SESSION['user']->get_id(), $num, 710, 'Reading - ' . $levels[$jlpt_level]);
+				echo print_vocab_jlpt_levels($_SESSION['user']->getID(), $num, 710, 'Vocab - '. $levels[$jlpt_level]);
+				echo print_reading_jlpt_levels($_SESSION['user']->getID(), $num, 710, 'Reading - ' . $levels[$jlpt_level]);
 			}
 		break;
 		

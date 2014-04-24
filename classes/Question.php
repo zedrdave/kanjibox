@@ -166,8 +166,8 @@ abstract class Question
 	{
 		if($this->is_drill() || $this->is_learning_set() || $this->is_grammar_set())
 		{
-			if(@$_SESSION['user']->get_id())
-				$items = $this->get_db_data($how_many, $grade, $_SESSION['user']->get_id());
+			if(@$_SESSION['user']->getID())
+				$items = $this->get_db_data($how_many, $grade, $_SESSION['user']->getID());
 			else
 				force_reload("You need to be logged in order to use drill mode.");
 		}

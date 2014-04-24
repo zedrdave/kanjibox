@@ -55,7 +55,7 @@ $query .= " GROUP BY du.update_id ORDER BY du.table_name, du.col_name, du.id_nam
 <?php echo display_editors_board(); ?>
 <form action="<?php echo SERVER_URL ?>tools/mod_reviewer/" class="search_form">
 	<h3>Filter options:</h3>
-	User Id(s): <input name="user_id" size="30" value="<?php echo @$_REQUEST['user_id'] ?>" /> (your ID: <?php echo $_SESSION['user']->get_id(); ?>)<br/>
+	User Id(s): <input name="user_id" size="30" value="<?php echo @$_REQUEST['user_id'] ?>" /> (your ID: <?php echo $_SESSION['user']->getID(); ?>)<br/>
 	Table: <?php
 	echo get_select_menu(array('' => 'all', 'examples' => 'examples', 'examples_str' => 'examples_str', 'example_parts' => 'example_parts', 'jmdict' => 'jmdict', 'jmdict_ext' => 'jmdict_ext', 'kanjis_ext' => 'Kanji Translations'), 'table_name', (@$_REQUEST['table_name'] ? $_REQUEST['table_name'] : ''));
 

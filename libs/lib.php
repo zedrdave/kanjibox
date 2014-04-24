@@ -2,6 +2,7 @@
 define('ABS_PATH', dirname(__DIR__) . '/');
 
 require_once ABS_PATH . 'libs/consts.php';
+require_once ABS_PATH . 'classes/DB.php';
 require_once ABS_PATH . 'libs/util_lib.php';
 require_once ABS_PATH . 'libs/log_lib.php';
 require_once ABS_PATH . 'classes/User.php';
@@ -249,7 +250,7 @@ function array2obj($data) {
     return is_array($data) ? (object) array_map(__FUNCTION__, $data) : $data;
 }
 
-function mysql_query_debug($query) {
+function XX_mysql_query_debug($query) {
     $time = microtime(true);
     $ret = mysql_query($query);
     $elapsed = microtime(true) - $time;
@@ -322,7 +323,7 @@ function post_db_correction($table_name, $id_name, $id_value, $col_name, $new_va
     if ($old_value == $new_value)
         return 'Value unchanged';
 
-    $user_id = (int) $_SESSION['user']->get_id();
+    $user_id = (int) $_SESSION['user']->getID();
 
     $res = mysql_query("INSERT INTO data_updates SET user_id = $user_id, table_name = '$table_name', id_name = '$id_name', id_value = $id_value, col_name = '$col_name', old_value = '$old_value', new_value = '$new_value', applied = 0, usr_cmt = '$user_cmt' $insert_id_2, need_work = $need_work");
     if (!$res)
@@ -395,7 +396,7 @@ function execute_query($query, $apply = true, $force_run_again = false) {
             mysql_query("UPDATE data_update_queries SET applied = 1 WHERE update_query_id = $row->update_query_id") or die(mysql_error());
         }
     } else {
-        mysql_query("INSERT INTO data_update_queries SET user_id = " . $_SESSION['user']->get_id() . ", query_str = '" . mysql_real_escape_string($query) . "', applied = " . (int) $apply) or die(mysql_error());
+        mysql_query("INSERT INTO data_update_queries SET user_id = " . $_SESSION['user']->getID() . ", query_str = '" . mysql_real_escape_string($query) . "', applied = " . (int) $apply) or die(mysql_error());
     }
     if ($apply) {
         mysql_query($query) or die(mysql_error());

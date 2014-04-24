@@ -48,7 +48,7 @@ if(isset($_REQUEST['sentence_id']) && !empty($_REQUEST['jmdict_id'])) {
 		if($pos_start === FALSE)
 			$pos_start = 0;
 	
-		mysql_query("INSERT INTO grammar_questions SET sentence_id = " . (int) $sent->example_id . ", jmdict_id = " . (int) $word->id . ", pos_start = " . (int) $pos_start . ", pos_end = ". (int) $pos_end . ", njlpt = " . ((int) $word->njlpt) . ", user_id = " . (int) $_SESSION['user']->get_id()) or die(mysql_error());
+		mysql_query("INSERT INTO grammar_questions SET sentence_id = " . (int) $sent->example_id . ", jmdict_id = " . (int) $word->id . ", pos_start = " . (int) $pos_start . ", pos_end = ". (int) $pos_end . ", njlpt = " . ((int) $word->njlpt) . ", user_id = " . (int) $_SESSION['user']->getID()) or die(mysql_error());
 	
 		$params['question_id'] = mysql_insert_id();
 
@@ -99,7 +99,7 @@ if(isset($params['question_id'])) {
 		if(@$_REQUEST['user_id'])
 			$query .= ', user_id = ' . (int) $_REQUEST['user_id'];
 		else
-			$query .= ', user_id = ' . (int) $_SESSION['user']->get_id();
+			$query .= ', user_id = ' . (int) $_SESSION['user']->getID();
 
 		if(@$_REQUEST['set_id'])
 			$query .= ', set_id = ' . (int) $_REQUEST['set_id'];
@@ -140,7 +140,7 @@ if(isset($params['question_id'])) {
     	// 	echo '<div class="message">This answer seems to have been deleted already. Please refresh the page and try again.</div>';
     	//         }
     	//         else {
-            $query = "REPLACE INTO grammar_answer_reviews SET user_id = " . $_SESSION['user']->get_id() . ", status = '" . mysql_real_escape_string($_REQUEST['update_reviewed']) . "', question_id = " . (int) $params['question_id'] . ", jmdict_id = " . (int) $params['jmdict_id'];
+            $query = "REPLACE INTO grammar_answer_reviews SET user_id = " . $_SESSION['user']->getID() . ", status = '" . mysql_real_escape_string($_REQUEST['update_reviewed']) . "', question_id = " . (int) $params['question_id'] . ", jmdict_id = " . (int) $params['jmdict_id'];
         	$res = mysql_query($query);
             if(! $res)
         		echo '<div class="message">Database error: could not update review status: ' . mysql_error() . '<br/>' . $query . '</div>';            

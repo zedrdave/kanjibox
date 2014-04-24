@@ -4,8 +4,8 @@
 if(!@$_SESSION['user'] || !$_SESSION['user']->isEditor())
 	die("editors only");
 
-if(!$_SESSION['user']->isAdministrator() && $_SESSION['user']->get_id() != 46796) {
-	$user_id = $_SESSION['user']->get_id();
+if(!$_SESSION['user']->isAdministrator() && $_SESSION['user']->getID() != 46796) {
+	$user_id = $_SESSION['user']->getID();
     $set_id = 0;
 }
 else {

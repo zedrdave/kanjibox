@@ -4,9 +4,9 @@ define('MSG_SUCCESS', 'success');
 define('MSG_NOTICE', 'notice');
 
 function get_db_conn() {
-    mysql_connect($GLOBALS['db_ip'], $GLOBALS['db_user'], $GLOBALS['db_pass']) or log_error("Can't connect to DB: " . $GLOBALS['db_user'] . ':' . strlen($GLOBALS['db_pass']) . '@' . $GLOBALS['db_ip'], false, true) or log_db_error('mysql_connect()', '', true, true);
-    mysql_select_db($GLOBALS['db_name']) or log_db_error('mysql_select_db()', '', true, true);
-    mysql_query("SET NAMES 'utf8'") or log_db_error('SET NAMES \'utf8\'', '', true, true);
+    //mysql_connect($GLOBALS['db_ip'], $GLOBALS['db_user'], $GLOBALS['db_pass']) or log_error("Can't connect to DB: " . $GLOBALS['db_user'] . ':' . strlen($GLOBALS['db_pass']) . '@' . $GLOBALS['db_ip'], false, true) or log_db_error('mysql_connect()', '', true, true);
+    //mysql_select_db($GLOBALS['db_name']) or log_db_error('mysql_select_db()', '', true, true);
+    //mysql_query("SET NAMES 'utf8'") or log_db_error('SET NAMES \'utf8\'', '', true, true);
 
     try {
         global $dbh;
@@ -26,9 +26,6 @@ function include_css($file) {
 function include_js($file) {
     $ts = filemtime('js/' . $file);
     echo "<script type=\"text/javascript\" src=\"" . SERVER_URL . "js/$file?ts=$ts\"></script>";
-    // echo "<script type=\"text/javascript\">\n<!--\n";
-    // readfile(ABS_PATH . 'js/' . $file);
-    // echo "\n//-->\n</script>";
 }
 
 function include_jquery($jquery_plugin) {

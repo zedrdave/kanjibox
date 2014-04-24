@@ -1,5 +1,5 @@
 <?php
-$user_id = $_SESSION['user']->get_id();
+$user_id = $_SESSION['user']->getID();
 
 $type = @$_POST['filter_set_type'];
 

@@ -26,7 +26,7 @@ class GuestUser extends User {
         return false;
     }
 
-    function get_jlpt_num_level() {
+    function getJLPTNumLevel() {
         return 5;
     }
 
@@ -34,7 +34,7 @@ class GuestUser extends User {
         return 0;
     }
 
-    function get_id() {
+    function getID() {
         return -1;
     }
 

@@ -1,6 +1,6 @@
 <?php
 
-if(! @$_SESSION['user'] || $_SESSION['user']->get_id() <= 0)
+if(! @$_SESSION['user'] || $_SESSION['user']->getID() <= 0)
 {
 	force_reload("You cannot access this page directly.", get_page_url('home'), "You need to be logged in, in order to use this feature.");
 	die();
@@ -45,7 +45,7 @@ if(($type == 'text') && !$_SESSION['user']->is_elite())
 
 if(@$params['level'])
 	$level = $params['level'];
-elseif($_SESSION['user']->get_id())
+elseif($_SESSION['user']->getID())
 	$level = $_SESSION['user']->get_level();
 else
 	$level = LEVEL_N4;

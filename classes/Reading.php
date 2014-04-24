@@ -135,9 +135,9 @@ class Reading extends Question
 		if($this->is_quiz() || !@$_SESSION['user'])
 			$picks = $this->get_random_readings($grade, $grade, $how_many);
 		elseif($this->is_drill())
-			$picks = $this->get_weighted_readings($_SESSION['user']->get_id(), $grade, $grade, $how_many);
+			$picks = $this->get_weighted_readings($_SESSION['user']->getID(), $grade, $grade, $how_many);
 		else
-			$picks = $this->get_set_weighted_readings($_SESSION['user']->get_id(), $how_many);
+			$picks = $this->get_set_weighted_readings($_SESSION['user']->getID(), $how_many);
 	//	echo '<pre>';
 	//	print_r($picks);
 	//	echo '</pre>';
@@ -284,7 +284,7 @@ class Reading extends Question
 			if($level_field == 'njlpt')
 				$r_level = ($grade2 > 0 ? $grade2 : $grade1);
 			else
-				$r_level = $_SESSION['user']->get_jlpt_num_level();
+				$r_level = $_SESSION['user']->getJLPTNumLevel();
 
 			if ($grade2 > 0)
 			{
@@ -321,7 +321,7 @@ class Reading extends Question
 
 		$query = "SELECT j.*, jx.pos, " . Vocab::get_query_gloss() . " FROM (SELECT j.`id` AS `id`, j.`word` AS `word`, j.`reading` AS `reading`, `j`.`njlpt` AS `njlpt`, `j`.`njlpt_r` AS `njlpt_r`, IF(l.curve IS NULL, 1000, l.curve)+1000*rand() as xcurve
 		FROM learning_set_vocab ls LEFT JOIN `jmdict` j ON j.id = ls.jmdict_id
-		LEFT JOIN " . $this->table_learning . " l on l.user_id = '" . (int) $_SESSION['user']->get_id() . "' AND j.id = l." . $this->table_learning_index . "
+		LEFT JOIN " . $this->table_learning . " l on l.user_id = '" . (int) $_SESSION['user']->getID() . "' AND j.id = l." . $this->table_learning_index . "
 		WHERE ls.set_id = $this->set_id AND j.word != j.reading AND j.katakana = '0' AND j.usually_kana = 0 ";
 		
 		$query .= 	'  ORDER BY xcurve DESC';
@@ -373,7 +373,7 @@ class Reading extends Question
 		
 		$query = "SELECT j.*, jx.pos, " . Vocab::get_query_gloss() . " FROM (SELECT j.`id` AS `id`, j.`word` AS `word`, j.`reading` AS `reading`, `j`.`njlpt` AS `njlpt`, `j`.`njlpt_r` AS `njlpt_r`, IF(l.curve IS NULL, 1000, l.curve)+1000*rand() as xcurve
 		FROM `jmdict` j
-		LEFT JOIN " . $this->table_learning . " l on l.user_id = '" . (int) $_SESSION['user']->get_id() . "' AND j.id = l." . $this->table_learning_index . "
+		LEFT JOIN " . $this->table_learning . " l on l.user_id = '" . (int) $_SESSION['user']->getID() . "' AND j.id = l." . $this->table_learning_index . "
 		WHERE  j.word != j.reading AND j.katakana = '0' AND j.usually_kana = 0 AND j.njlpt >0 ";
 	
 		if ($grade1 > 0)
@@ -383,7 +383,7 @@ class Reading extends Question
 			if($level_field == 'njlpt')
 				$r_level = ($grade2 > 0 ? $grade2 : $grade1);
 			else
-				$r_level = $_SESSION['user']->get_jlpt_num_level();
+				$r_level = $_SESSION['user']->getJLPTNumLevel();
 
 			if ($grade2 > 0)
 			{

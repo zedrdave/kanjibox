@@ -6,9 +6,9 @@ if(! @$_SESSION['user'])
 
 $query = 'SELECT m.*, u_to.fb_id AS fb_id, ux_to.first_name AS user_to_first_name, ux_to.last_name AS user_to_last_name FROM `messages` m LEFT JOIN users u_to ON u_to.id = m.user_id_to JOIN users_ext ux_to on ux_to.user_id = u_to.id WHERE ';
 if(@$params['type'] == 'from')
-	$query .= "user_id_from = " . (int) $_SESSION['user']->get_id();
+	$query .= "user_id_from = " . (int) $_SESSION['user']->getID();
 else
-	$query .= "user_id_to = " . (int) $_SESSION['user']->get_id();
+	$query .= "user_id_to = " . (int) $_SESSION['user']->getID();
 
 if(@$params['show'] == 'all')
 	$query .= " ";
@@ -38,7 +38,7 @@ if(mysql_num_rows($res))
 		?>
 		<div id="kb-msg-<?php echo $msg->message_id ?>" class="kb-msg kb-msg-<?php echo $msg->msg_class ?>">
 			<?php
-			if($msg->user_id_from == $_SESSION['user']->get_id())
+			if($msg->user_id_from == $_SESSION['user']->getID())
 			{
 				if($msg->user_to_first_name || $msg->user_to_last_name)
 					$to = $msg->user_to_first_name . ' ' . $msg->user_to_last_name;
@@ -57,7 +57,7 @@ if(mysql_num_rows($res))
 				echo '<div class="signature"><a href="mailto:dave@kanjibox.net">Dave</a></div>';
 			}
 			
-			if(!$msg->msg_read && ($msg->user_id_to == $_SESSION['user']->get_id()))
+			if(!$msg->msg_read && ($msg->user_id_to == $_SESSION['user']->getID()))
 			{
 				?>
 			<a class="dismiss" href="#" onclick="do_load('<?php echo SERVER_URL ?>ajax/mark_msg_read/id/<?php echo $msg->message_id ?>/', ''); $('#kb-msg-<?php echo $msg->message_id ?>').fadeOut(); return false;">[dismiss]</a>

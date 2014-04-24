@@ -113,7 +113,7 @@ function display_new_account_page() {
                 <?php
                 $no_error = true;
 
-                if ($_REQUEST['action'] == 'new_account') {
+                if (!empty($_REQUEST['action']) && $_REQUEST['action'] == 'new_account') {
                     get_db_conn();
 
                     $riddle = str_replace(' ', '', strtolower($_REQUEST['spam_question']));
@@ -183,15 +183,15 @@ function display_new_account_page() {
                         </fieldset>
 
                         <label>&nbsp;</label><input type="submit" name="new_account" value="Create Account" style="margin:auto;" onclick="if ($('#password').val() != $('#password_2').val()) {
-                                            alert('Passwords don\'t match');
-                                            return false;
-                                        }
-                                        ;
-                                        if ($('#login_mail').val() != $('#login_mail_2').val()) {
-                                            alert('Logins don\'t match');
-                                            return false;
-                                        }
-                                        ;"></input>
+                                    alert('Passwords don\'t match');
+                                    return false;
+                                }
+                                ;
+                                if ($('#login_mail').val() != $('#login_mail_2').val()) {
+                                    alert('Logins don\'t match');
+                                    return false;
+                                }
+                                ;"></input>
                     </form>
 
                     <?php

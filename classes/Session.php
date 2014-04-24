@@ -87,7 +87,7 @@ class Session
 	function cleanup_before_destroy()
 	{
 		if(@$_SESSION['user'] && $_SESSION['user']->is_logged_in() && $this->question_loader)
-			$this->question_loader->learn_set($_SESSION['user']->get_id(), $this->questions);
+			$this->question_loader->learn_set($_SESSION['user']->getID(), $this->questions);
 	
 		$cleaned_up = true;
 	}
@@ -215,7 +215,7 @@ class Session
 			if($is_new_highscore)
 			{
 				echo '<p class="highscore">This is a  new personal highscore for you!</p>';
-				$_SESSION['user']->cache_highscores();
+				$_SESSION['user']->cacheHighscores();
 				//$_SESSION['user']->update_profile_box();
 			}
 				
@@ -277,7 +277,7 @@ class Session
 	{
 		if(@$_SESSION['user'])
 		{
-			$this->question_loader->learn_set($_SESSION['user']->get_id(), $this->questions);
+			$this->question_loader->learn_set($_SESSION['user']->getID(), $this->questions);
 			//$_SESSION['user']->update_profile_box();
 		}
 		
@@ -452,7 +452,7 @@ class Session
 		if ($this->score_id)
 			$query = 'UPDATE `games` SET ';
 		else
-			 $query = 'INSERT INTO `games` SET `user_id`=' .  $_SESSION['user']->get_id() . ', `level` = \'' . mysql_real_escape_string($this->session_level) . '\', `date_started` = \'' . date("Y-m-d H:i:s", $this->start_time) . '\', ';
+			 $query = 'INSERT INTO `games` SET `user_id`=' .  $_SESSION['user']->getID() . ', `level` = \'' . mysql_real_escape_string($this->session_level) . '\', `date_started` = \'' . date("Y-m-d H:i:s", $this->start_time) . '\', ';
 	
 		$query .= '`score` = ' . ((int) $this->tot_score) . ', `date_ended` = \'' . date("Y-m-d H:i:s") . '\'';
 		$query .= ", `type` = '".  $this->get_type() . "'";
@@ -470,7 +470,7 @@ class Session
 
 		if($this->score_id && $this->is_highscore())
 		{
-			$query = 'UPDATE users SET ' .  $this->get_type() .'_highscore_id = ' . (int) $this->score_id . ' WHERE id = ' .  $_SESSION['user']->get_id();
+			$query = 'UPDATE users SET ' .  $this->get_type() .'_highscore_id = ' . (int) $this->score_id . ' WHERE id = ' .  $_SESSION['user']->getID();
 			// if($_SESSION['user']->is_admin())
 			// {
 			// 	echo $query;

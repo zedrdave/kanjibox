@@ -183,7 +183,7 @@ if(@$_REQUEST['answer_ids']) {
 	            text: false
 	          })
 			 
-				 $('#review_add').val('<?php echo ($_SESSION['user']->get_id() == 1 ? 'add' : 'review_and_add'); ?>');
+				 $('#review_add').val('<?php echo ($_SESSION['user']->getID() == 1 ? 'add' : 'review_and_add'); ?>');
 				 review_menu_change($('#review_add').val());
 	      })
 			

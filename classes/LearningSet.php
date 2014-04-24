@@ -15,9 +15,9 @@ class LearningSet {
         if (!(int) $set_id)
             return;
 
-        $query = 'SELECT ls.*, IFNULL(subs.user_id, 0) AS sub_id FROM learning_sets ls LEFT JOIN learning_set_subs subs ON subs.set_id = ls.set_id AND subs.user_id = ' . $_SESSION['user']->get_id() . ' WHERE ls.set_id = ' . (int) $set_id;
+        $query = 'SELECT ls.*, IFNULL(subs.user_id, 0) AS sub_id FROM learning_sets ls LEFT JOIN learning_set_subs subs ON subs.set_id = ls.set_id AND subs.user_id = ' . $_SESSION['user']->getID() . ' WHERE ls.set_id = ' . (int) $set_id;
         if (!$_SESSION['user']->isAdministrator())
-            $query .= ' AND (ls.public = 1 OR ls.user_id = ' . $_SESSION['user']->get_id() . ')';
+            $query .= ' AND (ls.public = 1 OR ls.user_id = ' . $_SESSION['user']->getID() . ')';
         $res = mysql_query($query) or log_db_error($query, '', false, true); //print_r(mysql_error());
         if (mysql_num_rows($res) == 0)
             return;
@@ -36,7 +36,7 @@ class LearningSet {
 
     static function create_new($name, $type, $public = true, $editable = false) {
         $public = $public || $editable;
-        $query = 'INSERT INTO learning_sets SET user_id = ' . $_SESSION['user']->get_id() . ", set_type = '" . mysql_real_escape_string($type) . "', date_created = NOW(), date_modified = NOW(), public = " . (int) $public . ", editable = " . (int) $editable . ", name = '" . mysql_real_escape_string($name) . "'";
+        $query = 'INSERT INTO learning_sets SET user_id = ' . $_SESSION['user']->getID() . ", set_type = '" . mysql_real_escape_string($type) . "', date_created = NOW(), date_modified = NOW(), public = " . (int) $public . ", editable = " . (int) $editable . ", name = '" . mysql_real_escape_string($name) . "'";
         $res = mysql_query($query) or log_db_error($query, '', false, true); //print_r(mysql_error());
 
         return mysql_insert_id();
@@ -81,7 +81,7 @@ class LearningSet {
     }
 
     function is_owner() {
-        return (@$_SESSION['user'] && $this->data && $this->data->user_id == $_SESSION['user']->get_id());
+        return (@$_SESSION['user'] && $this->data && $this->data->user_id == $_SESSION['user']->getID());
     }
 
     function is_public_domain() {
@@ -381,7 +381,7 @@ class LearningSet {
     }
 
     function subscribe_to_set() {
-        mysql_query('INSERT IGNORE INTO learning_set_subs SET user_id = ' . $_SESSION['user']->get_id() . ", set_id = $this->set_id");
+        mysql_query('INSERT IGNORE INTO learning_set_subs SET user_id = ' . $_SESSION['user']->getID() . ", set_id = $this->set_id");
 
         return mysql_error();
     }
@@ -429,7 +429,7 @@ class LearningSet {
                 for ($i = 5; $i >= 0; $i--)
                     $ret .= '<option value="' . $i . '">N' . $i . '</option>';
                 $ret .= "</select></p>\n";
-                $query = 'SELECT ls.*, subs.set_id AS sub FROM learning_sets ls LEFT JOIN learning_set_subs subs ON subs.set_id = ls.set_id AND subs.user_id = ' . $_SESSION['user']->get_id() . ' WHERE ls.deleted = 0 AND (ls.user_id = ' . $_SESSION['user']->get_id() . " OR subs.set_id IS NOT NULL) AND set_type = '" . $this->get_type() . "' AND ls.set_id != " . $this->set_id . " ORDER BY date_modified";
+                $query = 'SELECT ls.*, subs.set_id AS sub FROM learning_sets ls LEFT JOIN learning_set_subs subs ON subs.set_id = ls.set_id AND subs.user_id = ' . $_SESSION['user']->getID() . ' WHERE ls.deleted = 0 AND (ls.user_id = ' . $_SESSION['user']->getID() . " OR subs.set_id IS NOT NULL) AND set_type = '" . $this->get_type() . "' AND ls.set_id != " . $this->set_id . " ORDER BY date_modified";
                 $res = mysql_query($query) or log_db_error($query, '', false, true);
 
                 $ret .= '<p>Remove all entries also in set: <select onchange="if(this.value != \'\') bulk_remove_other_set_from_set(' . $this->set_id . ', this.value);">';

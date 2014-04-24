@@ -10,7 +10,7 @@ function log_public_error($msg, $fatal = false) {
 function log_error($msg, $details = false, $fatal = false) {
     global $no_file_log, $fb_id;
     if (!empty($_SESSION['user'])) {
-        $user_id = $_SESSION['user']->get_id();
+        $user_id = $_SESSION['user']->getID();
     } elseif ($fb_id) {
         $user_id = $fb_id;
     } else {
@@ -20,7 +20,7 @@ function log_error($msg, $details = false, $fatal = false) {
     $log_msg .= date('m/d/Y H:i:s') . " (" . time() . ") - " . $_SERVER['PHP_SELF'] . ' - ' . ($user_id) . "\n";
     $log_msg .= $msg . "\n";
     if ($details) {
-        $log_msg .= "---\nREQUEST:\n" . print_r($_REQUEST, true) . "\n---\nSESSION:\n" . print_r($_SESSION, true) . "\n";
+        $log_msg .= "---\nREQUEST:\n" . print_r($_REQUEST, true) . "\n---\nSESSION:\n" . (isset($_SESSION) ? print_r($_SESSION, true) : null) . "\n";
     }
     $log_msg .= "\n";
 
@@ -71,7 +71,7 @@ function log_exception($e, $extra = '', $details = false, $fatal = false) {
 function log_pwd_reset($msg, $error = true, $fatal = true, $private_msg = '', $details = true) {
     global $fb_id;
     if (!empty($_SESSION['user'])) {
-        $user_id = $_SESSION['user']->get_id();
+        $user_id = $_SESSION['user']->getID();
     } elseif ($fb_id) {
         $user_id = $fb_id;
     } else {
@@ -83,7 +83,7 @@ function log_pwd_reset($msg, $error = true, $fatal = true, $private_msg = '', $d
     $log_msg .= $msg . "\n" . $private_msg . "\n";
 
     if ($details) {
-        $log_msg .= "---\nREQUEST:\n" . print_r($_REQUEST, true) . "\n---\nSESSION:\n" . print_r(!empty($_SESSION) ? $_SESSION : array() , true) . "\n";
+        $log_msg .= "---\nREQUEST:\n" . print_r($_REQUEST, true) . "\n---\nSESSION:\n" . print_r(!empty($_SESSION) ? $_SESSION : array(), true) . "\n";
     }
     $log_msg .= "\n";
 

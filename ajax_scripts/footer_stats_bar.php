@@ -33,32 +33,32 @@ switch($params['type'])
 {
 	case 'kanji':
 		if(@$params['mode'] == SETS_MODE) {
-			echo print_kanji_set_stats($_SESSION['user']->get_id(), $_SESSION['cur_session']->get_set_id(), 720, ' ');
+			echo print_kanji_set_stats($_SESSION['user']->getID(), $_SESSION['cur_session']->get_set_id(), 720, ' ');
 		}
 		elseif($grade[0] == 'N')
-			echo print_jlpt_levels($_SESSION['user']->get_id(), (int) $grade[1], 600, ' ');
+			echo print_jlpt_levels($_SESSION['user']->getID(), (int) $grade[1], 600, ' ');
 		elseif($grade >= 1 && $grade <= 9)
-			echo print_grades_levels($_SESSION['user']->get_id(), (int) $grade, 600, ' ');
+			echo print_grades_levels($_SESSION['user']->getID(), (int) $grade, 600, ' ');
 	break;
 	
 	case 'vocab':
 	case 'text':
 		if(@$params['mode'] == SETS_MODE) {
-			echo print_vocab_set_stats($_SESSION['user']->get_id(), $_SESSION['cur_session']->get_set_id(), 720, ' ');
+			echo print_vocab_set_stats($_SESSION['user']->getID(), $_SESSION['cur_session']->get_set_id(), 720, ' ');
 		}
 		elseif($grade[0] == 'N')
-			echo print_vocab_jlpt_levels($_SESSION['user']->get_id(),  (int) $grade[1], 600, ' ');
+			echo print_vocab_jlpt_levels($_SESSION['user']->getID(),  (int) $grade[1], 600, ' ');
 	break;
 
 	case 'reading':
 	if(@$params['mode'] == SETS_MODE)
-		echo print_reading_set_stats($_SESSION['user']->get_id(), $_SESSION['cur_session']->get_set_id(), 720, ' ');
+		echo print_reading_set_stats($_SESSION['user']->getID(), $_SESSION['cur_session']->get_set_id(), 720, ' ');
 		elseif($grade[0] == 'N')
-			echo print_reading_jlpt_levels($_SESSION['user']->get_id(), (int) $grade[1], 600, ' ');
+			echo print_reading_jlpt_levels($_SESSION['user']->getID(), (int) $grade[1], 600, ' ');
 	break;
 	
 	case 'kana':
-		echo print_kana_levels($_SESSION['user']->get_id(), 720, ' ');
+		echo print_kana_levels($_SESSION['user']->getID(), 720, ' ');
 	break;
 	
 	

@@ -134,7 +134,7 @@ $(function() {
 	else
 		$num_examples = 3;
 	
-	$user_id = mysql_real_escape_string($_SESSION['user']->get_id());
+	$user_id = mysql_real_escape_string($_SESSION['user']->getID());
 
 	$newtoo = (@$_REQUEST['newtoo'] ? true : false);
 	$include_below = (@$_REQUEST['include_below'] ? true : false);

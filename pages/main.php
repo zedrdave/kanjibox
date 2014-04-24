@@ -404,7 +404,7 @@ if (!empty($_SESSION['user'])) {
     $query = 'SELECT COUNT(*) FROM `messages` WHERE msg_read = 1 AND user_id_to = :id';
     try {
         $stmt = $dbh->prepare($query);
-        $stmt->bindValue(':id', $_SESSION['user']->get_id());
+        $stmt->bindValue(':id', $_SESSION['user']->getID());
         $stmt->execute();
         $messagesCount = $stmt->fetchColumn();
     } catch (PDOException $e) {

@@ -56,7 +56,7 @@ if ($cur_type == 'main') {
         <fieldset class="line">
             <legend><?php echo ucfirst($type) ?></legend>
             <?php
-            $game = $_SESSION['user']->get_highscore($level, $type);
+            $game = $_SESSION['user']->getHighscore($level, $type);
             if ($game) {
                 $rank = $_SESSION['user']->get_rank($type);
 

@@ -2,21 +2,6 @@
 
 global $facebook;
 
-/*
-  if (! isset($_SESSION['user']['timezone']))
-  {
-  $infos = $facebook->api_client->users_getInfo($user, 'timezone');
-  if (count($infos) > 0)
-  $_SESSION['user']['timezone'] = $infos[0]['timezone'];
-  else
-  $_SESSION['user']['timezone'] = 0;
-  }
-  $timezone = $_SESSION['user']['timezone'];
- */
-
-//date_default_timezone_set('UTC');
-
-
 function print_friendsboard($user, $level, $type, $title, $otherlevels = false) {
     global $facebook, $levels;
 
@@ -410,11 +395,18 @@ function make_charts($verybad, $bad, $unknown, $neutral, $good, $verygood, $tot_
     return $ret_str;
 }
 
-function reset_rankings($level, $type) {
-    $query = "DELETE FROM ranking WHERE level = '" . mysql_real_escape_string($level) . "' AND type = '" . mysql_real_escape_string($type) . "'";
-    mysql_query_debug($query) or log_db_error($query, true, true);
+function resetRankings($level, $type) {
+    $query = 'DELETE FROM ranking WHERE level = :level AND type = :type';
+    try {
+        $stmt = DB::getConnection()->prepare($query);
+        $stmt->bindValue(':level', $level);
+        $stmt->bindValue(':type', $type);
+        $stmt->execute();
+    } catch (PDOException $e) {
+        log_db_error($query, $e->getMessage(), true, true);
+    }
 
-    $query = "INSERT INTO ranking (SELECT NULL, user_id, type, level, @rownum:=@rownum+1 as rank, game_id, NOW()
+    $query = 'INSERT INTO ranking (SELECT NULL, user_id, type, level, @rownum:=@rownum+1 as rank, game_id, NOW()
 	FROM (SELECT @rownum:=0) r,
 			(SELECT u.id as user_id, g.type as type, g.level as level, g.id as game_id
 				FROM games g
@@ -426,15 +418,18 @@ function reset_rankings($level, $type) {
 					OR (g.score = g2.score AND TIMEDIFF(g2.date_ended, g2.date_started) > TIMEDIFF(g.date_ended, g.date_started))
 					)
 				JOIN users u ON g.user_id = u.id AND g.level = u.level AND u.active = 1
-	WHERE g2.user_id IS NULL AND g.type = '" . mysql_real_escape_string($type) . "' AND g.level = '" . mysql_real_escape_string($level) . "'
+	WHERE g2.user_id IS NULL AND g.type = :type AND g.level = :level
 	GROUP BY g.user_id
-	ORDER BY g.score DESC, TIMEDIFF(g.date_ended, g.date_started) ASC) temp)";
+	ORDER BY g.score DESC, TIMEDIFF(g.date_ended, g.date_started) ASC) temp)';
 
-    // if($_SESSION['user']->is_admin())
-    // 	echo $query;
-
-
-    $res = mysql_query_debug($query) or log_db_error($query);
+    try {
+        $stmt = DB::getConnection()->prepare($query);
+        $stmt->bindValue(':level', $level);
+        $stmt->bindValue(':type', $type);
+        $stmt->execute();
+    } catch (PDOException $e) {
+        log_db_error($query, $e->getMessage());
+    }
 }
 
 function get_tot_rank_counts($level, $type) {
