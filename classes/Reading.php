@@ -121,7 +121,7 @@ class Reading extends Question {
         } elseif ($this->is_drill()) {
             $picks = $this->getWeightedReadings($grade, $grade, $how_many);
         } else {
-            $picks = $this->get_set_weighted_readings($_SESSION['user']->getID(), $how_many);
+            $picks = $this->getSetWeightedReadings($how_many);
         }
         //	echo '<pre>';
         //	print_r($picks);
@@ -286,7 +286,7 @@ class Reading extends Question {
         return $readings;
     }
 
-    function get_set_weighted_readings($user_id, $how_many = 1) {
+    function getSetWeightedReadings($how_many = 1) {
 
         $query = "SELECT j.*, jx.pos, " . Vocab::get_query_gloss() . " FROM (SELECT j.`id` AS `id`, j.`word` AS `word`, j.`reading` AS `reading`, `j`.`njlpt` AS `njlpt`, `j`.`njlpt_r` AS `njlpt_r`, IF(l.curve IS NULL, 1000, l.curve)+1000*rand() as xcurve
 		FROM learning_set_vocab ls LEFT JOIN `jmdict` j ON j.id = ls.jmdict_id
@@ -294,25 +294,28 @@ class Reading extends Question {
 		WHERE ls.set_id = $this->set_id AND j.word != j.reading AND j.katakana = '0' AND j.usually_kana = 0 ";
 
         $query .= '  ORDER BY xcurve DESC';
-
         $query .= '  LIMIT ' . $how_many . ') AS j LEFT JOIN jmdict_ext jx ON jx.jmdict_id = j.id';
 
-        // if($_SESSION['user']->is_admin())
-        // 	echo "<pre>$query</pre>";
+        try {
+            $stmt = DB::getConnection()->prepare($query);
+            $stmt->execute();
+            $readingCount = $stmt->rowCount();
 
-        $res = mysql_query_debug($query) or log_db_error($query);
-        if (mysql_num_rows($res) < $how_many)
-            die("This set does not contain enough entries to be drilled on. Please add more entries and try again.");
-        // log_error("Reading mode (get_set_weighted_readings): Can't get enough randomized vocab: " . $query . "\n(needed $how_many, got: " . mysql_num_rows($res) . ")", false, true);
+            if ($readingCount < $how_many) {
+                die('This set does not contain enough entries to be drilled on. Please add more entries and try again.');
+            }
 
-        if ($how_many == 1)
-            return array(mysql_fetch_object($res));
+            if ($how_many == 1) {
+                return array($stmt->fetchObject(PDO::FETCH_CLASS));
+            }
 
-        $readings = array();
-        while ($row = mysql_fetch_object($res))
-            $readings[] = $row;
-        shuffle($readings);
-        return $readings;
+            $readings = $stmt->fetchAll(PDO::FETCH_CLASS);
+            $stmt = null;
+            shuffle($readings);
+            return $readings;
+        } catch (PDOException $e) {
+            log_db_error($query, $e->getMessage(), true, true);
+        }
     }
 
     function getWeightedReadings($grade1 = -1, $grade2 = -1, $how_many = 1) {
@@ -378,6 +381,7 @@ class Reading extends Question {
             }
 
             $readings = $stmt->fetchAll(PDO::FETCH_CLASS);
+            $stmt = null;
             shuffle($readings);
             return $readings;
         } catch (PDOException $e) {
