@@ -396,14 +396,14 @@ function make_charts($verybad, $bad, $unknown, $neutral, $good, $verygood, $tot_
 }
 
 function resetRankings($level, $type) {
-    $query = 'DELETE FROM ranking WHERE level = :level AND type = :type';
+    $deleteQuery = 'DELETE FROM ranking WHERE level = :level AND type = :type';
     try {
-        $stmt = DB::getConnection()->prepare($query);
+        $stmt = DB::getConnection()->prepare($deleteQuery);
         $stmt->bindValue(':level', $level);
         $stmt->bindValue(':type', $type);
         $stmt->execute();
     } catch (PDOException $e) {
-        log_db_error($query, $e->getMessage(), true, true);
+        log_db_error($deleteQuery, $e->getMessage(), true, true);
     }
 
     $query = 'INSERT INTO ranking (SELECT NULL, user_id, type, level, @rownum:=@rownum+1 as rank, game_id, NOW()
@@ -432,13 +432,17 @@ function resetRankings($level, $type) {
     }
 }
 
-function get_tot_rank_counts($level, $type) {
-    $counts = array();
+function getTotalRankCounts($level, $type) {
+    $query = 'SELECT COUNT(*) FROM users u JOIN ranking r ON u.id = r.user_id AND u.level = r.level WHERE u.active = 1 AND u.level = :level AND r.type = :type';
 
-    $query = "SELECT COUNT(*) AS c FROM users u JOIN ranking r ON u.id = r.user_id AND u.level = r.level WHERE u.active = 1 AND u.level = '" . mysql_real_escape_string($level) . "' AND r.type = '" . mysql_real_escape_string($type) . "'";
-    $res = mysql_query_debug($query) or log_db_error($query, true, true);
-    $row = mysql_fetch_object($res);
-    return $row->c;
+    try {
+        $stmt = DB::getConnection()->prepare($query);
+        $stmt->bindValue(':level', $level);
+        $stmt->bindValue(':type', $type);
+        $stmt->execute();
+
+        return $stmt->fetchColumn();
+    } catch (PDOException $e) {
+        log_db_error($query, $e->getMessage(), true, true);
+    }
 }
-
-?>

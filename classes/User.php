@@ -543,13 +543,13 @@ class User {
         }
 
         if ($rank) {
-            $rank->tot_count = max(1, get_tot_rank_counts($this->get_level(), $type));
+            $rank->tot_count = max(1, getTotalRankCounts($this->get_level(), $type));
             $rank->name_array = $this->get_rank_name_array($rank->rank, $rank->tot_count);
             $rank->pretty_name = $rank->name_array[1];
             $rank->short_name = $rank->name_array[0];
         } else { // default ranking
             $rank = new stdClass();
-            $rank->tot_count = max(1, get_tot_rank_counts($this->get_level(), $type));
+            $rank->tot_count = max(1, getTotalRankCounts($this->get_level(), $type));
             $rank->rank = $rank->tot_count;
             $rank->name_array = $this->get_rank_name_array($rank->rank, $rank->tot_count);
             $rank->pretty_name = $rank->name_array[1];

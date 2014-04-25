@@ -23,7 +23,7 @@ function get_rank_pop_table($level) {
 
     foreach ($types as $type) {
         $table .= '<th>' . $type . '</th>';
-        $tot = get_tot_rank_counts($level, $type);
+        $tot = getTotalRankCounts($level, $type);
         $pops[$type] = get_rank_population($tot);
     }
 
