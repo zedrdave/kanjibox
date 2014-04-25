@@ -117,16 +117,13 @@ class Reading extends Question {
 
     function get_db_data($how_many, $grade, $user_id = -1) {
         if ($this->is_quiz() || !empty($_SESSION['user'])) {
-            $picks = $this->get_random_readings($grade, $grade, $how_many);
+            $picks = $this->getRandomReadings($grade, $grade, $how_many);
         } elseif ($this->is_drill()) {
             $picks = $this->getWeightedReadings($grade, $grade, $how_many);
         } else {
             $picks = $this->getSetWeightedReadings($how_many);
         }
-        //	echo '<pre>';
-        //	print_r($picks);
-        //	echo '</pre>';
-//$time = microtime();		
+
         foreach ($picks as $pick) {
             $pick->jmdict_id = $pick->id;
 
@@ -217,19 +214,10 @@ class Reading extends Question {
         return $data;
     }
 
-    function get_random_readings($grade1 = -1, $grade2 = -1, $how_many = 1) {
-        //DEBUG:
-        // if($_SESSION['user']->is_admin())
-        // {
-        // 	$query = "SELECT j.`id` AS `id`, j.`word` AS `word`, j.`reading` , jx.gloss_english AS j.`fullgloss`, j.pos, `j`.`jlpt` AS `jlpt`, `j`.`jlpt_r` AS `jlpt_r` FROM `jmdict` j WHERE j.id = 1552890 GROUP BY `id`";
-        // 	$res = mysql_query_debug($query) or die(mysql_error());
-        // 	$row = mysql_fetch_object($res);
-        // 	
-        // 	return array($row);
-        // }
-
-        if ((int) $how_many < 1)
+    function getRandomReadings($grade1 = -1, $grade2 = -1, $how_many = 1) {
+        if ((int) $how_many < 1) {
             log_error('get_random_readings called with how_many = ' . $how_many, false, true);
+        }
 
         if ($grade1[0] == 'N') {
             $grade1 = $grade1[1];
@@ -253,37 +241,47 @@ class Reading extends Question {
         if ($grade1 > 0) {
             $grade1 = (int) $grade1;
 
-            if ($level_field == 'njlpt')
+            if ($level_field == 'njlpt') {
                 $r_level = ($grade2 > 0 ? $grade2 : $grade1);
-            else
+            } else {
                 $r_level = $_SESSION['user']->getJLPTNumLevel();
+            }
 
             if ($grade2 > 0) {
                 $grade2 = (int) $grade2;
-                if ($grade1 == $grade2)
+                if ($grade1 == $grade2) {
                     $query .= " AND (($level_field = $grade1 AND njlpt_r >= $r_level) OR ($grade1 $strictly_harder $level_field AND njlpt_r = $r_level))";
-                else
+                } else {
                     $query .= " AND $level_field $easier $grade2 AND (($level_field = $grade1 AND njlpt_r >= $r_level) OR ($grade1 $strictly_harder $level_field AND njlpt_r = $r_level))";
-            } else
+                }
+            } else {
                 $query .= " AND $level_field $harder $easiest AND $level_field $easier $grade1 AND njlpt_r >= $r_level";
+            }
         }
 
         $query .= ' GROUP BY `id` ORDER BY RAND()';
-
         $query .= '  LIMIT ' . (int) $how_many . ') AS j LEFT JOIN jmdict_ext jx ON jx.jmdict_id = j.id ';
 
-        $res = mysql_query_debug($query) or log_db_error($query);
-        if (mysql_num_rows($res) < $how_many)
-            log_error("Reading mode (get_random_readings): Can't get enough randomized vocab: " . $query . "\n(needed $how_many, got: " . mysql_num_rows($res) . ")", false, true);
+        try {
+            $stmt = DB::getConnection()->prepare($query);
+            $stmt->execute();
+            $readingCount = $stmt->rowCount();
 
-        if ($how_many == 1)
-            return array(mysql_fetch_object($res));
+            if ($readingCount < $how_many) {
+                log_error("Reading mode (get_random_readings): Can't get enough randomized vocab: " . $query . "\n(needed $how_many, got: " . $readingCount . ")", false, true);
+            }
 
-        $readings = array();
-        while ($row = mysql_fetch_object($res))
-            $readings[] = $row;
+            if ($how_many == 1) {
+                return array($stmt->fetchObject(PDO::FETCH_CLASS));
+            }
 
-        return $readings;
+            $readings = $stmt->fetchAll(PDO::FETCH_CLASS);
+            $stmt = null;
+            shuffle($readings);
+            return $readings;
+        } catch (PDOException $e) {
+            log_db_error($query, $e->getMessage(), true, true);
+        }
     }
 
     function getSetWeightedReadings($how_many = 1) {
