@@ -219,9 +219,9 @@ function force_reload($msg, $url = APP_URL, $alt_msg = '') {
     die();
 }
 
-function force_logged_in_app($page = 'main') {
-    if (!@$_SESSION['user'] || !$_SESSION['user']->is_logged_in()) {
-        header("Location: login.php");
+function force_logged_in_app() {
+    if (!isset($_SESSION['user']) || !$_SESSION['user']->is_logged_in()) {
+        header('Location: login.php');
         die();
     }
 }
@@ -350,7 +350,7 @@ function get_audio_hash($str) {
 function display_editors_board() {
     ?>
     <div class="search_form" style="background-color:#DDD;"><h3><a href="#"  onclick="$('textarea#editors_board').toggle();
-                return false;">Editors Bulletin Board:</a></h3>
+            return false;">Editors Bulletin Board:</a></h3>
             <?php
             if (file_exists(dirname(__FILE__) . '/../tools/notes.txt'))
                 $notes = file_get_contents(dirname(__FILE__) . '/../tools/notes.txt');

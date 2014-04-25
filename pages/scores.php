@@ -1,5 +1,5 @@
 <?php
-force_logged_in_app('scores');
+force_logged_in_app();
 
 require_once ABS_PATH . 'libs/stats_lib.php';
 require_once ABS_PATH . 'libs/util_lib.php';
