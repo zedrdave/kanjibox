@@ -9,7 +9,7 @@ $levels = Session::$level_names;
 ?>
 <div class="subtabs">
     <?php
-    if ($params['type']) {
+    if (!empty($params['type'])) {
         $cur_type = $params['type'];
     } else {
         $cur_type = 'main';
@@ -28,15 +28,9 @@ $levels = Session::$level_names;
 </div>
 <div style="clear:both;" ></div>
 <?php
-$query = 'SELECT COUNT(*) AS c FROM learning l WHERE l.user_id = \'' . $_SESSION['user']->getID() . '\' LIMIT 1';
-$res = mysql_query($query) or log_db_error($query);
-$row = mysql_fetch_object($res);
-$query = 'SELECT COUNT(*) AS c FROM jmdict_learning jl WHERE jl.user_id=\'' . $_SESSION['user']->getID() . '\' LIMIT 1';
-$res = mysql_query($query) or log_db_error($query);
-$row2 = mysql_fetch_object($res);
-$query = 'SELECT COUNT(*) AS c FROM reading_learning rl WHERE rl.user_id=\'' . $_SESSION['user']->getID() . '\' LIMIT 1';
-$res = mysql_query($query) or log_db_error($query);
-$row3 = mysql_fetch_object($res);
+$kanjiLearningCount = DB::count('SELECT COUNT(*) FROM learning l WHERE l.user_id = ? LIMIT 1', [$_SESSION['user']->getID()]);
+$vocabLearningCount = DB::count('SELECT COUNT(*) FROM jmdict_learning jl WHERE jl.user_id=? LIMIT 1', [$_SESSION['user']->getID()]);
+$readLearningCount = DB::count('SELECT COUNT(*) FROM reading_learning rl WHERE rl.user_id=? LIMIT 1', [$_SESSION['user']->getID()]);
 
 $ajax_url = SERVER_URL . 'ajax/stats/type/';
 
@@ -44,9 +38,9 @@ require_once ABS_PATH . 'libs/stats_lib.php';
 ?>
 <fieldset class="stats">
     <?php
-    if (@$_POST['reset-stats']) {
-        $sql = "DELETE FROM ";
-        switch (@$_POST['reset-stats']) {
+    if (!empty($_POST['reset-stats'])) {
+        $sql = 'DELETE FROM ';
+        switch ($_POST['reset-stats']) {
             case 'kanji':
                 $sql .= 'learning';
                 break;
@@ -78,12 +72,13 @@ require_once ABS_PATH . 'libs/stats_lib.php';
             <legend>Kanjis</legend>
             [<a href="<?php echo get_page_url(PAGE_PLAY, array('type' => 'kanji')); ?>">Play</a>]
             <?php
-            if ($row->c == 0)
+            if ($kanjiLearningCount == 0) {
                 echo "<div class=\"mynotice\">You do not have any learning statistics for kanji yet. You need to <a href=\"" . get_page_url(PAGE_PLAY, array('type' => 'kanji')) . "\">practice</a> a little bit before the charts get updated.</div>";
+            }
             ?>
             <table class="resultbox" >
                 <tr><td class="kyuu">
-                        <?php echo print_jlpt_levels($_SESSION['user']->getID(), 5); ?>
+                        <?php echo printJLPTLevels($_SESSION['user']->getID(), 5); ?>
                     </td>
                     <td>
                         <?php
@@ -92,7 +87,7 @@ require_once ABS_PATH . 'libs/stats_lib.php';
                     </td>
                 </tr>
                 <tr><td class="kyuu">
-                        <?php echo print_jlpt_levels($_SESSION['user']->getID(), 4); ?>
+                        <?php echo printJLPTLevels($_SESSION['user']->getID(), 4); ?>
                     </td>
                     <td>
                         <?php
@@ -101,7 +96,7 @@ require_once ABS_PATH . 'libs/stats_lib.php';
                     </td>
                 </tr>
                 <tr><td class="kyuu">
-                        <?php echo print_jlpt_levels($_SESSION['user']->getID(), 3); ?>
+                        <?php echo printJLPTLevels($_SESSION['user']->getID(), 3); ?>
                     </td>
                     <td>
                         <?php
@@ -111,7 +106,7 @@ require_once ABS_PATH . 'libs/stats_lib.php';
                     </td>
                 </tr>
                 <tr><td class="kyuu">
-                        <?php echo print_jlpt_levels($_SESSION['user']->getID(), 2); ?>
+                        <?php echo printJLPTLevels($_SESSION['user']->getID(), 2); ?>
                     </td>
                     <td>
                         <?php
@@ -121,7 +116,7 @@ require_once ABS_PATH . 'libs/stats_lib.php';
                     </td>
                 </tr>
                 <tr><td class="kyuu">
-                        <?php echo print_jlpt_levels($_SESSION['user']->getID(), 1); ?>
+                        <?php echo printJLPTLevels($_SESSION['user']->getID(), 1); ?>
                     </td>
                     <td>
                         <?php
@@ -137,8 +132,9 @@ require_once ABS_PATH . 'libs/stats_lib.php';
 
         case 'vocab':
             echo '<legend>Vocabulary</legend>';
-            if ($row2->c == 0)
+            if ($vocabLearningCount == 0) {
                 echo "<div class=\"mynotice\">You do not have any learning statistics for vocabulary yet. You need to <a href=\"" . get_page_url(PAGE_PLAY, array('type' => 'vocab')) . "\">practice</a> a little bit before the charts get updated.</div>";
+            }
             echo print_vocab_jlpt_levels($_SESSION['user']->getID(), 5);
             echo print_vocab_jlpt_levels($_SESSION['user']->getID(), 4);
             echo print_vocab_jlpt_levels($_SESSION['user']->getID(), 3);
@@ -149,8 +145,9 @@ require_once ABS_PATH . 'libs/stats_lib.php';
         case 'reading':
             echo '<legend>Reading</legend>';
 
-            if ($row3->c == 0)
+            if ($readLearningCount == 0) {
                 echo "<div class=\"mynotice\">You do not have any reading statistics for vocabulary yet. You need to <a href=\"" . get_page_url(PAGE_PLAY, array('type' => 'reading')) . "\">practice</a> a little bit before the charts get updated.</div>";
+            }
 
             echo print_reading_jlpt_levels($_SESSION['user']->getID(), 5);
             echo print_reading_jlpt_levels($_SESSION['user']->getID(), 4);
@@ -165,34 +162,36 @@ require_once ABS_PATH . 'libs/stats_lib.php';
             break;
 
         case 'main':
-            if ($row->c == 0)
+            if ($kanjiLearningCount == 0) {
                 echo "<div class=\"mynotice\">You do not have any learning statistics for kanjis yet. You need to <a href=\"" . get_page_url(PAGE_PLAY, array('type' => 'kanji')) . "\">practice</a> a little bit before the charts get updated.</div>";
-
-            if ($row2->c == 0)
+            }
+            if ($vocabLearningCount == 0) {
                 echo "<div class=\"mynotice\">You do not have any learning statistics for vocabulary yet. You need to <a href=\"" . get_page_url(PAGE_PLAY, array('type' => 'vocab')) . "\">practice</a> a little bit before the charts get updated.</div>";
-
-            if ($row3->c == 0)
+            }
+            if ($readLearningCount == 0) {
                 echo "<div class=\"mynotice\">You do not have any reading statistics for vocabulary yet. You need to <a href=\"" . get_page_url(PAGE_PLAY, array('type' => 'reading')) . "\">practice</a> a little bit before the charts get updated.</div>";
-
+            }
 
             $level = $_SESSION['user']->get_level();
             $jlpt_level = $_SESSION['user']->get_njlpt_level();
             echo '<legend>' . $levels[$level] . ($level != $jlpt_level ? '/' . $levels[$jlpt_level] : '') . '</legend>';
 
-            if ($jlpt_level == LEVEL_J4 || $jlpt_level == LEVEL_N5)
+            if ($jlpt_level == LEVEL_J4 || $jlpt_level == LEVEL_N5) {
                 echo print_kana_levels($_SESSION['user']->getID(), 710, 'Kana');
+            }
             if ($level == $jlpt_level) {
                 $num = Question::level_to_grade($level);
                 $num = $num[1];
-                echo print_jlpt_levels($_SESSION['user']->getID(), $num, 710, 'Kanji');
+                echo printJLPTLevels($_SESSION['user']->getID(), $num, 710, 'Kanji');
                 echo print_vocab_jlpt_levels($_SESSION['user']->getID(), $num, 710, 'Vocab');
                 echo print_reading_jlpt_levels($_SESSION['user']->getID(), $num, 710, 'Reading');
             } else {
                 $num = (int) Question::level_to_grade($level);
-                if ($num > 0)
+                if ($num > 0) {
                     echo print_grades_levels($_SESSION['user']->getID(), $num, 710, 'Kanji - Grade ' . $num);
-                else
-                    echo print_jlpt_levels($_SESSION['user']->getID(), 1, 710, 'Kanji - N1');
+                } else {
+                    echo printJLPTLevels($_SESSION['user']->getID(), 1, 710, 'Kanji - N1');
+                }
                 $num = Question::level_to_grade($jlpt_level);
                 $num = $num[1];
                 echo print_vocab_jlpt_levels($_SESSION['user']->getID(), $num, 710, 'Vocab - ' . $levels[$jlpt_level]);
@@ -201,7 +200,7 @@ require_once ABS_PATH . 'libs/stats_lib.php';
             break;
 
         default:
-            echo "unknown stats type";
+            echo 'unknown stats type';
             break;
     }
 
@@ -212,11 +211,10 @@ require_once ABS_PATH . 'libs/stats_lib.php';
                 $('input.reset').show('bounce', {}, 200);
                 return false;">Reset Stats ▷</a>
         <form action="<?php get_page_url(PAGE_STATS, array('type' => $type)) ?>" method="POST">
-            <input type="hidden" name="reset-stats" value="<?php echo $cur_type ?>"></input>
-            <input type="submit" class="reset" style="display:none;" onclick="return (confirm('Are you SURE your want to erase <?php echo ($cur_type == 'main') ? 'ALL your stats' : 'all your ' . $cur_type . ' stats' ?>? This cannot be recovered.'));" value="Reset Stats"></input>
+            <input type="hidden" name="reset-stats" value="<?php echo $cur_type ?>" />
+            <input type="submit" class="reset" style="display:none;" onclick="return (confirm('Are you SURE your want to erase <?php echo ($cur_type == 'main') ? 'ALL your stats' : 'all your ' . $cur_type . ' stats' ?>? This cannot be recovered.'));" value="Reset Stats"/>
         </form>
         <?php
     }
     ?>
 </fieldset>
-<?php ?>

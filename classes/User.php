@@ -320,16 +320,16 @@ class User {
                 switch ($type) {
                     case 'kanji':
                         if ($this->get_level() == $jlpt_level) {
-                            $big = print_jlpt_levels($this->getID(), $jlpt_level, $wide_bar, 'Learning stats - ' . $jlpt_level);
-                            $small = print_jlpt_levels($this->getID(), $jlpt_level, $narrow_bar, 'Learning stats - ' . $jlpt_level);
+                            $big = printJLPTLevels($this->getID(), $jlpt_level, $wide_bar, 'Learning stats - ' . $jlpt_level);
+                            $small = printJLPTLevels($this->getID(), $jlpt_level, $narrow_bar, 'Learning stats - ' . $jlpt_level);
                         } else {
                             $num = (int) Question::level_to_grade($this->get_level());
                             if ($num > 0) {
                                 $big = print_grades_levels($this->getID(), $num, $wide_bar, 'Learning stats - Grade ' . $num);
                                 $small = print_grades_levels($this->getID(), $num, $narrow_bar, 'Learning stats - Grade ' . $num);
                             } else {
-                                $big = print_jlpt_levels($this->getID(), 1, $wide_bar, 'Learning stats - 1-kyuu');
-                                $small = print_jlpt_levels($this->getID(), 1, $narrow_bar, 'Learning stats - 1-kyuu');
+                                $big = printJLPTLevels($this->getID(), 1, $wide_bar, 'Learning stats - 1-kyuu');
+                                $small = printJLPTLevels($this->getID(), 1, $narrow_bar, 'Learning stats - 1-kyuu');
                             }
                         }
                         break;

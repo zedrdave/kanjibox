@@ -85,9 +85,7 @@ function init_app($ajax = false) {
 
             $query = 'SELECT COUNT(*) FROM `users` u LEFT JOIN users_ext ux ON ux.user_id = u.id WHERE ux.login_email = :login AND ux.login_pwd = :pwd';
             try {
-                global $dbh;
-
-                $stmt = $dbh->prepare($query);
+                $stmt = DB::getConnection()->prepare($query);
                 $stmt->bindValue(':login', $_POST['login']);
                 $stmt->bindValue(':pwd', md5($_POST['pwd']));
                 $stmt->execute();

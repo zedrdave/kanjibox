@@ -157,40 +157,22 @@ function print_grades_levels($user_id, $grade, $tot_size = 330, $title = '') {
     return make_charts($verybad, $bad, $unknown, $neutral, $good, $verygood, $tot_size, $title);
 }
 
-function print_jlpt_levels($user_id, $jlpt, $tot_size = 335, $title = '') {
+function printJLPTLevels($user_id, $jlpt, $tot_size = 335, $title = '') {
 
-    $res = mysql_query_debug("select count(*) as count from kanjis k left join learning l on k.id = l.kanji_id and user_id = '" . (int) $user_id . "' where k.njlpt = " . (int) $jlpt . " and curve < 500") or die(mysql_error());
-    $row = mysql_fetch_array($res);
-    $verygood = $row[0];
-
-    $res = mysql_query_debug("select count(*) as count from kanjis k left join learning l on k.id = l.kanji_id and user_id = '" . (int) $user_id . "' where k.njlpt = " . (int) $jlpt . " and (curve >= 500 and curve < 950)") or die(mysql_error());
-    $row = mysql_fetch_array($res);
-    $good = $row[0];
-
-    $res = mysql_query_debug("select count(*) as count from kanjis k left join learning l on k.id = l.kanji_id and user_id = '" . (int) $user_id . "' where k.njlpt = " . (int) $jlpt . " and curve IS NULL") or die(mysql_error());
-    $row = mysql_fetch_array($res);
-    $unknown = $row[0];
-
-    $res = mysql_query_debug("select count(*) as count from kanjis k left join learning l on k.id = l.kanji_id and user_id = '" . (int) $user_id . "' where k.njlpt = " . (int) $jlpt . " and curve >= 950 and curve < 1050") or die(mysql_error());
-    $row = mysql_fetch_array($res);
-    $neutral = $row[0];
-
-    $res = mysql_query_debug("select count(*) as count from kanjis k left join learning l on k.id = l.kanji_id and user_id = '" . (int) $user_id . "' where k.njlpt = " . (int) $jlpt . " and (curve >= 1050 and curve < 1500)") or die(mysql_error());
-    $row = mysql_fetch_array($res);
-    $bad = $row[0];
-
-    $res = mysql_query_debug("select count(*) as count from kanjis k left join learning l on k.id = l.kanji_id and user_id = '" . (int) $user_id . "' where k.njlpt = " . (int) $jlpt . " and curve >= 1500") or die(mysql_error());
-    $row = mysql_fetch_array($res);
-    $verybad = $row[0];
+    $verygood = DB::count('select count(*) from kanjis k left join learning l on k.id = l.kanji_id and user_id = ? where k.njlpt = ? and curve < 500', [$user_id, $jlpt]);
+    $good = DB::count('select count(*) from kanjis k left join learning l on k.id = l.kanji_id and user_id = ? where k.njlpt = ? and (curve >= 500 and curve < 950)', [$user_id, $jlpt]);
+    $unknown = DB::count('select count(*) from kanjis k left join learning l on k.id = l.kanji_id and user_id = ? where k.njlpt = ? and curve IS NULL', [$user_id, $jlpt]);
+    $neutral = DB::count('select count(*) from kanjis k left join learning l on k.id = l.kanji_id and user_id = ? where k.njlpt = ? and (curve >= 950 and curve < 1050)', [$user_id, $jlpt]);
+    $bad = DB::count('select count(*) from kanjis k left join learning l on k.id = l.kanji_id and user_id = ? where k.njlpt = ? and (curve >= 1050 and curve < 1500)', [$user_id, $jlpt]);
+    $verybad = DB::count('select count(*) from kanjis k left join learning l on k.id = l.kanji_id and user_id = ? where k.njlpt = ? and curve >= 1500', [$user_id, $jlpt]);
 
     $total = ($verybad + $bad + $unknown + $neutral + $good + $verygood);
-    if (!$total)
+    if (!$total) {
         return '';
-
-    if (empty($title))
+    }
+    if (empty($title)) {
         $title = 'JLPT N' . $jlpt . ' (' . $total . '): ';
-
-
+    }
 
     return make_charts($verybad, $bad, $unknown, $neutral, $good, $verygood, $tot_size, $title);
 }
@@ -434,7 +416,6 @@ function resetRankings($level, $type) {
 
 function getTotalRankCounts($level, $type) {
     $query = 'SELECT COUNT(*) FROM users u JOIN ranking r ON u.id = r.user_id AND u.level = r.level WHERE u.active = 1 AND u.level = :level AND r.type = :type';
-
     try {
         $stmt = DB::getConnection()->prepare($query);
         $stmt->bindValue(':level', $level);
