@@ -182,24 +182,20 @@ function print_vocab_jlpt_levels($user_id, $jlpt, $tot_size = 710, $title = '') 
 
     foreach ($query_params as $var => $val) {
         list($min, $max) = $val;
-        $res = mysql_query_debug("select count(*) as count from jmdict j left join jmdict_learning l on j.id = l.jmdict_id and user_id = '" . (int) $user_id . "' where j.njlpt = " . (int) $jlpt . " and curve >= $min and curve < $max") or die(mysql_error());
-        $row = mysql_fetch_array($res);
+        $row = DB::count('select count(*) from jmdict j left join jmdict_learning l on j.id = l.jmdict_id and user_id = ? where j.njlpt = ? and curve >= ? and curve < ?', [$user_id, $jlpt, $min, $max]);
         $$var = $row[0];
     }
 
-    $res = mysql_query_debug("select count(*) as count from jmdict j left join jmdict_learning l on j.id = l.jmdict_id and user_id = '" . (int) $user_id . "' where j.njlpt = " . (int) $jlpt . " and curve IS NULL") or die(mysql_error());
-    $row = mysql_fetch_array($res);
-    $unknown = $row[0];
+    $unknown = DB::count('select count(*) from jmdict j left join jmdict_learning l on j.id = l.jmdict_id and user_id = ? where j.njlpt = ? and curve IS NULL', [$user_id, $jlpt]);
 
     $total = ($verybad + $bad + $unknown + $neutral + $good + $verygood);
-    if (!$total)
+    if (!$total) {
         return '';
+    }
 
-    if (empty($title))
+    if (empty($title)) {
         $title = 'JLPT N' . $jlpt . ' (' . $total . '): ';
-
-    // if($_SESSION['user']->is_admin())
-    // 	echo "<pre>$title: $total</pre>";
+    }
 
     return make_charts($verybad, $bad, $unknown, $neutral, $good, $verygood, $tot_size, $title);
 }

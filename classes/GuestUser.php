@@ -39,7 +39,7 @@ class GuestUser extends User {
     }
 
     function get_first_name() {
-        return "Guest User";
+        return 'Guest User';
     }
 
     function get_level() {
