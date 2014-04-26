@@ -82,7 +82,7 @@ require_once ABS_PATH . 'libs/stats_lib.php';
                     </td>
                     <td>
                         <?php
-                        echo print_grades_levels($_SESSION['user']->getID(), 1);
+                        echo printGradeLevels($_SESSION['user']->getID(), 1);
                         ?>
                     </td>
                 </tr>
@@ -91,7 +91,7 @@ require_once ABS_PATH . 'libs/stats_lib.php';
                     </td>
                     <td>
                         <?php
-                        echo print_grades_levels($_SESSION['user']->getID(), 2);
+                        echo printGradeLevels($_SESSION['user']->getID(), 2);
                         ?>
                     </td>
                 </tr>
@@ -100,8 +100,8 @@ require_once ABS_PATH . 'libs/stats_lib.php';
                     </td>
                     <td>
                         <?php
-                        echo print_grades_levels($_SESSION['user']->getID(), 3);
-                        echo print_grades_levels($_SESSION['user']->getID(), 4);
+                        echo printGradeLevels($_SESSION['user']->getID(), 3);
+                        echo printGradeLevels($_SESSION['user']->getID(), 4);
                         ?>
                     </td>
                 </tr>
@@ -110,8 +110,8 @@ require_once ABS_PATH . 'libs/stats_lib.php';
                     </td>
                     <td>
                         <?php
-                        echo print_grades_levels($_SESSION['user']->getID(), 5);
-                        echo print_grades_levels($_SESSION['user']->getID(), 6);
+                        echo printGradeLevels($_SESSION['user']->getID(), 5);
+                        echo printGradeLevels($_SESSION['user']->getID(), 6);
                         ?>
                     </td>
                 </tr>
@@ -120,9 +120,9 @@ require_once ABS_PATH . 'libs/stats_lib.php';
                     </td>
                     <td>
                         <?php
-                        echo print_grades_levels($_SESSION['user']->getID(), 7);
-                        echo print_grades_levels($_SESSION['user']->getID(), 8);
-                        echo print_grades_levels($_SESSION['user']->getID(), 9);
+                        echo printGradeLevels($_SESSION['user']->getID(), 7);
+                        echo printGradeLevels($_SESSION['user']->getID(), 8);
+                        echo printGradeLevels($_SESSION['user']->getID(), 9);
                         ?>
                     </td>
                 </tr>
@@ -149,16 +149,16 @@ require_once ABS_PATH . 'libs/stats_lib.php';
                 echo "<div class=\"mynotice\">You do not have any reading statistics for vocabulary yet. You need to <a href=\"" . get_page_url(PAGE_PLAY, array('type' => 'reading')) . "\">practice</a> a little bit before the charts get updated.</div>";
             }
 
-            echo print_reading_jlpt_levels($_SESSION['user']->getID(), 5);
-            echo print_reading_jlpt_levels($_SESSION['user']->getID(), 4);
-            echo print_reading_jlpt_levels($_SESSION['user']->getID(), 3);
-            echo print_reading_jlpt_levels($_SESSION['user']->getID(), 2);
-            echo print_reading_jlpt_levels($_SESSION['user']->getID(), 1);
+            echo printReadingJLPTLevels($_SESSION['user']->getID(), 5);
+            echo printReadingJLPTLevels($_SESSION['user']->getID(), 4);
+            echo printReadingJLPTLevels($_SESSION['user']->getID(), 3);
+            echo printReadingJLPTLevels($_SESSION['user']->getID(), 2);
+            echo printReadingJLPTLevels($_SESSION['user']->getID(), 1);
             break;
 
         case 'kana':
             echo '<legend>Kana</legend>';
-            echo print_kana_levels($_SESSION['user']->getID());
+            echo printKanaLevels($_SESSION['user']->getID());
             break;
 
         case 'main':
@@ -177,25 +177,26 @@ require_once ABS_PATH . 'libs/stats_lib.php';
             echo '<legend>' . $levels[$level] . ($level != $jlpt_level ? '/' . $levels[$jlpt_level] : '') . '</legend>';
 
             if ($jlpt_level == LEVEL_J4 || $jlpt_level == LEVEL_N5) {
-                echo print_kana_levels($_SESSION['user']->getID(), 710, 'Kana');
+                echo 'here';
+                echo printKanaLevels($_SESSION['user']->getID(), 710, 'Kana');
             }
             if ($level == $jlpt_level) {
                 $num = Question::level_to_grade($level);
                 $num = $num[1];
                 echo printJLPTLevels($_SESSION['user']->getID(), $num, 710, 'Kanji');
                 echo print_vocab_jlpt_levels($_SESSION['user']->getID(), $num, 710, 'Vocab');
-                echo print_reading_jlpt_levels($_SESSION['user']->getID(), $num, 710, 'Reading');
+                echo printReadingJLPTLevels($_SESSION['user']->getID(), $num, 710, 'Reading');
             } else {
                 $num = (int) Question::level_to_grade($level);
                 if ($num > 0) {
-                    echo print_grades_levels($_SESSION['user']->getID(), $num, 710, 'Kanji - Grade ' . $num);
+                    echo printGradeLevels($_SESSION['user']->getID(), $num, 710, 'Kanji - Grade ' . $num);
                 } else {
                     echo printJLPTLevels($_SESSION['user']->getID(), 1, 710, 'Kanji - N1');
                 }
                 $num = Question::level_to_grade($jlpt_level);
                 $num = $num[1];
                 echo print_vocab_jlpt_levels($_SESSION['user']->getID(), $num, 710, 'Vocab - ' . $levels[$jlpt_level]);
-                echo print_reading_jlpt_levels($_SESSION['user']->getID(), $num, 710, 'Reading - ' . $levels[$jlpt_level]);
+                echo printReadingJLPTLevels($_SESSION['user']->getID(), $num, 710, 'Reading - ' . $levels[$jlpt_level]);
             }
             break;
 
@@ -208,8 +209,8 @@ require_once ABS_PATH . 'libs/stats_lib.php';
     if ($cur_type != 'main') {
         ?>
         <a href="#" class="reset" onclick="$(this).hide();
-                $('input.reset').show('bounce', {}, 200);
-                return false;">Reset Stats ▷</a>
+                    $('input.reset').show('bounce', {}, 200);
+                    return false;">Reset Stats ▷</a>
         <form action="<?php get_page_url(PAGE_STATS, array('type' => $type)) ?>" method="POST">
             <input type="hidden" name="reset-stats" value="<?php echo $cur_type ?>" />
             <input type="submit" class="reset" style="display:none;" onclick="return (confirm('Are you SURE your want to erase <?php echo ($cur_type == 'main') ? 'ALL your stats' : 'all your ' . $cur_type . ' stats' ?>? This cannot be recovered.'));" value="Reset Stats"/>

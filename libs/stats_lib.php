@@ -122,37 +122,22 @@ function print_globalboard($user, $level, $type, $title, $limit = 5) {
     echo "</div><div style=\"clear: both;\"></div>";
 }
 
-function print_grades_levels($user_id, $grade, $tot_size = 330, $title = '') {
-    $res = mysql_query_debug("select count(*) as count from kanjis k left join learning l on k.id = l.kanji_id and user_id = '" . (int) $user_id . "' where k.grade = " . (int) $grade . " and curve < 500") or die(mysql_error());
-    $row = mysql_fetch_array($res);
-    $verygood = $row[0];
-
-    $res = mysql_query_debug("select count(*) as count from kanjis k left join learning l on k.id = l.kanji_id and user_id = '" . (int) $user_id . "' where k.grade = " . (int) $grade . " and (curve >= 500 and curve < 950)") or die(mysql_error());
-    $row = mysql_fetch_array($res);
-    $good = $row[0];
-
-    $res = mysql_query_debug("select count(*) as count from kanjis k left join learning l on k.id = l.kanji_id and user_id = '" . (int) $user_id . "' where k.grade = " . (int) $grade . " and (curve >= 950 and curve <= 1050)") or die(mysql_error());
-    $row = mysql_fetch_array($res);
-    $neutral = $row[0];
-
-    $res = mysql_query_debug("select count(*) as count from kanjis k left join learning l on k.id = l.kanji_id and user_id = '" . (int) $user_id . "' where k.grade = " . (int) $grade . " and curve IS NULL") or die(mysql_error());
-    $row = mysql_fetch_array($res);
-    $unknown = $row[0];
-
-    $res = mysql_query_debug("select count(*) as count from kanjis k left join learning l on k.id = l.kanji_id and user_id = '" . (int) $user_id . "' where k.grade = " . (int) $grade . " and (curve >= 1050 and curve < 1500)") or die(mysql_error());
-    $row = mysql_fetch_array($res);
-    $bad = $row[0];
-
-    $res = mysql_query_debug("select count(*) as count from kanjis k left join learning l on k.id = l.kanji_id and user_id = '" . (int) $user_id . "' where k.grade = " . (int) $grade . " and curve >= 1500") or die(mysql_error());
-    $row = mysql_fetch_array($res);
-    $verybad = $row[0];
+function printGradeLevels($user_id, $grade, $tot_size = 330, $title = '') {
+    $verygood = DB::count('select count(*) from kanjis k left join learning l on k.id = l.kanji_id and user_id = ? where k.grade = ? and curve < 500', [$user_id, $grade]);
+    $good = DB::count('select count(*) from kanjis k left join learning l on k.id = l.kanji_id and user_id = ? where k.grade = ? and (curve >= 500 and curve < 950)', [$user_id, $grade]);
+    $neutral = DB::count('select count(*) from kanjis k left join learning l on k.id = l.kanji_id and user_id = ? where k.grade = ? and (curve >= 950 and curve <= 1050)', [$user_id, $grade]);
+    $unknown = DB::count('select count(*) as count from kanjis k left join learning l on k.id = l.kanji_id and user_id = ? where k.grade = ? and curve IS NULL', [$user_id, $grade]);
+    $bad = DB::count('select count(*) as count from kanjis k left join learning l on k.id = l.kanji_id and user_id = ? where k.grade = ? and (curve >= 1050 and curve < 1500)', [$user_id, $grade]);
+    $verybad = DB::count('select count(*) as count from kanjis k left join learning l on k.id = l.kanji_id and user_id = ? where k.grade = ? and curve >= 1500', [$user_id, $grade]);
 
     $total = ($verybad + $bad + $unknown + $neutral + $good + $verygood);
-    if (!$total)
+    if (!$total) {
         return '';
+    }
 
-    if (empty($title))
+    if (empty($title)) {
         $title = 'Grade ' . $grade . ' (' . $total . '): ';
+    }
 
     return make_charts($verybad, $bad, $unknown, $neutral, $good, $verygood, $tot_size, $title);
 }
@@ -205,24 +190,22 @@ function print_kanji_set_stats($user_id, $set_id, $tot_size = 710, $title = '') 
 
     foreach ($query_params as $var => $val) {
         list($min, $max) = $val;
-        $res = mysql_query_debug("SELECT COUNT(*) as count FROM learning_set_kanji ls LEFT JOIN learning l on l.kanji_id = ls.kanji_id and user_id = '" . (int) $user_id . "' WHERE ls.set_id = " . (int) $set_id . " and curve >= $min and curve < $max") or die(mysql_error());
-        $row = mysql_fetch_array($res);
+        $row = DB::count('SELECT COUNT(*) FROM learning_set_kanji ls LEFT JOIN learning l on l.kanji_id = ls.kanji_id and user_id = ? WHERE ls.set_id = ? and curve >= ? and curve < ?', [$user_id, $set_id, $min, $max]);
         $$var = $row[0];
     }
 
-    $res = mysql_query_debug("select count(*) as count FROM learning_set_kanji ls LEFT JOIN learning l on l.kanji_id = ls.kanji_id and user_id = '" . (int) $user_id . "' WHERE ls.set_id = " . (int) $set_id . " and curve IS NULL") or die(mysql_error());
-    $row = mysql_fetch_array($res);
-    $unknown = $row[0];
+    $unknown = DB::count("select count(*) FROM learning_set_kanji ls LEFT JOIN learning l on l.kanji_id = ls.kanji_id and user_id = '" . (int) $user_id . "' WHERE ls.set_id = " . (int) $set_id . " and curve IS NULL", [$user_id, $set_id]);
+    //echo $unknown;
+    //$unknown = $row[0];
 
     $total = ($verybad + $bad + $unknown + $neutral + $good + $verygood);
-    if (!$total)
+    if (!$total) {
         return '';
+    }
 
-    if (empty($title))
-        $title = 'Set: ' . $jlpt . ' (' . $total . '): ';
-
-    // if($_SESSION['user']->is_admin())
-    // 	echo "<pre>$title: $total</pre>";
+    if (empty($title)) {
+        $title = 'Set: ' . $set_id . ' (' . $total . '): ';
+    }
 
     return make_charts($verybad, $bad, $unknown, $neutral, $good, $verygood, $tot_size, $title);
 }
@@ -232,8 +215,10 @@ function print_vocab_set_stats($user_id, $set_id, $tot_size = 710, $title = '') 
 
     foreach ($query_params as $var => $val) {
         list($min, $max) = $val;
-        $res = mysql_query_debug("SELECT COUNT(*) as count FROM learning_set_vocab ls LEFT JOIN jmdict_learning l on l.jmdict_id = ls.jmdict_id and user_id = '" . (int) $user_id . "' WHERE ls.set_id = " . (int) $set_id . " and curve >= $min and curve < $max") or die(mysql_error());
-        $row = mysql_fetch_array($res);
+        $row = DB::count('SELECT COUNT(*) FROM learning_set_vocab ls LEFT JOIN jmdict_learning l on l.jmdict_id = ls.jmdict_id and user_id = ? WHERE ls.set_id = ? and curve >= ? and curve < ?', [$user_id, $set_id, $min, $max]);
+
+        //$res = mysql_query_debug("SELECT COUNT(*) as count FROM learning_set_vocab ls LEFT JOIN jmdict_learning l on l.jmdict_id = ls.jmdict_id and user_id = '" . (int) $user_id . "' WHERE ls.set_id = " . (int) $set_id . " and curve >= $min and curve < $max") or die(mysql_error());
+        //$row = mysql_fetch_array($res);
         $$var = $row[0];
     }
 
@@ -254,40 +239,26 @@ function print_vocab_set_stats($user_id, $set_id, $tot_size = 710, $title = '') 
     return make_charts($verybad, $bad, $unknown, $neutral, $good, $verygood, $tot_size, $title);
 }
 
-function print_reading_jlpt_levels($user_id, $jlpt, $tot_size = 710, $title = '') {
+function printReadingJLPTLevels($user_id, $jlpt, $tot_size = 710, $title = '') {
     $query_params = array('verygood' => array(-1, 500), 'good' => array(500, 950), 'neutral' => array(950, 1050), 'bad' => array(1050, 1500), 'verybad' => array(1500, 10000));
     $jlpt = (int) $jlpt;
 
     foreach ($query_params as $var => $val) {
         list($min, $max) = $val;
-
-        $query = "select count(*) as count FROM jmdict j left join reading_learning l on j.id = l.jmdict_id and user_id = '" . (int) $user_id . "' where ((j.njlpt = $jlpt AND j.njlpt_r >= $jlpt) OR (j.njlpt > $jlpt AND j.njlpt_r = $jlpt)) AND j.usually_kana =  0 AND j.katakana = '0' AND j.word != j.reading AND curve >= $min and curve < $max";
-
-        $res = mysql_query_debug($query) or die(mysql_error());
-        $row = mysql_fetch_array($res);
+        $row = DB::count('select count(*) FROM jmdict j left join reading_learning l on j.id = l.jmdict_id and user_id = ? where ((j.njlpt = ? AND j.njlpt_r >= ?) OR (j.njlpt > ? AND j.njlpt_r = ?)) AND j.usually_kana =  0 AND j.katakana ="0" AND j.word != j.reading AND curve >= ? and curve < ?', [$user_id, $jlpt, $jlpt, $jlpt, $jlpt, $min, $max]);
         $$var = $row[0];
-        // if($_SESSION['user']->is_admin())
-        // 	echo "<pre>$query\n\nReturned: $row[0]</pre>";
     }
 
-    $query = "select count(*) as count from jmdict j left join reading_learning l on j.id = l.jmdict_id and user_id = '" . (int) $user_id . "' WHERE ((j.njlpt = $jlpt AND j.njlpt_r >= $jlpt) OR (j.njlpt > $jlpt AND j.njlpt_r = $jlpt)) AND  j.usually_kana =  0 AND j.katakana = '0' AND j.word != j.reading AND curve IS NULL";
-    $res = mysql_query_debug($query) or die(mysql_error());
-    $row = mysql_fetch_array($res);
-    $unknown = $row[0];
-
-    // if($_SESSION['user']->is_admin())
-    // 	echo "<pre>$query\n\nReturned: $row[0]</pre>";
-
+    $unknown = DB::count('select count(*) from jmdict j left join reading_learning l on j.id = l.jmdict_id and user_id = ? WHERE ((j.njlpt = ? AND j.njlpt_r >= ?) OR (j.njlpt > ? AND j.njlpt_r = ?)) AND j.usually_kana = 0 AND j.katakana = "0" AND j.word != j.reading AND curve IS NULL', [$user_id, $jlpt, $jlpt, $jlpt, $jlpt]);
 
     $total = ($verybad + $bad + $unknown + $neutral + $good + $verygood);
-    if (!$total)
+    if (!$total) {
         return '';
+    }
 
-    if (empty($title))
+    if (empty($title)) {
         $title = 'JLPT N' . $jlpt . ' (' . $total . '): ';
-
-    // if($_SESSION['user']->is_admin())
-    // 	echo "<pre>$title: $total</pre>";
+    }
 
     return make_charts($verybad, $bad, $unknown, $neutral, $good, $verygood, $tot_size, $title);
 }
@@ -326,26 +297,20 @@ function print_reading_set_stats($user_id, $set_id, $tot_size = 710, $title = ''
     return make_charts($verybad, $bad, $unknown, $neutral, $good, $verygood, $tot_size, $title);
 }
 
-function print_kana_levels($user_id, $tot_size = 710, $title = '') {
-    $ret_str = '';
-
+function printKanaLevels($user_id, $tot_size = 710, $title = '') {
     $query_params = array('verygood' => array(-1, 500), 'good' => array(500, 950), 'neutral' => array(950, 1050), 'bad' => array(1050, 1500), 'verybad' => array(1500, 10000));
 
     foreach ($query_params as $var => $val) {
         list($min, $max) = $val;
-        $res = mysql_query_debug("select count(*) as count from kanas k left join kana_learning l on k.id = l.kana_id and user_id = '" . (int) $user_id . "' where curve >= $min and curve < $max") or die(mysql_error());
-        $row = mysql_fetch_array($res);
+        $row = DB::count('select count(*) from kanas k left join kana_learning l on k.id = l.kana_id and user_id = ? where curve >= ? and curve < ?', [$user_id, $min, $max]);
         $$var = $row[0];
     }
-
-    $res = mysql_query_debug("select count(*) as count from kanas k left join kana_learning l on k.id = l.kana_id and user_id = '" . (int) $user_id . "' where curve IS NULL") or die(mysql_error());
-    $row = mysql_fetch_array($res);
-    $unknown = $row[0];
-
+    $unknown = DB::count('select count(*) from kanas k left join kana_learning l on k.id = l.kana_id and user_id = ? where curve IS NULL', [$user_id]);
 
     $total = ($verybad + $bad + $unknown + $neutral + $good + $verygood);
-    if (!$total)
+    if (!$total) {
         return '';
+    }
 
     return make_charts($verybad, $bad, $unknown, $neutral, $good, $verygood, $tot_size, $title);
 }
@@ -356,16 +321,19 @@ function make_charts($verybad, $bad, $unknown, $neutral, $good, $verygood, $tot_
     $total = ($verybad + $bad + $unknown + $neutral + $good + $verygood);
 
     $ret_str .= '<div class="result_bar">';
-    if (!empty($title))
+    if (!empty($title)) {
         $ret_str .= '<p>' . $title . '</p>';
+    }
     $temptot = 0;
     foreach (array('verybad', 'bad', 'unknown', 'neutral', 'good', 'verygood') as $what) {
-        if (!$total)
+        if (!$total) {
             echo "$title (empty)";
+        }
         $size = max(1, round(($tot_size * $$what) / $total) - 1);
         $temptot += $$what;
-        if ($$what > 0 && $size > 0)
+        if ($$what > 0 && $size > 0) {
             $ret_str .= '<div class="' . $what . '" style="width:' . $size . 'px;' . ($temptot >= $total ? 'border-right:1px solid black;' : '') . '">' . ($size > (5 * ceil(log($$what + 0.1, 10))) ? $$what : '') . '</div>';
+        }
     }
 
     $ret_str .= '</div><div style="clear: both;"></div>';
@@ -380,6 +348,7 @@ function resetRankings($level, $type) {
         $stmt->bindValue(':level', $level);
         $stmt->bindValue(':type', $type);
         $stmt->execute();
+        $stmt = null;
     } catch (PDOException $e) {
         log_db_error($deleteQuery, $e->getMessage(), true, true);
     }
@@ -405,21 +374,12 @@ function resetRankings($level, $type) {
         $stmt->bindValue(':level', $level);
         $stmt->bindValue(':type', $type);
         $stmt->execute();
+        $stmt = null;
     } catch (PDOException $e) {
         log_db_error($query, $e->getMessage());
     }
 }
 
 function getTotalRankCounts($level, $type) {
-    $query = 'SELECT COUNT(*) FROM users u JOIN ranking r ON u.id = r.user_id AND u.level = r.level WHERE u.active = 1 AND u.level = :level AND r.type = :type';
-    try {
-        $stmt = DB::getConnection()->prepare($query);
-        $stmt->bindValue(':level', $level);
-        $stmt->bindValue(':type', $type);
-        $stmt->execute();
-
-        return $stmt->fetchColumn();
-    } catch (PDOException $e) {
-        log_db_error($query, $e->getMessage(), true, true);
-    }
+    return DB::count('SELECT COUNT(*) FROM users u JOIN ranking r ON u.id = r.user_id AND u.level = r.level WHERE u.active = 1 AND u.level = ? AND r.type = ?', [$level, $type]);
 }

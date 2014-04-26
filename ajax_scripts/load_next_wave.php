@@ -22,7 +22,7 @@ if(!$_SESSION['cur_session']->is_quiz() && $_SESSION['user']->is_logged_in() && 
 <?php
 }
 
-if (! $_SESSION['cur_session']->display_wave())
+if (! $_SESSION['cur_session']->displayWave())
 {
 //	log_error('###DEBUG: load_next_wave.php: display_wave() returned false, emptying sessions');
 	$_SESSION['cur_session']->cleanup_before_destroy();

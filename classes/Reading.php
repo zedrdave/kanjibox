@@ -115,7 +115,7 @@ class Reading extends Question {
         return parent::learn_set($user_id, $learning_set, $learn_others);
     }
 
-    function get_db_data($how_many, $grade, $user_id = -1) {
+    function get_db_data($how_many, $grade, $user_id = -1) {    
         if ($this->is_quiz() || !empty($_SESSION['user'])) {
             $picks = $this->getRandomReadings($grade, $grade, $how_many);
         } elseif ($this->is_drill()) {
@@ -127,27 +127,31 @@ class Reading extends Question {
         foreach ($picks as $pick) {
             $pick->jmdict_id = $pick->id;
 
-            $query = 'SELECT j.reading as main_reading, r.*, (rd.jmdict_id IS NOT NULL) AS pre_processed FROM jmdict j LEFT JOIN jmdict_reading r ON r.jmdict_id = j.id LEFT JOIN reading_decoys rd ON rd.jmdict_id = j.id WHERE j.word = \'' . $pick->word . '\' GROUP BY j.reading, r.jmdict_reading_id';
-            $res = mysql_query_debug($query) or log_db_error($query, false, true);
-
-            $pick->readings = array();
+            $pick->readings = [];
             $pre_processed = false;
-            while ($row = mysql_fetch_object($res)) {
-                if (!in_array($row->main_reading, $pick->readings))
-                    $pick->readings[] = $row->main_reading;
-                if ($row->reading && !in_array($row->reading, $pick->readings))
-                    $pick->readings[] = $row->reading;
+            $query = 'SELECT j.reading as main_reading, r.*, (rd.jmdict_id IS NOT NULL) AS pre_processed FROM jmdict j LEFT JOIN jmdict_reading r ON r.jmdict_id = j.id LEFT JOIN reading_decoys rd ON rd.jmdict_id = j.id WHERE j.word = ? GROUP BY j.reading, r.jmdict_reading_id';
 
-                if ($row->pre_processed)
-                    $pre_processed = true;
+            try {
+                $stmt = DB::getConnection()->prepare($query);
+                $stmt->execute([$pick->word]);
+
+                while ($row = $stmt->fetchObject()) {
+                    if (!in_array($row->main_reading, $pick->readings)) {
+                        $pick->readings[] = $row->main_reading;
+                    }
+
+                    if ($row->reading && !in_array($row->reading, $pick->readings)) {
+                        $pick->readings[] = $row->reading;
+                    }
+
+                    if ($row->pre_processed) {
+                        $pre_processed = true;
+                    }
+                }
+                $stmt = null;
+            } catch (PDOException $e) {
+                log_db_error($query, $e->getMessage(), false, true);
             }
-
-            // if($_SESSION['user']->is_admin()) {
-            // 	echo '<pre>';
-            // 	print_r($pick);
-            // 	echo '</pre>';
-            // 	// $pick->word = "木";
-            // }
 
             $pick->kanji_prons = array();
 
@@ -157,58 +161,69 @@ class Reading extends Question {
                 array_pop($matches); // last elem is empty
 
                 $kanjis = array();
-                foreach ($matches as $match)
-                    if (!empty($match[1]))
+                foreach ($matches as $match) {
+                    if (!empty($match[1])) {
                         $kanjis[] = $match[1];
+                    }
+                }
 
                 if (count($kanjis)) {
                     $kanji_csv = '\'' . implode('\', \'', $kanjis) . '\'';
-
                     $query = 'SELECT k.id, k.kanji, p.pron, p.type, 1 as coef_prob FROM kanjis k JOIN pron p ON p.kanji_id = k.id AND p.type != \'nanori\' WHERE k.kanji IN (' . $kanji_csv . ')';
-
-                    $res = mysql_query_debug($query) or log_db_error($query, false, true);
-
-                    while ($row = mysql_fetch_object($res))
-                        $pick->kanji_prons[$row->kanji][] = $row;
+                    try {
+                        $stmt = DB::getConnection()->prepare($query);
+                        $stmt->execute();
+                        while ($row = $stmt->fetchObject()) {
+                            $pick->kanji_prons[$row->kanji][] = $row;
+                        }
+                        $stmt = null;
+                    } catch (PDOException $e) {
+                        log_db_error($query, $e->getMessage(), false, true);
+                    }
                 }
 
-                // $sort_order[$var] = ($prob ? pow(rand() / getrandmax(), 1/$prob) : 0);
+                $query = 'SELECT reading_decoy, score FROM reading_decoys rd WHERE rd.jmdict_id = ? ORDER BY POW(RAND(), 10000/GREATEST(rd.score, 1)) DESC LIMIT 3';
+                try {
+                    $stmt = DB::getConnection()->prepare($query);
+                    $stmt->execute([(int) $pick->jmdict_id]);
 
-                $query = "SELECT reading_decoy, score FROM reading_decoys rd WHERE rd.jmdict_id = " . (int) $pick->jmdict_id . " ORDER BY POW(RAND(), 10000/GREATEST(rd.score, 1)) DESC LIMIT 3";
-                $res = mysql_query_debug($query) or log_db_error($query, false, true);
-
-                $sims = array();
-                while ($row = mysql_fetch_object($res))
-                    $sims[$row->reading_decoy] = $row->score / 10000;
+                    $sims = array();
+                    while ($row = $stmt->fetchObject()) {
+                        $sims[$row->reading_decoy] = $row->score / 10000;
+                    }
+                    $stmt = null;
+                } catch (PDOException $e) {
+                    log_db_error($query, $e->getMessage(), false, true);
+                }
             }
 
             if (count($sims) < 3) {
                 $this->init_twisters();
-
                 $sims = $this->get_similar_readings($pick->word, $pick->readings, 3, $grade, $pick->kanji_prons);
             }
 
-            if (count($sims) < 3)
+            if (count($sims) < 3) {
                 log_error("Not enough reading choices for " . $pick->word . ": " . print_r($sims, true) . "\n\n" . print_r($pick, true), true, true);
+            }
 
             $choice = array(0 => $pick);
-            foreach ($sims as $variant => $prob)
+            foreach ($sims as $variant => $prob) {
                 $choice[] = array2obj(array('reading' => $variant, 'prob' => $prob));
+            }
 
-            if ($choice[0]->reading == $choice[1]->reading || $choice[0]->reading == $choice[2]->reading || $choice[0]->reading == $choice[3]->reading || $choice[1]->reading == $choice[2]->reading || $choice[1]->reading == $choice[3]->reading || $choice[2]->reading == $choice[3]->reading)
+            if ($choice[0]->reading == $choice[1]->reading || $choice[0]->reading == $choice[2]->reading || $choice[0]->reading == $choice[3]->reading || $choice[1]->reading == $choice[2]->reading || $choice[1]->reading == $choice[3]->reading || $choice[2]->reading == $choice[3]->reading) {
                 log_error("IDENTICAL READINGS: " . print_r($choice, true) . "\n\n" . print_r($picks, true), true, false);
-
-
+            }
             $indices = range(1, 4);
             shuffle($indices);
 
-            foreach ($choice as $i => $var)
+            foreach ($choice as $i => $var) {
                 $choice[$i]->id = $indices[$i];
+            }
 
             $sid = 'sid_' . md5('himitsu' . time() . '-' . rand(1, 100000));
             $data[$sid] = array('sid' => $sid, 'choices' => $choice, 'solution' => $choice[0]);
         }
-//echo "#" . max(0, round((microtime()-$time)*1000)) . 'ms';
 
         $this->fast_mode = false;
         return $data;

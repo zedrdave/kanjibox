@@ -325,8 +325,8 @@ class User {
                         } else {
                             $num = (int) Question::level_to_grade($this->get_level());
                             if ($num > 0) {
-                                $big = print_grades_levels($this->getID(), $num, $wide_bar, 'Learning stats - Grade ' . $num);
-                                $small = print_grades_levels($this->getID(), $num, $narrow_bar, 'Learning stats - Grade ' . $num);
+                                $big = printGradeLevels($this->getID(), $num, $wide_bar, 'Learning stats - Grade ' . $num);
+                                $small = printGradeLevels($this->getID(), $num, $narrow_bar, 'Learning stats - Grade ' . $num);
                             } else {
                                 $big = printJLPTLevels($this->getID(), 1, $wide_bar, 'Learning stats - 1-kyuu');
                                 $small = printJLPTLevels($this->getID(), 1, $narrow_bar, 'Learning stats - 1-kyuu');
@@ -345,8 +345,8 @@ class User {
                     case 'reading':
                         $num = Question::level_to_grade($jlpt_level);
                         $num = $num[1];
-                        $big = print_reading_jlpt_levels($this->getID(), $num, $wide_bar, 'Learning stats - ' . $num . '-kyuu');
-                        $small = print_reading_jlpt_levels($this->getID(), $num, $narrow_bar, 'Learning stats - ' . $num . '-kyuu');
+                        $big = printReadingJLPTLevels($this->getID(), $num, $wide_bar, 'Learning stats - ' . $num . '-kyuu');
+                        $small = printReadingJLPTLevels($this->getID(), $num, $narrow_bar, 'Learning stats - ' . $num . '-kyuu');
                         break;
                 }
                 $text .= '<fb:wide>' . $big . '</fb:wide><fb:narrow>' . $small . '</fb:narrow>';
