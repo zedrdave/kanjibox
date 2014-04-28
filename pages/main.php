@@ -73,37 +73,12 @@ if ($_SESSION['user']->is_on_translator_probation()) {
 
 <?php
 if ($lang_vocab != 'en') {
-    $query = 'SELECT COUNT(*) FROM jmdict j WHERE j.njlpt = :level';
-    try {
-        $stmt = $dbh->prepare($query);
-        $stmt->bindValue(':level', $_SESSION['user']->get_level());
-        $stmt->execute();
-        $tot = $stmt->fetchColumn();
-    } catch (PDOException $e) {
-        log_db_error($query, mysql_error(), false, true);
-    }
-
-    $query = 'SELECT COUNT(*) FROM jmdict j LEFT JOIN jmdict_ext jx ON jx.jmdict_id = j.id WHERE j.njlpt = $level AND jx.gloss_' . Vocab::$lang_strings[$lang_vocab] . ' IS NOT NULL AND jx.gloss_' . Vocab::$lang_strings[$lang_vocab] . ' != \'\'';
-    try {
-        $stmt = $dbh->prepare($query);
-        $stmt->execute();
-        $translated = $stmt->fetchColumn();
-    } catch (PDOException $e) {
-        log_db_error($query, mysql_error(), false, true);
-    }
-
-    $query = 'SELECT COUNT(*) AS c FROM jmdict j LEFT JOIN jmdict_ext jx ON jx.jmdict_id = j.id WHERE j.njlpt = $level AND jx.gloss_' . Vocab::$lang_strings[$lang_vocab] . ' LIKE \'(~)%\'';
-    try {
-        $stmt = $dbh->prepare($query);
-        $stmt->execute();
-        $need_work = $stmt->fetchColumn();
-    } catch (PDOException $e) {
-        log_db_error($query, mysql_error(), false, true);
-    }
+    $tot = DB::count('SELECT COUNT(*) FROM jmdict j WHERE j.njlpt = ?', [$_SESSION['user']->get_level()]);
+    $translated = DB::count('SELECT COUNT(*) FROM jmdict j LEFT JOIN jmdict_ext jx ON jx.jmdict_id = j.id WHERE j.njlpt = $level AND jx.gloss_' . Vocab::$lang_strings[$lang_vocab] . ' IS NOT NULL AND jx.gloss_' . Vocab::$lang_strings[$lang_vocab] . ' != \'\'', []);
+    $need_work = DB::count('SELECT COUNT(*) AS c FROM jmdict j LEFT JOIN jmdict_ext jx ON jx.jmdict_id = j.id WHERE j.njlpt = $level AND jx.gloss_' . Vocab::$lang_strings[$lang_vocab] . ' LIKE \'(~)%\'', []);
 
     $translated -= $need_work;
     $ratio_good = round(100 * $translated / $tot, 1);
-
     $ratio_need_work = round(100 * $need_work / $tot, 1);
 
     echo '<div style="margin:5px;">';
@@ -114,40 +89,13 @@ if ($lang_vocab != 'en') {
 }
 
 if ($lang_kanji != 'en') {
-
-    $query = 'SELECT COUNT(*) FROM kanjis k WHERE k.njlpt = :level';
-    try {
-        $stmt = $dbh->prepare($query);
-        $stmt->bindValue(':level', $_SESSION['user']->get_level());
-        $stmt->execute();
-        $tot = $stmt->fetchColumn();
-    } catch (PDOException $e) {
-        log_db_error($query, mysql_error(), false, true);
-    }
-
-    $query = 'SELECT COUNT(*) FROM kanjis k LEFT JOIN kanjis_ext kx ON kx.kanji_id = k.id WHERE k.njlpt = $level AND kx.meaning_' . Kanji::$lang_strings[$lang_kanji] . ' IS NOT NULL AND kx.meaning_' . Kanji::$lang_strings[$lang_kanji] . ' != \'\'';
-    try {
-        $stmt = $dbh->prepare($query);
-        $stmt->execute();
-        $translated = $stmt->fetchColumn();
-    } catch (PDOException $e) {
-        log_db_error($query, mysql_error(), false, true);
-    }
-
-    $query = 'SELECT COUNT(*) FROM kanjis k LEFT JOIN kanjis_ext kx ON kx.kanji_id = k.id WHERE k.njlpt = $level AND kx.meaning_' . Kanji::$lang_strings[$lang_kanji] . ' LIKE \'(~)%\'';
-    try {
-        $stmt = $dbh->prepare($query);
-        $stmt->execute();
-        $need_work = $stmt->fetchColumn();
-    } catch (PDOException $e) {
-        log_db_error($query, mysql_error(), false, true);
-    }
+    $tot = DB::count('SELECT COUNT(*) FROM kanjis k WHERE k.njlpt = ?', [$_SESSION['user']->get_level()]);
+    $translated = DB::count('SELECT COUNT(*) FROM kanjis k LEFT JOIN kanjis_ext kx ON kx.kanji_id = k.id WHERE k.njlpt = $level AND kx.meaning_' . Kanji::$lang_strings[$lang_kanji] . ' IS NOT NULL AND kx.meaning_' . Kanji::$lang_strings[$lang_kanji] . ' != \'\'', []);
+    $need_work = DB::count('SELECT COUNT(*) FROM kanjis k LEFT JOIN kanjis_ext kx ON kx.kanji_id = k.id WHERE k.njlpt = $level AND kx.meaning_' . Kanji::$lang_strings[$lang_kanji] . ' LIKE \'(~)%\'', []);
 
     $translated -= $need_work;
     $ratio_good = round(100 * $translated / $tot, 1);
-
     $ratio_need_work = round(100 * $need_work / $tot, 1);
-
 
     echo '<div style="margin:5px;">';
     $ratio = round(100 * $translated / $tot, 1);
