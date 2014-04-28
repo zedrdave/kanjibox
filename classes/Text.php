@@ -17,22 +17,22 @@ class Text extends Vocab
 	}
 	
 
-	function use_anticheat_on_hint()
+	function useAnticheatOnHint()
 	{
 		return false;
 	}
 
 	
-	function display_hint()
+	function displayHint()
 	{
-		$solution = $this->get_solution();
+		$solution = $this->getSolution();
 		
 		if(!isset($solution->hint_str))
 		{
-			if($this->is_grammar_set())
-				$strings = Text::getSentenceWithHints($solution, $this->is_quiz(), $solution->pos_start, $solution->pos_end, $solution->id);
+			if($this->isGrammarSet())
+				$strings = Text::getSentenceWithHints($solution, $this->isQuiz(), $solution->pos_start, $solution->pos_end, $solution->id);
 			else
-				$strings = Text::getSentenceWithHints($solution, $this->is_quiz(), -1, -1, $solution_id = $solution->id);
+				$strings = Text::getSentenceWithHints($solution, $this->isQuiz(), -1, -1, $solution_id = $solution->id);
 				
 			$solution->hint_str = $strings[0];
 			$solution->answer_str = $strings[1];
@@ -43,7 +43,7 @@ class Text extends Vocab
 	
 		echo '<span lang="ja" xml:lang="ja">' . $solution->hint_str . '</span>';
 		
-		if(!$this->is_quiz()) {
+		if(!$this->isQuiz()) {
 			echo  make_toggle_visibility("<span class=\"meaning\">" . $solution->example_english . "</span><br/>");
 		}
 		else
@@ -62,7 +62,7 @@ class Text extends Vocab
   	
 		
 		$reading_pref = $_SESSION['user']->get_pref('drill', 'show_reading');
-		$level = $_SESSION['user']->get_level();
+		$level = $_SESSION['user']->getLevel();
 		
 		if($hide_pos_start >= 0 && $hide_pos_end >= 0) {
 			$hint_str = mb_substr($sentence->example_str, 0, $hide_pos_start) . str_repeat('^', $hide_pos_end - $hide_pos_start) . mb_substr($sentence->example_str, $hide_pos_end);
@@ -129,7 +129,7 @@ class Text extends Vocab
 				elseif($row['kanji'])
 				{
 					
-					if((!$is_quiz && ($reading_pref != 'never') && ($reading_pref == 'always' || ($this->get_level_num() > $row['kanji_jlpt'])))
+					if((!$is_quiz && ($reading_pref != 'never') && ($reading_pref == 'always' || ($this->getLevelNum() > $row['kanji_jlpt'])))
 							|| ($is_quiz && ($level > $row['kanji_jlpt'])))
 						$hint_str = $pref . '<span class="kanji_detail" href="#" onclick="show_kanji_details(\'' . $row['kanji'] . '\', \''. SERVER_URL . 'ajax/kanji_details/kanji/'. urlencode($row['kanji']) . '\');  return false;">'. $row['kanji'] . '</span>' . $suf;
 
@@ -159,13 +159,13 @@ class Text extends Vocab
 	}
 
 	
-	function display_correction($answer_id)
+	function displayCorrection($answer_id)
 	{
 		$kanjis = array();
-		$solution = $this->get_solution();
+		$solution = $this->getSolution();
 		$encoding = mb_detect_encoding($solution->word);
 		
-		if ($answer_id != SKIP_ID && !$this->is_solution($answer_id))
+		if ($answer_id != SKIP_ID && !$this->isSolution($answer_id))
 		{
 			if (! $wrong = $this->get_vocab_id((int) $answer_id))
 				log_error('Unknown Vocab ID: ' . $answer_id, true, true);
@@ -189,12 +189,12 @@ class Text extends Vocab
 	}
 
 
-	function get_db_data($how_many, $grade, $user_id = -1)
+	function getDBData($how_many, $grade, $user_id = -1)
 	{
 		if($grade == -1)
 			$grade = 'N1';
 		
-		if($this->is_grammar_set()) {
+		if($this->isGrammarSet()) {
 			$picks = $this->get_grammar_set_questions($user_id, $how_many);
 			foreach($picks as $pick)
 			{
@@ -214,9 +214,9 @@ class Text extends Vocab
 			}
 		}
 		else {
-			if($this->is_quiz())
+			if($this->isQuiz())
 				$picks = $this->get_random_vocab ($grade, $grade, $how_many);
-			elseif($this->is_learning_set())
+			elseif($this->isLearningSet())
 				$picks = $this->get_set_weighted_vocab($user_id, $how_many);
 			else
 				$picks = $this->get_random_weighted_vocab($user_id, $grade, $grade, $how_many);
@@ -493,18 +493,18 @@ class Text extends Vocab
 	// 	  return mysql_fetch_object($res);
 	// }
 
-	function get_grade_options()
+	function getGradeOptions()
 	{
-		if($this->is_quiz())
+		if($this->isQuiz())
 			return NULL;
 		
 		for($i = 1; $i <= 5; $i++)
-			$options[] = array('grade' => 'N' . $i, 'label' => 'JLPT '. $i, 'selected' => ($this->get_grade() == 'N' . $i));
+			$options[] = array('grade' => 'N' . $i, 'label' => 'JLPT '. $i, 'selected' => ($this->getGrade() == 'N' . $i));
 		
 		return $options;
 	}
 	
-	public function get_default_w_sizes()
+	public function getDefaultWSizes()
 	{ 
 		return array(
 		LEVEL_SENSEI => array(	4,		6,	 	6,	 10,	15,  	10, 	5,	5),
@@ -517,7 +517,7 @@ class Text extends Vocab
 	}
 	
 	
-	public function get_default_w_grades()
+	public function getDefaultWGrades()
 	{
 		$array = array(LEVEL_N5 => array('N5', 	'N5', 			1,	 	'N5',		1,	 		2,		'N4'),
 		LEVEL_N4 => array('N5', 	'N4', 		2,			'N4',		3,		'N4',	'N2'),
@@ -529,9 +529,9 @@ class Text extends Vocab
 		return $array;
 	}
 
-	public function feedback_form_options()
+	public function feedbackFormOptions()
 	{
-		$solution = $this->get_solution();
+		$solution = $this->getSolution();
 		foreach($this->data['choices'] as $choice)
 			$words[$choice->id] = $choice->word;
 			
@@ -539,7 +539,7 @@ class Text extends Vocab
 		
 		$forms[] = array('type' => 'text_furigana', 'title' => 'Need furigana at this level', 'param_1' => $words, 'param_1_title' => 'This word should have furigana at this JLPT level:', 'param_3' => $solution->example_id, 'param_1_required' => true, 'param_2_required' => false);
 
-		if(! $this->is_quiz())
+		if(! $this->isQuiz())
 			$forms[] = array('type' => 'text_wrong_level', 'title' => 'Wrong level', 'param_1' => $words, 'param_1_title' => 'This word doesn\'t belong at this JLPT level:', 'param_3' => $solution->example_id, 'param_1_required' => true, 'param_2_required' => false);
 		
 		$forms[] = array('type' => 'text_other', 'title' => 'Other...', 'param_1' => $words, 'param_1_title' => 'Word 1:', 'param_2_title' => ' - Word 2 (optional):', 'param_2' => $words, 'param_3' => $solution->example_id, 'param_1_required' => true, 'param_2_required' => false);
@@ -548,22 +548,22 @@ class Text extends Vocab
 		return $forms;
 	}
 
-	function has_feedback_options()
+	function hasFeedbackOptions()
 	{
 		return true;
 	}
 	
-	function edit_button_link()
+	function editButtonLink()
 	{	
-		if($_SESSION['user']->is_elite() && !$this->is_quiz()) {
-			$solution = $this->get_solution();
+		if($_SESSION['user']->is_elite() && !$this->isQuiz()) {
+			$solution = $this->getSolution();
 			return '<a class="icon-button ui-state-default ui-corner-all" title="Edit..." href="#" onclick="do_load_with_close_button(\'' . SERVER_URL . 'ajax/get_sentence/edit/yes/?id=' . $solution->example_id . '&jmdict_id=' . $solution->id . '\', \'ajax_edit_form\'); return false;">✍</a>';
 		}
 		else
 			return '';
 	}
 	
-	static function get_quiz_time() { return 51; }
+	static function getQuizTime() { return 51; }
 	
 
 }

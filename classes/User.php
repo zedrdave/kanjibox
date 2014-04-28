@@ -323,7 +323,7 @@ class User {
                             $big = printJLPTLevels($this->getID(), $jlpt_level, $wide_bar, 'Learning stats - ' . $jlpt_level);
                             $small = printJLPTLevels($this->getID(), $jlpt_level, $narrow_bar, 'Learning stats - ' . $jlpt_level);
                         } else {
-                            $num = (int) Question::level_to_grade($this->get_level());
+                            $num = (int) Question::levelToGrade($this->get_level());
                             if ($num > 0) {
                                 $big = printGradeLevels($this->getID(), $num, $wide_bar, 'Learning stats - Grade ' . $num);
                                 $small = printGradeLevels($this->getID(), $num, $narrow_bar, 'Learning stats - Grade ' . $num);
@@ -335,7 +335,7 @@ class User {
                         break;
 
                     case 'vocab':
-                        $num = Question::level_to_grade($jlpt_level);
+                        $num = Question::levelToGrade($jlpt_level);
                         $num = $num[1];
                         $big = print_vocab_jlpt_levels($this->getID(), $num, $wide_bar, 'Learning stats - ' . $num . '-kyuu');
                         $small = print_vocab_jlpt_levels($this->getID(), $num, $narrow_bar, 'Learning stats - ' . $num . '-kyuu');
@@ -343,7 +343,7 @@ class User {
                         break;
 
                     case 'reading':
-                        $num = Question::level_to_grade($jlpt_level);
+                        $num = Question::levelToGrade($jlpt_level);
                         $num = $num[1];
                         $big = printReadingJLPTLevels($this->getID(), $num, $wide_bar, 'Learning stats - ' . $num . '-kyuu');
                         $small = printReadingJLPTLevels($this->getID(), $num, $narrow_bar, 'Learning stats - ' . $num . '-kyuu');

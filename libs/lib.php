@@ -450,7 +450,7 @@ function get_badge($rank_array, $caption_type) {
     $rank_nice = $rank_array->name_array[1];
     $levels = array(LEVEL_N5 => '5級', LEVEL_N4 => '4級', LEVEL_N3 => '3級', LEVEL_N2 => '2級', LEVEL_N1 => '1級', LEVEL_SENSEI => '先生');
     if (!isset($rank_array->level)) {
-        $rank_array->level = $_SESSION['user']->get_level();
+        $rank_array->level = $_SESSION['user']->getLevel();
     }
     $level_jp = $levels[$rank_array->level];
     $level = Session::$level_names[$rank_array->level];

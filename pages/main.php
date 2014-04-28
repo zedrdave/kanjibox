@@ -73,7 +73,7 @@ if ($_SESSION['user']->is_on_translator_probation()) {
 
 <?php
 if ($lang_vocab != 'en') {
-    $tot = DB::count('SELECT COUNT(*) FROM jmdict j WHERE j.njlpt = ?', [$_SESSION['user']->get_level()]);
+    $tot = DB::count('SELECT COUNT(*) FROM jmdict j WHERE j.njlpt = ?', [$_SESSION['user']->getLevel()]);
     $translated = DB::count('SELECT COUNT(*) FROM jmdict j LEFT JOIN jmdict_ext jx ON jx.jmdict_id = j.id WHERE j.njlpt = $level AND jx.gloss_' . Vocab::$lang_strings[$lang_vocab] . ' IS NOT NULL AND jx.gloss_' . Vocab::$lang_strings[$lang_vocab] . ' != \'\'', []);
     $need_work = DB::count('SELECT COUNT(*) AS c FROM jmdict j LEFT JOIN jmdict_ext jx ON jx.jmdict_id = j.id WHERE j.njlpt = $level AND jx.gloss_' . Vocab::$lang_strings[$lang_vocab] . ' LIKE \'(~)%\'', []);
 
@@ -89,7 +89,7 @@ if ($lang_vocab != 'en') {
 }
 
 if ($lang_kanji != 'en') {
-    $tot = DB::count('SELECT COUNT(*) FROM kanjis k WHERE k.njlpt = ?', [$_SESSION['user']->get_level()]);
+    $tot = DB::count('SELECT COUNT(*) FROM kanjis k WHERE k.njlpt = ?', [$_SESSION['user']->getLevel()]);
     $translated = DB::count('SELECT COUNT(*) FROM kanjis k LEFT JOIN kanjis_ext kx ON kx.kanji_id = k.id WHERE k.njlpt = $level AND kx.meaning_' . Kanji::$lang_strings[$lang_kanji] . ' IS NOT NULL AND kx.meaning_' . Kanji::$lang_strings[$lang_kanji] . ' != \'\'', []);
     $need_work = DB::count('SELECT COUNT(*) FROM kanjis k LEFT JOIN kanjis_ext kx ON kx.kanji_id = k.id WHERE k.njlpt = $level AND kx.meaning_' . Kanji::$lang_strings[$lang_kanji] . ' LIKE \'(~)%\'', []);
 
@@ -274,7 +274,7 @@ if ($_SESSION['user']->is_pwd_empty()) {
                         return true;" clickthrough="true" ><?php
                                                 $levels = Session::$level_names;
                                                 foreach ($levels as $level => $label)
-                                                    echo "<option value=\"$level\"" . ($_SESSION['user']->get_level() == $level ? ' selected' : ' ') . ">$label</option>"
+                                                    echo "<option value=\"$level\"" . ($_SESSION['user']->getLevel() == $level ? ' selected' : ' ') . ">$label</option>"
                                                     ?></select>
     </fieldset>
     <p style="text-align:center;"><a href="#" id="more-options-link" onclick="$('#more-options').show('slow');

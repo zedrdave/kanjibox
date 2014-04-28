@@ -12,7 +12,7 @@ class Kana extends Question {
         parent::__construct($_mode, $_level, $_grade, $_data);
     }
 
-    function display_choices($next_sid = '') {
+    function displayChoices($next_sid = '') {
         $submit_url = SERVER_URL . 'ajax/submit_answer/?sid=' . $this->data['sid'] . '&amp;time_created=' . (int) $this->created . '&amp;';
         $choices = $this->data['choices'];
         shuffle($choices);
@@ -23,19 +23,19 @@ class Kana extends Question {
         echo '<div class="choice skip" onclick="submit_answer(\'' . $this->data['sid'] . '\',  \'' . $next_sid . '\', \'' . $submit_url . 'answer_id=' . SKIP_ID . '\'); return false;">&nbsp;?&nbsp;</div>';
     }
 
-    function display_hint() {
-        $solution = $this->get_solution();
+    function displayHint() {
+        $solution = $this->getSolution();
         echo $solution->roma . ' (' . ($solution->type == 'kata' ? 'katakana' : 'hiragana') . ')';
     }
 
-    function display_correction($answer_id) {
-        $solution = $this->get_solution();
+    function displayCorrection($answer_id) {
+        $solution = $this->getSolution();
 
         echo "<span class=\"kanji\">" . $solution->kana . "</span> [" . ($solution->type == 'kata' ? 'katakana' : 'hiragana') . "] - " . $solution->roma;
 
-        if ($answer_id != SKIP_ID && !$this->is_solution($answer_id)) {
+        if ($answer_id != SKIP_ID && !$this->isSolution($answer_id)) {
             echo "<br/><br/>";
-            $wrong = $this->get_kana_id((int) $answer_id);
+            $wrong = $this->getKanaID((int) $answer_id);
             if (!$wrong) {
                 log_error('Unknown Kana ID: ' . $answer_id, false, true);
             }
@@ -43,8 +43,8 @@ class Kana extends Question {
         }
     }
 
-    function get_db_data($how_many, $grade, $user_id = -1) {
-        if ($this->is_quiz()) {
+    function getDBData($how_many, $grade, $user_id = -1) {
+        if ($this->isQuiz()) {
             log_error('Quiz mode not supported for kana.', false, true);
         } elseif (!$_SESSION['user']) {
             $picks = $this->get_random_kanas($how_many * 4);
@@ -77,18 +77,23 @@ class Kana extends Question {
 
             //###DEBUG
             if ($choice[0]->id == $choice[1]->id || $choice[0]->id == $choice[2]->id || $choice[0]->id == $choice[3]->id || $choice[1]->id == $choice[2]->id || $choice[1]->id == $choice[3]->id || $choice[2]->id == $choice[3]->id) {
-                log_error("IDENTICAL KANA: " . print_r($choice, true) . "\n\n" . print_r($picks, true), true, true);
+                log_error('IDENTICAL KANA: ' . print_r($choice, true) . "\n\n" . print_r($picks, true), true, true);
             }
         }
 
         return $data;
     }
 
-    function get_kana_id($kana_id) {
-        $query = "SELECT `id`, `kana`, UPPER(`roma`) AS `roma`, `type` FROM `kanas` WHERE `id` = '" . mysql_real_escape_string($kana_id) . "'";
+    function getKanaID($kana_id) {
+        $query = 'SELECT `id`, `kana`, UPPER(`roma`) AS `roma`, `type` FROM `kanas` WHERE `id` = ?';
 
-        $res = mysql_query_debug($query) or log_db_error($query);
-        return mysql_fetch_object($res);
+        try {
+            $stmt = DB::getConnection()->prepare($query);
+            $stmt->execute([$kana_id]);
+            return $stmt->fetch(PDO::FETCH_CLASS);
+        } catch (PDOException $e) {
+            log_db_error($query, $e->getMessage());
+        }
     }
 
     function getRandomWeightedKanas($user_id, $how_many = 1, $type = NULL, $exclude = NULL) {

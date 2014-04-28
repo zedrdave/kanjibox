@@ -6,7 +6,7 @@ if(!@$_SESSION['user']) //  && !$_SESSION['user']->is_admin()
 	
 $can_edit = $_SESSION['user']->is_elite();
 	
-$level = (int) (isset($params['level']) ? $params['level'] : @$_SESSION['user']->get_level());
+$level = (int) (isset($params['level']) ? $params['level'] : @$_SESSION['user']->getLevel());
 	
 $level_array = array(5 => 'N5', 4 => 'N4', 3 => 'N3', 2 => 'N2', 1 => 'N1', 0 => '先生');
 ?>

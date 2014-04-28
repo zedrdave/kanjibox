@@ -6,7 +6,7 @@ if(@$params['type'] != 'general' && !@$_SESSION['cur_session'])
 	log_error('You need to be using Drill or Quiz mode to send this type of feedback.', false, true);
 
 
-	if(! $form_options = $_SESSION['cur_session']->feedback_form_options($params['sid']))
+	if(! $form_options = $_SESSION['cur_session']->feedbackFormOptions($params['sid']))
 		die('No feedback options for this type of drill/quiz');
 
 	$select = '';

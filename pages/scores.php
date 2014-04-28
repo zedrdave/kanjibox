@@ -39,7 +39,7 @@ $levels = Session::$level_names;
 
 <?php
 if ($cur_type == 'main') {
-    $level = $_SESSION['user']->get_level();
+    $level = $_SESSION['user']->getLevel();
 
     echo '<div class="summary">';
     echo '<h1>Your ' . $levels[$level] . ' Highscores</h1>';
@@ -102,17 +102,17 @@ if ($cur_type == 'main') {
     $type_label = ucfirst($cur_type);
     ?>
     <fieldset class="stats">
-        <legend><?php echo $type_label . ' ' . $levels[$_SESSION['user']->get_level()]; ?> Level High Scores</legend>
+        <legend><?php echo $type_label . ' ' . $levels[$_SESSION['user']->getLevel()]; ?> Level High Scores</legend>
         <table class="twocols">
             <tr>
                 <td>
                     <?php
-                    print_globalboard($_SESSION['user'], $_SESSION['user']->get_level(), $cur_type, 'The World:');
+                    print_globalboard($_SESSION['user'], $_SESSION['user']->getLevel(), $cur_type, 'The World:');
                     ?>
                 </td>
                 <td>
                     <?php
-                    print_friendsboard($_SESSION['user'], $_SESSION['user']->get_level(), $cur_type, 'Your Friends:', false);
+                    print_friendsboard($_SESSION['user'], $_SESSION['user']->getLevel(), $cur_type, 'Your Friends:', false);
                     ?>
                 </td>
             </tr>
@@ -130,7 +130,7 @@ if ($cur_type == 'main') {
                 </td>
                 <td>
                     <?php
-                    print_friendsboard($_SESSION['user'], $_SESSION['user']->get_level(), $cur_type, 'Your friends:', true);
+                    print_friendsboard($_SESSION['user'], $_SESSION['user']->getLevel(), $cur_type, 'Your friends:', true);
                     ?>
                 </td>
             </tr>

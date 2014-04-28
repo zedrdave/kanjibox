@@ -12,7 +12,7 @@ if (!$_SESSION['user']->get_pref('drill', 'show_learning_stats')) {
 if ($_SESSION['cur_session']) {
     $grade = $_SESSION['cur_session']->get_cur_grade();
 } else {
-    $grade = Question::level_to_grade($_SESSION['user']->get_level());
+    $grade = Question::levelToGrade($_SESSION['user']->getLevel());
 }
 
 require_once ABS_PATH . 'libs/stats_lib.php';

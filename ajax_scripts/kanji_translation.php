@@ -47,7 +47,7 @@ if(@$params['kanji_id']) {
 		
 		echo '<form id="translation_form">';
 		
-		if(!@$_SESSION['cur_session'] || $_SESSION['cur_session']->is_drill())	
+		if(!@$_SESSION['cur_session'] || $_SESSION['cur_session']->isDrill())	
 			echo "<p style=\"font-size:120%;\"><strong>$row->kanji</strong> 【" . $row->prons . "】 [N$row->njlpt]</p>";
 				
 		// echo "<p><img src=\"" . SERVER_URL . "/img/flags/en.png\" alt=\"uk-flag\" style=\"vertical-align:bottom; margin:0 3px 0 0;\" /> <i>$row->gloss_english</i></p>";

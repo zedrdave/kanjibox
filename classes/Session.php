@@ -43,11 +43,11 @@ class Session {
             log_error("Can't instantiate session class: " . $this->question_class, true, true);
 
         if ($this->is_quiz()) {
-            $array = $this->question_loader->get_default_w_sizes();
+            $array = $this->question_loader->getDefaultWSizes();
             $this->session_w_sizes = $array[$_level];
-            $array = $this->question_loader->get_default_w_grades();
+            $array = $this->question_loader->getDefaultWGrades();
             $this->session_w_grades = $array[$_level];
-            $array = $this->question_loader->get_default_w_points();
+            $array = $this->question_loader->getDefaultWPoints();
             $this->session_w_points = $array[$_level];
 
             $this->cur_rank = $_SESSION['user']->get_rank($this->get_type(), true);
@@ -56,7 +56,7 @@ class Session {
         } else
             $this->wave_size = $this->question_loader->default_size;
 
-        $this->wave_grade = $this->question_loader->get_grade();
+        $this->wave_grade = $this->question_loader->getGrade();
 
         $this->cur_wave = 0;
         $this->past_questions = array();
@@ -68,7 +68,7 @@ class Session {
 
     function cleanup_before_destroy() {
         if (@$_SESSION['user'] && $_SESSION['user']->is_logged_in() && $this->question_loader)
-            $this->question_loader->learn_set($_SESSION['user']->getID(), $this->questions);
+            $this->question_loader->learnSet($_SESSION['user']->getID(), $this->questions);
 
         $cleaned_up = true;
     }
@@ -100,7 +100,7 @@ class Session {
                 $skipped++;
             else {
                 $my_questions[] = array($question, $next_sid);
-                $next_sid = $question->get_sid();
+                $next_sid = $question->getSID();
             }
 
         if ($this->is_quiz()) {
@@ -121,10 +121,10 @@ class Session {
             $extra_suf .= '<div style="clear:both"></div></div>';
 
             foreach (array_reverse($my_questions) as $array)
-                $array[0]->display_question(($i++ == 0), $array[1], ($_SESSION['user']->get_pref('quiz', 'show_prog_bar') ? $extra_pref . '<div class="wave ongoing" style="width: ' . ((int) ($skipped + $i - 1) * $scale) . 'px" ></div>' . '<div class="wave pending" style="width: ' . ((int) (count($this->questions) - $skipped - $i + 1) * $scale) . 'px"></div>' . $extra_suf : ''));
+                $array[0]->displayQuestion(($i++ == 0), $array[1], ($_SESSION['user']->get_pref('quiz', 'show_prog_bar') ? $extra_pref . '<div class="wave ongoing" style="width: ' . ((int) ($skipped + $i - 1) * $scale) . 'px" ></div>' . '<div class="wave pending" style="width: ' . ((int) (count($this->questions) - $skipped - $i + 1) * $scale) . 'px"></div>' . $extra_suf : ''));
         } else
             foreach (array_reverse($my_questions) as $array)
-                $array[0]->display_question(($i++ == 0), $array[1]);
+                $array[0]->displayQuestion(($i++ == 0), $array[1]);
 
         echo '<div id="end_of_wave_wait" ' . ($i > 0 ? 'style="display:none;"' : '') . '>
 		<p>Loading next wave, please wait...</p>
@@ -222,20 +222,20 @@ class Session {
 
         if (@$this->questions)
             foreach ($this->questions as $sid => $question) {
-                if (!$question->is_answered())
+                if (!$question->isAnswered())
                     log_error('Wave was discarded before completion: ' . $sid . " not answered\nSession->past_questions: " . print_r($this->past_questions, true), true, false);
                 $this->past_questions[$sid] = time();
             }
 
 
-        $this->questions = $this->question_loader->load_questions($this->wave_size, $this->get_cur_grade());
+        $this->questions = $this->question_loader->loadQuestions($this->wave_size, $this->get_cur_grade());
 
         return true;
     }
 
     function load_next_wave() {
         if (@$_SESSION['user']) {
-            $this->question_loader->learn_set($_SESSION['user']->getID(), $this->questions);
+            $this->question_loader->learnSet($_SESSION['user']->getID(), $this->questions);
             //$_SESSION['user']->update_profile_box();
         }
 
@@ -261,7 +261,7 @@ class Session {
                     <div id="countdown" name="countdown" ></div>
                     <?php
                     insert_js_snippet('init_countdown(' . $this->question_loader->get_quiz_time() . ');');
-                    if (reset($this->questions)->is_asked())
+                    if (reset($this->questions)->isAsked())
                         insert_js_snippet('set_coutdown_to(0);');
                     ?>
                 </td>
@@ -300,13 +300,13 @@ class Session {
             } else
                 return '*duplicate*';
         }
-        elseif ($this->questions[$sid]->is_answered()) {
+        elseif ($this->questions[$sid]->isAnswered()) {
             return '*duplicate*';
         }
 
         if ($answer_id == SKIP_ID)
             $class = 'skipped';
-        elseif ($this->questions[$sid]->is_solution($answer_id))
+        elseif ($this->questions[$sid]->isSolution($answer_id))
             $class = 'correct';
         else
             $class = 'wrong';
@@ -314,13 +314,13 @@ class Session {
         $div_id = 'sol_' . $sid;
         echo '<div id="' . $div_id . '" class="solution ' . $class . '">';
 
-        $this->questions[$sid]->display_correction($answer_id);
+        $this->questions[$sid]->displayCorrection($answer_id);
 
-        $edit_button = $this->questions[$sid]->edit_button_link();
-        if ($this->questions[$sid]->has_feedback_options() || $edit_button) {
+        $edit_button = $this->questions[$sid]->editButtonLink();
+        if ($this->questions[$sid]->hasFeedbackOptions() || $edit_button) {
             echo '<div class="icon-buttons">';
             echo $edit_button;
-            if ($this->questions[$sid]->has_feedback_options())
+            if ($this->questions[$sid]->hasFeedbackOptions())
                 echo '<a class="icon-button ui-state-default ui-corner-all" title="Report a problem with this question..." href="#" onclick="show_feedback_dialog(\'' . SERVER_URL . '\', \'' . $sid . '\'); return false;"><span class="ui-icon ui-icon-comment"></span></a>';
             echo '</div>'; // <div style="clear:both;">
         }
@@ -330,14 +330,14 @@ class Session {
     }
 
     function register_answer($sid, $answer_id, $time = 0) {
-        if (!@$this->questions[$sid] || $this->questions[$sid]->is_answered())
+        if (!@$this->questions[$sid] || $this->questions[$sid]->isAnswered())
             return false;
 
         $this->cur_total++;
-        if ($this->questions[$sid]->register_answer($answer_id, $time))
+        if ($this->questions[$sid]->registerAnswer($answer_id, $time))
             $this->cur_correct++;
         if ($this->is_quiz()) {
-            $score_diff = ceil($this->questions[$sid]->score_coef() * $this->wave_points);
+            $score_diff = ceil($this->questions[$sid]->scoreCoef() * $this->wave_points);
             $this->last_wave_score += $score_diff;
             $this->tot_score = max(0, $this->tot_score + $score_diff);
         }
@@ -366,9 +366,9 @@ class Session {
     function get_success_rate() {
         $tot = $success = 0;
         foreach ($this->questions as $question)
-            if ($question->is_answered()) {
+            if ($question->isAnswered()) {
                 $tot++;
-                if ($question->is_correct())
+                if ($question->isCorrect())
                     $success++;
             }
         if ($tot != 0)
@@ -380,7 +380,7 @@ class Session {
     function get_cur_wave_correct() {
         $tot = 0;
         foreach ($this->questions as $question)
-            if ($question->is_answered() && $question->is_correct())
+            if ($question->isAnswered() && $question->isCorrect())
                 $tot++;
         return $tot;
     }
@@ -429,7 +429,7 @@ class Session {
     }
 
     function get_grade_options() {
-        return $this->question_loader->get_grade_options();
+        return $this->question_loader->getGradeOptions();
     }
 
     function get_params() {
@@ -454,7 +454,7 @@ class Session {
         if (!$_SESSION['user']->is_logged_in() || !isset($this->questions[$sid]))
             return false;
 
-        return $this->questions[$sid]->feedback_form_options();
+        return $this->questions[$sid]->feedbackFormOptions();
     }
 
     function get_set_count() {

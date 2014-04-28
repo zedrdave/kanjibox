@@ -117,7 +117,7 @@ $(function() {
 	if(@$_REQUEST['njlpt'])
 		$njlpt = min(5, max(1, @$_REQUEST['njlpt']));
 	else
-		$njlpt = max(1, $_SESSION['user']->get_level());
+		$njlpt = max(1, $_SESSION['user']->getLevel());
 	$include_below = (@$_REQUEST['include_below'] == 1);
 	
 	$curve_values = array(1500 => 'Very Bad', 1050 => 'Bad', 950 => 'OK', 500 => 'Good', 0 => 'Very Good');

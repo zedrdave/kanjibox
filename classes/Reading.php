@@ -18,13 +18,13 @@ class Reading extends Question {
         parent::__construct($_mode, $_level, $_grade, $_data);
     }
 
-    function display_choices($next_sid = '') {
+    function displayChoices($next_sid = '') {
 
         $submit_url = SERVER_URL . 'ajax/submit_answer/?sid=' . $this->data['sid'] . '&amp;time_created=' . (int) $this->created . '&amp;';
         $choices = $this->data['choices'];
         shuffle($choices);
 
-        if ($this->is_quiz()) {
+        if ($this->isQuiz()) {
             $anticheat = '<div class="cheat-trick" style="display:block;">瞞着 瞞着 瞞着 瞞着 瞞着 瞞着 瞞着 瞞着 瞞着 瞞着 瞞着 瞞着</div>';
         } else {
             $anticheat = '';
@@ -37,21 +37,21 @@ class Reading extends Question {
         echo '<div class="choice skip" onclick="submit_answer(\'' . $this->data['sid'] . '\',  \'' . $next_sid . '\', \'' . $submit_url . 'answer_id=' . SKIP_ID . '\'); return false;">&nbsp;?&nbsp;</div>';
     }
 
-    function display_hint() {
-        $solution = $this->get_solution();
+    function displayHint() {
+        $solution = $this->getSolution();
         echo '<div class="japanese" lang="ja" xml:lang="ja">' . $solution->word . '</div>';
 
-        if (!$this->is_quiz()) {
+        if (!$this->isQuiz()) {
             if ($_SESSION['user']->get_pref('drill', 'show_reading_translation')) {
                 if (@$solution->missing_lang) {
                     echo '<div class="missing_lang">' . $solution->fullgloss;
                     if (!$_SESSION['user']->is_on_translator_probation())
-                        echo ' <a class="" href="#" onclick="show_vocab_translate_dialog(\'' . SERVER_URL . '\', \'' . $solution->id . '\', \'' . $this->data['sid'] . '\'); return false;"><img src="' . SERVER_URL . 'img/flags/' . $_SESSION['user']->get_pref('lang', 'vocab_lang') . '.png" class="missing_lang_icon' . ($this->is_quiz() ? ' disabled' : '') . '" /></a>';
+                        echo ' <a class="" href="#" onclick="show_vocab_translate_dialog(\'' . SERVER_URL . '\', \'' . $solution->id . '\', \'' . $this->data['sid'] . '\'); return false;"><img src="' . SERVER_URL . 'img/flags/' . $_SESSION['user']->get_pref('lang', 'vocab_lang') . '.png" class="missing_lang_icon' . ($this->isQuiz() ? ' disabled' : '') . '" /></a>';
                     echo '</div>';
                 }
                 else {
                     if ($_SESSION['user']->get_pref('lang', 'vocab_lang') != 'en' && substr($solution->fullgloss, 0, 3) == '(~)') {
-                        if ($this->is_quiz())
+                        if ($this->isQuiz())
                             echo '<div class="missing_lang">' . $solution->gloss_english . ' <a class="" href="#" onclick="show_vocab_translate_dialog(\'' . SERVER_URL . '\', \'' . $solution->id . '\', \'' . $this->data['sid'] . '\'); return false;"><img src="' . SERVER_URL . 'img/flags/' . $_SESSION['user']->get_pref('lang', 'vocab_lang') . '.png" class="missing_lang_icon disabled" /></a></div>' . ' <small><em>(incomplete translation)</em></small>';
                         else
                             echo '<div class="missing_lang">' . substr($solution->fullgloss, 3) . ' <a class="" href="#" onclick="show_vocab_translate_dialog(\'' . SERVER_URL . '\', \'' . $solution->id . '\', \'' . $this->data['sid'] . '\'); return false;"><img src="' . SERVER_URL . 'img/flags/' . $_SESSION['user']->get_pref('lang', 'vocab_lang') . '.png" class="missing_lang_icon" /></a></div>  <small><em>(translation may need improving)</em></small>';
@@ -75,12 +75,12 @@ class Reading extends Question {
             return false;
     }
 
-    function display_correction($answer_id) {
+    function displayCorrection($answer_id) {
         $kanjis = array();
-        $solution = $this->get_solution();
+        $solution = $this->getSolution();
 
         $wrong_reading = '';
-        if ($answer_id != SKIP_ID && !$this->is_solution($answer_id))
+        if ($answer_id != SKIP_ID && !$this->isSolution($answer_id))
             foreach ($this->data['choices'] as $choice)
                 if ($choice->id == $answer_id)
                     $wrong_reading = ', <span class="wrong" lang="ja" xml:lang="ja">' . $choice->reading . '</span>';
@@ -97,7 +97,7 @@ class Reading extends Question {
         if (@$solution->missing_lang) {
             echo '<div class="missing_lang">' . $solution->fullgloss;
             if (!$_SESSION['user']->is_on_translator_probation())
-                echo ' <a class="" href="#" onclick="show_vocab_translate_dialog(\'' . SERVER_URL . '\', \'' . $solution->id . '\', \'' . $this->data['sid'] . '\'); return false;"><img src="' . SERVER_URL . 'img/flags/' . $_SESSION['user']->get_pref('lang', 'vocab_lang') . '.png" class="missing_lang_icon' . ($this->is_quiz() ? ' disabled' : '') . '" /></a>';
+                echo ' <a class="" href="#" onclick="show_vocab_translate_dialog(\'' . SERVER_URL . '\', \'' . $solution->id . '\', \'' . $this->data['sid'] . '\'); return false;"><img src="' . SERVER_URL . 'img/flags/' . $_SESSION['user']->get_pref('lang', 'vocab_lang') . '.png" class="missing_lang_icon' . ($this->isQuiz() ? ' disabled' : '') . '" /></a>';
             echo '</div>';
         } else
             echo '<br/> ' . $solution->fullgloss . '<br/>';
@@ -111,14 +111,14 @@ class Reading extends Question {
         }
     }
 
-    function learn_set($user_id, $learning_set, $learn_others = false) {
+    function learnSet($user_id, $learning_set, $learn_others = false) {
         return parent::learn_set($user_id, $learning_set, $learn_others);
     }
 
-    function get_db_data($how_many, $grade, $user_id = -1) {    
-        if ($this->is_quiz() || !empty($_SESSION['user'])) {
+    function getDBData($how_many, $grade, $user_id = -1) {    
+        if ($this->isQuiz() || !empty($_SESSION['user'])) {
             $picks = $this->getRandomReadings($grade, $grade, $how_many);
-        } elseif ($this->is_drill()) {
+        } elseif ($this->isDrill()) {
             $picks = $this->getWeightedReadings($grade, $grade, $how_many);
         } else {
             $picks = $this->getSetWeightedReadings($how_many);
@@ -716,22 +716,22 @@ class Reading extends Question {
         return(@$array[$verb_ending] ? $array[$verb_ending] : $verb_ending);
     }
 
-    function get_grade_options() {
-        if ($this->is_quiz())
+    function getGradeOptions() {
+        if ($this->isQuiz())
             return NULL;
 
         for ($i = 1; $i <= 5; $i++)
-            $options[] = array('grade' => 'N' . $i, 'label' => 'JLPT ' . $i, 'selected' => ($this->get_grade() == 'N' . $i));
+            $options[] = array('grade' => 'N' . $i, 'label' => 'JLPT ' . $i, 'selected' => ($this->getGrade() == 'N' . $i));
 
         return $options;
     }
 
-    function get_solution_id() {
-        $sol = $this->get_solution();
+    function getSolutionID() {
+        $sol = $this->getSolution();
         return $sol->jmdict_id;
     }
 
-    public function get_default_w_sizes() {
+    public function getDefaultWSizes() {
         return array(
             LEVEL_SENSEI => array(4, 6, 6, 6, 10, 10, 10, 5, 10, 5),
             LEVEL_N5 => array(5, 10, 10, 10, 10, 10, 5),
@@ -742,7 +742,7 @@ class Reading extends Question {
         );
     }
 
-    public function get_default_w_grades() {
+    public function getDefaultWGrades() {
         return array(
             LEVEL_SENSEI => array(3, 4, 5, 6, 6, 8, 9, -1, -1, -1),
             LEVEL_N5 => array('N5', 'N5', 1, 'N5', 1, 2, 'N4'),
@@ -780,32 +780,32 @@ class Reading extends Question {
         );
     }
 
-    function edit_button_link() {
+    function editButtonLink() {
         if ($_SESSION['user']->is_on_translator_probation() && !$_SESSION['user']->get_pref('lang', 'translator_mode'))
             return '';
 
         if ($_SESSION['user']->get_pref('lang', 'vocab_lang') != 'en' || $_SESSION['user']->isEditor()) {
-            $solution = $this->get_solution();
+            $solution = $this->getSolution();
 
             return '<a class="icon-button ui-state-default ui-corner-all" title="Languages..." href="#" onclick="show_vocab_translate_dialog(\'' . SERVER_URL . '\', \'' . $solution->jmdict_id . '\', \'' . $this->data['sid'] . '\'); return false;">✍</a>';
         } else
             return '';
     }
 
-    public function feedback_form_options() {
+    public function feedbackFormOptions() {
 
         foreach ($this->data['choices'] as $choice)
             $readings[$choice->reading] = $choice->reading;
 
-        if (!$this->is_quiz())
-            $forms[] = array('type' => 'reading_wrong_level', 'title' => 'Wrong level', 'param_1' => $this->get_solution_id(), 'param_1_title' => 'Reading(s) for \'' . $this->get_solution()->word . '\' do not belong at this JLPT level.', 'param_3_title' => ' Reading (optional):', 'param_3' => $readings, 'param_1_required' => true, 'param_2_required' => false);
+        if (!$this->isQuiz())
+            $forms[] = array('type' => 'reading_wrong_level', 'title' => 'Wrong level', 'param_1' => $this->getSolutionID(), 'param_1_title' => 'Reading(s) for \'' . $this->getSolution()->word . '\' do not belong at this JLPT level.', 'param_3_title' => ' Reading (optional):', 'param_3' => $readings, 'param_1_required' => true, 'param_2_required' => false);
 
-        $forms[] = array('type' => 'reading_other', 'title' => 'Other...', 'param_1' => $this->get_solution_id(), 'param_1_title' => 'Problem on this word', 'param_3_title' => 'with reading (optional):', 'param_3' => $readings, 'param_1_required' => true, 'param_2_required' => false);
+        $forms[] = array('type' => 'reading_other', 'title' => 'Other...', 'param_1' => $this->getSolutionID(), 'param_1_title' => 'Problem on this word', 'param_3_title' => 'with reading (optional):', 'param_3' => $readings, 'param_1_required' => true, 'param_2_required' => false);
 
         return $forms;
     }
 
-    function has_feedback_options() {
+    function hasFeedbackOptions() {
         return true;
     }
 

@@ -172,7 +172,7 @@ require_once ABS_PATH . 'libs/stats_lib.php';
                 echo "<div class=\"mynotice\">You do not have any reading statistics for vocabulary yet. You need to <a href=\"" . get_page_url(PAGE_PLAY, array('type' => 'reading')) . "\">practice</a> a little bit before the charts get updated.</div>";
             }
 
-            $level = $_SESSION['user']->get_level();
+            $level = $_SESSION['user']->getLevel();
             $jlpt_level = $_SESSION['user']->get_njlpt_level();
             echo '<legend>' . $levels[$level] . ($level != $jlpt_level ? '/' . $levels[$jlpt_level] : '') . '</legend>';
 
@@ -181,19 +181,19 @@ require_once ABS_PATH . 'libs/stats_lib.php';
                 echo printKanaLevels($_SESSION['user']->getID(), 710, 'Kana');
             }
             if ($level == $jlpt_level) {
-                $num = Question::level_to_grade($level);
+                $num = Question::levelToGrade($level);
                 $num = $num[1];
                 echo printJLPTLevels($_SESSION['user']->getID(), $num, 710, 'Kanji');
                 echo print_vocab_jlpt_levels($_SESSION['user']->getID(), $num, 710, 'Vocab');
                 echo printReadingJLPTLevels($_SESSION['user']->getID(), $num, 710, 'Reading');
             } else {
-                $num = (int) Question::level_to_grade($level);
+                $num = (int) Question::levelToGrade($level);
                 if ($num > 0) {
                     echo printGradeLevels($_SESSION['user']->getID(), $num, 710, 'Kanji - Grade ' . $num);
                 } else {
                     echo printJLPTLevels($_SESSION['user']->getID(), 1, 710, 'Kanji - N1');
                 }
-                $num = Question::level_to_grade($jlpt_level);
+                $num = Question::levelToGrade($jlpt_level);
                 $num = $num[1];
                 echo print_vocab_jlpt_levels($_SESSION['user']->getID(), $num, 710, 'Vocab - ' . $levels[$jlpt_level]);
                 echo printReadingJLPTLevels($_SESSION['user']->getID(), $num, 710, 'Reading - ' . $levels[$jlpt_level]);

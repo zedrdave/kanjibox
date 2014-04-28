@@ -79,7 +79,7 @@ if(@$params['jmdict_id']) {
 		
 		echo '<form id="translation_form">';
 		
-		if(!@$_SESSION['cur_session'] || $_SESSION['cur_session']->is_drill())	
+		if(!@$_SESSION['cur_session'] || $_SESSION['cur_session']->isDrill())	
 			echo "<p style=\"font-size:120%;\"><strong>$row->word</strong> 【" . $row->reading . "】 [N$row->njlpt , Reading-N$row->njlpt_r]</p>";
 		
 		$english_sense_count = count(preg_split("/$pretty_num_regex/", $row->gloss_english));

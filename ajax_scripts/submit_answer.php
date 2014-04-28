@@ -36,7 +36,7 @@ switch ($class) {
 if (!$_SESSION['user']->get_pref('general', 'auto_vanish'))
     $timeout = 1000 * 120;
 
-$_SESSION['cur_session']->register_answer($sid, $answer_id, $time);
+$_SESSION['cur_session']->registerAnswer($sid, $answer_id, $time);
 $load_next = $_SESSION['cur_session']->all_answered();
 
 if ($load_next)
@@ -47,7 +47,7 @@ $keep_last_n_sols = 2;
 <script type="text/javascript">
 
 <?php
-if ($_SESSION['cur_session']->is_quiz()) {
+if ($_SESSION['cur_session']->isQuiz()) {
     ?>
         $('#score').html("<?php echo $_SESSION['cur_session']->get_score_str() ?>");
 

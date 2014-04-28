@@ -19,13 +19,13 @@ class Kanji extends Question
 	}
 	
 	
-	function display_choices($next_sid = '')
+	function displayChoices($next_sid = '')
 	{
 		$submit_url = SERVER_URL . 'ajax/submit_answer/?sid=' . $this->data['sid'] . '&amp;time_created=' . (int) $this->created . '&amp;';
 		$choices = $this->data['choices'];
 		shuffle($choices);
 		
-		if($this->is_quiz())
+		if($this->isQuiz())
 			$anticheat = '<div class="cheat-trick" style="display:block;">瞞着 瞞着 瞞着</div>';		
 		else
 			$anticheat = '';
@@ -36,9 +36,9 @@ class Kanji extends Question
 		echo '<div class="choice skip" onclick="submit_answer(\'' .  $this->data['sid'] . '\',  \'' . $next_sid . '\', \'' . $submit_url . 'answer_id=' . SKIP_ID .'\'); return false;">&nbsp;?&nbsp;</div>';
 	}
 	
-	function display_hint()
+	function displayHint()
 	{
-		$solution = $this->get_solution();
+		$solution = $this->getSolution();
 		// $solution->mean_str = $this->get_meaning_str($solution->id, $solution->traditional);
 		$mean_str = $solution->mean_str . ($solution->traditional ? ' (旧)' : '');
 		$solution->prons = Kanji::get_pronunciations($solution);
@@ -46,15 +46,15 @@ class Kanji extends Question
 			log_error("Kanji::display_hint() - Empty prons array for id: " . $solution->id);
 
 		echo '<div class="japanese" lang="ja" xml:lang="ja">' . $solution->prons . '</div>';
-		if ($this->is_quiz() || $_SESSION['user']->get_pref('drill', 'show_english')) {
+		if ($this->isQuiz() || $_SESSION['user']->get_pref('drill', 'show_english')) {
 			if(@$solution->missing_lang) {
 				echo '<div class="missing_lang meaning">' . $mean_str;
 				if(! $_SESSION['user']->is_on_translator_probation())
-					echo ' <a class="" href="#" onclick="show_kanji_translate_dialog(\'' . SERVER_URL . '\', \'' . $solution->id . '\', \'' . $this->data['sid'] .'\'); return false;"><img src="' . SERVER_URL . 'img/flags/' . $_SESSION['user']->get_pref('lang', 'kanji_lang') . '.png" class="missing_lang_icon' . ($this->is_quiz() ? ' disabled' : '') . '" /></a>';
+					echo ' <a class="" href="#" onclick="show_kanji_translate_dialog(\'' . SERVER_URL . '\', \'' . $solution->id . '\', \'' . $this->data['sid'] .'\'); return false;"><img src="' . SERVER_URL . 'img/flags/' . $_SESSION['user']->get_pref('lang', 'kanji_lang') . '.png" class="missing_lang_icon' . ($this->isQuiz() ? ' disabled' : '') . '" /></a>';
 				echo '</div>';
 			}
 			elseif($_SESSION['user']->get_pref('lang', 'kanji_lang') != 'en' && substr($mean_str, 0, 3) == '(~)') {
-				if($this->is_quiz())
+				if($this->isQuiz())
 					echo '<div class="missing_lang meaning">' . $solution->meaning_english . ($solution->traditional ? ' (旧)' : '') . ' <a class="" href="#" onclick="show_kanji_translate_dialog(\'' . SERVER_URL . '\', \'' . $solution->id . '\', \'' . $this->data['sid'] .'\'); return false;"><img src="' . SERVER_URL . 'img/flags/' . $_SESSION['user']->get_pref('lang', 'kanji_lang') . '.png" class="missing_lang_icon disabled" /></a>  <br/><small><em>(incomplete translation)</em></small></div>';
 				else
 					echo '<div class="missing_lang meaning">' . substr($mean_str, 3) . ' <a class="" href="#" onclick="show_kanji_translate_dialog(\'' . SERVER_URL . '\', \'' . $solution->id . '\', \'' . $this->data['sid'] .'\'); return false;"><img src="' . SERVER_URL . 'img/flags/' . $_SESSION['user']->get_pref('lang', 'kanji_lang') . '.png" class="missing_lang_icon" /></a> <br/><small><em>(translation may need improving)</em></small></div>';
@@ -67,11 +67,11 @@ class Kanji extends Question
 	}
 	
 	
-	function display_correction($answer_id)
+	function displayCorrection($answer_id)
 	{
-		$show_examples = (!$this->is_quiz() && $_SESSION['user']->get_pref('drill', 'show_examples'));
+		$show_examples = (!$this->isQuiz() && $_SESSION['user']->get_pref('drill', 'show_examples'));
 
-		$solution = $this->get_solution();
+		$solution = $this->getSolution();
 		
 		echo "<span class=\"kanji main\" lang=\"ja\" xml:lang=\"ja\">" . $solution->kanji . "</span> ";
 		echo '✦ <span lang="ja" xml:lang="ja">' . $solution->prons . '</span> ✦ <span class="meaning">' . $solution->mean_str . ($solution->traditional ? ' (旧)' : '') . "</span>";
@@ -80,7 +80,7 @@ class Kanji extends Question
 			if($ex = $this->get_kanji_examples_str($solution->id))
 				echo "<div class=\"example_str\" lang=\"ja\" xml:lang=\"ja\">Ex: " . $ex . '</div>';
 		}
-		if ($answer_id != SKIP_ID && !$this->is_solution($answer_id))
+		if ($answer_id != SKIP_ID && !$this->isSolution($answer_id))
 		{
 			echo "<br/><br/>";
 			
@@ -99,8 +99,8 @@ class Kanji extends Question
 	}
 
 
-	function get_db_data($how_many, $grade, $user_id = -1, $cumulative = false, $options = 0) {
-		if($this->is_quiz()) {
+	function getDBData($how_many, $grade, $user_id = -1, $cumulative = false, $options = 0) {
+		if($this->isQuiz()) {
 			if($cumulative) {
 				if($grade == 'J0' || $grade == '0' || $grade == '-1') //bit of a hack
 					$picks = $this->get_random_kanjis (-1, -1, $how_many * 2);
@@ -110,7 +110,7 @@ class Kanji extends Question
 			else
 				$picks = $this->get_random_kanjis ($grade, $grade, $how_many * 2);			
 		}
-		elseif($this->is_learning_set())
+		elseif($this->isLearningSet())
 			$picks = $this->get_set_weighted_kanjis($user_id, $how_many);
 		else
 			$picks = $this->get_random_weighted_kanjis($user_id, $grade, $grade, $how_many * 2);
@@ -303,7 +303,7 @@ class Kanji extends Question
 	
 	function get_other_kanji($kanji_id, $grade, $exclude = NULL, $how_many = 1, $options = 0) 
 	{
-		if (! $kanji = $this->get_similar_kanjis ($kanji_id, $how_many, $this->get_next_grade($grade), -1, $exclude, '', $options))
+		if (! $kanji = $this->get_similar_kanjis ($kanji_id, $how_many, $this->getNextGrade($grade), -1, $exclude, '', $options))
 			if (! $kanji = $this->get_similar_kanjis($kanji_id, $how_many, -1, -1, $exclude, '', $options))
 				if (! $kanji = $this->get_random_kanjis($grade, $grade, $how_many, $exclude, $options, 0))
 					$kanji = $this->get_random_kanjis($grade, -1, $how_many, $exclude, $options, 0); 
@@ -410,7 +410,7 @@ k.`njlpt`
 	}
 	
 	function update_meaning_str($new_meaning) {
-		$solution = $this->get_solution();
+		$solution = $this->getSolution();
 
 		$solution->mean_str = $new_meaning;
 		$solution->missing_lang = false;
@@ -473,21 +473,21 @@ k.`njlpt`
 		return $str;
 	}
 
-	function get_grade_options()
+	function getGradeOptions()
 	{
-		if($this->is_quiz())
+		if($this->isQuiz())
 			return NULL;
 		
 		for($i = 1; $i <= 5; $i++)
-			$options[] = array('grade' => 'N' . $i, 'label' => 'JLPT '. $i, 'selected' => ($this->get_grade() == 'N' . $i));
+			$options[] = array('grade' => 'N' . $i, 'label' => 'JLPT '. $i, 'selected' => ($this->getGrade() == 'N' . $i));
 
 		for($i = 1; $i <= 9; $i++)
-			$options[] = array('grade' => $i, 'label' => 'Grade '. $i, 'selected' => ($this->get_grade() == $i));
+			$options[] = array('grade' => $i, 'label' => 'Grade '. $i, 'selected' => ($this->getGrade() == $i));
 		
 		return $options;
 	}
 	
-	public function feedback_form_options()
+	public function feedbackFormOptions()
 	{
 
 		foreach($this->data['choices'] as $choice)
@@ -496,7 +496,7 @@ k.`njlpt`
 		
 		$forms[] = array('type' => 'kanji_tradit', 'title' => 'Traditional form of the same kanji', 'param_1' => $kanji_ids, 'param_1_title' => 'This kanji ', 'param_2_title' => ' is the traditional variant of ', 'param_2' => $kanji_ids, 'param_1_required' => true, 'param_2_required' => true);
 
-		if(! $this->is_quiz())
+		if(! $this->isQuiz())
 			$forms[] = array('type' => 'kanji_wrong_level', 'title' => 'Wrong level', 'param_1' => $kanji_ids, 'param_1_title' => 'This kanji doesn\'t belong at this JLPT level:', 'param_1_required' => true, 'param_2_required' => false);
 		
 		$forms[] = array('type' => 'kanji_other', 'title' => 'Other...', 'param_1' => $kanji_ids, 'param_1_title' => 'Kanji 1:', 'param_2_title' => ' - Kanji 2 (optional):', 'param_2' => $kanji_ids, 'param_1_required' => true, 'param_2_required' => false);
@@ -504,13 +504,13 @@ k.`njlpt`
 		return $forms;
 	}
 
-	function has_feedback_options()
+	function hasFeedbackOptions()
 	{
 		return true;
 	}
 
 
-	public function get_default_w_grades()
+	public function getDefaultWGrades()
 	{
 		$array = parent::get_default_w_grades();
 		
@@ -519,13 +519,13 @@ k.`njlpt`
 		return $array;
 	}
 	
-	function edit_button_link()
+	function editButtonLink()
 	{
 		if($_SESSION['user']->is_on_translator_probation() && !$_SESSION['user']->get_pref('lang', 'translator_mode'))
 			return '';
 
 		if($_SESSION['user']->get_pref('lang', 'kanji_lang') != 'en' || $_SESSION['user']->isEditor()) {
-			$solution = $this->get_solution();
+			$solution = $this->getSolution();
 		
 			return '<a class="icon-button ui-state-default ui-corner-all" title="Languages..." href="#" onclick="show_kanji_translate_dialog(\'' . SERVER_URL . '\', \'' . $solution->id . '\', \'' . $this->data['sid'] .'\'); return false;">✍</a>';
 		}

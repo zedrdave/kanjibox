@@ -40,7 +40,7 @@ if (($type == 'text') && !$_SESSION['user']->is_elite()) {
 if (@$params['level'])
     $level = $params['level'];
 elseif ($_SESSION['user']->getID())
-    $level = $_SESSION['user']->get_level();
+    $level = $_SESSION['user']->getLevel();
 else
     $level = LEVEL_N4;
 
@@ -51,7 +51,7 @@ if (isset($_REQUEST['grade']))
     $grade = $_REQUEST['grade'];
 
 if (isset($_SESSION['cur_session']) &&
-        ($_SESSION['cur_session']->get_mode() != $mode || $_SESSION['cur_session']->get_type() != $type || $_SESSION['cur_session']->get_level() != $level || ($_SESSION['cur_session']->is_drill() && isset($grade) && $_SESSION['cur_session']->get_cur_grade() != $grade) || $_SESSION['cur_session']->game_over || @$params['mode'] != $_SESSION['cur_session']->get_mode() || ($_SESSION['cur_session']->get_mode() == SETS_MODE && @$params['set_id'] && $_SESSION['cur_session']->get_set_id() != $params['set_id']) || ($_SESSION['cur_session']->get_mode() == GRAMMAR_SETS_MODE && @$params['set_id'] && $_SESSION['cur_session']->get_set_id() != $params['set_id'])
+        ($_SESSION['cur_session']->get_mode() != $mode || $_SESSION['cur_session']->get_type() != $type || $_SESSION['cur_session']->getLevel() != $level || ($_SESSION['cur_session']->isDrill() && isset($grade) && $_SESSION['cur_session']->get_cur_grade() != $grade) || $_SESSION['cur_session']->game_over || @$params['mode'] != $_SESSION['cur_session']->get_mode() || ($_SESSION['cur_session']->get_mode() == SETS_MODE && @$params['set_id'] && $_SESSION['cur_session']->get_set_id() != $params['set_id']) || ($_SESSION['cur_session']->get_mode() == GRAMMAR_SETS_MODE && @$params['set_id'] && $_SESSION['cur_session']->get_set_id() != $params['set_id'])
         )) {
     $_SESSION['cur_session']->cleanup_before_destroy();
     $_SESSION['cur_session'] = NULL;  //###DEBUG: save session score?

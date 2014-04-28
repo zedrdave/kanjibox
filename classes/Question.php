@@ -22,15 +22,16 @@ abstract class Question {
         if ($this->mode == SETS_MODE) {
             $this->set_id = $_grade_or_set_id;
             $this->set = new LearningSet($this->set_id);
-            $this->grade = $this->level_to_grade($this->level);
+            $this->grade = $this->levelToGrade($this->level);
         } elseif ($this->mode == GRAMMAR_SETS_MODE) {
             $this->set_id = $_grade_or_set_id;
-            $this->grade = $this->level_to_grade($this->level);
+            $this->grade = $this->levelToGrade($this->level);
         } else {
-            if ($_grade_or_set_id >= -1)
+            if ($_grade_or_set_id >= -1) {
                 $this->grade = $_grade_or_set_id;
-            else
-                $this->grade = $this->level_to_grade($this->level);
+            } else {
+                $this->grade = $this->levelToGrade($this->level);
+            }
         }
 
         $this->data = $_data;
@@ -38,177 +39,187 @@ abstract class Question {
         $this->created = time();
     }
 
-    function get_sid() {
+    function getSID() {
         return $this->data['sid'];
     }
 
-    public function is_drill() {
+    public function isDrill() {
         return ($this->mode == DRILL_MODE);
     }
 
-    public function is_quiz() {
+    public function isQuiz() {
         return ($this->mode == QUIZ_MODE);
     }
 
-    public function is_learning_set() {
+    public function isLearningSet() {
         return ($this->mode == SETS_MODE);
     }
 
-    public function is_grammar_set() {
+    public function isGrammarSet() {
         return ($this->mode == GRAMMAR_SETS_MODE);
     }
 
-    abstract function display_choices($next_sid = 0);
+    abstract function displayChoices($next_sid = 0);
 
-    abstract function display_hint();
+    abstract function displayHint();
 
-    function display_question($first = false, $next_sid = '', $insert_html = '') {
+    function displayQuestion($first = false, $next_sid = '', $insert_html = '') {
         $this->asked = true;
-        echo '<div class="question question_' . strtolower(get_class($this)) . '" id="' . $this->get_sid() . '" ' . ($first ? '' : 'style="display:none;"') . ' >';
+        echo '<div class="question question_' . strtolower(get_class($this)) . '" id="' . $this->getSID() . '" ' . ($first ? '' : 'style="display:none;"') . ' >';
         echo $insert_html;
         echo '<div class="choices">';
-        $this->display_choices($next_sid);
+        $this->displayChoices($next_sid);
         echo '<div style="clear:both;"></div></div>';
         echo '<div class="hint">';
-        if ($this->is_quiz() && $this->use_anticheat_on_hint())
+        if ($this->isQuiz() && $this->useAnticheatOnHint()) {
             echo '<div class="cheat-trick" style="display:block;">瞞着 瞞着 瞞着 瞞着 瞞着 瞞着 瞞着 瞞着 瞞着 瞞着 瞞着 瞞着 瞞着 瞞着 瞞着 瞞着 瞞着 瞞着 瞞着 瞞着 瞞着 瞞着 瞞着 瞞着 瞞着 瞞着 瞞着 瞞着 瞞着 瞞着 瞞着 瞞着 瞞着 </div>';
-        $this->display_hint();
+        }
+        $this->displayHint();
         echo '</div>';
 
-        $edit_button = $this->edit_button_link();
-        if ($this->has_feedback_options() || $edit_button) {
+        $edit_button = $this->editButtonLink();
+        if ($this->hasFeedbackOptions() || $edit_button) {
             echo '<div class="icon-buttons">';
             echo $edit_button;
-            if ($this->has_feedback_options())
-                echo '<a class="icon-button ui-state-default ui-corner-all" title="Report a problem with this question..." href="#" onclick="show_feedback_dialog(\'' . SERVER_URL . '\', \'' . $this->get_sid() . '\'); return false;"><span class="ui-icon ui-icon-comment"></span></a>';
+            if ($this->hasFeedbackOptions()) {
+                echo '<a class="icon-button ui-state-default ui-corner-all" title="Report a problem with this question..." href="#" onclick="show_feedback_dialog(\'' . SERVER_URL . '\', \'' . $this->getSID() . '\'); return false;"><span class="ui-icon ui-icon-comment"></span></a>';
+            }
 
-            echo '</div>'; // <div style="clear:both;">
+            echo '</div>';
         }
 
         echo '</div>';
     }
 
-    function use_anticheat_on_hint() {
+    function useAnticheatOnHint() {
         return true;
     }
 
-    function get_solution() {
+    function getSolution() {
         return $this->data['solution'];
     }
 
-    function register_answer($answer_id, $time = 0) {
+    function registerAnswer($answer_id, $time = 0) {
         $this->answered = true;
         $this->answered_id = $answer_id;
-        $this->correct = $this->is_solution($answer_id);
+        $this->correct = $this->isSolution($answer_id);
         $this->time = $time;
         return $this->correct;
     }
 
-    function score_coef() {
-        if (!$this->answered)
+    function scoreCoef() {
+        if (!$this->answered) {
             return 0;
+        }
 
-        if ($this->answered_id == SKIP_ID)
+        if ($this->answered_id == SKIP_ID) {
             return 0;
+        }
 
-        if ($this->correct)
+        if ($this->correct) {
             return min(1, max(0.1, 1.15 * $this->time / $this->get_quiz_time()));
-        else
+        } else {
             return - (min(0.5, max(0.1, 0.62 * $this->time / $this->get_quiz_time())));
+        }
     }
 
-    function is_solution($id) {
-        $sol = $this->get_solution();
+    function isSolution($id) {
+        $sol = $this->getSolution();
         return ($id && ($id == $sol->id));
     }
 
-    function get_solution_id() {
-        $sol = $this->get_solution();
+    function getSolutionID() {
+        $sol = $this->getSolution();
         return $sol->id;
     }
 
-    function display_correction($answer_id) {
+    function displayCorrection($answer_id) {
         echo "### DEBUG: should override this class<br/>";
 
-        if ($answer_id == SKIP_ID)
+        if ($answer_id == SKIP_ID) {
             $class = 'skipped';
-        elseif ($this->is_solution($answer_id))
+        } elseif ($this->isSolution($answer_id)) {
             $class = 'correct';
-        else
+        } else {
             $class = 'wrong';
+        }
 
         echo $class;
     }
 
-    abstract function get_db_data($how_many, $grade, $user_id = -1);
+    abstract function getDBData($how_many, $grade, $user_id = -1);
 
-    function load_questions($how_many, $grade) {
-        if ($this->is_drill() || $this->is_learning_set() || $this->is_grammar_set()) {
+    function loadQuestions($how_many, $grade) {
+        if ($this->isDrill() || $this->isLearningSet() || $this->isGrammarSet()) {
             if ($_SESSION['user']->getID()) {
-                $items = $this->get_db_data($how_many, $grade, $_SESSION['user']->getID());
-            }
-            else {
+                $items = $this->getDBData($how_many, $grade, $_SESSION['user']->getID());
+            } else {
                 force_reload('You need to be logged in order to use drill mode.');
             }
         } else {
-            $items = $this->get_db_data($how_many, $grade);
+            $items = $this->getDBData($how_many, $grade);
         }
 
         if ($items && count($items)) {
             $class_name = get_class($this);
             $questions = array();
-            foreach ($items as $item)
-                $questions[$item['sid']] = new $class_name($this->mode, $this->level, (($this->is_learning_set() || $this->is_grammar_set()) ? $this->set_id : $grade), $item);
+            foreach ($items as $item) {
+                $questions[$item['sid']] = new $class_name($this->mode, $this->level, (($this->isLearningSet() || $this->isGrammarSet()) ? $this->set_id : $grade), $item);
+            }
             return $questions;
-        } else
+        } else {
             return NULL;
+        }
     }
 
-    function get_next_grade($grade) {
+    function getNextGrade($grade) {
         if ($grade[0] == 'N') {
-            if ($grade == 'N1')
+            if ($grade == 'N1') {
                 return -1;
-            else
+            } else {
                 return 'N' . ($grade[1] - 1);
-        }
-        else {
-            if ($grade >= 9)
+            }
+        } else {
+            if ($grade >= 9) {
                 return -1;
-            else
+            } else {
                 return $grade + 1;
+            }
         }
     }
 
-    function learn_set($user_id, $learning_set, $learn_others = true) {
-        if (!$this->is_learnable())
+    function learnSet($user_id, $learning_set, $learn_others = true) {
+        if (!$this->isLearnable()) {
             return true;
+        }
 
-        if (!count($learning_set))
+        if (!count($learning_set)) {
             return false;
-
+        }
         $init_values = $good_ids = $bad_ids = array();
         foreach ($learning_set as $question) {
-            if (!$question->is_answered() || $question->is_learnt())
+            if (!$question->isAnswered() || $question->isLearnt()) {
                 continue;
+            }
 
-            $init_values[] = '(' . $user_id . ', ' . $question->get_solution_id() . ', ' . 'NOW())';
+            $init_values[] = '(' . $user_id . ', ' . $question->getSolutionID() . ', ' . 'NOW())';
 
-            if ($question->is_correct())
-                $good_ids[] = $question->get_solution_id();
-            else {
-                $bad_ids[] = $question->get_solution_id();
-                if ($learn_others && $question->get_answered_id() != SKIP_ID) {
-                    $init_values[] = '(' . $user_id . ', ' . $question->get_answered_id() . ', ' . 'NOW())';
-                    $bad_ids[] = $question->get_answered_id();
+            if ($question->isCorrect()) {
+                $good_ids[] = $question->getSolutionID();
+            } else {
+                $bad_ids[] = $question->getSolutionID();
+                if ($learn_others && $question->getAnsweredID() != SKIP_ID) {
+                    $init_values[] = '(' . $user_id . ', ' . $question->getAnsweredID() . ', ' . 'NOW())';
+                    $bad_ids[] = $question->getAnsweredID();
                 }
             }
 
             $question->learnt = true;
         }
 
-        if (!count($init_values))
+        if (!count($init_values)) {
             return false;
-
+        }
         mysql_query_debug('BEGIN');
         $query = "INSERT IGNORE INTO " . $this->table_learning . " (user_id, " . $this->table_learning_index . ", date_first) VALUES " . implode(',', $init_values);
 
@@ -217,9 +228,6 @@ abstract class Question {
         if (count($bad_ids)) {
             $query = "UPDATE " . $this->table_learning . " SET total = total+1, curve = LEAST(2000, tan(atan(curve/1000-1)+0.15)*1000+1000) where `user_id` = '" . $user_id . "' AND " . $this->table_learning_index . " IN (" . implode(',', $bad_ids) . ")";
             mysql_query_debug($query) or log_db_error($query, false, true);
-
-            // if($_SESSION['user']->is_admin())
-            // 	echo "<pre>$query</pre>";
         }
 
         if (count($good_ids)) {
@@ -231,11 +239,11 @@ abstract class Question {
         return true;
     }
 
-    function get_grade_options() {
+    function getGradeOptions() {
         return NULL;
     }
 
-    static function level_to_grade($_level) {
+    static function levelToGrade($_level) {
         switch ($_level) {
             case LEVEL_1:
                 $grade = 1;
@@ -272,7 +280,7 @@ abstract class Question {
         return $grade;
     }
 
-    static function level_to_num($_level) {
+    static function levelToNum($_level) {
         switch ($_level) {
             case LEVEL_SENSEI:
             // 	$num = 0;
@@ -292,11 +300,11 @@ abstract class Question {
         return $num;
     }
 
-    function get_level_num() {
-        return $this->level_to_num($this->level);
+    function getLevelNum() {
+        return $this->levelToNum($this->level);
     }
 
-    public function get_default_w_sizes() {
+    public function getDefaultWSizes() {
         return array(
             LEVEL_SENSEI => array(4, 6, 6, 6, 10, 15, 15, 5, 10, 5),
             LEVEL_N5 => array(5, 10, 10, 15, 10, 10, 5),
@@ -307,7 +315,7 @@ abstract class Question {
         );
     }
 
-    public function get_default_w_grades() {
+    public function getDefaultWGrades() {
         return array(
             LEVEL_SENSEI => array(3, 4, 5, 6, 6, 8, 9, -1, -1, -1),
             LEVEL_N5 => array('N5', 'N5', 1, 'N5', 1, 2, 'N4'),
@@ -318,7 +326,7 @@ abstract class Question {
         );
     }
 
-    public function get_default_w_points() {
+    public function getDefaultWPoints() {
         return array(
             LEVEL_SENSEI => array(1, 2, 2, 8, 15, 30, 50, 65, 80, 75),
             LEVEL_N5 => array(1, 4, 6, 12, 20, 34, 16),
@@ -329,54 +337,52 @@ abstract class Question {
         );
     }
 
-    public function feedback_form_options() {
-        return "No feedback options for this quiz";
+    public function feedbackFormOptions() {
+        return 'No feedback options for this quiz';
     }
 
-    function has_feedback_options() {
+    function hasFeedbackOptions() {
         return false;
     }
 
-    function edit_button_link() {
+    function editButtonLink() {
         return '';
     }
 
-    static function get_quiz_time() {
+    static function getQuizTime() {
         return 31;
     }
 
-    function is_learnable() {
+    function isLearnable() {
         return $this->learnable;
     }
 
-    function is_correct() {
+    function isCorrect() {
         return $this->correct;
     }
 
-    function is_answered() {
+    function isAnswered() {
         return $this->answered;
     }
 
-    function is_asked() {
+    function isAsked() {
         return $this->asked;
     }
 
-    function is_learnt() {
+    function isLearnt() {
         return $this->learnt;
     }
 
-    function get_answered_id() {
+    function getAnsweredID() {
         return $this->answered_id;
     }
 
-    function get_level() {
+    function getLevel() {
         return $this->level;
     }
 
-    function get_grade() {
+    function getGrade() {
         return $this->grade;
     }
 
 }
-
-?>

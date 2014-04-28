@@ -16,14 +16,14 @@ class Vocab extends Question
 	}
 	
 
-	function display_choices($next_sid = '')
+	function displayChoices($next_sid = '')
 	{
 		$submit_url = SERVER_URL . 'ajax/submit_answer/?sid=' . $this->data['sid'] . '&amp;time_created=' . (int) $this->created . '&amp;';
 
 		$choices = $this->data['choices'];
 		shuffle($choices);
 
-		if($this->is_quiz())
+		if($this->isQuiz())
 			$anticheat = '<div class="cheat-trick" style="display:block;">瞞着 瞞着 瞞着 瞞着 瞞着 瞞着 瞞着 瞞着 瞞着 瞞着 瞞着 瞞着</div>';		
 		else
 			$anticheat = '';
@@ -40,10 +40,10 @@ class Vocab extends Question
 			
 						
 				if ($choice->word != $choice->reading && !$choice->katakana
-						&& ((!$this->is_quiz() 
+						&& ((!$this->isQuiz() 
 								&& $reading_pref != 'never'
-								&& ($reading_pref == 'always' || $this->is_above_level($this->get_grade(), $choice->njlpt_r)))
-							|| ($this->is_quiz() && $this->is_above_level($this->level_to_grade($this->get_level()), $choice->njlpt_r))))
+								&& ($reading_pref == 'always' || $this->is_above_level($this->getGrade(), $choice->njlpt_r)))
+							|| ($this->isQuiz() && $this->is_above_level($this->level_to_grade($this->getLevel()), $choice->njlpt_r))))
 					echo '<div class="furigana">' . $choice->reading . "</div>"; 
 
 				echo '</div>';
@@ -54,18 +54,18 @@ class Vocab extends Question
 		echo '<div class="choice skip" onclick="submit_answer(\'' .  $this->data['sid'] . '\',  \'' . $next_sid . '\', \'' . $submit_url . 'answer_id=' . SKIP_ID .'\'); return false;">&nbsp;?&nbsp;</div>';
 	}
 	
-	function display_hint()
+	function displayHint()
 	{
-		$solution = $this->get_solution();
+		$solution = $this->getSolution();
 		if(@$solution->missing_lang) {
 			echo '<div class="missing_lang">' . $solution->fullgloss;
 			if(! $_SESSION['user']->is_on_translator_probation())
-			 	echo ' <a class="" href="#" onclick="show_vocab_translate_dialog(\'' . SERVER_URL . '\', \'' . $solution->id . '\', \'' . $this->data['sid'] .'\'); return false;"><img src="' . SERVER_URL . 'img/flags/' . $_SESSION['user']->get_pref('lang', 'vocab_lang') . '.png" class="missing_lang_icon' . ($this->is_quiz() ? ' disabled' : '') . '" /></a>';
+			 	echo ' <a class="" href="#" onclick="show_vocab_translate_dialog(\'' . SERVER_URL . '\', \'' . $solution->id . '\', \'' . $this->data['sid'] .'\'); return false;"><img src="' . SERVER_URL . 'img/flags/' . $_SESSION['user']->get_pref('lang', 'vocab_lang') . '.png" class="missing_lang_icon' . ($this->isQuiz() ? ' disabled' : '') . '" /></a>';
 			echo '</div>';
 		}
 		else {
 			if($_SESSION['user']->get_pref('lang', 'vocab_lang') != 'en' && substr($solution->fullgloss, 0, 3) == '(~)') {
-				if($this->is_quiz())
+				if($this->isQuiz())
 					echo '<div class="missing_lang">' . $solution->gloss_english . ' <a class="" href="#" onclick="show_vocab_translate_dialog(\'' . SERVER_URL . '\', \'' . $solution->id . '\', \'' . $this->data['sid'] .'\'); return false;"><img src="' . SERVER_URL . 'img/flags/' . $_SESSION['user']->get_pref('lang', 'vocab_lang') . '.png" class="missing_lang_icon disabled" /></a></div>' . ' <small><em>(incomplete translation)</em></small>';
 				else
 					echo '<div class="missing_lang">' . substr($solution->fullgloss, 3) . ' <a class="" href="#" onclick="show_vocab_translate_dialog(\'' . SERVER_URL . '\', \'' . $solution->id . '\', \'' . $this->data['sid'] .'\'); return false;"><img src="' . SERVER_URL . 'img/flags/' . $_SESSION['user']->get_pref('lang', 'vocab_lang') . '.png" class="missing_lang_icon" /></a></div>  <small><em>(translation may need improving)</em></small>';
@@ -87,13 +87,13 @@ class Vocab extends Question
 	}
 
 	
-	function display_correction($answer_id)
+	function displayCorrection($answer_id)
 	{
 		$kanjis = array();
-		$solution = $this->get_solution();
+		$solution = $this->getSolution();
 		$encoding = mb_detect_encoding($solution->word);
 		
-		if ($answer_id != SKIP_ID && !$this->is_solution($answer_id))
+		if ($answer_id != SKIP_ID && !$this->isSolution($answer_id))
 		{
 			if (! $wrong = $this->get_vocab_id((int) $answer_id))
 				log_error('Unknown Vocab ID: ' . $answer_id, true, true);			
@@ -110,8 +110,8 @@ class Vocab extends Question
 		
 		echo '<span class="main" lang="ja" xml:lang="ja">' . $display_word_solution . "</span> " . (($solution->reading != $solution->word && !$solution->katakana && $display_word_solution != $solution->reading)? " [" . $solution->reading . "]" : '') .  ' <a href="#" onclick="play_tts(\'' . $audio_lookup . '\', \'' . get_audio_hash($audio_lookup) . '\'); return false;" class="tts-link"><img src="' . SERVER_URL . '/img/speaker.png" alt="play"/></a>' . " - " . $solution->fullgloss;
 		
-		if($this->is_learning_set() && $this->set->can_edit())
-			echo '<a class="remove-from-set" title="Remove from set" href="#" onclick="remove_entry_from_set(\'' . SERVER_URL . 'ajax/edit_learning_set/\', ' . $this->set_id . ', ' . $this->get_solution()->id . ', \'#ajax-result\'); return false;">【×】</a>' . "\n";
+		if($this->isLearningSet() && $this->set->can_edit())
+			echo '<a class="remove-from-set" title="Remove from set" href="#" onclick="remove_entry_from_set(\'' . SERVER_URL . 'ajax/edit_learning_set/\', ' . $this->set_id . ', ' . $this->getSolution()->id . ', \'#ajax-result\'); return false;">【×】</a>' . "\n";
 		
 		//Example sentence:
 		$query = "SELECT e.example_str, e.english AS example_english, e.example_id, ep.pos_start, ep.pos_end FROM example_parts ep LEFT JOIN examples e ON e.example_id = ep.example_id WHERE ep.jmdict_id = " . (int) $solution->id . " ORDER BY ep.prime_example DESC, e.njlpt DESC, e.njlpt_r DESC, RAND() LIMIT 1";
@@ -137,11 +137,11 @@ class Vocab extends Question
 	}
 
 
-	function get_db_data($how_many, $grade, $user_id = -1)
+	function getDBData($how_many, $grade, $user_id = -1)
 	{
-		if($this->is_quiz())
+		if($this->isQuiz())
 			$picks = $this->get_random_vocab ($grade, $grade, $how_many);
-		elseif($this->is_learning_set())
+		elseif($this->isLearningSet())
 			$picks = $this->get_set_weighted_vocab($user_id, $how_many);
 		else
 			$picks = $this->get_random_weighted_vocab($user_id, $grade, $grade, $how_many);
@@ -451,18 +451,18 @@ class Vocab extends Question
 		  return mysql_fetch_object($res);
 	}
 
-	function get_grade_options()
+	function getGradeOptions()
 	{
-		if($this->is_quiz())
+		if($this->isQuiz())
 			return NULL;
 		
 		for($i = 1; $i <= 5; $i++)
-			$options[] = array('grade' => 'N' . $i, 'label' => 'JLPT '. $i, 'selected' => ($this->get_grade() == 'N' . $i));
+			$options[] = array('grade' => 'N' . $i, 'label' => 'JLPT '. $i, 'selected' => ($this->getGrade() == 'N' . $i));
 		
 		return $options;
 	}
 	
-	public function get_default_w_grades()
+	public function getDefaultWGrades()
 	{
 		$array = parent::get_default_w_grades();
 		
@@ -471,7 +471,7 @@ class Vocab extends Question
 		return $array;
 	}
 
-	public function feedback_form_options()
+	public function feedbackFormOptions()
 	{
 		foreach($this->data['choices'] as $choice)
 			$words[$choice->id] = $choice->word;
@@ -480,7 +480,7 @@ class Vocab extends Question
 		
 		$forms[] = array('type' => 'vocab_furigana', 'title' => 'Need furigana at this level', 'param_1' => $words, 'param_1_title' => 'This word should have furigana at this JLPT level:', 'param_1_required' => true, 'param_2_required' => false);
 
-		if(! $this->is_quiz())
+		if(! $this->isQuiz())
 			$forms[] = array('type' => 'vocab_wrong_level', 'title' => 'Wrong level', 'param_1' => $words, 'param_1_title' => 'This word doesn\'t belong at this JLPT level:', 'param_1_required' => true, 'param_2_required' => false);
 		
 		$forms[] = array('type' => 'vocab_other', 'title' => 'Other...', 'param_1' => $words, 'param_1_title' => 'Word 1:', 'param_2_title' => ' - Word 2 (optional):', 'param_2' => $words, 'param_1_required' => true, 'param_2_required' => false);
@@ -488,18 +488,18 @@ class Vocab extends Question
 		return $forms;
 	}
 
-	function has_feedback_options()
+	function hasFeedbackOptions()
 	{
 		return true;
 	}
 	
-	function edit_button_link()
+	function editButtonLink()
 	{
 		if($_SESSION['user']->is_on_translator_probation() && !$_SESSION['user']->get_pref('lang', 'translator_mode'))
 			return '';
 		
 		if($_SESSION['user']->get_pref('lang', 'vocab_lang') != 'en' || $_SESSION['user']->isEditor()) {
-			$solution = $this->get_solution();
+			$solution = $this->getSolution();
 		
 			return '<a class="icon-button ui-state-default ui-corner-all" title="Languages..." href="#" onclick="show_vocab_translate_dialog(\'' . SERVER_URL . '\', \'' . $solution->id . '\', \'' . $this->data['sid'] .'\'); return false;">✍</a>';
 		}

@@ -13,11 +13,11 @@ if(! @$_SESSION['cur_session'])
 
 $_SESSION['cur_session']->load_next_wave();
 
-if(!$_SESSION['cur_session']->is_quiz() && $_SESSION['user']->is_logged_in() && $_SESSION['user']->get_pref('drill', 'show_learning_stats'))
+if(!$_SESSION['cur_session']->isQuiz() && $_SESSION['user']->is_logged_in() && $_SESSION['user']->get_pref('drill', 'show_learning_stats'))
 {
 ?>
 	<script type="text/javascript">
-		do_load('<?php echo SERVER_URL . 'ajax/footer_stats_bar/type/' . $_SESSION['cur_session']->get_type() . ($_SESSION['cur_session']->is_learning_set() ? '/mode/' . SETS_MODE : ''); ?>/', 'footer-stats'); 
+		do_load('<?php echo SERVER_URL . 'ajax/footer_stats_bar/type/' . $_SESSION['cur_session']->get_type() . ($_SESSION['cur_session']->isLearningSet() ? '/mode/' . SETS_MODE : ''); ?>/', 'footer-stats'); 
 	</script>
 <?php
 }
