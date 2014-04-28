@@ -1,3 +1,4 @@
+
 Options -indexes
 
 RewriteEngine on
@@ -9,3 +10,5 @@ RewriteRule ^audio/([^/]*)/?(.*)?$ audio.php?string=$1&hash=$2 [L,QSA]
 RewriteRule ^set/([^/]*)/(.*)?$ set.php?set_id=$1&params=$2 [L,QSA]
 RewriteRule ^sets/?(.*)?$ set.php?params=$1 [L,QSA]
 RewriteRule ^decks/(.*)?$ decks.php?$1 [L,QSA]
+
+RedirectMatch 404 /\.git
