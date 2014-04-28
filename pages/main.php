@@ -178,8 +178,8 @@ if ($lang_kanji != 'en') {
     if ($_SESSION['user']->get_fb_id() == 0 || $_SESSION['user']->get_first_name() == '') {
         ?>
         <p id="set-name-link">Name (<em>optional</em>): <span class="name_info" id="first_name"><?php echo $_SESSION['user']->get_first_name() ?></span> <span class="name_info" id="last_name"><?php echo $_SESSION['user']->get_last_name() ?></span> <a href="#" onclick="$('#set-name').show();
-                    $('#set-name-link').hide();
-                    return false;">[change name]</a></p>
+                $('#set-name-link').hide();
+                return false;">[change name]</a></p>
         <form id="set-name" class="update-login" action="<?php echo SERVER_URL ?>ajax/update_login_info/" method="post">
             <input type="text" name="set_first_name" id="set_first_name" size="16" placeholder="First Name"/> <input type="text" name="set_last_name" id="set_last_name" size="16" placeholder="Last Name"/> <input type="submit" name="change-name" value="Save" />
         </form>
@@ -401,20 +401,11 @@ if ($_SESSION['user']->is_pwd_empty()) {
 <hr/>
 <?php
 if (!empty($_SESSION['user'])) {
-    $query = 'SELECT COUNT(*) FROM `messages` WHERE msg_read = 1 AND user_id_to = :id';
-    try {
-        $stmt = $dbh->prepare($query);
-        $stmt->bindValue(':id', $_SESSION['user']->getID());
-        $stmt->execute();
-        $messagesCount = $stmt->fetchColumn();
-    } catch (PDOException $e) {
-        log_db_error($query, false, true);
-    }
-
+    $messagesCount = DB::count('SELECT COUNT(*) FROM `messages` WHERE msg_read = 1 AND user_id_to = ?', [$_SESSION['user']->getID()]);
     if ($messagesCount > 0) {
         ?>
         <h2><a href="#" onclick="do_load('<?php echo SERVER_URL ?>ajax/get_messages/show/read/', 'old-kb-msgs');
-                        return false;">Past Messages</a></h2>
+                return false;">Past Messages</a></h2>
         <div id="old-kb-msgs"></div>
         <hr/>
         <?php

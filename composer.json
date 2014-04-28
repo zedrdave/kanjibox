@@ -1,0 +1,13 @@
+{
+    "name": "vendor/kanji-box",
+    "description": "KanjiBox.",
+    "authors": [
+        {
+            "name": "sachatelgenhofoudekoehorst",
+            "email": "your@email.here"
+        }
+    ],
+    "require": {
+    },
+    "minimum-stability": "stable"
+}
