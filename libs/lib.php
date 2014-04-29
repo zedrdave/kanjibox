@@ -69,7 +69,7 @@ function init_app($ajax = false) {
         $_SESSION['user']->inc_load_count();
         $_SESSION['user']->set_logged_in(true);
         $levels = Session::$level_names;
-        if (!in_array($_SESSION['user']->get_level(), $levels)) {
+        if (!in_array($_SESSION['user']->getLevel(), $levels)) {
             $_SESSION['user']->update_level($_SESSION['user']->get_njlpt_level());
         }
 

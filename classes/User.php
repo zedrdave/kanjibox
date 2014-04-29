@@ -129,7 +129,7 @@ class User {
             $this->prefs = array();
         }
 
-        $cur_level = $this->get_level();
+        $cur_level = $this->getLevel();
         if ($cur_level == LEVEL_1 || $cur_level == LEVEL_2 || $cur_level == LEVEL_3 || $cur_level == LEVEL_J1 || $cur_level == LEVEL_J2 || $cur_level == LEVEL_J3 || $cur_level == LEVEL_J4) {
             $this->data->level = $this->get_njlpt_level();
         }
@@ -227,7 +227,7 @@ class User {
         $query = 'UPDATE `users` SET `level` = :level, `active` = :active WHERE `id` = :id';
         try {
             $stmt = DB::getConnection()->prepare($query);
-            $stmt->bindValue(':level', $this->get_level());
+            $stmt->bindValue(':level', $this->getLevel());
             $stmt->bindValue(':active', (int) ($this->is_logged_in()));
             $stmt->bindValue(':id', $this->getID());
             $stmt->execute();
@@ -281,7 +281,7 @@ class User {
         $text = '<fb:ref handle="global_announcement" />';
         $text .= '<fb:ref handle="profile_css" />';
 
-        $text .= "<p class=\"summary\"><fb:name firstnameonly=\"true\" uid=\"$fb_id\" useyou=\"false\" capitalize=\"true\" /> is training at level: <strong>" . $levels[$this->get_level()] . "</strong> on <a href=\"" . get_page_url() . "\">Kanji Box</a>.</p>";
+        $text .= "<p class=\"summary\"><fb:name firstnameonly=\"true\" uid=\"$fb_id\" useyou=\"false\" capitalize=\"true\" /> is training at level: <strong>" . $levels[$this->getLevel()] . "</strong> on <a href=\"" . get_page_url() . "\">Kanji Box</a>.</p>";
 
         $query = 'SELECT SUM(c) as c FROM ((SELECT COUNT(*) as c FROM learning l WHERE l.user_id = ' . (int) $this->getID() . ' LIMIT 1) UNION (SELECT COUNT(*) as c FROM jmdict_learning jl WHERE jl.user_id = ' . (int) $this->getID() . ' LIMIT 1) UNION (SELECT COUNT(*) as c FROM reading_learning rl WHERE rl.user_id = ' . (int) $this->getID() . ' LIMIT 1)) as t';
 
@@ -294,7 +294,7 @@ class User {
             foreach (array('kanji' => 'Kanji', 'vocab' => 'Vocabulary', 'reading' => 'Reading') as $type => $type_desc) {
                 $text .= '<fieldset class="profile-box"><legend><a href="' . get_page_url(PAGE_PLAY, array('type' => $type, 'mode' => QUIZ_MODE)) . '">' . $type_desc . '</a></legend>';
 
-                $game = $this->getHighscore($this->get_level(), $type);
+                $game = $this->getHighscore($this->getLevel(), $type);
                 if ($game) {
                     $rank = $this->get_rank($type);
                     $text .= '<div class="game">';
@@ -319,11 +319,11 @@ class User {
                 $narrow_bar = 145;
                 switch ($type) {
                     case 'kanji':
-                        if ($this->get_level() == $jlpt_level) {
+                        if ($this->getLevel() == $jlpt_level) {
                             $big = printJLPTLevels($this->getID(), $jlpt_level, $wide_bar, 'Learning stats - ' . $jlpt_level);
                             $small = printJLPTLevels($this->getID(), $jlpt_level, $narrow_bar, 'Learning stats - ' . $jlpt_level);
                         } else {
-                            $num = (int) Question::levelToGrade($this->get_level());
+                            $num = (int) Question::levelToGrade($this->getLevel());
                             if ($num > 0) {
                                 $big = printGradeLevels($this->getID(), $num, $wide_bar, 'Learning stats - Grade ' . $num);
                                 $small = printGradeLevels($this->getID(), $num, $narrow_bar, 'Learning stats - Grade ' . $num);
@@ -401,9 +401,9 @@ class User {
         $levels = Session::$level_names;
 
         if ($this->data->first_name)
-            $description = $this->data->first_name . ($just_now ? ' just' : '') . ' reached the glorious rank of ' . $rank->pretty_name . ' (' . $levels[$this->get_level()] . ' ' . ucfirst($type) . ' division) in KanjiBox!';
+            $description = $this->data->first_name . ($just_now ? ' just' : '') . ' reached the glorious rank of ' . $rank->pretty_name . ' (' . $levels[$this->getLevel()] . ' ' . ucfirst($type) . ' division) in KanjiBox!';
         else
-            $description = 'I' . ($just_now ? ' just' : '') . ' reached the glorious rank of ' . $rank->pretty_name . ' (' . $levels[$this->get_level()] . ' ' . ucfirst($type) . ' division) in KanjiBox!';
+            $description = 'I' . ($just_now ? ' just' : '') . ' reached the glorious rank of ' . $rank->pretty_name . ' (' . $levels[$this->getLevel()] . ' ' . ucfirst($type) . ' division) in KanjiBox!';
 
 
         try {
@@ -493,7 +493,7 @@ class User {
         try {
             $stmt = DB::getConnection()->prepare($query);
             $stmt->bindValue(':id', $this->getID());
-            $stmt->bindValue(':level', $this->get_level());
+            $stmt->bindValue(':level', $this->getLevel());
             $stmt->bindValue(':type', $type);
             $stmt->execute();
 
@@ -514,20 +514,20 @@ class User {
                     $rank = mysql_fetch_object($res);
 
                     if (!$rank) {
-                        log_error("Can't get quick rank for user: " . $this->getID() . ", level: " . $this->get_level() . ", type: $type", true, true);
+                        log_error("Can't get quick rank for user: " . $this->getID() . ", level: " . $this->getLevel() . ", type: $type", true, true);
                     }
 
                     $query = 'INSERT INTO ranking SET last_updated = NOW(), user_id = ' . $this->getID() . ', game_id = ' . (int) $rank->game_id . ', type = \'' . $rank->type . '\', level=\'' . $rank->level . '\', rank = ' . $rank->rank;
                     mysql_query_debug($query) or log_db_error($query, true, true);
                 }
             } else {
-                resetRankings($this->get_level(), $type);
+                resetRankings($this->getLevel(), $type);
                 // *** Function? as twice used...
                 $query = 'SELECT r.rank, r.type, r.level, TIMESTAMPDIFF(SECOND, r.last_updated, NOW()) AS age, r.last_updated FROM ranking r LEFT JOIN games g ON g.id = r.game_id WHERE r.user_id = :id AND r.level = :level AND r.type = :type';
                 try {
                     $stmt = DB::getConnection()->prepare($query);
                     $stmt->bindValue(':id', $this->getID());
-                    $stmt->bindValue(':level', $this->get_level());
+                    $stmt->bindValue(':level', $this->getLevel());
                     $stmt->bindValue(':type', $type);
                     $stmt->execute();
 
@@ -537,19 +537,19 @@ class User {
                 }
 
                 if ($rank && $expired_time > 10 && $rank->age > $expired_time) {
-                    log_error('Can\'t update ranking for level: ' . $this->get_level() . ", type: $type \n rank: " . print_r($rank, true) . "\n expired_time: $expired_time \n query: $query", true);
+                    log_error('Can\'t update ranking for level: ' . $this->getLevel() . ", type: $type \n rank: " . print_r($rank, true) . "\n expired_time: $expired_time \n query: $query", true);
                 }
             }
         }
 
         if ($rank) {
-            $rank->tot_count = max(1, getTotalRankCounts($this->get_level(), $type));
+            $rank->tot_count = max(1, getTotalRankCounts($this->getLevel(), $type));
             $rank->name_array = $this->get_rank_name_array($rank->rank, $rank->tot_count);
             $rank->pretty_name = $rank->name_array[1];
             $rank->short_name = $rank->name_array[0];
         } else { // default ranking
             $rank = new stdClass();
-            $rank->tot_count = max(1, getTotalRankCounts($this->get_level(), $type));
+            $rank->tot_count = max(1, getTotalRankCounts($this->getLevel(), $type));
             $rank->rank = $rank->tot_count;
             $rank->name_array = $this->get_rank_name_array($rank->rank, $rank->tot_count);
             $rank->pretty_name = $rank->name_array[1];
@@ -595,7 +595,7 @@ class User {
 
             try {
                 $stmt = DB::getConnection()->prepare($query);
-                $stmt->bindValue(':level', $this->get_level());
+                $stmt->bindValue(':level', $this->getLevel());
                 $stmt->bindValue(':type', $type);
                 $stmt->bindValue(':id', $this->getID());
                 $stmt->execute();
@@ -656,7 +656,7 @@ class User {
     }
 
     function get_best_game($type) {
-        $query = 'SELECT r.*, g.*, g.date_started AS date_played, TIMEDIFF(g.date_ended, g.date_started) AS duration FROM ranking  r JOIN games g ON g.id = r.game_id WHERE r.user_id = ' . (int) $this->getID() . ' AND r.level = \'' . mysql_real_escape_string($this->get_level()) . '\' AND r.type = \'' . mysql_real_escape_string($type) . '\' LIMIT 1';
+        $query = 'SELECT r.*, g.*, g.date_started AS date_played, TIMEDIFF(g.date_ended, g.date_started) AS duration FROM ranking  r JOIN games g ON g.id = r.game_id WHERE r.user_id = ' . (int) $this->getID() . ' AND r.level = \'' . mysql_real_escape_string($this->getLevel()) . '\' AND r.type = \'' . mysql_real_escape_string($type) . '\' LIMIT 1';
 
         $res = mysql_query_debug($query) or log_db_error($query);
 
@@ -674,7 +674,7 @@ class User {
     }
 
     function get_njlpt_level() {
-        return old_to_new_jlpt($this->get_level());
+        return old_to_new_jlpt($this->getLevel());
     }
 
     function is_logged_in() {
@@ -863,7 +863,7 @@ class User {
         return $this->data->login_pwd == '';
     }
 
-    function get_level() {
+    function getLevel() {
         return $this->data->level;
     }
 

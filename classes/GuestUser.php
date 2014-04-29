@@ -42,7 +42,7 @@ class GuestUser extends User {
         return 'Guest User';
     }
 
-    function get_level() {
+    function getLevel() {
         return 5;
     }
 
