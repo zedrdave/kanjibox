@@ -254,7 +254,7 @@ abstract class Question
 
             if (count($good_ids)) {
                 $stmt = $dbh->prepare('UPDATE ' . $this->table_learning . ' SET total = total+1, curve = GREATEST(100, tan(atan(curve/1000-1)-0.2)*1000+1000) where `user_id` = ? AND ' . $this->table_learning_index . ' IN (' . implode(',',
-                        $good_ids) . ")");
+                        $good_ids) . ')');
                 $stmt->execute([$user_id]);
             }
 
