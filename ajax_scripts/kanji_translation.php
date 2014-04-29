@@ -22,7 +22,7 @@ if(isset($_REQUEST['update'])) {
 	$ret = post_db_correction('kanjis_ext', 'kanji_id', $kanji_id, 'meaning_' . Vocab::$lang_strings[$lang], $new_gloss, true);
 	
 	if(@$_SESSION['cur_session'] && $q = $_SESSION['cur_session']->get_question(@$_REQUEST['sid']))
-		$q->update_meaning_str($new_gloss);
+		$q->updateMeaningStr($new_gloss);
 	
 	echo '<div>';
 	if($ret != 'Value unchanged')

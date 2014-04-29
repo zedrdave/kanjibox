@@ -418,7 +418,6 @@ k.`njlpt`
     public function getKanjiID($id)
     {
         $query = 'SELECT `id`, `kanji`, `traditional`, `prons`, ' . Kanji::get_query_meaning() . ' FROM `kanjis` k LEFT JOIN kanjis_ext kx ON kx.kanji_id = k.id WHERE `id` = :id';
-
         try {
             $stmt = DB::getConnection()->prepare($query);
             $stmt->bindValue(':id', id, PDO::PARAM_INT);
@@ -430,33 +429,51 @@ k.`njlpt`
         }
     }
 
-    public function get_kanji($kanji)
+    public function getKanji($kanji)
     {
-        $query = "SELECT `id`, `kanji`, `traditional`, `prons`, " . Kanji::get_query_meaning() . " FROM `kanjis` k LEFT JOIN kanjis_ext kx ON kx.kanji_id = k.id WHERE `kanji` = '" . mysql_real_escape_string($kanji) . "'";
+        $query = 'SELECT `id`, `kanji`, `traditional`, `prons`, ' . Kanji::get_query_meaning() . ' FROM `kanjis` k LEFT JOIN kanjis_ext kx ON kx.kanji_id = k.id WHERE `kanji` = :kanji';
+        try {
+            $stmt = DB::getConnection()->prepare($query);
+            $stmt->bindValue(':kanji', $kanji, PDO::PARAM_STR);
+            $stmt->execute();
 
-        $res = mysql_query_debug($query) or log_db_error($query, true, true);
-        return mysql_fetch_object($res);
+            return $stmt->fetchObject();
+        } catch (PDOException $e) {
+            log_db_error($query, $e->getMessage(), true, true);
+        }
     }
 
-    public function update_meaning_str($new_meaning)
+    public function updateMeaningStr($new_meaning)
     {
         $solution = $this->getSolution();
-
         $solution->mean_str = $new_meaning;
         $solution->missing_lang = false;
     }
 
     public static function get_meaning_str($id, $trad = false)
     {
-        $query = "SELECT `meaning` FROM `english` WHERE `kanji_id` = '" . (int) $id . "' LIMIT 3";
+        $query = 'SELECT `meaning` FROM `english` WHERE `kanji_id` = :id LIMIT 3';
+        $meanings = [];
+        try {
+            $stmt = DB::getConnection()->prepare($query);
+            $stmt->bindValue(':id', $id, PDO::PARAM_INT);
+            $stmt->execute();
 
-        $res = mysql_query_debug($query) or log_db_error($query, true, true);
+            $meanings = $stmt->fetchAll(PDO::FETCH_CLASS);
+        } catch (PDOException $e) {
+            log_db_error($query, $e->getMessage(), true, true);
+        }
 
-        $meanings = array();
-        while ($row = mysql_fetch_object($res))
-            $meanings[] = $row->meaning;
 
-        return implode(", ", $meanings) . ($trad ? ' (traditional)' : '');
+
+        /*
+          $query = "SELECT `meaning` FROM `english` WHERE `kanji_id` = '" . (int) $id . "' LIMIT 3";
+          $res = mysql_query_debug($query) or log_db_error($query, true, true);
+          $meanings = array();
+          while ($row = mysql_fetch_object($res))
+          $meanings[] = $row->meaning;
+         */
+        return implode(', ', $meanings) . ($trad ? ' (traditional)' : '');
     }
 
     public static function get_pronunciations($db_rec)
@@ -521,9 +538,9 @@ k.`njlpt`
 
         $forms[] = array('type' => 'kanji_tradit', 'title' => 'Traditional form of the same kanji', 'param_1' => $kanji_ids, 'param_1_title' => 'This kanji ', 'param_2_title' => ' is the traditional variant of ', 'param_2' => $kanji_ids, 'param_1_required' => true, 'param_2_required' => true);
 
-        if (!$this->isQuiz())
+        if (!$this->isQuiz()) {
             $forms[] = array('type' => 'kanji_wrong_level', 'title' => 'Wrong level', 'param_1' => $kanji_ids, 'param_1_title' => 'This kanji doesn\'t belong at this JLPT level:', 'param_1_required' => true, 'param_2_required' => false);
-
+        }
         $forms[] = array('type' => 'kanji_other', 'title' => 'Other...', 'param_1' => $kanji_ids, 'param_1_title' => 'Kanji 1:', 'param_2_title' => ' - Kanji 2 (optional):', 'param_2' => $kanji_ids, 'param_1_required' => true, 'param_2_required' => false);
 
         return $forms;
@@ -536,8 +553,7 @@ k.`njlpt`
 
     public function getDefaultWGrades()
     {
-        $array = parent::get_default_w_grades();
-
+        $array = parent::getDefaultWGrades();
         $array[LEVEL_SENSEI] = array(3, 4, 5, 6, 6, 8, 9, -1, -1, -1);
 
         return $array;
