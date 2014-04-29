@@ -286,7 +286,7 @@ elseif ($mode == SETS_MODE) {
         ?>
         <hr/><div id="footer">
             <?php
-            if ($_SESSION['cur_session']->is_drill()) {
+            if ($_SESSION['cur_session']->isDrill()) {
 
                 $options = $_SESSION['cur_session']->get_grade_options();
 

@@ -1,6 +1,7 @@
 <?php
 
-class DB {
+class DB
+{
 
     /**
      * Returns the *Singleton* instance of this class.
@@ -9,26 +10,29 @@ class DB {
      *
      * @return Singleton The *Singleton* instance.
      */
-    public static function getConnection() {
+    public static function getConnection()
+    {
         static $instance = null;
         if (null === $instance) {
             try {
-                $instance = new PDO('mysql:host=' . $GLOBALS['db_ip'] . ';dbname=' . $GLOBALS['db_name'] . ';charset=utf8', $GLOBALS['db_user'], $GLOBALS['db_pass']);
+                $instance = new PDO('mysql:host=' . $GLOBALS['db_ip'] . ';dbname=' . $GLOBALS['db_name'] . ';charset=utf8',
+                    $GLOBALS['db_user'], $GLOBALS['db_pass']);
                 $instance->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
             } catch (Exception $e) {
-                return 'PDO Connection failed: ' . $e->getMessage();
+                log_error('DB Connection failed.', $e->getMessage(), true);
             }
         }
         return $instance;
     }
 
-    public static function count($query, $params = []) {
+    public static function count($query, $params = [])
+    {
         try {
             $stmt = DB::getConnection()->prepare($query);
             $stmt->execute($params);
             return (int) $stmt->fetchColumn();
         } catch (PDOException $e) {
-            log_db_error($query, $e->getMessage());
+            log_db_error($query, $e->getMessage(), false);
             return 0;
         }
     }
@@ -37,7 +41,8 @@ class DB {
      * Protected constructor to prevent creating a new instance of the
      * *Singleton* via the `new` operator from outside of this class.
      */
-    protected function __construct() {
+    protected function __construct()
+    {
         
     }
 
@@ -47,7 +52,8 @@ class DB {
      *
      * @return void
      */
-    private function __clone() {
+    private function __clone()
+    {
         
     }
 
@@ -57,8 +63,8 @@ class DB {
      *
      * @return void
      */
-    private function __wakeup() {
+    private function __wakeup()
+    {
         
     }
-
 }

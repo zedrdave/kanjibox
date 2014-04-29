@@ -287,7 +287,7 @@ class Reading extends Question {
             }
 
             if ($how_many == 1) {
-                return array($stmt->fetchObject(PDO::FETCH_CLASS));
+                return array($stmt->fetchObject());
             }
 
             $readings = $stmt->fetchAll(PDO::FETCH_CLASS);

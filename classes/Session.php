@@ -433,7 +433,7 @@ class Session {
     }
 
     function get_params() {
-        return array('mode' => $this->get_mode(), 'type' => $this->get_type(), 'level' => $this->get_level());
+        return array('mode' => $this->get_mode(), 'type' => $this->get_type(), 'level' => $this->getLevel());
     }
 
     function stop_quiz() {
@@ -447,7 +447,7 @@ class Session {
     }
 
     function display_play_again() {
-        echo '<p class="play_again"><a href="' . get_page_url(PAGE_PLAY, array('type' => $this->get_type(), 'level' => $this->get_level(), 'mode' => $this->get_mode())) . '">Play Again</a></p>';
+        echo '<p class="play_again"><a href="' . get_page_url(PAGE_PLAY, array('type' => $this->get_type(), 'level' => $this->getLevel(), 'mode' => $this->get_mode())) . '">Play Again</a></p>';
     }
 
     function feedback_form_options($sid) {
@@ -474,7 +474,7 @@ class Session {
         return $this->set_size;
     }
 
-    function is_drill() {
+    function isDrill() {
         return ($this->session_mode == DRILL_MODE);
     }
 
@@ -502,7 +502,7 @@ class Session {
         return ucfirst($this->question_loader->quiz_type);
     }
 
-    function get_level() {
+    function getLevel() {
         return $this->session_level;
     }
 

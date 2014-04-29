@@ -117,7 +117,7 @@ class Kanji extends Question
         } elseif ($this->isLearningSet()) {
             $picks = $this->get_set_weighted_kanjis($user_id, $how_many);
         } else {
-            $picks = $this->get_random_weighted_kanjis($user_id, $grade, $grade, $how_many * 2);
+            $picks = $this->getRandomWeightedKanjis($user_id, $grade, $grade, $how_many * 2);
         }
 
         if ($grade > 100) {
@@ -326,20 +326,8 @@ class Kanji extends Question
     public static function get_similar_kanjis($kanji_id, $howmany = 1, $grade1 = -1, $grade2 = -1, $exclude = 0,
         $query_where_extra = '', $options = 0)
     {
-        //	$main_rad_coef = 10;
-        //	$classic_rad_coef = 30;
-        //	$multi_rad_coef = 1;
-        //	$stroke_dist_coef = 40;
-        /*
-          UPDATE `sim_kanjis` s JOIN kanjis k1 ON k1.id = s.k1_id JOIN kanjis k2 ON k2.id = s.k2_id SET s.stroke_dist =2 * ABS( k1.strokes - k2.strokes ) / ( k1.strokes + k2.strokes )
-
-          UPDATE `sim_kanjis` s JOIN kanjis k1 ON k1.id = s.k1_id JOIN kanjis k2 ON k2.id = s.k2_id SET s.combi_sim = ( (
-          '10' * s.main_rad
-          ) + ( '30' * s.classic_rad ) + ( '1' * s.sim ) - ( 40 *2 * ABS( k1.strokes - k2.strokes ) / ( k1.strokes + k2.strokes ) ) )
-
-         */
         if (!$kanji_id) {
-            log_error('get_similar_kanjis error: kanji_id = "' . $kanji_id, true, true);
+            log_error('get_similar_kanjis error: kanji_id = ' . $kanji_id, true, true);
         }
 
         if ($grade1[0] == 'N') {
@@ -369,36 +357,53 @@ k.`njlpt`
 	  JOIN `kanjis` k ON k.id = s.`k2_id`
 		LEFT JOIN kanjis_ext kx ON k.id = kx.kanji_id
 	  LEFT JOIN kanji_variants v ON v.kanji_id = k.id
-	  LEFT JOIN kanji_variants v2 ON v2.kanji_id =  ' . (int) $kanji_id . '  AND v2.variant_id = v.variant_id
-	  WHERE v2.variant_id IS NULL AND s.`k1_id` = ' . (int) $kanji_id;
+	  LEFT JOIN kanji_variants v2 ON v2.kanji_id = :kanji_id AND v2.variant_id = v.variant_id
+	  WHERE v2.variant_id IS NULL AND s.`k1_id` = :kanji_id';
 
         if ($grade1 > -1) {
-            if ($grade2 > -1)
-                $query .= " AND k.`$level_field` $harder '" . mysql_real_escape_string($grade1) . "' AND k.`$level_field` $easier '" . mysql_real_escape_string($grade2) . "'";
-            else
-                $query .= " AND k.`$level_field` $harder $easiest AND k.`$level_field` $easier '" . mysql_real_escape_string($grade1) . "'";
+            if ($grade2 > -1) {
+                $query .= " AND k.`$level_field` $harder :grade1 AND k.`$level_field` $easier :grade2";
+            } else {
+                $query .= " AND k.`$level_field` $harder $easiest AND k.`$level_field` $easier :grade1";
+            }
         }
 
         if ($exclude) {
-            if ($options == OPTIONS_UNIQUE_PRON)
-                $query .= " AND k.id  NOT IN (" . implode(',', $exclude) . ')';
-            else
-                $query .= " AND prons NOT IN (SELECT prons FROM kanjis_ext WHERE kanji_id IN (" . implode(',', $exclude) . '))';
+            if ($options == OPTIONS_UNIQUE_PRON) {
+                $query .= ' AND k.id  NOT IN (' . implode(',', $exclude) . ')';
+            } else {
+                $query .= ' AND prons NOT IN (SELECT prons FROM kanjis_ext WHERE kanji_id IN (' . implode(',', $exclude) . '))';
+            }
         }
         $query .= $query_where_extra;
+        $query .= ' GROUP BY k.id ORDER BY combi_sim DESC, k.njlpt DESC LIMIT :howmany';
 
-        $query .= ' GROUP BY k.id ORDER BY combi_sim DESC, k.njlpt DESC LIMIT ' . $howmany;
+        try {
+            $stmt = DB::getConnection()->prepare($query);
+            $stmt->bindValue(':kanji_id', $kanji_id, PDO::PARAM_INT);
+            $stmt->bindValue(':howmany', $howmany, PDO::PARAM_INT);
 
-        $kanjis = array();
+            if ($grade1 > -1) {
+                if ($grade2 > -1) {
+                    $stmt->bindValue(':grade1', $grade1, PDO::PARAM_INT);
+                    $stmt->bindValue(':grade2', $grade2, PDO::PARAM_INT);
+                } else {
+                    $stmt->bindValue(':grade1', $grade1, PDO::PARAM_INT);
+                }
+            }
 
-        $res = mysql_query_debug($query) or log_db_error($query, true, true);
+            $stmt->execute();
 
-        if ($howmany == 1)
-            return mysql_fetch_object($res);
+            if ($howmany == 1) {
+                return $stmt->fetchObject();
+            }
 
-        while ($row = mysql_fetch_object($res))
-            $kanjis[] = $row;
-        return $kanjis;
+            $kanjis = $stmt->fetchAll(PDO::FETCH_CLASS);
+            $stmt = null;
+            return $kanjis;
+        } catch (PDOException $e) {
+            log_db_error($query, $e->getMessage(), true, true);
+        }
     }
 
     public function get_kanji_id($id)
