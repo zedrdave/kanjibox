@@ -43,12 +43,12 @@ class Kanji extends Question
         $mean_str = $solution->mean_str . ($solution->traditional ? ' (旧)' : '');
         $solution->prons = Kanji::get_pronunciations($solution);
         if (!$solution->prons) {
-            log_error("Kanji::display_hint() - Empty prons array for id: " . $solution->id);
+            log_error('Kanji::display_hint() - Empty prons array for id: ' . $solution->id);
         }
 
         echo '<div class="japanese" lang="ja" xml:lang="ja">' . $solution->prons . '</div>';
         if ($this->isQuiz() || $_SESSION['user']->get_pref('drill', 'show_english')) {
-            if (@$solution->missing_lang) {
+            if ($solution->missing_lang) {
                 echo '<div class="missing_lang meaning">' . $mean_str;
                 if (!$_SESSION['user']->is_on_translator_probation()) {
                     echo ' <a class="" href="#" onclick="show_kanji_translate_dialog(\'' . SERVER_URL . '\', \'' . $solution->id . '\', \'' . $this->data['sid'] . '\'); return false;"><img src="' . SERVER_URL . 'img/flags/' . $_SESSION['user']->get_pref('lang',
@@ -77,24 +77,25 @@ class Kanji extends Question
 
         $solution = $this->getSolution();
 
-        echo "<span class=\"kanji main\" lang=\"ja\" xml:lang=\"ja\">" . $solution->kanji . "</span> ";
-        echo '✦ <span lang="ja" xml:lang="ja">' . $solution->prons . '</span> ✦ <span class="meaning">' . $solution->mean_str . ($solution->traditional ? ' (旧)' : '') . "</span>";
+        echo '<span class="kanji main" lang="ja" xml:lang="ja">' . $solution->kanji . '</span> ';
+        echo '✦ <span lang="ja" xml:lang="ja">' . $solution->prons . '</span> ✦ <span class="meaning">' . $solution->mean_str . ($solution->traditional ? ' (旧)' : '') . '</span>';
         if ($show_examples) {
             if ($ex = $this->get_kanji_examples_str($solution->id)) {
-                echo "<div class=\"example_str\" lang=\"ja\" xml:lang=\"ja\">Ex: " . $ex . '</div>';
+                echo '<div class="example_str" lang="ja" xml:lang="ja">Ex: ' . $ex . '</div>';
             }
         }
         if ($answer_id != SKIP_ID && !$this->isSolution($answer_id)) {
             echo '<br/><br/>';
 
-            if (!$wrong = $this->get_kanji_id((int) $answer_id))
+            if (!$wrong = $this->getKanjiID((int) $answer_id)) {
                 log_error('Unknown kanji ID: ' . (int) $answer_id, false, true);
-            echo "<span class=\"kanji main\" lang=\"ja\" xml:lang=\"ja\">" . $wrong->kanji . "</span> ";
+            }
+            echo '<span class="kanji main" lang="ja" xml:lang="ja">' . $wrong->kanji . "</span> ";
             echo '✦ <span lang="ja" xml:lang="ja">' . Kanji::get_pronunciations($wrong) . '</span> ✦ <span class="wrong_meaning">' . $wrong->mean_str . ($wrong->traditional ? ' (旧)' : '') . '</span>';
 
             if ($show_examples) {
                 if ($ex = $this->get_kanji_examples_str($wrong->id)) {
-                    echo "<div class=\"example_str\" lang=\"ja\" xml:lang=\"ja\">Ex: " . $ex . '</div>';
+                    echo '<div class="example_str" lang="ja" xml:lang="ja">Ex: ' . $ex . '</div>';
                 }
             }
         }
@@ -126,9 +127,8 @@ class Kanji extends Question
             $choice = array();
             $choice[0] = $picks[$i];
             $choice[2] = $picks[$i + 1];
-            $choice[1] = $this->get_other_kanji($choice[0]->id, $grade, array($choice[2]->id, $choice[0]->id), 1,
-                $options);
-            $choice[3] = $this->get_other_kanji($choice[2]->id, $grade,
+            $choice[1] = $this->getOtherKanji($choice[0]->id, $grade, array($choice[2]->id, $choice[0]->id), 1, $options);
+            $choice[3] = $this->getOtherKanji($choice[2]->id, $grade,
                 array($choice[0]->id, $choice[1]->id, $choice[2]->id), 1, $options);
             $sid = 'sid_' . md5('himitsu' . time() . '-' . rand(1, 100000));
             $data[$sid] = array('sid' => $sid, 'choices' => $choice, 'solution' => $choice[0]);
@@ -318,13 +318,13 @@ class Kanji extends Question
         }
     }
 
-    public function get_other_kanji($kanji_id, $grade, $exclude = null, $how_many = 1, $options = 0)
+    public function getOtherKanji($kanji_id, $grade, $exclude = null, $how_many = 1, $options = 0)
     {
-        if (!$kanji = $this->get_similar_kanjis($kanji_id, $how_many, $this->getNextGrade($grade), -1, $exclude, '',
+        if (!$kanji = $this->getSimilarKanjis($kanji_id, $how_many, $this->getNextGrade($grade), -1, $exclude, '',
             $options)) {
-            if (!$kanji = $this->get_similar_kanjis($kanji_id, $how_many, -1, -1, $exclude, '', $options)) {
-                if (!$kanji = $this->get_random_kanjis($grade, $grade, $how_many, $exclude, $options, 0)) {
-                    $kanji = $this->get_random_kanjis($grade, -1, $how_many, $exclude, $options, 0);
+            if (!$kanji = $this->getSimilarKanjis($kanji_id, $how_many, -1, -1, $exclude, '', $options)) {
+                if (!$kanji = $this->getRandomKanjis($grade, $grade, $how_many, $exclude, $options, 0)) {
+                    $kanji = $this->getRandomKanjis($grade, -1, $how_many, $exclude, $options, 0);
                 }
             }
         }
@@ -332,7 +332,7 @@ class Kanji extends Question
         return $kanji;
     }
 
-    public static function get_similar_kanjis($kanji_id, $howmany = 1, $grade1 = -1, $grade2 = -1, $exclude = 0,
+    public static function getSimilarKanjis($kanji_id, $howmany = 1, $grade1 = -1, $grade2 = -1, $exclude = 0,
         $query_where_extra = '', $options = 0)
     {
         if (!$kanji_id) {
@@ -415,12 +415,19 @@ k.`njlpt`
         }
     }
 
-    public function get_kanji_id($id)
+    public function getKanjiID($id)
     {
-        $query = "SELECT `id`, `kanji`, `traditional`, `prons`, " . Kanji::get_query_meaning() . " FROM `kanjis` k LEFT JOIN kanjis_ext kx ON kx.kanji_id = k.id WHERE `id` = '" . ((int) $id) . "'";
+        $query = 'SELECT `id`, `kanji`, `traditional`, `prons`, ' . Kanji::get_query_meaning() . ' FROM `kanjis` k LEFT JOIN kanjis_ext kx ON kx.kanji_id = k.id WHERE `id` = :id';
 
-        $res = mysql_query_debug($query) or log_db_error($query, true, true);
-        return mysql_fetch_object($res);
+        try {
+            $stmt = DB::getConnection()->prepare($query);
+            $stmt->bindValue(':id', id, PDO::PARAM_INT);
+            $stmt->execute();
+
+            return $stmt->fetchObject();
+        } catch (PDOException $e) {
+            log_db_error($query, $e->getMessage(), true, true);
+        }
     }
 
     public function get_kanji($kanji)
