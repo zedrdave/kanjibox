@@ -35,8 +35,9 @@ for($i = 5; $i > 0; $i--) {
 
 echo '<ul>';
 foreach(Vocab::$lang_strings as $lang => $lang_full) {
-	if($lang == 'en')
+	if($lang == 'en') {
 		continue;
+    }
 		
 	$res = mysql_query("SELECT COUNT(*) AS c FROM $table j LEFT JOIN $table_ext jx ON jx.$table_ext_idx = j.id WHERE jx.$content_col$lang_full != ''");
 	$row = mysql_fetch_object($res);
