@@ -40,7 +40,6 @@ class Kanji extends Question
     public function displayHint()
     {
         $solution = $this->getSolution();
-        // $solution->mean_str = $this->get_meaning_str($solution->id, $solution->traditional);
         $mean_str = $solution->mean_str . ($solution->traditional ? ' (旧)' : '');
         $solution->prons = Kanji::get_pronunciations($solution);
         if (!$solution->prons) {
@@ -91,7 +90,6 @@ class Kanji extends Question
             if (!$wrong = $this->get_kanji_id((int) $answer_id))
                 log_error('Unknown kanji ID: ' . (int) $answer_id, false, true);
             echo "<span class=\"kanji main\" lang=\"ja\" xml:lang=\"ja\">" . $wrong->kanji . "</span> ";
-            // echo $this->get_meaning_str($wrong->id, $wrong->traditional), " - ";
             echo '✦ <span lang="ja" xml:lang="ja">' . Kanji::get_pronunciations($wrong) . '</span> ✦ <span class="wrong_meaning">' . $wrong->mean_str . ($wrong->traditional ? ' (旧)' : '') . '</span>';
 
             if ($show_examples) {
@@ -145,7 +143,7 @@ class Kanji extends Question
         return $data;
     }
 
-    public static function get_random_kanjis($grade1 = -1, $grade2 = -1, $how_many = 1, $exclude = null, $options = 0)
+    public static function getRandomKanjis($grade1 = -1, $grade2 = -1, $how_many = 1, $exclude = null, $options = 0)
     {
         if ($grade1[0] == 'N') {
             $grade1 = $grade1[1];
@@ -166,42 +164,51 @@ class Kanji extends Question
 
         $query = 'SELECT  `id`, `kanji`, `traditional`, `prons`, ' . Kanji::get_query_meaning() . ' FROM `kanjis` k LEFT JOIN kanjis_ext kx ON kx.kanji_id = k.id WHERE';
 
-        if ($grade1 <= 0 && $how_many == 1)
+        if ($grade1 <= 0 && $how_many == 1) {
             $query .= ' `id` >= (SELECT FLOOR( MAX(`id`) * RAND()) FROM `kanjis` )';
-        else
+        } else {
             $query .= ' 1';
+        }
 
-        if ($exclude)
+        if ($exclude) {
             $query .= " AND k.id  NOT IN (" . implode(',', $exclude) . ')';
+        }
 
         if ($grade1 > 0) {
-            if ($grade2 > 0)
+            if ($grade2 > 0) {
                 $query .= " AND `$level_field` $harder " . (int) $grade1 . " AND `$level_field` $easier " . (int) $grade2;
-            else
+            } else {
                 $query .= " AND `$level_field` $harder $easiest AND `$level_field` $easier " . (int) $grade1;
-
+            }
             $query .= ' ORDER BY RAND()';
-        }
-        elseif ($how_many > 1)
+        } elseif ($how_many > 1) {
             $query .= ' ORDER BY RAND()';
-        else
+        } else {
             $query .= ' ORDER BY `id`';
+        }
 
         $query .= '  LIMIT ' . $how_many;
 
+        try {
+            $stmt = DB::getConnection()->prepare($query);
+            $stmt->execute();
+            $rowCount = $stmt->rowCount();
 
-        $res = mysql_query_debug($query) or log_db_error($query, true, true);
-        if (mysql_num_rows($res) < $how_many)
-            log_db_error($query, 'Can\'t get enough randomized kanjis');
+            if ($rowCount < $how_many) {
+                log_db_error($query, 'Can\'t get enough randomized kanjis');
+            }
 
-        if ($how_many == 1)
-            return mysql_fetch_object($res);
+            if ($how_many == 1) {
+                return $stmt->fetchObject();
+            }
 
-        $kanjis = array();
-        while ($row = mysql_fetch_object($res))
-            $kanjis[] = $row;
-
-        return $kanjis;
+            $kanjis = $stmt->fetchAll(PDO::FETCH_CLASS);
+            $stmt = null;
+            shuffle($kanjis);
+            return $kanjis;
+        } catch (PDOException $e) {
+            log_db_error($query, $e->getMessage(), true, true);
+        }
     }
 
     //STATIC needed for use by multiplayer
@@ -258,7 +265,7 @@ class Kanji extends Question
             if ($rowCount <= 1) {
                 if ($translator_mode) {
                     if ($rowCount == 1) {
-                        $kanjis[] = Kanji::get_random_kanjis($grade1, $grade2, 1);
+                        $kanjis[] = Kanji::getRandomKanjis($grade1, $grade2, 1);
                     } else {
                         die('No kanji left to translate at this level. Please change level or turn off Translator mode.');
                     }
