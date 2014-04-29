@@ -113,7 +113,7 @@ class Kanji extends Question
                 $picks = $this->get_random_kanjis($grade, $grade, $how_many * 2);
             }
         } elseif ($this->isLearningSet()) {
-            $picks = $this->get_set_weighted_kanjis($user_id, $how_many);
+            $picks = $this->geSetWeightedKanjis($user_id, $how_many);
         } else {
             $picks = $this->getRandomWeightedKanjis($user_id, $grade, $grade, $how_many * 2);
         }
@@ -283,13 +283,11 @@ class Kanji extends Question
         }
     }
 
-    public function get_set_weighted_kanjis($user_id, $how_many = 1)
+    public function geSetWeightedKanjis($user_id, $how_many = 1)
     {
         $query = "SELECT  k.`id`, k.`kanji`, k.`traditional`, `prons`, " . Kanji::get_query_meaning() . ", IF(l.curve IS NULL, 1000, curve)+1000*rand() as xcurve FROM learning_set_kanji ls LEFT JOIN kanjis k ON k.id = ls.kanji_id LEFT JOIN kanjis_ext kx ON kx.kanji_id = k.id left join learning l on l.user_id = '" . (int) $user_id . "' AND k.id = l.kanji_id WHERE ls.set_id = $this->set_id ";
 
         $translator_mode = false;
-        // $translator_mode = (isset($_SESSION['user']) && $_SESSION['user']->get_pref('lang', 'kanji_lang') != 'en' && $_SESSION['user']->get_pref('lang', 'translator_mode'));
-
         if ($translator_mode) {
             $query .= ' AND (kx.meaning_' . Kanji::$lang_strings[$_SESSION['user']->get_pref('lang', 'kanji_lang')] . ' IS NULL OR kx.meaning_' . Kanji::$lang_strings[$_SESSION['user']->get_pref('lang',
                     'kanji_lang')] . " = '')";
@@ -298,22 +296,26 @@ class Kanji extends Question
         $query .= '  ORDER BY xcurve DESC';
         $query .= '  LIMIT ' . $how_many;
 
-        $res = mysql_query_debug($query) or log_db_error($query, true, true);
+        try {
+            $stmt = DB::getConnection()->prepare($query);
+            $stmt->execute([$user_id]);
+            $rowCount = $stmt->rowCount();
 
-        $kanjis = array();
+            if ($rowCount <= 1) {
+                if ($translator_mode) {
+                    die('No kanji left to translate at this level. Please change level or turn off Translator mode.');
+                } else {
+                    log_error('get_set_weighted_kanjis: Can\'t get enough randomised kanjis: ' . $query, true, true);
+                }
+            }
 
-        if (mysql_num_rows($res) <= 1) {
-            if ($translator_mode) {
-                die('No kanji left to translate at this level. Please change level or turn off Translator mode.');
-            } else
-                log_error("get_set_weighted_kanjis: Can't get enough randomised kanjis: " . $query, true, true);
+            $kanjis = $stmt->fetchAll(PDO::FETCH_CLASS);
+            $stmt = null;
+            shuffle($kanjis);
+            return $kanjis;
+        } catch (PDOException $e) {
+            log_db_error($query, $e->getMessage(), true, true);
         }
-
-        while ($row = mysql_fetch_object($res))
-            $kanjis[] = $row;
-
-        shuffle($kanjis);
-        return $kanjis;
     }
 
     public function get_other_kanji($kanji_id, $grade, $exclude = null, $how_many = 1, $options = 0)
