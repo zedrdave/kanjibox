@@ -4,10 +4,12 @@
     "authors": [
         {
             "name": "sachatelgenhofoudekoehorst",
-            "email": "your@email.here"
+            "email": "stelgenhof@gmail.com"
         }
     ],
     "require": {
+        "facebook/php-sdk": "*"
+
     },
     "minimum-stability": "stable"
 }

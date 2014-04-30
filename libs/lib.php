@@ -135,7 +135,8 @@ function fb_connect_init($test_query = true) {
         unset($_REQUEST['code']);
 
 
-    require_once ABS_PATH . 'api/facebook.php';
+    //require_once ABS_PATH . 'api/facebook.php';
+    require_once ABS_PATH . 'vendor/autoload.php';
     try {
         if (!is_object($facebook))
             $facebook = new Facebook(array('appId' => $api_key, 'secret' => $secret, 'cookie' => true));
