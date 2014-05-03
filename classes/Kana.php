@@ -2,17 +2,20 @@
 
 require_once 'Question.php';
 
-class Kana extends Question {
+class Kana extends Question
+{
 
     public $table_learning = 'kana_learning';
     public $table_learning_index = 'kana_id';
     public $quiz_type = 'kana';
 
-    function __construct($_mode, $_level, $_grade = -2, $_data = NULL) {
+    public function __construct($_mode, $_level, $_grade = -2, $_data = null)
+    {
         parent::__construct($_mode, $_level, $_grade, $_data);
     }
 
-    function displayChoices($next_sid = '') {
+    public function displayChoices($next_sid = '')
+    {
         $submit_url = SERVER_URL . 'ajax/submit_answer/?sid=' . $this->data['sid'] . '&amp;time_created=' . (int) $this->created . '&amp;';
         $choices = $this->data['choices'];
         shuffle($choices);
@@ -23,12 +26,14 @@ class Kana extends Question {
         echo '<div class="choice skip" onclick="submit_answer(\'' . $this->data['sid'] . '\',  \'' . $next_sid . '\', \'' . $submit_url . 'answer_id=' . SKIP_ID . '\'); return false;">&nbsp;?&nbsp;</div>';
     }
 
-    function displayHint() {
+    public function displayHint()
+    {
         $solution = $this->getSolution();
         echo $solution->roma . ' (' . ($solution->type == 'kata' ? 'katakana' : 'hiragana') . ')';
     }
 
-    function displayCorrection($answer_id) {
+    public function displayCorrection($answer_id)
+    {
         $solution = $this->getSolution();
 
         echo "<span class=\"kanji\">" . $solution->kana . "</span> [" . ($solution->type == 'kata' ? 'katakana' : 'hiragana') . "] - " . $solution->roma;
@@ -43,11 +48,12 @@ class Kana extends Question {
         }
     }
 
-    function getDBData($how_many, $grade, $user_id = -1) {
+    public function getDBData($how_many, $grade, $user_id = -1)
+    {
         if ($this->isQuiz()) {
             log_error('Quiz mode not supported for kana.', false, true);
         } elseif (!$_SESSION['user']) {
-            $picks = $this->get_random_kanas($how_many * 4);
+            $picks = $this->getRandomKanas($how_many * 4);
         } else {
             $picks = $this->getRandomWeightedKanas($user_id, $how_many * 4);
         }
@@ -62,7 +68,7 @@ class Kana extends Question {
             }
             if ($j < 4) {
                 if ($_SESSION['user']) {
-                    $filler = $this->get_random_kanas((4 - $j), $choice[0]->type, $exclude);
+                    $filler = $this->getRandomKanas((4 - $j), $choice[0]->type, $exclude);
                 } else {
                     $filler = $this->getRandomWeightedKanas($user_id, (4 - $j), $choice[0]->type, $exclude);
                 }
@@ -84,7 +90,8 @@ class Kana extends Question {
         return $data;
     }
 
-    function getKanaID($kana_id) {
+    public function getKanaID($kana_id)
+    {
         $query = 'SELECT `id`, `kana`, UPPER(`roma`) AS `roma`, `type` FROM `kanas` WHERE `id` = ?';
 
         try {
@@ -96,7 +103,8 @@ class Kana extends Question {
         }
     }
 
-    function getRandomWeightedKanas($user_id, $how_many = 1, $type = NULL, $exclude = NULL) {
+    public function getRandomWeightedKanas($user_id, $how_many = 1, $type = null, $exclude = null)
+    {
         $inputValues = [$user_id];
         $where_type = '1';
         if (isset($type)) {
@@ -116,7 +124,7 @@ class Kana extends Question {
             }
 
             if ($how_many == 1) {
-                return $stmt->fetch(PDO::FETCH_CLASS);
+                return $stmt->fetchObject();
             }
 
             return $stmt->fetchAll(PDO::FETCH_CLASS);
@@ -125,26 +133,31 @@ class Kana extends Question {
         }
     }
 
-    function get_random_kanas($how_many = 1, $type = NULL, $exclude = NULL) {
-        $where_type = ($type ? 'k.type = \'' . mysql_real_escape_string($type) . "'" : '1');
+    public function getRandomKanas($how_many = 1, $type = null, $exclude = null)
+    {
+        $where_type = ($type ? 'k.type = :type' : '1');
         $where_exclude = ($exclude ? 'k.roma NOT IN (' . implode(', ', $exclude) . ')' : '1');
-        $query = "SELECT * FROM (SELECT  k.`id`, k.`kana`,  UPPER(k.`roma`) AS `roma`, k.`type` from kanas k WHERE $where_type AND $where_exclude ORDER BY RAND() LIMIT " . $how_many . ') as temp ORDER BY type';
+        $query = 'SELECT * FROM (SELECT  k.`id`, k.`kana`,  UPPER(k.`roma`) AS `roma`, k.`type` from kanas k WHERE ' . $where_type . ' AND ' . $where_exclude . ' ORDER BY RAND() LIMIT :showmany) as temp ORDER BY type';
 
-        $res = mysql_query_debug($query) or log_db_error($query);
-        if (mysql_num_rows($res) < $how_many) {
-            log_error("Can't get enough randomized kanas: " . $query, false, true);
+        try {
+            $stmt = DB::getConnection()->prepare($query);
+            if (!empty($type)) {
+                $stmt->bindValue(':type', $type, PDO::PARAM_STR);
+            }
+            $stmt->bindValue(':showmany', $how_many, PDO::PARAM_INT);
+            $stmt->execute();
+
+            if ($stmt->rowCount() < $how_many) {
+                log_error('Can\'t get enough randomized kanas: ' . $query, false, true);
+            }
+
+            if ($how_many == 1) {
+                return $stmt->fetchObject();
+            }
+
+            return $stmt->fetchAll(PDO::FETCH_CLASS);
+        } catch (PDOException $e) {
+            log_db_error($query, $e->getMessage(), false, true);
         }
-
-        if ($how_many == 1) {
-            return $row;
-        }
-
-        $kanas = array();
-        while ($row = mysql_fetch_object($res)) {
-            $kanas[] = $row;
-        }
-
-        return $kanas;
     }
-
 }
