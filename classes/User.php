@@ -1,22 +1,26 @@
 <?php
 
-class User {
+class User
+{
 
-    private $data = NULL;
-    private $prefs = NULL;
+    private $data = null;
+    private $prefs = null;
     private $logged_in;
     private $load_count = 0;
-    static $ranks_abs = array(1 => array('shougun', 'Shōgun'), 5 => array('daimyou', 'Daimyō'), 30 => array('samurai', 'Samurai'), 100 => array('ninja', 'Ninja'));
-    static $ranks_rel = array(array('rikishi', 'Rikishi', 0.3), array('tanuki', 'Tanuki', 0.5), array('kappa', 'Kappa', 0.7));
-    static $default_rank = array('gokiburi', 'Gokiburi');
+    public static $ranks_abs = array(1 => ['shougun', 'Shōgun'], 5 => ['daimyou', 'Daimyō'], 30 => array('samurai', 'Samurai'), 100 => array('ninja', 'Ninja'));
+    public static $ranks_rel = array(array('rikishi', 'Rikishi', 0.3), array('tanuki', 'Tanuki', 0.5), array('kappa', 'Kappa', 0.7));
+    public static $default_rank = ['gokiburi', 'Gokiburi'];
     public static $pref_labels = array(
-        'general' => array(
+        'general' => [
             'auto_vanish' => 'Hide answers automatically after a few seconds <strong><a href="http://kanjibox.net/kb/page/faq/#corrections">*</a></strong><br/>',
             'shortcuts' => 'Enable Hotkeys  (press keyboard key \'1\' to \'5\' to choose an answer) &mdash; <em>Currently only available to <a href="http://kanjibox.net/kb/page/faq/#elite">Elite</a> users</em><br/>',
-            'hide_rare_kanji' => 'Hide rare kanji spellings'),
-        'drill' => array('show_english' => 'Show kanji meaning', 'show_reading_translation' => 'Show translation (Reading drill)',
+            'hide_rare_kanji' => 'Hide rare kanji spellings'
+        ],
+        'drill' => [
+            'show_english' => 'Show kanji meaning', 'show_reading_translation' => 'Show translation (Reading drill)',
             'show_examples' => 'Show examples', 'show_learning_stats' => 'Show learning stats',
-            'show_reading' => array('legend' => 'Show reading: ', 'choices' => array('always' => 'Always', 'above_level' => 'If above level', 'never' => 'Never'))),
+            'show_reading' => array('legend' => 'Show reading: ', 'choices' => array('always' => 'Always', 'above_level' => 'If above level', 'never' => 'Never'))
+        ],
         'quiz' => array('show_prog_bar' => 'Show Progress Bar'),
         'notif' => array('post_news' => 'Post highscore updates in news feed'),
         'lang' => array(
@@ -27,9 +31,8 @@ class User {
     );
     public static $default_prefs = array('general' => array('auto_vanish' => true, 'shortcuts' => true, 'hide_rare_kanji' => true), 'drill' => array('show_english' => true, 'show_pron' => true, 'show_examples' => true, 'show_learning_stats' => true, 'show_reading' => 'above_level', 'show_reading_translation' => true), 'quiz' => array('show_prog_bar' => true), 'notif' => array('profile_box' => true, 'post_news' => true), 'lang' => array('kanji_lang' => 'en', 'vocab_lang' => 'en', 'translator_mode' => false));
 
-    public function __construct($id_params, $_logged_in = false, $info = NULL) {
-        global $facebook;
-
+    public function __construct($id_params, $_logged_in = false, $info = null)
+    {
         if (empty($id_params)) {
             log_error('Can\'t instantiate User class without id_params', true, true);
         }
@@ -70,7 +73,7 @@ class User {
                 $query = 'INSERT INTO `users_ext` SET `user_id` = :id';
                 try {
                     $stmt = DB::getConnection()->prepare($query);
-                    $stmt->bindValue(':id', $this->getID());
+                    $stmt->bindValue(':id', $this->getID(), PDO::PARAM_INT);
                     $stmt->execute();
                 } catch (PDOException $e) {
                     log_db_error($query, $e->getMessage(), false, true);
@@ -82,10 +85,17 @@ class User {
             die('incorrect login/pwd');
         }
 
-        if (empty($this->data->inf_session_key) && !empty($_POST['fb_sig_session_key']) && (@$_POST['fb_sig_expires'] == 0)) {
+        if (empty($this->data->inf_session_key) && !empty($_POST['fb_sig_session_key']) && ($_POST['fb_sig_expires'] == 0)) {
             $this->data->inf_session_key = $_POST['fb_sig_session_key'];
-            $query = 'UPDATE `users_ext` SET `inf_session_key` = \'' . mysql_real_escape_string($this->data->inf_session_key) . '\' WHERE `user_id` = \'' . $this->getID() . '\'';
-            mysql_query_debug($query) or log_db_error($query);
+            $query = 'UPDATE `users_ext` SET `inf_session_key` = :sessionid WHERE `user_id` = :userid';
+            try {
+                $stmt = DB::getConnection()->prepare($query);
+                $stmt->bindValue(':sessionid', $this->data->inf_session_key, PDO::PARAM_STR);
+                $stmt->bindValue(':userid', $this->getID(), PDO::PARAM_INT);
+                $stmt->execute();
+            } catch (PDOException $e) {
+                log_db_error($query, $e->getMessage());
+            }
         }
 
         if ($info && isset($info['first_name']) && isset($info['last_name'])) {
@@ -93,8 +103,15 @@ class User {
 
             if ($name_hidden != $this->is_name_hidden()) {
                 $this->data->name_hidden = $name_hidden;
-                $query = 'UPDATE `users` SET  `name_hidden` = \'' . (int) $name_hidden . '\' WHERE id = ' . $this->getID();
-                mysql_query_debug($query) or log_db_error($query);
+                $query = 'UPDATE `users` SET  `name_hidden` = :name_hidden WHERE id = :userid';
+                try {
+                    $stmt = DB::getConnection()->prepare($query);
+                    $stmt->bindValue(':name_hidden', $name_hidden, PDO::PARAM_INT);
+                    $stmt->bindValue(':userid', $this->getID(), PDO::PARAM_INT);
+                    $stmt->execute();
+                } catch (PDOException $e) {
+                    log_db_error($query, $e->getMessage());
+                }
             }
 
             if ($info['first_name'] != $this->data->first_name || $info['last_name'] != $this->data->last_name) {
@@ -105,20 +122,37 @@ class User {
                     $this->data->last_name = $info['last_name'];
                 }
 
-                $query = 'UPDATE `users_ext` SET  `first_name` = \'' . mysql_real_escape_string($this->data->first_name) . '\',  `last_name` = \'' . mysql_real_escape_string($this->data->last_name) . '\' WHERE user_id = ' . $this->getID();
-                mysql_query_debug($query) or log_db_error($query);
+                $query = 'UPDATE `users_ext` SET `first_name` = :firstname, `last_name` = :lastname WHERE user_id = :userid';
+                try {
+                    $stmt = DB::getConnection()->prepare($query);
+                    $stmt->bindValue(':firstname', $this->data->first_name, PDO::PARAM_STR);
+                    $stmt->bindValue(':lastname', $this->data->last_name, PDO::PARAM_STR);
+                    $stmt->bindValue(':userid', $this->getID(), PDO::PARAM_INT);
+                    $stmt->execute();
+                } catch (PDOException $e) {
+                    log_db_error($query, $e->getMessage());
+                }
             }
         }
 
-        if (empty($this->data->login_email) && !empty($info['email']) && strpos($info['email'], '@proxymail.facebook.com') === FALSE) {
+        if (empty($this->data->login_email) && !empty($info['email']) && strpos($info['email'],
+                '@proxymail.facebook.com') === false) {
             $email = $info['email'];
-            $query = 'SELECT COUNT(*) AS c FROM `users_ext` WHERE `login_email` = \'' . mysql_real_escape_string($email) . '\' AND `user_id` != ' . (int) $this->getID();
-            $res = mysql_query_debug($query) or die(mysql_error());
-            $row = mysql_fetch_object($res);
-            if ($row->c == 0) {
+
+            $rowCount = DB::count('SELECT COUNT(*) FROM `users_ext` WHERE `login_email` = ? AND `user_id` != ?',
+                    [$email, $this->getID()]);
+            if ($rowCount == 0) {
                 $this->data->login_email = $email;
-                $query = 'UPDATE `users_ext` SET `login_email` = \'' . mysql_real_escape_string($info['email']) . '\' WHERE user_id = ' . $this->getID();
-                mysql_query_debug($query) or log_db_error($query);
+
+                $query = 'UPDATE `users_ext` SET `login_email` = :email WHERE user_id = :userid';
+                try {
+                    $stmt = DB::getConnection()->prepare($query);
+                    $stmt->bindValue(':email', $info['email'], PDO::PARAM_STR);
+                    $stmt->bindValue(':userid', $this->getID(), PDO::PARAM_INT);
+                    $stmt->execute();
+                } catch (PDOException $e) {
+                    log_db_error($query, $e->getMessage());
+                }
             }
         }
 
@@ -141,7 +175,8 @@ class User {
         $this->logged_in = true;
     }
 
-    static function create_account($fb_id, $_logged_in) {
+    public static function create_account($fb_id, $_logged_in)
+    {
         if (!(int) $fb_id) {
             log_error("User::create_account: invalid fb_id: '$fb_id'");
         }
@@ -161,45 +196,49 @@ class User {
         }
     }
 
-    function isAdministrator() {
+    public function isAdministrator()
+    {
         return ($this->getID() == '1');
     }
 
-    function isEditor() {
+    public function isEditor()
+    {
         return ($this->isAdministrator() || $this->data->privileges > 1 );
     }
 
-    function get_pref($pref, $sub_pref = NULL) {
+    public function get_pref($pref, $sub_pref = null)
+    {
         if ($sub_pref) {
-            if (isset($this->prefs[$pref][$sub_pref]))
+            if (isset($this->prefs[$pref][$sub_pref])) {
                 return $this->prefs[$pref][$sub_pref];
-            elseif (isset(User::$default_prefs[$pref][$sub_pref]))
+            } elseif (isset(User::$default_prefs[$pref][$sub_pref])) {
                 return User::$default_prefs[$pref][$sub_pref];
-            else {
+            } else {
                 log_error('No default for pref: ' . $pref . ' - ' . $sub_pref, false, false);
-                return NULL;
+                return null;
             }
-        } elseif (isset($this->prefs[$pref]))
+        } elseif (isset($this->prefs[$pref])) {
             return $this->prefs[$pref];
-        else
-            return @User::$default_prefs[$pref];
+        } else {
+            return User::$default_prefs[$pref];
+        }
     }
 
-    function update_level($new_level) {
+    public function update_level($new_level)
+    {
         $query = 'UPDATE `users` SET `level` = :level WHERE `id` = :id';
         try {
             $stmt = DB::getConnection()->prepare($query);
-            $stmt->bindValue(':level', $new_level);
-            $stmt->bindValue(':id', $this->getID());
+            $stmt->bindValue(':level', $new_level, PDO::PARAM_INT);
+            $stmt->bindValue(':id', $this->getID(), PDO::PARAM_INT);
             $stmt->execute();
         } catch (PDOException $e) {
             log_db_error($query, true, true);
         }
     }
 
-    function update_prefs($new_prefs) {
-        $old_profile_pref = $this->get_pref('notif', 'profile_box');
-
+    public function update_prefs($new_prefs)
+    {
         foreach (User::$pref_labels as $key => $val) {
             foreach ($val as $key2 => $val2) {
                 if (isset($new_prefs['prefs'][$key][$key2])) {
@@ -212,24 +251,23 @@ class User {
 
         if (isset($new_prefs['level'])) {
             $this->data->level = $new_prefs['level'];
-            $_SESSION['cur_session'] = NULL;
+            $_SESSION['cur_session'] = null;
         }
 
         $this->save_prefs();
         $this->cacheHighscores();
-        //$force_update = ($old_profile_pref != $this->get_pref('notif', 'profile_box'));
-        //$this->update_profile_box($force_update);
     }
 
-    function save_prefs() {
+    public function save_prefs()
+    {
         /** mysql_query_debug formerly used: check if slow queries can be monitored by DB * */
         // Update level and status
         $query = 'UPDATE `users` SET `level` = :level, `active` = :active WHERE `id` = :id';
         try {
             $stmt = DB::getConnection()->prepare($query);
-            $stmt->bindValue(':level', $this->getLevel());
-            $stmt->bindValue(':active', (int) ($this->is_logged_in()));
-            $stmt->bindValue(':id', $this->getID());
+            $stmt->bindValue(':level', $this->getLevel(), PDO::PARAM_INT);
+            $stmt->bindValue(':active', (int) ($this->is_logged_in()), PDO::PARAM_INT);
+            $stmt->bindValue(':id', $this->getID(), PDO::PARAM_INT);
             $stmt->execute();
         } catch (PDOException $e) {
             log_db_error($query, true, true);
@@ -239,15 +277,16 @@ class User {
         $query = 'UPDATE `users_ext` SET `prefs` = :preferences WHERE `user_id` = :id';
         try {
             $stmt = DB::getConnection()->prepare($query);
-            $stmt->bindValue(':preferences', serialize($this->prefs));
-            $stmt->bindValue(':id', $this->getID());
+            $stmt->bindValue(':preferences', serialize($this->prefs), PDO::PARAM_STR);
+            $stmt->bindValue(':id', $this->getID(), PDO::PARAM_INT);
             $stmt->execute();
         } catch (PDOException $e) {
             log_db_error($query, true, true);
         }
     }
 
-    function update_profile_box($force_update = false) {
+    public function update_profile_box($force_update = false)
+    {
         global $facebook;
 
         if (!$this->logged_in) {
@@ -274,13 +313,11 @@ class User {
             return;
         }
 
-        require_once(ABS_PATH . 'libs/stats_lib.php');
+        require_once ABS_PATH . 'libs/stats_lib.php';
         $levels = Session::$level_names;
-
 
         $text = '<fb:ref handle="global_announcement" />';
         $text .= '<fb:ref handle="profile_css" />';
-
         $text .= "<p class=\"summary\"><fb:name firstnameonly=\"true\" uid=\"$fb_id\" useyou=\"false\" capitalize=\"true\" /> is training at level: <strong>" . $levels[$this->getLevel()] . "</strong> on <a href=\"" . get_page_url() . "\">Kanji Box</a>.</p>";
 
         $query = 'SELECT SUM(c) as c FROM ((SELECT COUNT(*) as c FROM learning l WHERE l.user_id = ' . (int) $this->getID() . ' LIMIT 1) UNION (SELECT COUNT(*) as c FROM jmdict_learning jl WHERE jl.user_id = ' . (int) $this->getID() . ' LIMIT 1) UNION (SELECT COUNT(*) as c FROM reading_learning rl WHERE rl.user_id = ' . (int) $this->getID() . ' LIMIT 1)) as t';
@@ -288,11 +325,10 @@ class User {
         $res = mysql_query_debug($query) or log_db_error($query, true, true);
         $row = mysql_fetch_object($res);
 
-        $info_fields = array();
-
         if ($row->c > 0) {
-            foreach (array('kanji' => 'Kanji', 'vocab' => 'Vocabulary', 'reading' => 'Reading') as $type => $type_desc) {
-                $text .= '<fieldset class="profile-box"><legend><a href="' . get_page_url(PAGE_PLAY, array('type' => $type, 'mode' => QUIZ_MODE)) . '">' . $type_desc . '</a></legend>';
+            foreach (['kanji' => 'Kanji', 'vocab' => 'Vocabulary', 'reading' => 'Reading'] as $type => $type_desc) {
+                $text .= '<fieldset class="profile-box"><legend><a href="' . get_page_url(PAGE_PLAY,
+                        ['type' => $type, 'mode' => QUIZ_MODE]) . '">' . $type_desc . '</a></legend>';
 
                 $game = $this->getHighscore($this->getLevel(), $type);
                 if ($game) {
@@ -303,14 +339,6 @@ class User {
                     $text .= '<div class="highscore">Highscore: <strong>' . $game->score . ' Pts</strong></div>';
                     $text .= '<div style="clear:both;" ></div>';
                     $text .= '</div>';
-
-                    /*
-                      $info_fields[] = array('field' => $type_desc . ' Ranking',
-                      'items' => array(array('label'=> $rank->pretty_name,
-                      'image' => SERVER_URL . 'img/ranks/rank_' . $rank->short_name . '.png',
-                      'description'=> 'Highscore: ' . $game->score . ' Pts.',
-                      'link'=> get_page_url(PAGE_PLAY, array('type' => $type, 'mode' => QUIZ_MODE)))));
-                     */
                 }
 
                 $jlpt_level = $this->get_njlpt_level();
@@ -320,13 +348,17 @@ class User {
                 switch ($type) {
                     case 'kanji':
                         if ($this->getLevel() == $jlpt_level) {
-                            $big = printJLPTLevels($this->getID(), $jlpt_level, $wide_bar, 'Learning stats - ' . $jlpt_level);
-                            $small = printJLPTLevels($this->getID(), $jlpt_level, $narrow_bar, 'Learning stats - ' . $jlpt_level);
+                            $big = printJLPTLevels($this->getID(), $jlpt_level, $wide_bar,
+                                'Learning stats - ' . $jlpt_level);
+                            $small = printJLPTLevels($this->getID(), $jlpt_level, $narrow_bar,
+                                'Learning stats - ' . $jlpt_level);
                         } else {
                             $num = (int) Question::levelToGrade($this->getLevel());
                             if ($num > 0) {
-                                $big = printGradeLevels($this->getID(), $num, $wide_bar, 'Learning stats - Grade ' . $num);
-                                $small = printGradeLevels($this->getID(), $num, $narrow_bar, 'Learning stats - Grade ' . $num);
+                                $big = printGradeLevels($this->getID(), $num, $wide_bar,
+                                    'Learning stats - Grade ' . $num);
+                                $small = printGradeLevels($this->getID(), $num, $narrow_bar,
+                                    'Learning stats - Grade ' . $num);
                             } else {
                                 $big = printJLPTLevels($this->getID(), 1, $wide_bar, 'Learning stats - 1-kyuu');
                                 $small = printJLPTLevels($this->getID(), 1, $narrow_bar, 'Learning stats - 1-kyuu');
@@ -337,16 +369,20 @@ class User {
                     case 'vocab':
                         $num = Question::levelToGrade($jlpt_level);
                         $num = $num[1];
-                        $big = print_vocab_jlpt_levels($this->getID(), $num, $wide_bar, 'Learning stats - ' . $num . '-kyuu');
-                        $small = print_vocab_jlpt_levels($this->getID(), $num, $narrow_bar, 'Learning stats - ' . $num . '-kyuu');
+                        $big = print_vocab_jlpt_levels($this->getID(), $num, $wide_bar,
+                            'Learning stats - ' . $num . '-kyuu');
+                        $small = print_vocab_jlpt_levels($this->getID(), $num, $narrow_bar,
+                            'Learning stats - ' . $num . '-kyuu');
 
                         break;
 
                     case 'reading':
                         $num = Question::levelToGrade($jlpt_level);
                         $num = $num[1];
-                        $big = printReadingJLPTLevels($this->getID(), $num, $wide_bar, 'Learning stats - ' . $num . '-kyuu');
-                        $small = printReadingJLPTLevels($this->getID(), $num, $narrow_bar, 'Learning stats - ' . $num . '-kyuu');
+                        $big = printReadingJLPTLevels($this->getID(), $num, $wide_bar,
+                            'Learning stats - ' . $num . '-kyuu');
+                        $small = printReadingJLPTLevels($this->getID(), $num, $narrow_bar,
+                            'Learning stats - ' . $num . '-kyuu');
                         break;
                 }
                 $text .= '<fb:wide>' . $big . '</fb:wide><fb:narrow>' . $small . '</fb:narrow>';
@@ -366,68 +402,68 @@ class User {
                 // $info = $facebook->api_client->users_getInfo($fb_id, $fields);
                 // log_exception($e, "update_profile_box() - Can't update profile.\nUser info: ". print_r($info, true) . "\nFBML:\n" . $text);
             } catch (Exception $e) {
-                log_exception($e, "update_profile_box() - Can't update profile and can't get info." . "\nFBML:\n" . $text);
+                log_exception($e,
+                    "update_profile_box() - Can't update profile and can't get info." . "\nFBML:\n" . $text);
             }
         }
     }
 
-    function set_pref($key, $key2, $new_value) {
+    public function set_pref($key, $key2, $new_value)
+    {
         $this->prefs[$key][$key2] = $new_value;
         $this->save_prefs();
     }
 
-    function publish_story($type) {
+    public function publish_story($type)
+    {
         $rank = $this->get_rank($type, true);
-        if (!$rank)
-            die("Can't get rank...");
+        if (!$rank) {
+            die('Can\'t get rank...');
+        }
         return $this->publish_rank_story($type, $rank, false);
     }
 
-    function publish_rank_story($type, $rank, $just_now = true) {
-        //
-        //return false;
+    public function publish_rank_story($type, $rank, $just_now = true)
+    {
 
         global $facebook;
 
-        if ($this->get_fb_id() <= 0)
+        if ($this->get_fb_id() <= 0) {
             return 'Not using Facebook';
+        }
 
-        if (!fb_connect_init())
-            return "Can't init Facebook";
+        if (!fb_connect_init()) {
+            return 'Can\'t init Facebook';
+        }
 
-        if ($type != TYPE_KANJI && $type != TYPE_VOCAB && $type != TYPE_READING && $type != TYPE_TEXT)
+        if ($type != TYPE_KANJI && $type != TYPE_VOCAB && $type != TYPE_READING && $type != TYPE_TEXT) {
             die('unknown type');
+        }
 
         $levels = Session::$level_names;
 
-        if ($this->data->first_name)
+        if ($this->data->first_name) {
             $description = $this->data->first_name . ($just_now ? ' just' : '') . ' reached the glorious rank of ' . $rank->pretty_name . ' (' . $levels[$this->getLevel()] . ' ' . ucfirst($type) . ' division) in KanjiBox!';
-        else
+        } else {
             $description = 'I' . ($just_now ? ' just' : '') . ' reached the glorious rank of ' . $rank->pretty_name . ' (' . $levels[$this->getLevel()] . ' ' . ucfirst($type) . ' division) in KanjiBox!';
+        }
 
 
         try {
-
-            // if($facebook->api('/me/feed', 'post', array('picture' => SERVER_URL . 'img/ranks/rank_' . $rank->short_name . '.png', 'name' => 'KanjiBox', 'link' => get_page_url(PAGE_PLAY, array('type' => $type, 'mode' => QUIZ_MODE)), 'caption' => '', 'description' => $description, 'actions' => array(array('name' => 'Play', 'link' => get_page_url())))))
-
-
-            if ($facebook->api('/me/feed', 'post', array('picture' => SERVER_URL . 'img/ranks/rank_' . $rank->short_name . '.png', 'name' => 'KanjiBox', 'link' => get_page_url(PAGE_PLAY, array('type' => $type, 'mode' => QUIZ_MODE)), 'caption' => '', 'description' => $description, 'actions' => array(array('name' => 'Play', 'link' => get_page_url()))))) {
+            if ($facebook->api('/me/feed', 'post',
+                    array('picture' => SERVER_URL . 'img/ranks/rank_' . $rank->short_name . '.png', 'name' => 'KanjiBox', 'link' => get_page_url(PAGE_PLAY,
+                        array('type' => $type, 'mode' => QUIZ_MODE)), 'caption' => '', 'description' => $description, 'actions' => array(array('name' => 'Play', 'link' => get_page_url()))))) {
                 $str = "<div class=\"success_msg\">Posted story on Facebook</div>";
 
                 return $str;
             }
         } catch (FacebookApiException $e) {
-
-            // log_error("publish_rank_story: FB Exception\n" . print_r($e, true), false, true);
-
-            return "<div class=\"error_msg\">Facebook error. Make sure KanjiBox is allowed to post on your Facebook feed.</div>";
+            return '<div class="error_msg">Facebook error. Make sure KanjiBox is allowed to post on your Facebook feed.</div>';
         }
-
-        // echo '<script src="http://static.ak.connect.facebook.com/js/api_lib/v0.4/FeatureLoader.js.php/en_US" type="text/javascript"></script>';
-        // insert_js_snippet("FB.Connect.streamPublish('やった！', " . json_encode($attachment) . ", ". json_encode($action_links) . ", 0, 'Your reaction?');");
     }
 
-    function getHighscore($level, $type) {
+    public function getHighscore($level, $type)
+    {
         $query = 'SELECT * FROM `games` g WHERE `user_id` = :id AND `level` = :level AND `type` = :type ORDER BY `score` DESC, TIMEDIFF(g.date_ended, g.date_started) ASC LIMIT 1';
         try {
             $stmt = DB::getConnection()->prepare($query);
@@ -444,13 +480,15 @@ class User {
         }
     }
 
-    function is_highscore($score_id, $level, $type) {
+    public function is_highscore($score_id, $level, $type)
+    {
         $score = $this->getHighscore($level, $type);
 
         return (!$score || ($score->id == $score_id));
     }
 
-    function reset_highscores($level = '', $type = '') {
+    public function reset_highscores($level = '', $type = '')
+    {
         $query = 'FROM `games` WHERE `user_id` = \'' . $this->getID() . '\'';
         if ($level)
             $query .= ' AND `level` = \'' . mysql_real_escape_string($level) . '\' ';
@@ -466,7 +504,8 @@ class User {
         mysql_query_debug($query) or log_db_error($query, false, true);
     }
 
-    function get_friendsranking($score, $level, $type) {
+    public function get_friendsranking($score, $level, $type)
+    {
         global $facebook;
 
         if ($this->get_fb_id() <= 0)
@@ -485,10 +524,11 @@ class User {
         return $row->c + 1;
     }
 
-    function get_rank($type, $no_refresh = false, $expired_time = 3600) {
+    public function get_rank($type, $no_refresh = false, $expired_time = 3600)
+    {
         require_once ABS_PATH . 'libs/stats_lib.php';
 
-        // *** Function? as twice used...
+        // *** Function? as used twice...
         $query = 'SELECT r.rank, r.type, r.level, TIMESTAMPDIFF(SECOND, r.last_updated, NOW()) AS age, r.last_updated FROM ranking r LEFT JOIN games g ON g.id = r.game_id WHERE r.user_id = :id AND r.level = :level AND r.type = :type';
         try {
             $stmt = DB::getConnection()->prepare($query);
@@ -514,7 +554,8 @@ class User {
                     $rank = mysql_fetch_object($res);
 
                     if (!$rank) {
-                        log_error("Can't get quick rank for user: " . $this->getID() . ", level: " . $this->getLevel() . ", type: $type", true, true);
+                        log_error("Can't get quick rank for user: " . $this->getID() . ", level: " . $this->getLevel() . ", type: $type",
+                            true, true);
                     }
 
                     $query = 'INSERT INTO ranking SET last_updated = NOW(), user_id = ' . $this->getID() . ', game_id = ' . (int) $rank->game_id . ', type = \'' . $rank->type . '\', level=\'' . $rank->level . '\', rank = ' . $rank->rank;
@@ -537,7 +578,8 @@ class User {
                 }
 
                 if ($rank && $expired_time > 10 && $rank->age > $expired_time) {
-                    log_error('Can\'t update ranking for level: ' . $this->getLevel() . ", type: $type \n rank: " . print_r($rank, true) . "\n expired_time: $expired_time \n query: $query", true);
+                    log_error('Can\'t update ranking for level: ' . $this->getLevel() . ", type: $type \n rank: " . print_r($rank,
+                            true) . "\n expired_time: $expired_time \n query: $query", true);
                 }
             }
         }
@@ -559,7 +601,8 @@ class User {
         return $rank;
     }
 
-    function get_rank_name_array($ranking, $tot_count) {
+    public function get_rank_name_array($ranking, $tot_count)
+    {
         if ($ranking <= 0) {
             return array('Gokiburi', 'gokiburi');
         }
@@ -578,7 +621,8 @@ class User {
         return User::$default_rank;
     }
 
-    function cacheHighscores() {
+    public function cacheHighscores()
+    {
         foreach (array('kanji', 'vocab', 'reading', 'text') as $type) {
             $query = "UPDATE `users` u
 			SET ${type}_highscore_id =
@@ -605,7 +649,8 @@ class User {
         }
     }
 
-    function print_highscores($type, $title = '') {
+    public function print_highscores($type, $title = '')
+    {
         global $facebook;
 
         if ($this->get_fb_id() <= 0)
@@ -655,7 +700,8 @@ class User {
         echo "</div><div style=\"clear: both;\"></div>";
     }
 
-    function get_best_game($type) {
+    public function get_best_game($type)
+    {
         $query = 'SELECT r.*, g.*, g.date_started AS date_played, TIMEDIFF(g.date_ended, g.date_started) AS duration FROM ranking  r JOIN games g ON g.id = r.game_id WHERE r.user_id = ' . (int) $this->getID() . ' AND r.level = \'' . mysql_real_escape_string($this->getLevel()) . '\' AND r.type = \'' . mysql_real_escape_string($type) . '\' LIMIT 1';
 
         $res = mysql_query_debug($query) or log_db_error($query);
@@ -673,15 +719,18 @@ class User {
         return $row;
     }
 
-    function get_njlpt_level() {
+    public function get_njlpt_level()
+    {
         return old_to_new_jlpt($this->getLevel());
     }
 
-    function is_logged_in() {
+    public function is_logged_in()
+    {
         return $this->logged_in;
     }
 
-    function set_logged_in($_logged_in) {
+    public function set_logged_in($_logged_in)
+    {
         if ($this->logged_in != $_logged_in) {
             $this->logged_in = $_logged_in;
             $query = 'UPDATE `users` SET `last_played` = NOW(), `active` = ' . ($_logged_in ? '1' : '0') . ' WHERE `id` = ' . (int) $this->getID();
@@ -689,7 +738,8 @@ class User {
         }
     }
 
-    function upgrade_account($device_id, $build, $kb_code) {
+    public function upgrade_account($device_id, $build, $kb_code)
+    {
         $query = 'UPDATE `users` SET `last_played` = NOW(), `active` = 1, build = ' . (int) $build . ', kb_code = \'' . mysql_real_escape_string($kb_code) . '\', privileges = 1 WHERE `id` = ' . (int) $this->getID();
         // $query = 'UPDATE `users` SET `last_played` = NOW(), `active` = 1, device_id = \''. mysql_real_escape_string($device_id) . '\', build = '. (int) $build . ', kb_code = \''. mysql_real_escape_string($kb_code) . '\', privileges = 1 WHERE `id` = ' . (int) $this->get_id();
         mysql_query_debug($query) or log_db_error($query, false, true);
@@ -697,7 +747,8 @@ class User {
         $this->data->privileges = 1;
     }
 
-    static function get_ranks() {
+    public static function get_ranks()
+    {
         $ranks = array();
         foreach (User::$ranks_abs as $rank) {
             $ranks[$rank[0]] = $rank[1];
@@ -711,7 +762,8 @@ class User {
         return $ranks;
     }
 
-    function unarchive_db_records() {
+    public function unarchive_db_records()
+    {
         foreach (array('kana_learning', 'learning', 'jmdict_learning', 'reading_learning') as $table_name) {
             mysql_query_debug('INSERT IGNORE INTO ' . $table_name . ' (SELECT * FROM _purge_' . $table_name . ' pl WHERE pl.user_id = ' . $this->getID() . ')');
             mysql_query_debug('DELETE pl.* FROM _purge_' . $table_name . ' pl WHERE pl.user_id = ' . $this->getID());
@@ -725,7 +777,8 @@ class User {
         mysql_query_debug("UPDATE users SET purged = '0' WHERE id = " . $this->getID());
     }
 
-    function store_fb_friends() {
+    public function store_fb_friends()
+    {
         global $facebook;
 
         if (!fb_connect_init(false)) {
@@ -752,9 +805,11 @@ class User {
         return true;
     }
 
-    function get_friends() {
-        if ($this->friends)
+    public function get_friends()
+    {
+        if ($this->friends) {
             return $this->friends;
+        }
 
         global $facebook;
 
@@ -763,14 +818,17 @@ class User {
 
         $res = $facebook->api('me/friends');
         $this->friends = array();
-        foreach ($res['data'] as $friend)
-            if ($friend['id'])
+        foreach ($res['data'] as $friend) {
+            if ($friend['id']) {
                 $this->friends[] = $friend['id'];
+            }
+        }
 
         return $this->friends;
     }
 
-    function update_login($login) {
+    public function update_login($login)
+    {
         if (empty($login))
             return;
 
@@ -790,7 +848,8 @@ class User {
             return '<div class="error_msg">Update failed: database error.</div>';
     }
 
-    function update_name($first_name, $last_name) {
+    public function update_name($first_name, $last_name)
+    {
         if (empty($first_name) && empty($last_name))
             return;
 
@@ -815,7 +874,8 @@ class User {
         }
     }
 
-    function update_password($pwd) {
+    public function update_password($pwd)
+    {
         if (empty($pwd))
             return;
 
@@ -830,67 +890,79 @@ class User {
         }
     }
 
-    function getJLPTNumLevel() {
+    public function getJLPTNumLevel()
+    {
         return $this->data->level;
     }
 
-    function get_fb_id() {
+    public function get_fb_id()
+    {
         return $this->data->fb_id;
     }
 
-    function getID() {
+    public function getID()
+    {
         return (int) $this->data->id;
     }
 
-    function get_email() {
+    public function get_email()
+    {
         return $this->data->login_email;
     }
 
-    function get_pwd_hash() {
+    public function get_pwd_hash()
+    {
         return $this->data->login_pwd;
     }
 
-    function get_first_name() {
+    public function get_first_name()
+    {
         /* <fb:name firstnameonly="true" uid="<?php echo $_SESSION['user']->get_fb_id() ?>" useyou="false" linked="false" ifcantsee="Anonymous Gaijin"></fb:name> */
         return $this->data->first_name;
     }
 
-    function get_last_name() {
+    public function get_last_name()
+    {
         return $this->data->last_name;
     }
 
-    function is_pwd_empty() {
+    public function is_pwd_empty()
+    {
         return $this->data->login_pwd == '';
     }
 
-    function getLevel() {
+    public function getLevel()
+    {
         return $this->data->level;
     }
 
-    function is_name_hidden() {
+    public function is_name_hidden()
+    {
         return $this->data->name_hidden;
     }
 
-    function is_elite() {
+    public function is_elite()
+    {
         return $this->data->privileges > 0;
     }
 
-    function is_on_translator_probation() {
+    public function is_on_translator_probation()
+    {
         return $this->data->translator_probation;
     }
 
-    function inc_load_count() {
+    public function inc_load_count()
+    {
         $this->load_count++;
     }
 
-    function get_load_count() {
+    public function get_load_count()
+    {
         return $this->load_count;
     }
 
-    function is_guest_user() {
+    public function is_guest_user()
+    {
         return false;
     }
-
 }
-
-?>
