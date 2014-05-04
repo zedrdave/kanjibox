@@ -63,13 +63,6 @@ function init_app($ajax = false)
     }
 
     if (!empty($_SESSION['user']) && $_SESSION['user']->is_logged_in()) {
-        //DEBUG: ensure user has new-style level
-        // if(strlen($_SESSION['user']->get_level()) > 1) {
-        // 	$_SESSION = array();
-        //
-		// 	die('session reset. please reload.');
-        // }
-
         $_SESSION['user']->inc_load_count();
         $_SESSION['user']->set_logged_in(true);
         $levels = Session::$level_names;

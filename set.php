@@ -7,7 +7,7 @@ if (!$logged_in) {
     $_SESSION['user'] = new GuestUser();
 }
 
-$pop_types = array('week' => 'this week', 'month' => 'this month', 'all' => 'all time');
+$pop_types = ['week' => 'this week', 'month' => 'this month', 'all' => 'all time'];
 
 $mode = null;
 $search_str = '';
@@ -97,7 +97,7 @@ if (!empty($_REQUEST['set_id']) && is_numeric($_REQUEST['set_id'])) {
 
             function make_url_name($str)
             {
-                return preg_replace(array('/[[:punct:]]+/', '/[\<\>&\/]+/', '/\s+/'), array('', '', '_'),
+                return preg_replace(['/[[:punct:]]+/', '/[\<\>&\/]+/', '/\s+/'], ['', '', '_'],
                     strtolower(mb_substr($str, 0, 50)));
             }
             if ($mode == 'faq') {
@@ -138,7 +138,7 @@ if (!empty($_REQUEST['set_id']) && is_numeric($_REQUEST['set_id'])) {
                                 <input type="text" size="40" name="filter_str" value="<?php
                                 echo htmlentities($search_str, ENT_COMPAT, 'UTF-8');
                                 ?>"></input> <?php
-                                       echo get_select_menu(array('kanji' => 'Kanji', 'vocab' => 'Vocab'), 'set_type',
+                                       echo get_select_menu(['kanji' => 'Kanji', 'vocab' => 'Vocab'], 'set_type',
                                            (isset($_REQUEST['set_type']) ? $_REQUEST['set_type'] : null), '', 'All')
                                        ?> <input type="submit" name="Search" value="search"></input>
                             </p>
@@ -220,7 +220,7 @@ if (!empty($_REQUEST['set_id']) && is_numeric($_REQUEST['set_id'])) {
 
                                 if (count($rows) > 5 && count($rows) < 1000) {
                                     echo '<div style="margin-bottom: 10px;"><p style="float: left; margin-right: 4px;">Levels: </p><div class="set-difficulty-bar">';
-                                    $levels = array(0 => 0, 1 => 0, 2 => 0, 3 => 0, 4 => 0, 5 => 0);
+                                    $levels = [0 => 0, 1 => 0, 2 => 0, 3 => 0, 4 => 0, 5 => 0];
                                     foreach ($rows as $row) {
                                         $levels[($row->njlpt == 0 && $row->katakana) ? 5 : $row->njlpt] ++;
                                     }

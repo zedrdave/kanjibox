@@ -11,7 +11,7 @@ if ($hard_hat_db_down) {
         </head>
         <body>
             <div class="error_msg">
-                <img src="<?php echo SERVER_URL . 'img/construction_jp.gif' ?>" class="justified" style="height: 150px; width: 150px;" />
+                <img src="<?php echo SERVER_URL . 'img/construction_jp.gif'?>" alt="Update Work in Progress" class="justified" style="height: 150px; width: 150px;" />
                 <div class="title" title="Update Work in Progress">工事中</div>
                 <p>I am in the midst of modifying some application files. You might experience transient errors while I do so. Please wait until this sign disappears before reporting any issues.<br/><br/>
                     Thanks for your patience!</p>
@@ -40,9 +40,9 @@ stopwatch(); // Start bench timer
 global $api_key, $page;
 
 $page = isset($_REQUEST['page']) ? $_REQUEST['page'] : null;
-$pages = array('main' => 'main.php', PAGE_PLAY => 'play.php', PAGE_SCORES => 'scores.php', PAGE_STATS => 'stats.php', PAGE_FAQ => 'faq.php', PAGE_RANKS => 'ranks.php', PAGE_DONATE => 'donate.php', PAGE_ELITE => 'elite.php', PAGE_INTERNATIONAL => 'international.php');
-$titles = array('main' => 'KanjiBox: Japanese Study Tools for the Web');
-$secret_pages = array('jlpt1' => 'jlpt1.php', 'test' => 'test.php', 'badges' => 'badges.php', 'vocab_levels' => 'vocab_levels.php', 'privacy' => 'privacy.php');
+$pages = ['main' => 'main.php', PAGE_PLAY => 'play.php', PAGE_SCORES => 'scores.php', PAGE_STATS => 'stats.php', PAGE_FAQ => 'faq.php', PAGE_RANKS => 'ranks.php', PAGE_DONATE => 'donate.php', PAGE_ELITE => 'elite.php', PAGE_INTERNATIONAL => 'international.php'];
+$titles = ['main' => 'KanjiBox: Japanese Study Tools for the Web'];
+$secret_pages = ['jlpt1' => 'jlpt1.php', 'test' => 'test.php', 'badges' => 'badges.php', 'vocab_levels' => 'vocab_levels.php', 'privacy' => 'privacy.php'];
 
 if (!isset($pages[$page]) && !isset($secret_pages[$page])) {
     $page = 'main';
@@ -66,7 +66,8 @@ if (!$public_page && !$logged_in) {
 if (!$public_page && !isset($_SESSION['user'])) {
     $file_exists = file_exists('/tmp/kb/sess_' . session_id());
     $file_size = filesize('/tmp/kb/sess_' . session_id());
-    log_error('Session disappeared!' . "\n session_id: " . session_id() . "\n Exists: $file_exists \n Size: $file_size", true, true);
+    log_error('Session disappeared!' . "\n session_id: " . session_id() . "\n Exists: $file_exists \n Size: $file_size",
+        true, true);
 }
 
 if ((!empty($params['redirect']) && $params['redirect'] === 'back_to_forum') || (!empty($_REQUEST['redirect']) && $_REQUEST['redirect'] === 'back_to_forum')) {
@@ -128,25 +129,15 @@ if ($redirect_to_url = (isset($_REQUEST['redirect_to_url']) ? $_REQUEST['redirec
         if (!empty($_SESSION['user']) && $_SESSION['user']->getID() > 0) {
             if ($_SESSION['user']->is_name_hidden() && $_SESSION['user']->get_load_count() < 2) {
                 echo '<div class="info-bar"><p>Due to your Facebook privacy settings, your name cannot be displayed to other users of this application and will therefore not appear in Global Highscores.</p><p>If you wish to appear in the global highscores: please <a href="//www.facebook.com/privacy/?view=profile">change your privacy settings</a>.</p></div>';
-            }
-            // if(! defined('ADDING') && $_SESSION['user']->get_load_count() == 0)
-            elseif (!defined('ADDING') && (!$_SESSION['user']->is_elite() || $_SESSION['user']->isAdministrator())) {
+            } elseif (!defined('ADDING') && (!$_SESSION['user']->is_elite() || $_SESSION['user']->isAdministrator())) {
                 include('pandering.php');
             }
         }
         ?>
 
         <?php
-        echo '<div style="float:left; width:' . ($two_columns ? '80%' : '100%') . ';">'; // <!-- full frame -->
-// die('BLAHBLAHBLAH </body></html>');
-
-
+        echo '<div style="float:left; width:' . ($two_columns ? '80%' : '100%') . ';">';
         echo '<div id="kb-header">KanjiBox 5.0α' . (($_SESSION['user'] && $_SESSION['user']->is_elite()) ? '<a class="elite" href="' . get_page_url(PAGE_ELITE) . '">エリート</a>' : '') . '</div>';
-
-
-// if($_SESSION['user']->is_admin())
-// {
-// }
 
         switch ($page) {
             case 'main':
@@ -178,23 +169,15 @@ if ($redirect_to_url = (isset($_REQUEST['redirect_to_url']) ? $_REQUEST['redirec
         } else {
             $lang = 'en';
         }
-        $tabs1 = array('home' => 'Home', 'highscores' => 'Highscores', 'stats' => 'Stats', 'faq' => 'FAQ');
-// if($lang != 'en')
-
+        $tabs1 = ['home' => 'Home', 'highscores' => 'Highscores', 'stats' => 'Stats', 'faq' => 'FAQ'];
         $tabs1['international'] = '<img src="' . SERVER_URL . 'img/flags/' . $lang . '.png" alt="' . $lang . '" style="padding:0; margin: -4px 0 -7px 0;" />';
-
-        $tabs2 = array('kana' => 'Kana', 'kanji' => 'Kanji', 'vocab' => 'Vocab', 'reading' => 'Reading', 'text' => 'Text');
-
-        $tab_urls = array('home' => '', 'highscores' => 'highscores', 'stats' => 'stats', 'faq' => 'faq', 'international' => 'international', 'kana' => 'play/type/kana', 'kanji' => 'play/type/kanji', 'reading' => 'play/type/reading', 'vocab' => 'play/type/vocab', 'text' => 'play/type/text');
-
-//echo '<div class="fb:title">' . ($tabs1[$tab] ? $tabs1[$tab] : ($tabs2[$tab] ? $tabs2[$tab] : $tab)) . '</div>';
-
-
+        $tabs2 = ['kana' => 'Kana', 'kanji' => 'Kanji', 'vocab' => 'Vocab', 'reading' => 'Reading', 'text' => 'Text'];
+        $tab_urls = ['home' => '', 'highscores' => 'highscores', 'stats' => 'stats', 'faq' => 'faq', 'international' => 'international', 'kana' => 'play/type/kana', 'kanji' => 'play/type/kanji', 'reading' => 'play/type/reading', 'vocab' => 'play/type/vocab', 'text' => 'play/type/text'];
 
         if ($hard_hat_zone) {
             ?>
             <div class="error_msg">
-                <img src="<?php echo SERVER_URL . 'img/construction_jp.gif' ?>" class="justified" style="height: 150px; width: 150px;" />  <div class="title" title="Update Work in Progress">工事中</div>
+                <img src="<?php echo SERVER_URL . 'img/construction_jp.gif'?>" class="justified" style="height: 150px; width: 150px;" />  <div class="title" title="Update Work in Progress">工事中</div>
                 <p>I am in the midst of modifying some application files. You might experience transient errors while I do so. Please wait until this sign disappears before reporting any issues.<br/><br/>
                     Thanks for your patience!</p>
                 <div style="clear:both" ></div>
@@ -218,7 +201,7 @@ if ($redirect_to_url = (isset($_REQUEST['redirect_to_url']) ? $_REQUEST['redirec
 
             <div id="new-kb-msgs"></div>
 
-            <div class="content" id="frame-<?php echo $page; ?>">
+            <div class="content" id="frame-<?php echo $page;?>">
                 <?php
                 if (!empty($pages[$page])) {
                     require_once ABS_PATH . 'pages/' . $pages[$page];
@@ -228,16 +211,13 @@ if ($redirect_to_url = (isset($_REQUEST['redirect_to_url']) ? $_REQUEST['redirec
                     die('Unknown page: ' . $page);
                 }
                 ?>
-                <p id="signout"><a href="<?php echo SERVER_URL ?>?sign_out=1">[sign out]</a></p>
+                <p id="signout"><a href="<?php echo SERVER_URL?>?sign_out=1">[sign out]</a></p>
                 <?php
-// $params = array( 'next' => SERVER_URL . '?sign_out=1' );
-// $url = $facebook->getLogoutUrl($params);
-// echo "<a href=\"$url\">[FB]</a>";
                 ?>
             </div>
         </div>
         <div id="kbbottom"></div>
-        </div> <!-- full frame -->
+        </div>
 
         <div id="user_feedback_dialog">
             <div id="user_feedback_content"></div>
@@ -256,7 +236,7 @@ if ($redirect_to_url = (isset($_REQUEST['redirect_to_url']) ? $_REQUEST['redirec
                 window.fbAsyncInit = function() {
 
                     FB.init({
-                        appId: '<?php echo $api_key ?>',
+                        appId: '<?php echo $api_key?>',
                         cookie: true,
                         xfbml: true,
                         oauth: true
@@ -282,8 +262,6 @@ if ($redirect_to_url = (isset($_REQUEST['redirect_to_url']) ? $_REQUEST['redirec
 
             }
 
-
-
             $(document).ready(function()
             {
                 $('#kb').corner('top');
@@ -300,26 +278,11 @@ if ($redirect_to_url = (isset($_REQUEST['redirect_to_url']) ? $_REQUEST['redirec
                 );
 
 <?php
-if ($_SESSION['user'] && ($_SESSION['user']->get_load_count() % 20 == 0))
+if ($_SESSION['user'] && ($_SESSION['user']->get_load_count() % 20 == 0)) {
     echo "do_load('" . SERVER_URL . "ajax/get_messages/', 'new-kb-msgs');";
-
-
-// echo ' //' . $_SESSION['user']->get_load_count() . "\n";
+}
 ?>
             })
-
-
-            // window.google_analytics_uacct = "UA-52899-7";
-            //
-            // var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
-            // document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));
-            //
-            // try {
-            // var pageTracker = _gat._getTracker("UA-52899-7");
-            // pageTracker._trackPageview();
-            // } catch(err) {}
-
         </script>
-
     </body>
 </html>

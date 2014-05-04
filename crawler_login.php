@@ -1,9 +1,10 @@
 <?php
-if(@$_REQUEST['crawler'] != 'adsense')
-	die();
-	
+if (!empty($_REQUEST['crawler']) && $_REQUEST['crawler'] != 'adsense') {
+    die();
+}
+
 session_start();
 
 $_SESSION['crawler'] = true;
-
-?>Logged-in as crawler
+?>
+Logged-in as crawler
