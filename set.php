@@ -11,7 +11,7 @@ $pop_types = array('week' => 'this week', 'month' => 'this month', 'all' => 'all
 
 $mode = null;
 $search_str = '';
-global $params, $dbh;
+global $params;
 
 if (!empty($params['mode']) && $params['mode'] == 'search') {
     $mode = 'search';
@@ -36,17 +36,17 @@ $all_tags = LearningSet::get_all_tags(true);
 if (!empty($_REQUEST['set_id']) && is_numeric($_REQUEST['set_id'])) {
     $set_id = (int) $_REQUEST['set_id'];
     $set = new LearningSet($set_id);
-    $title = "KanjiBox Study Set &raquo; " . $set->get_name();
+    $title = 'KanjiBox Study Set &raquo; ' . $set->get_name();
 } else {
-    $set_id = NULL;
-    $set = NULL;
-    $title = "KanjiBox Japanese Study Sets";
+    $set_id = null;
+    $set = null;
+    $title = 'KanjiBox Japanese Study Sets';
 }
 ?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en"  xmlns:fb="http://www.facebook.com/2008/fbml">
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-        <title><?php echo $title; ?></title>
+        <title><?php echo $title;?></title>
         <link type="text/css" href="/js/jquery/themes/custom-theme/jquery-ui-1.7.1.custom.css" rel="stylesheet" media="screen" />
         <script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/jquery/1.9.0/jquery.min.js"></script>
         <script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/jqueryui/1.10.0/jquery-ui.min.js"></script>
@@ -58,8 +58,10 @@ if (!empty($_REQUEST['set_id']) && is_numeric($_REQUEST['set_id'])) {
         include_css('sets.css');
         include_css('faq.css');
         ?>
-        <meta property="og:title" content="<?php echo ($set ? 'Study Set: ' . str_replace('"', '\"', mb_substr($set->get_name(), 0, 50)) : 'KanjiBox Japanese Study Sets') ?>"/>
-        <meta property="og:url" content="<?php echo (SERVER_URL . ($set ? 'set/' . $set->set_id . '/' : 'sets/')) ?>"/>
+        <meta property="og:title" content="<?php
+        echo ($set ? 'Study Set: ' . str_replace('"', '\"', mb_substr($set->get_name(), 0, 50)) : 'KanjiBox Japanese Study Sets')
+        ?>"/>
+        <meta property="og:url" content="<?php echo (SERVER_URL . ($set ? 'set/' . $set->set_id . '/' : 'sets/'))?>"/>
         <meta property="og:type" content="article"/>
         <meta property="og:image" content="http://kanjibox.net/kb/img/kb_large.png"/>
         <meta property="og:site_name" content="KanjiBox"/>
@@ -83,26 +85,27 @@ if (!empty($_REQUEST['set_id']) && is_numeric($_REQUEST['set_id'])) {
                 fjs.parentNode.insertBefore(js, fjs);
             }(document, 'script', 'facebook-jssdk'));
         </script>
-        <div id="kb-header"><a href="<?php echo SERVER_URL; ?>">KanjiBox Study Sets</a></div>
+        <div id="kb-header"><a href="<?php echo SERVER_URL;?>">KanjiBox Study Sets</a></div>
         <div id="kb">
             <div class="tabs-frame">
                 <ul class="tabs">
-                    <li><a class="tab-item<?php echo ($mode == 'faq') ? '' : ' selected' ?>" href="<?php echo SERVER_URL; ?>sets/">Study Sets</a></li>
-                    <li><a class="tab-item<?php echo ($mode == 'faq') ? ' selected' : '' ?>" href="<?php echo SERVER_URL; ?>sets/mode/faq/">What is this?</a></li>
+                    <li><a class="tab-item<?php echo ($mode == 'faq') ? '' : ' selected'?>" href="<?php echo SERVER_URL;?>sets/">Study Sets</a></li>
+                    <li><a class="tab-item<?php echo ($mode == 'faq') ? ' selected' : ''?>" href="<?php echo SERVER_URL;?>sets/mode/faq/">What is this?</a></li>
                 </ul>
             </div>
             <?php
 
-            function make_url_name($str) {
-                return preg_replace(array('/[[:punct:]]+/', '/[\<\>&\/]+/', '/\s+/'), array('', '', '_'), strtolower(mb_substr($str, 0, 50)));
+            function make_url_name($str)
+            {
+                return preg_replace(array('/[[:punct:]]+/', '/[\<\>&\/]+/', '/\s+/'), array('', '', '_'),
+                    strtolower(mb_substr($str, 0, 50)));
             }
-
             if ($mode == 'faq') {
                 ?>
                 <div class="content" id="frame-faq">
                     <ul class="content">
                         <li><h4>What are these lists?</h4>
-                            These Japanese study sets are compiled by users of <a href="http://kanjibox.net/kb/">KanjiBox</a> to help them study a particular aspect (textbook, exam, film, manga...) of Japanese.<br/><br/>You can use them directly from within <a href="http://kanjibox.net/kb/">KanjiBox</a> or the <a href="itms://itunes.apple.com/WebObjects/MZStore.woa/wa/viewSoftware?id=322311303&amp;mt=8&amp;s=143441">KanjiBox app for iOS</a>.
+                            These Japanese study sets are compiled by users of <a href="<?php echo SERVER_URL;?>">KanjiBox</a> to help them study a particular aspect (textbook, exam, film, manga...) of Japanese.<br/><br/>You can use them directly from within <a href="<?php echo SERVER_URL;?>">KanjiBox</a> or the <a href="itms://itunes.apple.com/WebObjects/MZStore.woa/wa/viewSoftware?id=322311303&amp;mt=8&amp;s=143441">KanjiBox app for iOS</a>.
                         </li>
                         <li><h4>How can I use the study sets with KanjiBox?</h4>
                             Just use the <em>'subscribe'</em> button to add it to your collection (sets are shared between all versions of KanjiBox, when you use the 'Sync' feature). Of course you can also browse and add sets directly from within the application.
@@ -114,7 +117,7 @@ if (!empty($_REQUEST['set_id']) && is_numeric($_REQUEST['set_id'])) {
                             Subscribing to a set is the main way to let other users that a set is worth using. You can also use the Facebook 'like' button on a set's page (some future update will display a list of most-liked sets).
                         </li>
                         <li><h4>Can I create my own sets?</h4>
-                            Yes, simply log into <a href="http://kanjibox.net/kb/">KanjiBox online</a> or start the <a href="itms://itunes.apple.com/WebObjects/MZStore.woa/wa/viewSoftware?id=322311303&amp;mt=8&amp;s=143441">KanjiBox app</a> and use the 'Create Set' option.
+                            Yes, simply log into <a href="<?php echo SERVER_URL;?>">KanjiBox online</a> or start the <a href="itms://itunes.apple.com/WebObjects/MZStore.woa/wa/viewSoftware?id=322311303&amp;mt=8&amp;s=143441">KanjiBox app</a> and use the 'Create Set' option.
                         </li>
                         <li><h4>Do my sets have to be public?</h4>
                             No. In fact it is recommended you do not make sets public unless they can be of use to other users (textbook, news articles, method support etc). There is an option to make a set public or keep it private.
@@ -130,11 +133,14 @@ if (!empty($_REQUEST['set_id']) && is_numeric($_REQUEST['set_id'])) {
                 ?>
                 <div class="content" id="frame-public-sets">
                     <fieldset><legend>Search public sets</legend>
-                        <form action="<?php echo SERVER_URL ?>sets/mode/search/" method="get">
+                        <form action="<?php echo SERVER_URL;?>sets/mode/search/" method="get">
                             <p style="margin-bottom:10px;">
-                                <input type="text" size="40" name="filter_str" value="<?php echo htmlentities($search_str, ENT_COMPAT, 'UTF-8'); ?>"></input> <?php
-                                echo get_select_menu(array('kanji' => 'Kanji', 'vocab' => 'Vocab'), 'set_type', (isset($_REQUEST['set_type']) ? $_REQUEST['set_type'] : null), '', 'All')
-                                ?> <input type="submit" name="Search" value="search"></input>
+                                <input type="text" size="40" name="filter_str" value="<?php
+                                echo htmlentities($search_str, ENT_COMPAT, 'UTF-8');
+                                ?>"></input> <?php
+                                       echo get_select_menu(array('kanji' => 'Kanji', 'vocab' => 'Vocab'), 'set_type',
+                                           (isset($_REQUEST['set_type']) ? $_REQUEST['set_type'] : null), '', 'All')
+                                       ?> <input type="submit" name="Search" value="search"></input>
                             </p>
                             <?php
                             if ($mode == 'search' && $search_str == '') {
@@ -184,8 +190,7 @@ if (!empty($_REQUEST['set_id']) && is_numeric($_REQUEST['set_id'])) {
                                         if ($set->can_edit()) {
                                             echo "<button onclick=\"location.href ='" . SERVER_URL . "page/play/type/" . $set->get_type() . "/mode/sets/view_set_id/" . $set->set_id . "/'\">Edit</button> ";
                                         }
-                                    } else
-                                    if ($_SESSION['user']->is_logged_in()) {
+                                    } elseif ($_SESSION['user']->is_logged_in()) {
                                         echo" <button id=\"subscribe-to-set\" onclick=\"subscribe_to_set($set->set_id, this); return false;\">Subscribe</button> ";
                                     } else {
                                         echo "<button onclick=\"location.href ='" . SERVER_URL . "?redirect=set_subscribe&set_id=" . $set->set_id . "'\">Log in & Subscribe</button>";
@@ -196,7 +201,7 @@ if (!empty($_REQUEST['set_id']) && is_numeric($_REQUEST['set_id'])) {
                                     if ($set->can_admin()) {
                                         echo " (public: <input type=\"checkbox\" name=\"set_public\" id=\"set_public\" value=\"1\" onclick=\"update_set_public(" . $set->set_id . ", this.checked)\"" . ($set->is_public() ? ' checked' : '') . (!$set->can_admin() ? ' disabled' : '') . "></input>" . (($set->is_public() && $set->can_admin() && $set->get_subs_count()) ? '<span style="color:red;">access</span>' : 'access') . ", <input type=\"checkbox\" name=\"set_editable\" id=\"set_editable\" value=\"1\" onclick=\"update_set_editable(" . $set->set_id . ", this.checked)\"" . ($set->is_editable() ? ' checked' : '') . (!$set->can_admin() ? ' disabled' : '') . "></input>edit)";
                                     }
-                                    ?> <span style="margin-left:10px;" class="fb-like" data-href="<?php echo SERVER_URL . 'set/' . $set->set_id . '/' ?>" data-send="false" data-layout="button_count" data-width="100" data-show-faces="false"></span>
+                                    ?> <span style="margin-left:10px;" class="fb-like" data-href="<?php echo SERVER_URL . 'set/' . $set->set_id . '/'?>" data-send="false" data-layout="button_count" data-width="100" data-show-faces="false"></span>
                                 </p>
                                 <?php
                                 echo "<div class=\"description\">";
@@ -229,7 +234,8 @@ if (!empty($_REQUEST['set_id']) && is_numeric($_REQUEST['set_id'])) {
                                         if ($levels[$i]) {
                                             $temptot += $levels[$i];
                                             $size = $tot_width * $levels[$i] / $tot;
-                                            echo '<div class="njlpt-' . $i . '" style="width:' . $size . 'px;' . ($temptot == $tot ? 'border-right:1px solid black;' : '') . '">' . ($size > (5 * ceil(log($levels[$i] + 0.1, 10))) ? $levels[$i] : '') . '</div>';
+                                            echo '<div class="njlpt-' . $i . '" style="width:' . $size . 'px;' . ($temptot == $tot ? 'border-right:1px solid black;' : '') . '">' . ($size > (5 * ceil(log($levels[$i] + 0.1,
+                                                    10))) ? $levels[$i] : '') . '</div>';
                                         }
                                     }
                                     echo '</div><div style="clear: both;"></div></div>';
@@ -264,7 +270,8 @@ if (!empty($_REQUEST['set_id']) && is_numeric($_REQUEST['set_id'])) {
                                 case 'list':
                                 default:
                                     echo '<legend>Recent Sets</legend>';
-                                    $row = $dbh->query('SELECT COUNT(*) AS c FROM learning_sets ls WHERE ls.deleted = 0 AND ls.public = 1')->fetchColumn();
+                                    $row = DB::count('SELECT COUNT(*) FROM learning_sets ls WHERE ls.deleted = 0 AND ls.public = 1',
+                                            []);
                                     $entry_per_page = 50;
                                     if (!empty($params['page']) && $params['page'] > 0) {
                                         $page = (int) $params['page'];
@@ -282,7 +289,8 @@ if (!empty($_REQUEST['set_id']) && is_numeric($_REQUEST['set_id'])) {
                                     break;
 
                                 case 'search':
-                                    echo '<legend>' . ($_REQUEST['set_type'] != '' ? ucwords($_REQUEST['set_type']) . ' ' : '') . "Sets matching <em>" . htmlentities($search_str, ENT_COMPAT, 'UTF-8') . "</em></legend>";
+                                    echo '<legend>' . ($_REQUEST['set_type'] != '' ? ucwords($_REQUEST['set_type']) . ' ' : '') . "Sets matching <em>" . htmlentities($search_str,
+                                        ENT_COMPAT, 'UTF-8') . "</em></legend>";
 
                                     $query = "SELECT ls.*, GROUP_CONCAT(DISTINCT lst.tag_id SEPARATOR ',') AS tags FROM learning_sets ls LEFT JOIN learning_set_tags lst ON lst.set_id = ls.set_id WHERE ls.deleted = 0 AND ls.public = 1 AND (ls.name LIKE '%" . mysql_real_escape_string($search_str) . "%' OR ls.description LIKE '%" . mysql_real_escape_string($search_str) . "%')";
 
@@ -294,7 +302,8 @@ if (!empty($_REQUEST['set_id']) && is_numeric($_REQUEST['set_id'])) {
                                     break;
 
                                 case 'tags':
-                                    echo "<legend>For tag" . (count($tags) > 1 ? 's: <em>' : ': <em>') . implode(' or ', $tags) . "</em></legend>";
+                                    echo "<legend>For tag" . (count($tags) > 1 ? 's: <em>' : ': <em>') . implode(' or ',
+                                        $tags) . "</em></legend>";
 
                                     $query = 'SELECT ls.*, lst.tag_id AS tags FROM learning_sets ls ';
 
@@ -322,23 +331,30 @@ if (!empty($_REQUEST['set_id']) && is_numeric($_REQUEST['set_id'])) {
                                     break;
                             }
 
-                            $res = mysql_query($query) or die(mysql_error());
+                            try {
+                                $stmt = DB::getConnection()->prepare($query);
+                                $stmt->execute();
 
-                            while ($row = mysql_fetch_object($res)) {
-                                if (isset($row->subs_count)) {
-                                    $count = $row->subs_count;
-                                } else {
-                                    $count = $dbh->query('SELECT COUNT(*) AS c FROM learning_set_subs WHERE set_id = ' . $row->set_id)->fetchColumn();
-                                }
-                                $row_num_entries = $dbh->query('SELECT COUNT(*) AS c FROM learning_set_' . $row->set_type . ' WHERE set_id = ' . $row->set_id)->fetchColumn();
-
-                                echo '<div class="set_line"><span class="set_type_' . $row->set_type . '">' . ($row->set_type == 'kanji' ? '漢字' : '単語') . '</span><a class="name" href="' . SERVER_URL . 'set/' . $row->set_id . '/name/' . make_url_name($row->name) . '">' . $row->name . '</a> <span class="size">' . $row_num_entries . '</span>' . ($row->editable ? '<span class="prop">editable</span>' : '') . ($count ? ' <span class="set_prop">' . $count . ' subscriber' . ($count > 1 ? 's' : '') . '</span>' : '');
-                                if (!empty($row->tags)) {
-                                    foreach (explode(',', $row->tags) as $tag_id) {
-                                        echo '<span class="tag_box">' . $all_tags[$tag_id] . '</span>';
+                                while ($row = $stmt->fetchObject()) {
+                                    if (isset($row->subs_count)) {
+                                        $count = $row->subs_count;
+                                    } else {
+                                        $count = DB::count('SELECT COUNT(*) FROM learning_set_subs WHERE set_id = ?',
+                                                [$row->set_id]);
                                     }
+                                    $row_num_entries = DB::count('SELECT COUNT(*) AS c FROM learning_set_' . $row->set_type . ' WHERE set_id = ?',
+                                            [$row->set_id]);
+
+                                    echo '<div class="set_line"><span class="set_type_' . $row->set_type . '">' . ($row->set_type == 'kanji' ? '漢字' : '単語') . '</span><a class="name" href="' . SERVER_URL . 'set/' . $row->set_id . '/name/' . make_url_name($row->name) . '">' . $row->name . '</a> <span class="size">' . $row_num_entries . '</span>' . ($row->editable ? '<span class="prop">editable</span>' : '') . ($count ? ' <span class="set_prop">' . $count . ' subscriber' . ($count > 1 ? 's' : '') . '</span>' : '');
+                                    if (!empty($row->tags)) {
+                                        foreach (explode(',', $row->tags) as $tag_id) {
+                                            echo '<span class="tag_box">' . $all_tags[$tag_id] . '</span>';
+                                        }
+                                    }
+                                    echo '</div>';
                                 }
-                                echo '</div>';
+                            } catch (PDOException $e) {
+                                log_db_error($query, $e->getMessage(), true, true);
                             }
                         }
                         ?>
@@ -350,7 +366,7 @@ if (!empty($_REQUEST['set_id']) && is_numeric($_REQUEST['set_id'])) {
         ?>
                         function update_tag(set_id, tag_id, val)
                         {
-                            $.get('<?php echo SERVER_URL ?>ajax/edit_learning_set/?set_id=' + set_id + '&set_tag_id=' + tag_id + '&val=' + (val ? 1 : 0), function(data) {
+                            $.get('<?php echo SERVER_URL;?>ajax/edit_learning_set/?set_id=' + set_id + '&set_tag_id=' + tag_id + '&val=' + (val ? 1 : 0), function(data) {
 
                                 $('#tag_' + tag_id).css('border', '1px solid green');
                                 setTimeout(function() {
@@ -361,9 +377,8 @@ if (!empty($_REQUEST['set_id']) && is_numeric($_REQUEST['set_id'])) {
 
                         function update_set_public(id, val)
                         {
-                            $.get('<?php echo SERVER_URL ?>ajax/edit_learning_set/?set_id=' + id + '&set_public=' + (val ? 1 : 0), function(data) {
+                            $.get('<?php echo SERVER_URL;?>ajax/edit_learning_set/?set_id=' + id + '&set_public=' + (val ? 1 : 0), function(data) {
                                 $('#set_public').css('outline', '2px ridge green');
-                                // alert(data);
                                 setTimeout(function() {
                                     $('#set_public').css('outline', 'none');
                                 }, 2000);
@@ -372,9 +387,8 @@ if (!empty($_REQUEST['set_id']) && is_numeric($_REQUEST['set_id'])) {
 
                         function update_set_editable(id, val)
                         {
-                            $.get('<?php echo SERVER_URL ?>ajax/edit_learning_set/?set_id=' + id + '&set_editable=' + (val ? 1 : 0), function(data) {
+                            $.get('<?php echo SERVER_URL?>ajax/edit_learning_set/?set_id=' + id + '&set_editable=' + (val ? 1 : 0), function(data) {
                                 $('#set_editable').css('outline', '2px ridge green');
-                                // alert(data);
                                 setTimeout(function() {
                                     $('#set_editable').css('outline', 'none');
                                 }, 2000);
@@ -383,7 +397,7 @@ if (!empty($_REQUEST['set_id']) && is_numeric($_REQUEST['set_id'])) {
 
                         function update_set_desc(id, desc)
                         {
-                            $.get('<?php echo SERVER_URL ?>ajax/edit_learning_set/?set_id=' + id + '&new_desc=' + desc, function(data) {
+                            $.get('<?php echo SERVER_URL?>ajax/edit_learning_set/?set_id=' + id + '&new_desc=' + desc, function(data) {
                                 $('#set_description').css('border', '2px solid green');
 
                                 setTimeout(function() {
@@ -404,7 +418,7 @@ if (!empty($_REQUEST['set_id']) && is_numeric($_REQUEST['set_id'])) {
 
                     function subscribe_to_set(set_id, btn) {
                         $(btn).prop('disabled', 'disabled');
-                        $.post('<?php echo SERVER_URL ?>ajax/edit_learning_set/', {'set_id': set_id, 'subscribe_to_set': true, 'return_play_btn': true}, function(data, textStatus, jqXHR) {
+                        $.post('<?php echo SERVER_URL?>ajax/edit_learning_set/', {'set_id': set_id, 'subscribe_to_set': true, 'return_play_btn': true}, function(data, textStatus, jqXHR) {
                             $(btn).hide();
                             $('#ajax-results').html(data);
                         });
