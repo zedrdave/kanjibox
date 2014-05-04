@@ -1,23 +1,27 @@
 <?php
 define('ABS_PATH', dirname(__DIR__) . '/');
 
+spl_autoload_register(function ($class) {
+    $classFile = ABS_PATH . 'classes/' . $class . '.php';
+    if (!file_exists($classFile)) {
+        log_error('Unknown class: ' . $classFile, false, true);
+    }
+    require_once $classFile;
+});
+
 require_once ABS_PATH . 'libs/consts.php';
 require_once ABS_PATH . 'classes/DB.php';
 require_once ABS_PATH . 'libs/util_lib.php';
 require_once ABS_PATH . 'libs/log_lib.php';
 require_once ABS_PATH . 'classes/User.php';
 
-function get_mode() {
+function get_mode()
+{
     return trim(strrchr(trim(str_replace('/htdocs', '', ABS_PATH), '/'), '/'), '/');
 }
 
-function __autoload($class) {
-    if (!file_exists(ABS_PATH . 'classes/' . $class . '.php'))
-        log_error("Unknown class: " . ABS_PATH . "classes/$class.php", false, true);
-    include_class($class);
-}
-
-function init_app($ajax = false) {
+function init_app($ajax = false)
+{
     global $facebook, $fb_id, $api_key, $secret, $params, $ajax;
 
     if (isset($_REQUEST['sign_out'])) {
@@ -98,7 +102,8 @@ function init_app($ajax = false) {
                 log_db_error($query, mysql_error(), false, true);
             }
 
-            $_SESSION['user'] = new User(array('ux.login_email' => $_POST['login'], 'ux.login_pwd' => md5($_POST['pwd'])), false);
+            $_SESSION['user'] = new User(array('ux.login_email' => $_POST['login'], 'ux.login_pwd' => md5($_POST['pwd'])),
+                false);
 
             return true;
         } else {
@@ -126,7 +131,8 @@ function init_app($ajax = false) {
     }
 }
 
-function fb_connect_init($test_query = true) {
+function fb_connect_init($test_query = true)
+{
     global $facebook, $api_key, $secret, $session;
 
     // xdebug_get_function_stack();
@@ -199,13 +205,15 @@ function fb_connect_init($test_query = true) {
     return $fql_result;
 }
 
-function is_tablet() {
+function is_tablet()
+{
     global $params;
 
     return (@$params['device'] == 'tablet' || @$_SESSION['params']['device'] == 'tablet');
 }
 
-function force_reload($msg, $url = APP_URL, $alt_msg = '') {
+function force_reload($msg, $url = APP_URL, $alt_msg = '')
+{
     if (!$alt_msg)
         $alt_msg = $msg;
 
@@ -218,14 +226,16 @@ function force_reload($msg, $url = APP_URL, $alt_msg = '') {
     die();
 }
 
-function force_logged_in_app() {
+function force_logged_in_app()
+{
     if (!isset($_SESSION['user']) || !$_SESSION['user']->is_logged_in()) {
         header('Location: login.php');
         die();
     }
 }
 
-function print_prefs($cat) {
+function print_prefs($cat)
+{
     foreach (User::$pref_labels[$cat] as $pref => $label) {
         if (is_array($label)) {
             $cur_val = @$_SESSION['user']->get_pref($cat, $pref);
@@ -235,21 +245,25 @@ function print_prefs($cat) {
                 echo '<option value="' . $value . '"' . ($cur_val == $value ? ' selected' : '') . '>' . $name . '</option>';
             echo '</select></p>';
         } else
-            echo "<input type=\"checkbox\" name=\"prefs[$cat][$pref]\" id=\"prefs[$cat][$pref]\" value=\"1\" " . (@$_SESSION['user']->get_pref($cat, $pref) ? 'checked' : '') . " onclick=\"show_and_blink('save_prefs'); return true;\" /> $label ";
+            echo "<input type=\"checkbox\" name=\"prefs[$cat][$pref]\" id=\"prefs[$cat][$pref]\" value=\"1\" " . (@$_SESSION['user']->get_pref($cat,
+                $pref) ? 'checked' : '') . " onclick=\"show_and_blink('save_prefs'); return true;\" /> $label ";
     }
 }
 
-function is_admin() {
+function is_admin()
+{
     if (!isset($_SESSION['user']))
         return false;
     return $_SESSION['user']->isAdministrator();
 }
 
-function array2obj($data) {
+function array2obj($data)
+{
     return is_array($data) ? (object) array_map(__FUNCTION__, $data) : $data;
 }
 
-function XX_mysql_query_debug($query) {
+function XX_mysql_query_debug($query)
+{
     $time = microtime(true);
     $ret = mysql_query($query);
     $elapsed = microtime(true) - $time;
@@ -257,7 +271,8 @@ function XX_mysql_query_debug($query) {
         $file = '/srv/www/kanjibox.net/logs/mysql_slow_queries.txt';
         $file = fopen($file, 'a');
         if ($file) {
-            fwrite($file, (@$_SERVER['REMOTE_ADDR'] ? $_SERVER['REMOTE_ADDR'] : 'local') . ' - ' . date('m/d/Y H:i:s') . "\n" . $elapsed . " s.\n" . $query . "\n***********************************\n\n");
+            fwrite($file,
+                (@$_SERVER['REMOTE_ADDR'] ? $_SERVER['REMOTE_ADDR'] : 'local') . ' - ' . date('m/d/Y H:i:s') . "\n" . $elapsed . " s.\n" . $query . "\n***********************************\n\n");
             fclose($file);
         } else {
             error_log("Can't open file $file to log slow SQL query.");
@@ -272,7 +287,8 @@ function XX_mysql_query_debug($query) {
     return $ret;
 }
 
-function require_elite_user() {
+function require_elite_user()
+{
     if (@$_SESSION['user'] && $_SESSION['user']->is_elite())
         return true;
 
@@ -280,14 +296,17 @@ function require_elite_user() {
     exit();
 }
 
-function j2n($j) {
+function j2n($j)
+{
     if ($j >= 3)
         return $j + 1;
     else
         return $j;
 }
 
-function post_db_correction($table_name, $id_name, $id_value, $col_name, $new_value, $apply = false, $id_name_2 = '', $id_value_2 = '', $reviewed = false, $user_cmt = '', $need_work = false) {
+function post_db_correction($table_name, $id_name, $id_value, $col_name, $new_value, $apply = false, $id_name_2 = '',
+    $id_value_2 = '', $reviewed = false, $user_cmt = '', $need_work = false)
+{
     if (!$_SESSION['user']) {
         return 'no logged-in user';
     }
@@ -342,26 +361,30 @@ function post_db_correction($table_name, $id_name, $id_value, $col_name, $new_va
         return 'Update successfully logged';
 }
 
-function get_audio_hash($str) {
+function get_audio_hash($str)
+{
     return md5($str . 'hophophop');
 }
 
-function display_editors_board() {
+function display_editors_board()
+{
     ?>
     <div class="search_form" style="background-color:#DDD;"><h3><a href="#"  onclick="$('textarea#editors_board').toggle();
             return false;">Editors Bulletin Board:</a></h3>
-            <?php
+                                                                   <?php
             if (file_exists(dirname(__FILE__) . '/../tools/notes.txt'))
                 $notes = file_get_contents(dirname(__FILE__) . '/../tools/notes.txt');
             else
                 $notes = '';
             ?>
-        <textarea id="editors_board" style="width:98%;height:<?php echo min(max(5, strlen($notes) / 90) + count(explode("\n", $notes)), 15) ?>em" onchange="save_board(this);"><?php echo $notes; ?></textarea>
+        <textarea id="editors_board" style="width:98%;height:<?php
+        echo min(max(5, strlen($notes) / 90) + count(explode("\n", $notes)), 15)
+            ?>em" onchange="save_board(this);"><?php echo $notes;?></textarea>
     </div>
     <script type="text/javascript">
         function save_board(txtobj) {
             $('#ajax-result').html('Saving...').show();
-            $.get('<?php echo SERVER_URL ?>ajax/mod_board/action/save/?board_content=' + encodeURIComponent($(txtobj).val()), function(data) {
+            $.get('<?php echo SERVER_URL?>ajax/mod_board/action/save/?board_content=' + encodeURIComponent($(txtobj).val()), function(data) {
                 $('#ajax-result').html(data).show();
                 setTimeout(function() {
                     $('#ajax-result').hide()
@@ -372,18 +395,21 @@ function display_editors_board() {
     <?php
 }
 
-function get_query_hash($query) {
+function get_query_hash($query)
+{
     return md5($query . "no-ch34ting!" . date('%Y%M%H'));
 }
 
-function execute_query_with_hash($query, $payload, $apply = true) {
+function execute_query_with_hash($query, $payload, $apply = true)
+{
     if (get_query_hash($query) != $payload)
         die('Nonono...');
 
     execute_query($query, $apply);
 }
 
-function execute_query($query, $apply = true, $force_run_again = false) {
+function execute_query($query, $apply = true, $force_run_again = false)
+{
 
     $res = mysql_query('SELECT * FROM data_update_queries WHERE query_str = \'' . mysql_real_escape_string($query) . "'") or die(mysql_error());
     if (mysql_num_rows($res) > 0) {
@@ -405,18 +431,20 @@ function execute_query($query, $apply = true, $force_run_again = false) {
     }
 }
 
-function get_progress_bar($ratio, $tot_size = 400, $alt = '', $second_bar_ratio = 0) {
+function get_progress_bar($ratio, $tot_size = 400, $alt = '', $second_bar_ratio = 0)
+{
     // if($ratio == 0)
     // 	return '';
     // F2826C
 
     return "<div style=\"width:" . ($ratio * $tot_size / 100) . "px; height:15px; background-color:#" . ($ratio == 100 ? '1C6' : 'ABF') . "; border:1px solid black; float:left; color:#FFF; font-size:13px; font-weight:bold; text-align:center; margin-top:3px; padding-top:0; overflow:visible;\" alt=\"$alt\" title=\"$alt\">" . ($ratio > 5 ? "$ratio%" : '') . "</div>" .
-            ($second_bar_ratio > 0 ? "<div style=\"width:" . ($tot_size * $second_bar_ratio / 100) . "px;height:15px;background-color:#F2826C;border-top:1px solid black;border-right:1px solid black;border-bottom:1px solid black;float:left;margin-top:3px; font-size:13px;\">" . ($second_bar_ratio < 5 ? '' : " $second_bar_ratio%") . "</div>" : '') .
-            ($ratio + $second_bar_ratio < 100 ? "<div style=\"width:" . ($tot_size * (100 - $ratio - $second_bar_ratio) / 100) . "px;height:15px;background-color:#DDD;border-top:1px solid black;border-right:1px solid black;border-bottom:1px solid black;float:left;margin-top:3px; font-size:13px;\" alt=\"$alt\" title=\"$alt\">" .
-                    (($ratio > 5 || $second_bar_ratio > 0) ? '' : "$ratio%") . "</div>" : '') . "<div style=\"clear:both;\"></div>";
+        ($second_bar_ratio > 0 ? "<div style=\"width:" . ($tot_size * $second_bar_ratio / 100) . "px;height:15px;background-color:#F2826C;border-top:1px solid black;border-right:1px solid black;border-bottom:1px solid black;float:left;margin-top:3px; font-size:13px;\">" . ($second_bar_ratio < 5 ? '' : " $second_bar_ratio%") . "</div>" : '') .
+        ($ratio + $second_bar_ratio < 100 ? "<div style=\"width:" . ($tot_size * (100 - $ratio - $second_bar_ratio) / 100) . "px;height:15px;background-color:#DDD;border-top:1px solid black;border-right:1px solid black;border-bottom:1px solid black;float:left;margin-top:3px; font-size:13px;\" alt=\"$alt\" title=\"$alt\">" .
+            (($ratio > 5 || $second_bar_ratio > 0) ? '' : "$ratio%") . "</div>" : '') . "<div style=\"clear:both;\"></div>";
 }
 
-function old_to_new_jlpt($level) {
+function old_to_new_jlpt($level)
+{
     switch ($level) {
         case LEVEL_1:
         case LEVEL_J4:
@@ -445,7 +473,8 @@ function old_to_new_jlpt($level) {
     }
 }
 
-function get_badge($rank_array, $caption_type) {
+function get_badge($rank_array, $caption_type)
+{
     $kb_type = $rank_array->type;
     $rank = $rank_array->name_array[0];
     $rank_nice = $rank_array->name_array[1];
