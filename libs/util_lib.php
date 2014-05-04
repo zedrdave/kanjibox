@@ -102,7 +102,7 @@ function pretty_print($array)
     }
 }
 
-function draw_table($title, $sql_results, $extras = array())
+function draw_table($title, $sql_results, $extras = [])
 {
     $ret = '<table cellspacing="0" class="spreadsheet"><caption>' . $title . '</caption><tbody>';
     while ($row = mysql_fetch_assoc($sql_results)) {

@@ -57,7 +57,7 @@ try {
                     }
                 } else {
                     echo 'loading: ' . $_REQUEST['script'] . '<br/><br/>';
-                    require('admin/' . str_replace(array('.', '/'), '', $_REQUEST['script']) . '.php');
+                    require('admin/' . str_replace(['.', '/'], '', $_REQUEST['script']) . '.php');
                 }
             } catch (Exception $e) {
                 log_error('Uncaught Exception in ' . __FILE__ . ': ' . $e->getMessage(), true, true);

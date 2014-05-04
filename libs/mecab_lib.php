@@ -19,7 +19,7 @@ function parse_jp_sentence($sentence, $include_particles = true, $output_debug =
 	if($output_debug)
 		echo "<pre style=\"display:none;\" class=\"debug\">$parse</pre>";
 
-	$queries = array();
+	$queries = [];
 
 	foreach(explode("\n", $parse) as $line) {
 		$items = explode("\t", $line);

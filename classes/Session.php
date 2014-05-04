@@ -59,7 +59,7 @@ class Session {
         $this->wave_grade = $this->question_loader->getGrade();
 
         $this->cur_wave = 0;
-        $this->past_questions = array();
+        $this->past_questions = [];
 
 
         if (!$this->init_wave())

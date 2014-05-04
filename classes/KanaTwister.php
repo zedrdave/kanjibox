@@ -17,7 +17,7 @@ class KanaTwister {
         if ($append_to_array) {
             $ret_array = $array;
         } else {
-            $ret_array = array();
+            $ret_array = [];
         }
 
         foreach ($array as $kana => $prob) {

@@ -160,7 +160,7 @@ class User
             $this->prefs = unserialize($this->data->prefs);
         }
         if (!is_array($this->prefs)) {
-            $this->prefs = array();
+            $this->prefs = [];
         }
 
         $cur_level = $this->getLevel();
@@ -749,7 +749,7 @@ class User
 
     public static function get_ranks()
     {
-        $ranks = array();
+        $ranks = [];
         foreach (User::$ranks_abs as $rank) {
             $ranks[$rank[0]] = $rank[1];
         }
@@ -814,10 +814,10 @@ class User
         global $facebook;
 
         if (!fb_connect_init(false))
-            return array();
+            return [];
 
         $res = $facebook->api('me/friends');
-        $this->friends = array();
+        $this->friends = [];
         foreach ($res['data'] as $friend) {
             if ($friend['id']) {
                 $this->friends[] = $friend['id'];

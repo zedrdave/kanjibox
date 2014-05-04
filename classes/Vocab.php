@@ -89,7 +89,7 @@ class Vocab extends Question
 	
 	function displayCorrection($answer_id)
 	{
-		$kanjis = array();
+		$kanjis = [];
 		$solution = $this->getSolution();
 		$encoding = mb_detect_encoding($solution->word);
 		
@@ -242,7 +242,7 @@ class Vocab extends Question
 		if ($how_many == 1)
 			return array(mysql_fetch_object($res));
 	
-		$vocabs = array();
+		$vocabs = [];
 		while ($row = mysql_fetch_object($res))
 			$vocabs[] = $row;
 		
@@ -319,7 +319,7 @@ class Vocab extends Question
 		if ($how_many == 1)
 			return array(mysql_fetch_object($res));
 	
-		$kanjis = array();
+		$kanjis = [];
 		while ($row = mysql_fetch_object($res))
 			$kanjis[] = $row;
 		
@@ -372,7 +372,7 @@ class Vocab extends Question
 		if ($how_many == 1)
 			return array(mysql_fetch_object($res));
 	
-		$kanjis = array();
+		$kanjis = [];
 		while ($row = mysql_fetch_object($res))
 			$kanjis[] = $row;
 		
@@ -436,7 +436,7 @@ class Vocab extends Question
 		if ($howmany == 1)
 			return array(mysql_fetch_object($res));
 	
-		$vocabs = array();
+		$vocabs = [];
 		while ($row = mysql_fetch_object($res))
 			$vocabs[] = $row;
 		

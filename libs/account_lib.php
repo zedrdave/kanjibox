@@ -208,7 +208,7 @@ function display_new_account_page() {
 function display_log_out_page() {
     session_save_path('/var/lib/php5/web_kb_sessions');
     session_start();
-    $_SESSION = array();
+    $_SESSION = [];
     setcookie('Vanilla', ' ', time() - 3600, '/', '.kanjibox.net');
     unset($_COOKIE['Vanilla']);
     setcookie("kanjibox", ' ', time() - 3600, '/', '.kanjibox.net');

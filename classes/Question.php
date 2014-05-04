@@ -178,7 +178,7 @@ abstract class Question
 
         if ($items && count($items)) {
             $class_name = get_class($this);
-            $questions = array();
+            $questions = [];
             foreach ($items as $item) {
                 $questions[$item['sid']] = new $class_name($this->mode, $this->level,
                     (($this->isLearningSet() || $this->isGrammarSet()) ? $this->set_id : $grade), $item);
@@ -215,7 +215,7 @@ abstract class Question
         if (!count($learning_set)) {
             return false;
         }
-        $init_values = $good_ids = $bad_ids = array();
+        $init_values = $good_ids = $bad_ids = [];
         foreach ($learning_set as $question) {
             if (!$question->isAnswered() || $question->isLearnt()) {
                 continue;

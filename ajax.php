@@ -13,7 +13,7 @@ try {
         newrelic_name_transaction('/kb/ajax/' . $_REQUEST['script']);
     }
 
-    require 'ajax_scripts/' . str_replace(array('.', '/'), '', $_REQUEST['script']) . '.php';
+    require 'ajax_scripts/' . str_replace(['.', '/'], '', $_REQUEST['script']) . '.php';
 } catch (Exception $e) {
     log_error('Uncaught Exception in ' . __FILE__ . ': ' . $e->getMessage(), true, true);
 }

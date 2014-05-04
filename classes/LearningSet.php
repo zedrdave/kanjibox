@@ -167,7 +167,7 @@ class LearningSet {
     }
 
     function search_new_entries($search_str) {
-        $new_entries = array();
+        $new_entries = [];
 
         if ($this->get_type() == TYPE_KANJI) {
             preg_match_all('/[\\x{4E00}-\\x{9FA5}]/u', $search_str, $matches, PREG_PATTERN_ORDER);
@@ -186,7 +186,7 @@ class LearningSet {
         } else {
             define('KB_VOCAB_SET', '# KB vocab');
             if (substr($search_str, 0, strlen(KB_VOCAB_SET)) == KB_VOCAB_SET) {
-                $ids = array();
+                $ids = [];
                 $lines = explode("\n", $search_str);
                 foreach ($lines as $line) {
                     if ($line[0] == '#')
@@ -202,7 +202,7 @@ class LearningSet {
                 $query = 'SELECT jx.jmdict_id, j.word, j.njlpt, j.njlpt_r, j.reading, jx.gloss_english, j.katakana, j.usually_kana, ls.set_id FROM jmdict j LEFT JOIN jmdict_ext jx ON jx.jmdict_id = j.id LEFT JOIN learning_set_vocab ls ON ls.set_id = ' . $this->set_id . ' AND ls.jmdict_id = j.id WHERE j.id IN (' . implode(',', $ids) . ')';
             }
             elseif (substr($search_str, 0, 6) == "JMDICT") {
-                $words = array();
+                $words = [];
 
                 $lines = explode("\n", $search_str);
                 foreach ($lines as $line) {
@@ -398,7 +398,7 @@ class LearningSet {
         if (!$res)
             die(mysql_error());
 
-        $this->entry_data = array();
+        $this->entry_data = [];
         while ($row = mysql_fetch_object($res))
             $this->entry_data[] = $row;
     }

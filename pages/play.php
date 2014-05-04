@@ -143,7 +143,7 @@ elseif ($mode == SETS_MODE) {
         $query = 'SELECT ls.*, subs.set_id AS sub, (SELECT COUNT(*) FROM learning_set_' . ($set_type == TYPE_KANJI ? TYPE_KANJI : TYPE_VOCAB) . ' WHERE set_id = ls.set_id) AS size FROM learning_sets ls LEFT JOIN learning_set_subs subs ON subs.set_id = ls.set_id AND subs.user_id = ' . $_SESSION['user']->getID() . ' WHERE ls.deleted = 0 AND (ls.user_id = ' . $_SESSION['user']->getID() . " OR subs.set_id IS NOT NULL) AND set_type = '" . mysql_real_escape_string($set_type) . "' ORDER BY date_modified";
         $res = mysql_query($query) or log_db_error($query, '', false, true); //print_r(mysql_error());
 
-        $array = array();
+        $array = [];
         if (mysql_num_rows($res) > 0) {
 
             while ($row = mysql_fetch_object($res)) {

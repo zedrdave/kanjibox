@@ -24,7 +24,7 @@ mb_internal_encoding("UTF-8");
 
 	if(@$set_id)
 	{
-	$answers = array();
+	$answers = [];
 
 	?>
 	<form id="make-wrong-answers-form" action="/kb/ajax/grammar_robot_step_2/" method="post" onsubmit="if($('.choice > input:checked').length >= 4) { return true; } else { alert('Please first at least 4 answers in this set.'); return false; };">

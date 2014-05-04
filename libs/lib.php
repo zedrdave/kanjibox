@@ -34,7 +34,7 @@ function init_app($ajax = false)
     session_start();
 
     if (isset($_REQUEST['reset_session'])) {
-        $_SESSION = array();
+        $_SESSION = [];
         setcookie('Vanilla', ' ', time() - 3600, '/', '.kanjibox.net');
         unset($_COOKIE['Vanilla']);
         setcookie("kanjibox", ' ', time() - 3600, '/', '.kanjibox.net');
@@ -50,7 +50,7 @@ function init_app($ajax = false)
     // header('P3P: CP="IDC DSP COR CURa ADMa OUR IND PHY ONL COM STA"');
 
     get_db_conn();
-    $params = array();
+    $params = [];
     if (!empty($_REQUEST['params'])) {
         $arr = explode('/', $_REQUEST['params']);
         for ($i = 0; $i < count($arr) - 1; $i += 2) {

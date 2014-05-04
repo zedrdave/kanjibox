@@ -12,7 +12,7 @@ else {
 	$user_id = (int) @$params['user_id'] or (int) @$_REQUEST['user_id'];
 	
 	$res = mysql_query("SELECT u.*, ux.* FROM grammar_questions sq LEFT JOIN users u ON u.id = sq.user_id JOIN users_ext ux ON ux.user_id = u.id GROUP BY u.id");
-	$array = array();
+	$array = [];
 	while($row = mysql_fetch_object($res)) {
 		$array[$row->user_id] = $row->first_name . ' ' . mb_substr($row->last_name, 0, 1, 'UTF-8') . '.';
 	}
@@ -35,7 +35,7 @@ else {
 	echo '<br/>';
 }
 
-$grammar_sets = array();
+$grammar_sets = [];
 $res = mysql_query("SELECT * FROM grammar_sets ORDER BY short_name");
 while($row = mysql_fetch_object($res))
 	$grammar_sets[$row->set_id] = $row->name;
@@ -47,7 +47,7 @@ $res = mysql_query("SELECT sq.*, e.*, j.njlpt AS word_jlpt, j.*, jg.gloss_englis
 
 echo "<p>Total: " . mysql_num_rows($res) . " questions (" . $demo_row->c . " demo)</p>";
 
-$answers = array();
+$answers = [];
 
 $res_correct_answers = mysql_query("SELECT j.*, jg.gloss_english as gloss, COUNT(*) AS c FROM grammar_questions sq JOIN jmdict j ON j.id = sq.jmdict_id JOIN jmdict_ext jg ON jg.jmdict_id = j.id LEFT JOIN users_ext ux ON ux.user_id = sq.user_id WHERE " . ($user_id ? "sq.user_id = $user_id" : "1") . ($set_id > 0 ? " AND sq.set_id = $set_id" : "") . ($set_id == -1 ? " AND (sq.set_id <= 0 OR sq.set_id IS NULL)" : "") . " GROUP BY j.id") or die(mysql_error());
 while($answer = mysql_fetch_object($res_correct_answers)) {

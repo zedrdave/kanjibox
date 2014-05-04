@@ -59,7 +59,7 @@ class Kana extends Question
         }
 
         for ($i = 0; $i < count($picks) - 3; $i+=4) {
-            $choice = array();
+            $choice = [];
             $choice[0] = $picks[$i];
             $exclude = array($choice[0]->roma);
             for ($j = 1; $picks[$i]->type == $choice[0]->type && $j < 4; $j++) {

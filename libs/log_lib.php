@@ -83,7 +83,7 @@ function log_pwd_reset($msg, $error = true, $fatal = true, $private_msg = '', $d
     $log_msg .= $msg . "\n" . $private_msg . "\n";
 
     if ($details) {
-        $log_msg .= "---\nREQUEST:\n" . print_r($_REQUEST, true) . "\n---\nSESSION:\n" . print_r(!empty($_SESSION) ? $_SESSION : array(), true) . "\n";
+        $log_msg .= "---\nREQUEST:\n" . print_r($_REQUEST, true) . "\n---\nSESSION:\n" . print_r(!empty($_SESSION) ? $_SESSION : [], true) . "\n";
     }
     $log_msg .= "\n";
 

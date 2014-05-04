@@ -29,7 +29,7 @@ if (isset($_REQUEST['jmdict_id'])) {
     $res = mysql_query('SELECT * FROM jmdict j LEFT JOIN jmdict_ext jx ON jx.jmdict_id = j.id WHERE ' . $where . ' LIMIT ' . $skip . ',' . $limit) or die(mysql_error());
 
     if (@$_REQUEST['return_json']) {
-        $words = array();
+        $words = [];
         while ($word = mysql_fetch_object($res))
             $words[] = $word;
         if ($words) {

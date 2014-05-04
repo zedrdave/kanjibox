@@ -149,7 +149,7 @@ if(isset($_POST['search']) || isset($_FILES['add_to_set_file']['name'])) {
 
 
 
-echo '<em>Set id: <a href="' . get_page_url(PAGE_PLAY, array('type' => $set->get_type(), 'mode' => SETS_MODE, 'view_set_id' => $set->set_id)) . '">' . $set->set_id . '</a></em>';
+echo '<em>Set id: <a href="' . get_page_url(PAGE_PLAY, ['type' => $set->get_type(), 'mode' => SETS_MODE, 'view_set_id' => $set->set_id]) . '">' . $set->set_id . '</a></em>';
 if(! $set->is_owner()) {
 	echo ' (created by: ';
 
@@ -172,18 +172,18 @@ if(! $set->is_owner()) {
 		echo "Public Domain";
 	
 	if($set->is_subscribed())
-		echo " <form style=\"display:inline;\" action=\"". get_page_url(PAGE_PLAY, array('mode' => SETS_MODE, 'type' => $set->get_type(), 'editor' => 'open')) ."\" method=\"post\"><input type=\"hidden\" name=\"unsubscribe_set_id\" value=\"$set->set_id\"></input><input type=\"submit\" value=\"Unsubscribe\"></submit></form> ";	
+		echo " <form style=\"display:inline;\" action=\"". get_page_url(PAGE_PLAY, ['mode' => SETS_MODE, 'type' => $set->get_type(), 'editor' => 'open']) ."\" method=\"post\"><input type=\"hidden\" name=\"unsubscribe_set_id\" value=\"$set->set_id\"></input><input type=\"submit\" value=\"Unsubscribe\"></submit></form> ";	
 	elseif($set->is_public())
 		echo " <button onclick=\"subscribe_to_set($set->set_id, this, '". str_replace("'", "\'", $set->get_name()) . "'); return false;\">Subscribe</button> ";
 	
 }
 
 if($set->can_admin()) {
-	echo " <form style=\"display:inline;\" action=\"". get_page_url(PAGE_PLAY, array('mode' => SETS_MODE, 'type' => $set->get_type(), 'editor' => 'open')) ."\" onsubmit=\"return confirm('Are you sure you want to delete this set?')\" method=\"post\"><input type=\"hidden\" name=\"delete_set_id\" value=\"$set->set_id\"></input><input class=\"delete\" type=\"submit\" value=\"Delete set\"></submit></form> ";
+	echo " <form style=\"display:inline;\" action=\"". get_page_url(PAGE_PLAY, ['mode' => SETS_MODE, 'type' => $set->get_type(), 'editor' => 'open']) ."\" onsubmit=\"return confirm('Are you sure you want to delete this set?')\" method=\"post\"><input type=\"hidden\" name=\"delete_set_id\" value=\"$set->set_id\"></input><input class=\"delete\" type=\"submit\" value=\"Delete set\"></submit></form> ";
 }
 
 if(@$_SESSION['user']->isAdministrator() && !$set->is_public_domain()) {
-	echo " <form style=\"display:inline;\" action=\"". get_page_url(PAGE_PLAY, array('mode' => SETS_MODE, 'type' => $set->get_type(), 'editor' => 'open')) ."\" method=\"post\"><input type=\"hidden\" name=\"public_domain_set_id\" value=\"$set->set_id\"></input><input type=\"submit\" value=\"Make public domain\"></submit></form> ";
+	echo " <form style=\"display:inline;\" action=\"". get_page_url(PAGE_PLAY, ['mode' => SETS_MODE, 'type' => $set->get_type(), 'editor' => 'open']) ."\" method=\"post\"><input type=\"hidden\" name=\"public_domain_set_id\" value=\"$set->set_id\"></input><input type=\"submit\" value=\"Make public domain\"></submit></form> ";
 }
 
 echo '<a href="' . APP_URL . "export/set_export.php?set_id=" . $set->set_id . '" target="_blank"><button id="set_export_btn">Export</button></a> ';

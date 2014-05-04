@@ -75,7 +75,7 @@ if(isset($_REQUEST['create'])) {
 if(isset($_REQUEST['id'])) {
 	$changes = 0;
 	echo '<div class="message">';
-	foreach(array('example_str', 'example_var', 'english', 'annotation', 'njlpt', 'njlpt_r', 'status') as $field) {
+	foreach(['example_str', 'example_var', 'english', 'annotation', 'njlpt', 'njlpt_r', 'status'] as $field) {
 		if(isset($_REQUEST[$field])) {
 			if($field == 'status')
 				$ret = post_db_correction('examples', 'example_id', (int) $_REQUEST['id'], $field, $_REQUEST[$field], true, '', '', true);

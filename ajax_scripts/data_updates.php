@@ -75,10 +75,11 @@ if (!empty($_REQUEST['validate']) && !empty($_REQUEST['update_id'])) {
     elseif ($c > 50) {
         echo "Too many updates selected ($c)";
     } else {
-        $update_ids = array();
-        while ($row = mysql_fetch_object($res))
+        $update_ids = [];
+        while ($row = mysql_fetch_object($res)) {
             $update_ids[] = $row->update_id;
-////
+        }
+
         $query = "SELECT * FROM data_updates WHERE update_id = $update_id";
         $res = mysql_query($query) or die(mysql_error());
         $row = mysql_fetch_object($res);
@@ -119,7 +120,7 @@ if (@$_REQUEST['revert'] && @$_REQUEST['update_id']) {
     $res = mysql_query($query) or die(mysql_error());
 
     $c = mysql_num_rows($res);
-    $update_ids = array();
+    $update_ids = [];
     while ($row = mysql_fetch_object($res))
         $update_ids[] = $row->update_id;
 
@@ -165,7 +166,7 @@ if (@$_REQUEST['discard'] && @$_REQUEST['update_id']) {
     $res = mysql_query($query) or die(mysql_error());
 
     $c = mysql_num_rows($res);
-    $update_ids = array();
+    $update_ids = [];
     while ($row = mysql_fetch_object($res))
         $update_ids[] = $row->update_id;
 

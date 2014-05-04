@@ -63,7 +63,7 @@ function utf8ToUnicode(&$str)
   $mUcs4  = 0;     // cached Unicode character
   $mBytes = 1;     // cached expected number of octets in the current sequence
 
-  $out = array();
+  $out = [];
 
   $len = strlen($str);
   for($i = 0; $i < $len; $i++) {

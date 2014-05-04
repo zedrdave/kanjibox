@@ -191,7 +191,7 @@ if ($count == 1) {
 
         if ($_SESSION['user']->isEditor()) {
 
-            echo "<p>Status: " . get_select_menu(array('unknown' => 'Unknown', 'reviewed' => 'Reviewed', 'modified' => 'Modified', 'need_work' => 'Need work', 'reimport_06_2011' => 'reimport_06_2011', 'kanjibox' => 'KanjiBox'),
+            echo "<p>Status: " . get_select_menu(['unknown' => 'Unknown', 'reviewed' => 'Reviewed', 'modified' => 'Modified', 'need_work' => 'Need work', 'reimport_06_2011' => 'reimport_06_2011', 'kanjibox' => 'KanjiBox'],
                 'status_' . $sentence->example_id, $sentence->status,
                 "update_sentence_status($sentence->example_id, this.value); return false;");
             echo '<br/><a href="#" onclick="confirm_delete_sentence(' . $sentence->example_id . '); return false;">[delete sentence]</a>';

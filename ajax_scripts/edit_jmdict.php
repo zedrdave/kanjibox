@@ -80,7 +80,7 @@ elseif(@$_POST['copy_jmdict_id']) {
 	else
 		$id = (int) $_POST['copy_jmdict_id'];
 		
-	foreach(array('word', 'reading') as $key)
+	foreach(['word', 'reading'] as $key)
 		if(isset($_POST[$key]))
 			$$key = "'" . mysql_real_escape_string($_POST[$key]) . "'";
 		else

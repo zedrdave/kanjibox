@@ -29,7 +29,7 @@ $query = 'SELECT SUM(c) as c FROM ((SELECT COUNT(*) as c FROM learning l WHERE l
 $res = mysql_query($query) or log_db_error($query, true, true);
 $row = mysql_fetch_object($res);
 
-$info_fields = array();
+$info_fields = [];
 
 if($row->c > 0)
 {

@@ -12,9 +12,9 @@ if(@$_REQUEST['answer_ids']) {
 		die('<div class="error_msg">You need to select at least 4 different answers to generate a set of questions.</div>');
 	}
 	
-	$preferences = array();
-	$mismatched_wrong_answers = array();
-	$problem_wrong_answers = array();
+	$preferences = [];
+	$mismatched_wrong_answers = [];
+	$problem_wrong_answers = [];
 
 	foreach($answer_ids as $id)
 		foreach($answer_ids as $id_2)
@@ -36,8 +36,8 @@ if(@$_REQUEST['answer_ids']) {
 	
 	$res = mysql_query($query) or die(mysql_error());
 	
-	$questions_wrong_answers = array();
-	$questions_right_answers = array();
+	$questions_wrong_answers = [];
+	$questions_right_answers = [];
 	
 	$min_wrong_answers = 100;
 	
@@ -108,7 +108,7 @@ if(@$_REQUEST['answer_ids']) {
 	if($add_total <= $min_wrong_answers)
 		die('<div class="error_msg">All questions already have at least ' . $min_wrong_answers . ' Wrong Answers. You need to select more question/answers to get more suggestions.</div>');
 		
-	$suggestions = array();
+	$suggestions = [];
 	
 	foreach($questions_right_answers as $question_id => $answer_id) {
 		$wrong_answers = $preferences[$answer_id];

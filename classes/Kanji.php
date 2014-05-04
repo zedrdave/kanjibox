@@ -124,7 +124,7 @@ class Kanji extends Question
         }
 
         for ($i = 0; $i < count($picks) - 1; $i+=2) {
-            $choice = array();
+            $choice = [];
             $choice[0] = $picks[$i];
             $choice[2] = $picks[$i + 1];
             $choice[1] = $this->getOtherKanji($choice[0]->id, $grade, array($choice[2]->id, $choice[0]->id), 1, $options);
@@ -469,7 +469,7 @@ k.`njlpt`
         /*
           $query = "SELECT `meaning` FROM `english` WHERE `kanji_id` = '" . (int) $id . "' LIMIT 3";
           $res = mysql_query_debug($query) or log_db_error($query, true, true);
-          $meanings = array();
+          $meanings = [];
           while ($row = mysql_fetch_object($res))
           $meanings[] = $row->meaning;
          */
@@ -486,7 +486,7 @@ k.`njlpt`
 
         $res = mysql_query_debug($query) or log_db_error($query, true, true);
 
-        $meanings = array();
+        $meanings = [];
         while ($row = mysql_fetch_object($res))
             $prons[] = $row->pron;
 

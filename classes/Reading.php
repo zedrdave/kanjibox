@@ -76,7 +76,7 @@ class Reading extends Question {
     }
 
     function displayCorrection($answer_id) {
-        $kanjis = array();
+        $kanjis = [];
         $solution = $this->getSolution();
 
         $wrong_reading = '';
@@ -104,7 +104,7 @@ class Reading extends Question {
 
         echo '<br/><span class="comment">Kanji breakdown:</span>';
         foreach ($solution->kanji_prons as $kanji => $prons) {
-            $kuns = $ons = array();
+            $kuns = $ons = [];
             foreach ($prons as $pron)
                 ($pron->type == 'on') ? $ons[] = $pron->pron : $kuns[] = $pron->pron;
             echo '<br/>• ' . $kanji . ': ' . (@count($kuns) ? implode(', ', $kuns) . ' - ' : '') . (@count($ons) ? implode(', ', $ons) : '');
@@ -153,14 +153,14 @@ class Reading extends Question {
                 log_db_error($query, $e->getMessage(), false, true);
             }
 
-            $pick->kanji_prons = array();
+            $pick->kanji_prons = [];
 
             if ($pre_processed) {
                 $str = mb_ereg_replace('(.)々', '\\1\\1', $pick->word);
                 preg_match_all('/([^\\x{3040}-\\x{30FF}]?)([\\x{3040}-\\x{30FF}]*)/u', $str, $matches, PREG_SET_ORDER);
                 array_pop($matches); // last elem is empty
 
-                $kanjis = array();
+                $kanjis = [];
                 foreach ($matches as $match) {
                     if (!empty($match[1])) {
                         $kanjis[] = $match[1];
@@ -187,7 +187,7 @@ class Reading extends Question {
                     $stmt = DB::getConnection()->prepare($query);
                     $stmt->execute([(int) $pick->jmdict_id]);
 
-                    $sims = array();
+                    $sims = [];
                     while ($row = $stmt->fetchObject()) {
                         $sims[$row->reading_decoy] = $row->score / 10000;
                     }
@@ -409,7 +409,7 @@ class Reading extends Question {
             preg_match_all('/([^\\x{3040}-\\x{30FF}]?)([\\x{3040}-\\x{30FF}]*)/u', $str, $matches, PREG_SET_ORDER);
             array_pop($matches); // last elem is empty
 
-            $kanjis = array();
+            $kanjis = [];
             foreach ($matches as $match)
                 if (!empty($match[1]))
                     $kanjis[] = $match[1];
@@ -436,7 +436,7 @@ class Reading extends Question {
                 }
             }
 
-            $var_parts = array();
+            $var_parts = [];
             $all_kanji = true;
 
             foreach ($matches as $idx => $match)
@@ -470,7 +470,7 @@ class Reading extends Question {
                 if (empty($kanji))
                     $var_parts[$i][$tail] = array('kanji' => '', 'kana' => $tail, 'prob' => 1, 'type' => 'kana');
                 elseif (isset($kanji_prons[$kanji])) {
-                    $pron_kana_vars = array();
+                    $pron_kana_vars = [];
 
                     foreach ($kanji_prons[$kanji] as $pron) {
                         list($pron_str, $prob) = $this->get_pron_prob($pron, $tail, $i, count($matches));
@@ -497,7 +497,7 @@ class Reading extends Question {
             $last_type = '';
 
             foreach ($var_parts as $i => $part) {
-                $new_variations = array();
+                $new_variations = [];
                 foreach ($variations as $var => $var_prob)
                     foreach ($part as $pron) {
                         if (rand(0, count($part)) > 20)
@@ -623,7 +623,7 @@ class Reading extends Question {
     }
 
     function weighted_rand_select($population) {
-        $sort_order = array();
+        $sort_order = [];
 
         foreach ($population as $var => $prob)
             $sort_order[$var] = ($prob ? pow(rand() / getrandmax(), 1 / $prob) : 0);
