@@ -11,7 +11,7 @@ class Kanji extends Question
     public $table_learning = 'learning';
     public $table_learning_index = 'kanji_id';
     public $quiz_type = 'kanji';
-    public static $lang_strings = array('en' => 'english', 'ru' => 'russian', 'sp' => 'spanish', 'fr' => 'french', 'sv' => 'swedish', 'pl' => 'polish', 'de' => 'german', 'fi' => 'finnish', 'it' => 'italian', 'tr' => 'turkish', 'th' => 'thai');
+    public static $lang_strings = ['en' => 'english', 'ru' => 'russian', 'sp' => 'spanish', 'fr' => 'french', 'sv' => 'swedish', 'pl' => 'polish', 'de' => 'german', 'fi' => 'finnish', 'it' => 'italian', 'tr' => 'turkish', 'th' => 'thai'];
 
     public function __construct($_mode, $_level, $_grade = -2, $_data = null)
     {
@@ -127,11 +127,11 @@ class Kanji extends Question
             $choice = [];
             $choice[0] = $picks[$i];
             $choice[2] = $picks[$i + 1];
-            $choice[1] = $this->getOtherKanji($choice[0]->id, $grade, array($choice[2]->id, $choice[0]->id), 1, $options);
-            $choice[3] = $this->getOtherKanji($choice[2]->id, $grade,
-                array($choice[0]->id, $choice[1]->id, $choice[2]->id), 1, $options);
+            $choice[1] = $this->getOtherKanji($choice[0]->id, $grade, [$choice[2]->id, $choice[0]->id], 1, $options);
+            $choice[3] = $this->getOtherKanji($choice[2]->id, $grade, [$choice[0]->id, $choice[1]->id, $choice[2]->id],
+                1, $options);
             $sid = 'sid_' . md5('himitsu' . time() . '-' . rand(1, 100000));
-            $data[$sid] = array('sid' => $sid, 'choices' => $choice, 'solution' => $choice[0]);
+            $data[$sid] = ['sid' => $sid, 'choices' => $choice, 'solution' => $choice[0]];
 
             //###DEBUG
             if ($choice[0]->id == $choice[1]->id || $choice[0]->id == $choice[2]->id || $choice[0]->id == $choice[3]->id || $choice[1]->id == $choice[2]->id || $choice[1]->id == $choice[3]->id || $choice[2]->id == $choice[3]->id) {
@@ -517,31 +517,33 @@ k.`njlpt`
 
     public function getGradeOptions()
     {
-        if ($this->isQuiz())
-            return NULL;
+        if ($this->isQuiz()) {
+            return null;
+        }
 
-        for ($i = 1; $i <= 5; $i++)
-            $options[] = array('grade' => 'N' . $i, 'label' => 'JLPT ' . $i, 'selected' => ($this->getGrade() == 'N' . $i));
+        for ($i = 1; $i <= 5; $i++) {
+            $options[] = ['grade' => 'N' . $i, 'label' => 'JLPT ' . $i, 'selected' => ($this->getGrade() == 'N' . $i)];
+        }
 
-        for ($i = 1; $i <= 9; $i++)
-            $options[] = array('grade' => $i, 'label' => 'Grade ' . $i, 'selected' => ($this->getGrade() == $i));
+        for ($i = 1; $i <= 9; $i++) {
+            $options[] = ['grade' => $i, 'label' => 'Grade ' . $i, 'selected' => ($this->getGrade() == $i)];
+        }
 
         return $options;
     }
 
     public function feedbackFormOptions()
     {
-
-        foreach ($this->data['choices'] as $choice)
+        foreach ($this->data['choices'] as $choice) {
             $kanji_ids[$choice->id] = $choice->kanji;
-        $forms[] = array('type' => 'kanji_same_def', 'title' => 'Confusing choices - Similar definitions', 'param_1' => $kanji_ids, 'param_1_title' => 'Between ', 'param_2_title' => ' and ', 'param_2' => $kanji_ids, 'param_1_required' => true, 'param_2_required' => true);
-
-        $forms[] = array('type' => 'kanji_tradit', 'title' => 'Traditional form of the same kanji', 'param_1' => $kanji_ids, 'param_1_title' => 'This kanji ', 'param_2_title' => ' is the traditional variant of ', 'param_2' => $kanji_ids, 'param_1_required' => true, 'param_2_required' => true);
+        }
+        $forms[] = ['type' => 'kanji_same_def', 'title' => 'Confusing choices - Similar definitions', 'param_1' => $kanji_ids, 'param_1_title' => 'Between ', 'param_2_title' => ' and ', 'param_2' => $kanji_ids, 'param_1_required' => true, 'param_2_required' => true];
+        $forms[] = ['type' => 'kanji_tradit', 'title' => 'Traditional form of the same kanji', 'param_1' => $kanji_ids, 'param_1_title' => 'This kanji ', 'param_2_title' => ' is the traditional variant of ', 'param_2' => $kanji_ids, 'param_1_required' => true, 'param_2_required' => true];
 
         if (!$this->isQuiz()) {
-            $forms[] = array('type' => 'kanji_wrong_level', 'title' => 'Wrong level', 'param_1' => $kanji_ids, 'param_1_title' => 'This kanji doesn\'t belong at this JLPT level:', 'param_1_required' => true, 'param_2_required' => false);
+            $forms[] = ['type' => 'kanji_wrong_level', 'title' => 'Wrong level', 'param_1' => $kanji_ids, 'param_1_title' => 'This kanji doesn\'t belong at this JLPT level:', 'param_1_required' => true, 'param_2_required' => false];
         }
-        $forms[] = array('type' => 'kanji_other', 'title' => 'Other...', 'param_1' => $kanji_ids, 'param_1_title' => 'Kanji 1:', 'param_2_title' => ' - Kanji 2 (optional):', 'param_2' => $kanji_ids, 'param_1_required' => true, 'param_2_required' => false);
+        $forms[] = ['type' => 'kanji_other', 'title' => 'Other...', 'param_1' => $kanji_ids, 'param_1_title' => 'Kanji 1:', 'param_2_title' => ' - Kanji 2 (optional):', 'param_2' => $kanji_ids, 'param_1_required' => true, 'param_2_required' => false];
 
         return $forms;
     }
@@ -554,7 +556,7 @@ k.`njlpt`
     public function getDefaultWGrades()
     {
         $array = parent::getDefaultWGrades();
-        $array[LEVEL_SENSEI] = array(3, 4, 5, 6, 6, 8, 9, -1, -1, -1);
+        $array[LEVEL_SENSEI] = [3, 4, 5, 6, 6, 8, 9, -1, -1, -1];
 
         return $array;
     }

@@ -61,7 +61,7 @@ class Kana extends Question
         for ($i = 0; $i < count($picks) - 3; $i+=4) {
             $choice = [];
             $choice[0] = $picks[$i];
-            $exclude = array($choice[0]->roma);
+            $exclude = [$choice[0]->roma];
             for ($j = 1; $picks[$i]->type == $choice[0]->type && $j < 4; $j++) {
                 $choice[$j] = $picks[$i + $j];
                 $exclude[] = $choice[$j]->roma;
@@ -79,7 +79,7 @@ class Kana extends Question
             }
 
             $sid = 'sid_' . md5('himitsu' . time() . '-' . rand(1, 100000));
-            $data[$sid] = array('sid' => $sid, 'choices' => $choice, 'solution' => $choice[0]);
+            $data[$sid] = ['sid' => $sid, 'choices' => $choice, 'solution' => $choice[0]];
 
             //###DEBUG
             if ($choice[0]->id == $choice[1]->id || $choice[0]->id == $choice[2]->id || $choice[0]->id == $choice[3]->id || $choice[1]->id == $choice[2]->id || $choice[1]->id == $choice[3]->id || $choice[2]->id == $choice[3]->id) {

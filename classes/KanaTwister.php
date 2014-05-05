@@ -41,7 +41,7 @@ class KanaTwister {
 }
 
 function add_tenten($char) {
-    // static $convmap = array(0x3040, 0x309F, 1, 0xFFFF);
+    // static $convmap = [0x3040, 0x309F, 1, 0xFFFF];
     // return mb_encode_numericentity($char, $convmap, 'UTF-8');
     $codes = utf8ToUnicode($char);
     $codes[0] ++;
@@ -49,7 +49,7 @@ function add_tenten($char) {
 }
 
 function remove_tenten($char) {
-//	static $convmap = array(0x3040, 0x309F, -1, 0xFFFF);
+//	static $convmap = [0x3040, 0x309F, -1, 0xFFFF];
 //	return mb_convert_encoding(mb_encode_numericentity($char, $convmap, 'UTF-8'), 'ASCII', 'UTF-8');
     $codes = utf8ToUnicode($char);
     $codes[0] --;
@@ -57,7 +57,7 @@ function remove_tenten($char) {
 }
 
 function add_maru($char) {
-    // static $convmap = array(0x3040, 0x309F, 2, 0xFFFF);
+    // static $convmap = [0x3040, 0x309F, 2, 0xFFFF];
     // return mb_encode_numericentity($char, $convmap, 'UTF-8');
     $codes = utf8ToUnicode($char);
     $codes[0]+=2;
@@ -65,7 +65,7 @@ function add_maru($char) {
 }
 
 function remove_maru($char) {
-// 	static $convmap = array(0x3040, 0x309F, -2, 0xFFFF);
+// 	static $convmap = [0x3040, 0x309F, -2, 0xFFFF];
 // 	return mb_encode_numericentity($char, $convmap, 'UTF-8');
     $codes = utf8ToUnicode($char);
     $codes[0]-=2;

@@ -54,7 +54,7 @@ class Session {
 
             $this->start_time = time();
         } else
-            $this->wave_size = $this->question_loader->default_size;
+            $this->wave_size = $this->question_loader->defaultSize;
 
         $this->wave_grade = $this->question_loader->getGrade();
 
@@ -425,7 +425,7 @@ class Session {
         if (!$this->score_id)
             return $this->save_score();
 
-        return $_SESSION['user']->is_highscore($this->score_id, $this->session_level, $this->question_loader->quiz_type);
+        return $_SESSION['user']->is_highscore($this->score_id, $this->session_level, $this->question_loader->quizType);
     }
 
     function get_grade_options() {
@@ -491,7 +491,7 @@ class Session {
     }
 
     function get_type() {
-        return $this->question_loader->quiz_type;
+        return $this->question_loader->quizType;
     }
 
     function get_set_id() {
@@ -499,7 +499,7 @@ class Session {
     }
 
     function get_nice_type() {
-        return ucfirst($this->question_loader->quiz_type);
+        return ucfirst($this->question_loader->quizType);
     }
 
     function getLevel() {

@@ -14,7 +14,7 @@ abstract class Question
     protected $data;
     protected $grade;
     protected $learnable = true;
-    public $completion_bonuses = array(LEVEL_1 => 20, LEVEL_2 => 50, LEVEL_3 => 70, LEVEL_SENSEI => 100, LEVEL_N5 => 20, LEVEL_N4 => 30, LEVEL_N3 => 35, LEVEL_N2 => 50, LEVEL_N1 => 70);
+    public $completion_bonuses = [LEVEL_1 => 20, LEVEL_2 => 50, LEVEL_3 => 70, LEVEL_SENSEI => 100, LEVEL_N5 => 20, LEVEL_N4 => 30, LEVEL_N3 => 35, LEVEL_N2 => 50, LEVEL_N1 => 70];
 
     public function Question($_mode, $_level, $_grade_or_set_id = -2, $_data = null)
     {
@@ -37,7 +37,6 @@ abstract class Question
         }
 
         $this->data = $_data;
-
         $this->created = time();
     }
 
@@ -361,38 +360,38 @@ abstract class Question
 
     public function getDefaultWSizes()
     {
-        return array(
-            LEVEL_SENSEI => array(4, 6, 6, 6, 10, 15, 15, 5, 10, 5),
-            LEVEL_N5 => array(5, 10, 10, 15, 10, 10, 5),
-            LEVEL_N4 => array(5, 5, 15, 10, 15, 10, 10, 10, 5),
-            LEVEL_N3 => array(5, 5, 5, 15, 10, 15, 5, 10, 5),
-            LEVEL_N2 => array(5, 5, 5, 15, 10, 15, 5, 10, 5),
-            LEVEL_N1 => array(4, 4, 15, 15, 10, 10, 15, 10, 5)
-        );
+        return [
+            LEVEL_SENSEI => [4, 6, 6, 6, 10, 15, 15, 5, 10, 5],
+            LEVEL_N5 => [5, 10, 10, 15, 10, 10, 5],
+            LEVEL_N4 => [5, 5, 15, 10, 15, 10, 10, 10, 5],
+            LEVEL_N3 => [5, 5, 5, 15, 10, 15, 5, 10, 5],
+            LEVEL_N2 => [5, 5, 5, 15, 10, 15, 5, 10, 5],
+            LEVEL_N1 => [4, 4, 15, 15, 10, 10, 15, 10, 5]
+        ];
     }
 
     public function getDefaultWGrades()
     {
-        return array(
-            LEVEL_SENSEI => array(3, 4, 5, 6, 6, 8, 9, -1, -1, -1),
-            LEVEL_N5 => array('N5', 'N5', 1, 'N5', 1, 2, 'N4'),
-            LEVEL_N4 => array('N5', 'N4', 'N4', 2, 'N4', 3, 'N4', 4, 'N3'),
-            LEVEL_N3 => array('N5', 'N4', 'N3', 'N3', 4, 'N3', 'N3', 5, 'N2'),
-            LEVEL_N2 => array('N5', 'N4', 'N3', 'N2', 5, 'N2', 'N2', 6, 'N1'),
-            LEVEL_N1 => array('N4', 'N3', 'N2', 'N1', 9, 'N1', 'N1', 9, -1)
-        );
+        return [
+            LEVEL_SENSEI => [3, 4, 5, 6, 6, 8, 9, -1, -1, -1],
+            LEVEL_N5 => ['N5', 'N5', 1, 'N5', 1, 2, 'N4'],
+            LEVEL_N4 => ['N5', 'N4', 'N4', 2, 'N4', 3, 'N4', 4, 'N3'],
+            LEVEL_N3 => ['N5', 'N4', 'N3', 'N3', 4, 'N3', 'N3', 5, 'N2'],
+            LEVEL_N2 => ['N5', 'N4', 'N3', 'N2', 5, 'N2', 'N2', 6, 'N1'],
+            LEVEL_N1 => ['N4', 'N3', 'N2', 'N1', 9, 'N1', 'N1', 9, -1]
+        ];
     }
 
     public function getDefaultWPoints()
     {
-        return array(
-            LEVEL_SENSEI => array(1, 2, 2, 8, 15, 30, 50, 65, 80, 75),
-            LEVEL_N5 => array(1, 4, 6, 12, 20, 34, 16),
-            LEVEL_N4 => array(1, 4, 8, 12, 16, 12, 35, 50, 45),
-            LEVEL_N3 => array(1, 4, 8, 16, 22, 18, 35, 65, 45),
-            LEVEL_N2 => array(1, 4, 8, 16, 22, 18, 35, 65, 45),
-            LEVEL_N1 => array(1, 4, 8, 16, 24, 18, 36, 70, 55)
-        );
+        return [
+            LEVEL_SENSEI => [1, 2, 2, 8, 15, 30, 50, 65, 80, 75],
+            LEVEL_N5 => [1, 4, 6, 12, 20, 34, 16],
+            LEVEL_N4 => [1, 4, 8, 12, 16, 12, 35, 50, 45],
+            LEVEL_N3 => [1, 4, 8, 16, 22, 18, 35, 65, 45],
+            LEVEL_N2 => [1, 4, 8, 16, 22, 18, 35, 65, 45],
+            LEVEL_N1 => [1, 4, 8, 16, 24, 18, 36, 70, 55]
+        ];
     }
 
     public function feedbackFormOptions()

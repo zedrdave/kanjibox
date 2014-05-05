@@ -6,7 +6,7 @@ class LearningSet {
 
     public $set_id;
     private $data, $entry_data;
-    static $jlpt2char = array(0 => '', 1 => '①', 2 => '②', 3 => '③', 4 => '④', 5 => '⑤');
+    static $jlpt2char = [0 => '', 1 => '①', 2 => '②', 3 => '③', 4 => '④', 5 => '⑤'];
 
     function __construct($set_id) {
         $this->valid = false;

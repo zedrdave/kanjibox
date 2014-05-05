@@ -6,21 +6,24 @@ mb_internal_encoding('UTF-8');
 mb_regex_encoding('UTF-8');
 require_once ABS_PATH . 'libs/utf8_lib.php';
 
-class Reading extends Question {
+class Reading extends Question
+{
 
-    public $table_learning = 'reading_learning';
-    public $table_learning_index = 'jmdict_id';
-    public $quiz_type = 'reading';
-    public $default_size = 10;
-    private $fast_mode = false;
+    public $tableLearning = 'reading_learning';
+    public $tableLearningIndex = 'jmdict_id';
+    public $quizType = 'reading';
+    public $defaultSize = 10;
+    private $fastMode = false;
 
-    function __construct($_mode, $_level, $_grade = 0, $_data = NULL) {
-        parent::__construct($_mode, $_level, $_grade, $_data);
+    public function __construct($mode, $level, $grade = 0, $data = null)
+    {
+        parent::__construct($mode, $level, $grade, $data);
     }
 
-    function displayChoices($next_sid = '') {
+    public function displayChoices($nextSid = '')
+    {
 
-        $submit_url = SERVER_URL . 'ajax/submit_answer/?sid=' . $this->data['sid'] . '&amp;time_created=' . (int) $this->created . '&amp;';
+        $submitURL = SERVER_URL . 'ajax/submit_answer/?sid=' . $this->data['sid'] . '&amp;time_created=' . (int) $this->created . '&amp;';
         $choices = $this->data['choices'];
         shuffle($choices);
 
@@ -31,104 +34,125 @@ class Reading extends Question {
         }
 
         foreach ($choices as $choice) {
-            echo '<div class="choice japanese" lang="ja" xml:lang="ja" onclick="submit_answer(\'' . $this->data['sid'] . '\', \'' . $next_sid . '\', \'' . $submit_url . 'answer_id=' . (int) $choice->id . '\'); return false;">' . $anticheat . $choice->reading . '</div>';
+            echo '<div class="choice japanese" lang="ja" xml:lang="ja" onclick="submit_answer(\'' . $this->data['sid'] . '\', \'' . $nextSid . '\', \'' . $submitURL . 'answer_id=' . (int) $choice->id . '\'); return false;">' . $anticheat . $choice->reading . '</div>';
         }
 
-        echo '<div class="choice skip" onclick="submit_answer(\'' . $this->data['sid'] . '\',  \'' . $next_sid . '\', \'' . $submit_url . 'answer_id=' . SKIP_ID . '\'); return false;">&nbsp;?&nbsp;</div>';
+        echo '<div class="choice skip" onclick="submit_answer(\'' . $this->data['sid'] . '\',  \'' . $nextSid . '\', \'' . $submitURL . 'answer_id=' . SKIP_ID . '\'); return false;">&nbsp;?&nbsp;</div>';
     }
 
-    function displayHint() {
+    public function displayHint()
+    {
         $solution = $this->getSolution();
         echo '<div class="japanese" lang="ja" xml:lang="ja">' . $solution->word . '</div>';
 
         if (!$this->isQuiz()) {
             if ($_SESSION['user']->get_pref('drill', 'show_reading_translation')) {
-                if (@$solution->missing_lang) {
+                if ($solution->missing_lang) {
                     echo '<div class="missing_lang">' . $solution->fullgloss;
-                    if (!$_SESSION['user']->is_on_translator_probation())
-                        echo ' <a class="" href="#" onclick="show_vocab_translate_dialog(\'' . SERVER_URL . '\', \'' . $solution->id . '\', \'' . $this->data['sid'] . '\'); return false;"><img src="' . SERVER_URL . 'img/flags/' . $_SESSION['user']->get_pref('lang', 'vocab_lang') . '.png" class="missing_lang_icon' . ($this->isQuiz() ? ' disabled' : '') . '" /></a>';
+                    if (!$_SESSION['user']->is_on_translator_probation()) {
+                        echo ' <a class="" href="#" onclick="show_vocab_translate_dialog(\'' . SERVER_URL . '\', \'' . $solution->id . '\', \'' . $this->data['sid'] . '\'); return false;"><img src="' . SERVER_URL . 'img/flags/' . $_SESSION['user']->get_pref('lang',
+                            'vocab_lang') . '.png" class="missing_lang_icon' . ($this->isQuiz() ? ' disabled' : '') . '" /></a>';
+                    }
                     echo '</div>';
-                }
-                else {
+                } else {
                     if ($_SESSION['user']->get_pref('lang', 'vocab_lang') != 'en' && substr($solution->fullgloss, 0, 3) == '(~)') {
-                        if ($this->isQuiz())
-                            echo '<div class="missing_lang">' . $solution->gloss_english . ' <a class="" href="#" onclick="show_vocab_translate_dialog(\'' . SERVER_URL . '\', \'' . $solution->id . '\', \'' . $this->data['sid'] . '\'); return false;"><img src="' . SERVER_URL . 'img/flags/' . $_SESSION['user']->get_pref('lang', 'vocab_lang') . '.png" class="missing_lang_icon disabled" /></a></div>' . ' <small><em>(incomplete translation)</em></small>';
-                        else
-                            echo '<div class="missing_lang">' . substr($solution->fullgloss, 3) . ' <a class="" href="#" onclick="show_vocab_translate_dialog(\'' . SERVER_URL . '\', \'' . $solution->id . '\', \'' . $this->data['sid'] . '\'); return false;"><img src="' . SERVER_URL . 'img/flags/' . $_SESSION['user']->get_pref('lang', 'vocab_lang') . '.png" class="missing_lang_icon" /></a></div>  <small><em>(translation may need improving)</em></small>';
-                    } else
+                        if ($this->isQuiz()) {
+                            echo '<div class="missing_lang">' . $solution->gloss_english . ' <a class="" href="#" onclick="show_vocab_translate_dialog(\'' . SERVER_URL . '\', \'' . $solution->id . '\', \'' . $this->data['sid'] . '\'); return false;"><img src="' . SERVER_URL . 'img/flags/' . $_SESSION['user']->get_pref('lang',
+                                'vocab_lang') . '.png" class="missing_lang_icon disabled" /></a></div>' . ' <small><em>(incomplete translation)</em></small>';
+                        } else {
+                            echo '<div class="missing_lang">' . substr($solution->fullgloss, 3) . ' <a class="" href="#" onclick="show_vocab_translate_dialog(\'' . SERVER_URL . '\', \'' . $solution->id . '\', \'' . $this->data['sid'] . '\'); return false;"><img src="' . SERVER_URL . 'img/flags/' . $_SESSION['user']->get_pref('lang',
+                                'vocab_lang') . '.png" class="missing_lang_icon" /></a></div>  <small><em>(translation may need improving)</em></small>';
+                        }
+                    } else {
                         echo $solution->fullgloss;
+                    }
                 }
-            }
-            else {
+            } else {
                 echo make_toggle_visibility("<span class=\"translation\">" . $solution->fullgloss . "</span><br/>");
             }
         }
     }
 
-    function is_above_level($grade, $jlpt_level, $or_same = true) {
-        $add = ($or_same ? 1 : 0);
-        if ($grade[0] == 'N')
-            return ($jlpt_level < $add + (int) $grade[1]);
-        elseif ($grade)
-            return ($jlpt_level < 5 + $add - ceil($grade * 4 / 9));
-        else
+    public function isAboveLevel($grade, $jlptLevel, $orSame = true)
+    {
+        $add = ($orSame ? 1 : 0);
+        if ($grade[0] == 'N') {
+            return ($jlptLevel < $add + (int) $grade[1]);
+        } elseif ($grade) {
+            return ($jlptLevel < 5 + $add - ceil($grade * 4 / 9));
+        } else {
             return false;
+        }
     }
 
-    function displayCorrection($answer_id) {
-        $kanjis = [];
+    public function displayCorrection($answerID)
+    {
         $solution = $this->getSolution();
 
-        $wrong_reading = '';
-        if ($answer_id != SKIP_ID && !$this->isSolution($answer_id))
-            foreach ($this->data['choices'] as $choice)
-                if ($choice->id == $answer_id)
-                    $wrong_reading = ', <span class="wrong" lang="ja" xml:lang="ja">' . $choice->reading . '</span>';
+        $wrongReading = '';
+        if ($answerID != SKIP_ID && !$this->isSolution($answerID)) {
+            foreach ($this->data['choices'] as $choice) {
+                if ($choice->id == $answerID) {
+                    $wrongReading = ', <span class="wrong" lang="ja" xml:lang="ja">' . $choice->reading . '</span>';
+                }
+            }
+        }
 
-        foreach ($solution->readings as $key => $val)
-            if ($val == $solution->reading)
+        foreach ($solution->readings as $key => $val) {
+            if ($val == $solution->reading) {
                 $solution->readings[$key] = '<span class="main_reading" lang="ja" xml:lang="ja">' . $val . '</span>';
+            }
+        }
 
-        $display_word_solution = preg_replace('/([^\\x{3040}-\\x{30FF}])/ue', "'<span class=\"kanji_detail\" href=\"#\" onclick=\"show_kanji_details(\'\\1\', \''. SERVER_URL . 'ajax/kanji_details/kanji/'.urlencode('\\1').'\');  return false;\">\\1</span>'", $solution->word);
+        $displayWordSolution = preg_replace('/([^\\x{3040}-\\x{30FF}])/ue',
+            "'<span class=\"kanji_detail\" href=\"#\" onclick=\"show_kanji_details(\'\\1\', \''. SERVER_URL . 'ajax/kanji_details/kanji/'.urlencode('\\1').'\');  return false;\">\\1</span>'",
+            $solution->word);
 
 
-        echo '<span class="main">' . $display_word_solution . ': ' . implode(', ', $solution->readings) . $wrong_reading . '</span><br/>';
+        echo '<span class="main">' . $displayWordSolution . ': ' . implode(', ', $solution->readings) . $wrongReading . '</span><br/>';
 
-        if (@$solution->missing_lang) {
+        if ($solution->missing_lang) {
             echo '<div class="missing_lang">' . $solution->fullgloss;
-            if (!$_SESSION['user']->is_on_translator_probation())
-                echo ' <a class="" href="#" onclick="show_vocab_translate_dialog(\'' . SERVER_URL . '\', \'' . $solution->id . '\', \'' . $this->data['sid'] . '\'); return false;"><img src="' . SERVER_URL . 'img/flags/' . $_SESSION['user']->get_pref('lang', 'vocab_lang') . '.png" class="missing_lang_icon' . ($this->isQuiz() ? ' disabled' : '') . '" /></a>';
+            if (!$_SESSION['user']->is_on_translator_probation()) {
+                echo ' <a class="" href="#" onclick="show_vocab_translate_dialog(\'' . SERVER_URL . '\', \'' . $solution->id . '\', \'' . $this->data['sid'] . '\'); return false;"><img src="' . SERVER_URL . 'img/flags/' . $_SESSION['user']->get_pref('lang',
+                    'vocab_lang') . '.png" class="missing_lang_icon' . ($this->isQuiz() ? ' disabled' : '') . '" /></a>';
+            }
             echo '</div>';
-        } else
+        } else {
             echo '<br/> ' . $solution->fullgloss . '<br/>';
+        }
 
         echo '<br/><span class="comment">Kanji breakdown:</span>';
         foreach ($solution->kanji_prons as $kanji => $prons) {
             $kuns = $ons = [];
-            foreach ($prons as $pron)
+            foreach ($prons as $pron) {
                 ($pron->type == 'on') ? $ons[] = $pron->pron : $kuns[] = $pron->pron;
-            echo '<br/>• ' . $kanji . ': ' . (@count($kuns) ? implode(', ', $kuns) . ' - ' : '') . (@count($ons) ? implode(', ', $ons) : '');
+            }
+            echo '<br/>• ' . $kanji . ': ' . (@count($kuns) ? implode(', ', $kuns) . ' - ' : '') . (@count($ons) ? implode(', ',
+                    $ons) : '');
         }
     }
 
-    function learnSet($user_id, $learning_set, $learn_others = false) {
-        return parent::learn_set($user_id, $learning_set, $learn_others);
+    public function learnSet($userID, $learningSet, $learnOthers = false)
+    {
+        return parent::learn_set($userID, $learningSet, $learnOthers);
     }
 
-    function getDBData($how_many, $grade, $user_id = -1) {    
+    public function getDBData($howMany, $grade, $userID = -1)
+    {
         if ($this->isQuiz() || !empty($_SESSION['user'])) {
-            $picks = $this->getRandomReadings($grade, $grade, $how_many);
+            $picks = $this->getRandomReadings($grade, $grade, $howMany);
         } elseif ($this->isDrill()) {
-            $picks = $this->getWeightedReadings($grade, $grade, $how_many);
+            $picks = $this->getWeightedReadings($grade, $grade, $howMany);
         } else {
-            $picks = $this->getSetWeightedReadings($how_many);
+            $picks = $this->getSetWeightedReadings($howMany);
         }
 
         foreach ($picks as $pick) {
             $pick->jmdict_id = $pick->id;
 
             $pick->readings = [];
-            $pre_processed = false;
+            $preProcessed = false;
             $query = 'SELECT j.reading as main_reading, r.*, (rd.jmdict_id IS NOT NULL) AS pre_processed FROM jmdict j LEFT JOIN jmdict_reading r ON r.jmdict_id = j.id LEFT JOIN reading_decoys rd ON rd.jmdict_id = j.id WHERE j.word = ? GROUP BY j.reading, r.jmdict_reading_id';
 
             try {
@@ -145,7 +169,7 @@ class Reading extends Question {
                     }
 
                     if ($row->pre_processed) {
-                        $pre_processed = true;
+                        $preProcessed = true;
                     }
                 }
                 $stmt = null;
@@ -155,7 +179,7 @@ class Reading extends Question {
 
             $pick->kanji_prons = [];
 
-            if ($pre_processed) {
+            if ($preProcessed) {
                 $str = mb_ereg_replace('(.)々', '\\1\\1', $pick->word);
                 preg_match_all('/([^\\x{3040}-\\x{30FF}]?)([\\x{3040}-\\x{30FF}]*)/u', $str, $matches, PREG_SET_ORDER);
                 array_pop($matches); // last elem is empty
@@ -168,8 +192,8 @@ class Reading extends Question {
                 }
 
                 if (count($kanjis)) {
-                    $kanji_csv = '\'' . implode('\', \'', $kanjis) . '\'';
-                    $query = 'SELECT k.id, k.kanji, p.pron, p.type, 1 as coef_prob FROM kanjis k JOIN pron p ON p.kanji_id = k.id AND p.type != \'nanori\' WHERE k.kanji IN (' . $kanji_csv . ')';
+                    $kanjiCSV = '\'' . implode('\', \'', $kanjis) . '\'';
+                    $query = 'SELECT k.id, k.kanji, p.pron, p.type, 1 as coef_prob FROM kanjis k JOIN pron p ON p.kanji_id = k.id AND p.type != \'nanori\' WHERE k.kanji IN (' . $kanjiCSV . ')';
                     try {
                         $stmt = DB::getConnection()->prepare($query);
                         $stmt->execute();
@@ -198,17 +222,18 @@ class Reading extends Question {
             }
 
             if (count($sims) < 3) {
-                $this->init_twisters();
-                $sims = $this->get_similar_readings($pick->word, $pick->readings, 3, $grade, $pick->kanji_prons);
+                $this->initTwisters();
+                $sims = $this->getSimilarReadings($pick->word, $pick->readings, 3, $grade, $pick->kanji_prons);
             }
 
             if (count($sims) < 3) {
-                log_error("Not enough reading choices for " . $pick->word . ": " . print_r($sims, true) . "\n\n" . print_r($pick, true), true, true);
+                log_error("Not enough reading choices for " . $pick->word . ": " . print_r($sims, true) . "\n\n" . print_r($pick,
+                        true), true, true);
             }
 
-            $choice = array(0 => $pick);
+            $choice = [0 => $pick];
             foreach ($sims as $variant => $prob) {
-                $choice[] = array2obj(array('reading' => $variant, 'prob' => $prob));
+                $choice[] = array2obj(['reading' => $variant, 'prob' => $prob]);
             }
 
             if ($choice[0]->reading == $choice[1]->reading || $choice[0]->reading == $choice[2]->reading || $choice[0]->reading == $choice[3]->reading || $choice[1]->reading == $choice[2]->reading || $choice[1]->reading == $choice[3]->reading || $choice[2]->reading == $choice[3]->reading) {
@@ -222,16 +247,17 @@ class Reading extends Question {
             }
 
             $sid = 'sid_' . md5('himitsu' . time() . '-' . rand(1, 100000));
-            $data[$sid] = array('sid' => $sid, 'choices' => $choice, 'solution' => $choice[0]);
+            $data[$sid] = ['sid' => $sid, 'choices' => $choice, 'solution' => $choice[0]];
         }
 
-        $this->fast_mode = false;
+        $this->fastMode = false;
         return $data;
     }
 
-    function getRandomReadings($grade1 = -1, $grade2 = -1, $how_many = 1) {
-        if ((int) $how_many < 1) {
-            log_error('get_random_readings called with how_many = ' . $how_many, false, true);
+    public function getRandomReadings($grade1 = -1, $grade2 = -1, $howMany = 1)
+    {
+        if ((int) $howMany < 1) {
+            log_error('get_random_readings called with how_many = ' . $howMany, false, true);
         }
 
         if ($grade1[0] == 'N') {
@@ -249,7 +275,6 @@ class Reading extends Question {
             $strictly_harder = '>';
             $easiest = '1';
         }
-
 
         $query = 'SELECT j.*, jx.pos, ' . Vocab::get_query_gloss() . ' FROM (SELECT j.`id` AS `id`, j.`word` AS `word`, j.`reading`, `j`.`njlpt` AS `njlpt`, `j`.`njlpt_r` AS `njlpt_r`  FROM `jmdict` j WHERE j.word != j.reading AND j.katakana = \'0\' AND j.usually_kana = 0 AND j.njlpt > 0 ';
 
@@ -275,19 +300,20 @@ class Reading extends Question {
         }
 
         $query .= ' GROUP BY `id` ORDER BY RAND()';
-        $query .= '  LIMIT ' . (int) $how_many . ') AS j LEFT JOIN jmdict_ext jx ON jx.jmdict_id = j.id ';
+        $query .= '  LIMIT ' . (int) $howMany . ') AS j LEFT JOIN jmdict_ext jx ON jx.jmdict_id = j.id ';
 
         try {
             $stmt = DB::getConnection()->prepare($query);
             $stmt->execute();
             $readingCount = $stmt->rowCount();
 
-            if ($readingCount < $how_many) {
-                log_error("Reading mode (get_random_readings): Can't get enough randomized vocab: " . $query . "\n(needed $how_many, got: " . $readingCount . ")", false, true);
+            if ($readingCount < $howMany) {
+                log_error('Reading mode (get_random_readings): Can\'t get enough randomized vocab: ' . $query . "\n(needed $howMany, got: " . $readingCount . ')',
+                    false, true);
             }
 
-            if ($how_many == 1) {
-                return array($stmt->fetchObject());
+            if ($howMany == 1) {
+                return [$stmt->fetchObject()];
             }
 
             $readings = $stmt->fetchAll(PDO::FETCH_CLASS);
@@ -299,11 +325,12 @@ class Reading extends Question {
         }
     }
 
-    function getSetWeightedReadings($how_many = 1) {
+    public function getSetWeightedReadings($how_many = 1)
+    {
 
         $query = "SELECT j.*, jx.pos, " . Vocab::get_query_gloss() . " FROM (SELECT j.`id` AS `id`, j.`word` AS `word`, j.`reading` AS `reading`, `j`.`njlpt` AS `njlpt`, `j`.`njlpt_r` AS `njlpt_r`, IF(l.curve IS NULL, 1000, l.curve)+1000*rand() as xcurve
 		FROM learning_set_vocab ls LEFT JOIN `jmdict` j ON j.id = ls.jmdict_id
-		LEFT JOIN " . $this->table_learning . " l on l.user_id = '" . (int) $_SESSION['user']->getID() . "' AND j.id = l." . $this->table_learning_index . "
+		LEFT JOIN " . $this->tableLearning . " l on l.user_id = '" . (int) $_SESSION['user']->getID() . "' AND j.id = l." . $this->tableLearningIndex . "
 		WHERE ls.set_id = $this->set_id AND j.word != j.reading AND j.katakana = '0' AND j.usually_kana = 0 ";
 
         $query .= '  ORDER BY xcurve DESC';
@@ -319,7 +346,7 @@ class Reading extends Question {
             }
 
             if ($how_many == 1) {
-                return array($stmt->fetchObject(PDO::FETCH_CLASS));
+                return [$stmt->fetchObject()];
             }
 
             $readings = $stmt->fetchAll(PDO::FETCH_CLASS);
@@ -331,7 +358,8 @@ class Reading extends Question {
         }
     }
 
-    function getWeightedReadings($grade1 = -1, $grade2 = -1, $how_many = 1) {
+    public function getWeightedReadings($grade1 = -1, $grade2 = -1, $how_many = 1)
+    {
         if ((int) $how_many < 1) {
             log_error('get_weighted_readings called with how_many = ' . $how_many, false, true);
         }
@@ -354,7 +382,7 @@ class Reading extends Question {
 
         $query = "SELECT j.*, jx.pos, " . Vocab::get_query_gloss() . " FROM (SELECT j.`id` AS `id`, j.`word` AS `word`, j.`reading` AS `reading`, `j`.`njlpt` AS `njlpt`, `j`.`njlpt_r` AS `njlpt_r`, IF(l.curve IS NULL, 1000, l.curve)+1000*rand() as xcurve
 		FROM `jmdict` j
-		LEFT JOIN " . $this->table_learning . " l on l.user_id = '" . (int) $_SESSION['user']->getID() . "' AND j.id = l." . $this->table_learning_index . "
+		LEFT JOIN " . $this->tableLearning . " l on l.user_id = '" . (int) $_SESSION['user']->getID() . "' AND j.id = l." . $this->tableLearningIndex . "
 		WHERE  j.word != j.reading AND j.katakana = '0' AND j.usually_kana = 0 AND j.njlpt >0 ";
 
         if ($grade1 > 0) {
@@ -386,11 +414,12 @@ class Reading extends Question {
             $readingCount = $stmt->rowCount();
 
             if ($readingCount < $how_many) {
-                log_error('Reading mode (get_weighted_readings): Can\'t get enough randomized vocab: ' . $query . "\n(needed $how_many, got: " . $readingCount . ")", false, true);
+                log_error('Reading mode (get_weighted_readings): Can\'t get enough randomized vocab: ' . $query . "\n(needed $how_many, got: " . $readingCount . ")",
+                    false, true);
             }
 
             if ($how_many == 1) {
-                return array($stmt->fetchObject(PDO::FETCH_CLASS));
+                return [$stmt->fetchObject()];
             }
 
             $readings = $stmt->fetchAll(PDO::FETCH_CLASS);
@@ -402,7 +431,8 @@ class Reading extends Question {
         }
     }
 
-    function get_similar_readings($word, $readings, $how_many, $grade, &$kanji_prons) {
+    public function getSimilarReadings($word, $readings, $how_many, $grade, &$kanji_prons)
+    {
         try {
 
             $str = mb_ereg_replace('(.)々', '\\1\\1', $word);
@@ -410,9 +440,11 @@ class Reading extends Question {
             array_pop($matches); // last elem is empty
 
             $kanjis = [];
-            foreach ($matches as $match)
-                if (!empty($match[1]))
+            foreach ($matches as $match) {
+                if (!empty($match[1])) {
                     $kanjis[] = $match[1];
+                }
+            }
 
             if (count($kanjis)) {
                 $kanji_csv = '\'' . implode('\', \'', $kanjis) . '\'';
@@ -420,27 +452,30 @@ class Reading extends Question {
 
                 $res = mysql_query_debug($query) or log_db_error($query, false, true);
 
-                while ($row = mysql_fetch_object($res))
+                while ($row = mysql_fetch_object($res)) {
                     $kanji_prons[$row->kanji][] = $row;
+                }
 
                 if (count($kanji_prons) <= 2 * $how_many || rand(0, 2) == 0) {
-                    $query = 'SELECT k.kanji, s1.combi_sim, p.pron, p.type, (s1.combi_sim/100) as coef_prob FROM kanjis k 
-						JOIN sim_kanjis s1 ON s1.k1_id = k.id 
-						LEFT JOIN sim_kanjis s2 ON s2.k1_id = k.id AND s2.k2_id != s1.k2_id AND s2.combi_sim > s1.combi_sim 
+                    $query = 'SELECT k.kanji, s1.combi_sim, p.pron, p.type, (s1.combi_sim/100) as coef_prob FROM kanjis k
+						JOIN sim_kanjis s1 ON s1.k1_id = k.id
+						LEFT JOIN sim_kanjis s2 ON s2.k1_id = k.id AND s2.k2_id != s1.k2_id AND s2.combi_sim > s1.combi_sim
 						LEFT JOIN pron p ON p.kanji_id = s1.k2_id
 						WHERE s2.id IS NULL AND s1.combi_sim > 85 AND k.kanji IN (' . $kanji_csv . ') ORDER BY RAND() LIMIT ' . (4 * $how_many);
 
                     $res = mysql_query_debug($query) or log_db_error($query, false, true);
-                    while ($row = mysql_fetch_object($res))
+                    while ($row = mysql_fetch_object($res)) {
                         $kanji_prons[$row->kanji][] = $row;
+                    }
                 }
             }
 
             $var_parts = [];
             $all_kanji = true;
 
-            foreach ($matches as $idx => $match)
+            foreach ($matches as $idx => $match) {
                 $matches[$idx][2] = mb_convert_kana($matches[$idx][2], 'c');
+            }
 
             $sql_pattern = '';
             $regex_pattern = '/^';
@@ -448,8 +483,9 @@ class Reading extends Question {
             foreach ($matches as $match) {
                 if (!empty($match[1])) {
                     $sql_pattern .= '_';
-                    if (substr($regex_pattern, -2) != '.+')
+                    if (substr($regex_pattern, -2) != '.+') {
                         $regex_pattern .= '.+';
+                    }
                 }
                 if (!empty($match[2])) {
                     $sql_pattern .= $match[2];
@@ -464,63 +500,73 @@ class Reading extends Question {
                 $kanji = $match[1];
                 $tail = mb_convert_kana($match[2], 'c');
 
-                if ($tail)
+                if ($tail) {
                     $all_kanji = false;
+                }
 
-                if (empty($kanji))
-                    $var_parts[$i][$tail] = array('kanji' => '', 'kana' => $tail, 'prob' => 1, 'type' => 'kana');
-                elseif (isset($kanji_prons[$kanji])) {
+                if (empty($kanji)) {
+                    $var_parts[$i][$tail] = ['kanji' => '', 'kana' => $tail, 'prob' => 1, 'type' => 'kana'];
+                } elseif (isset($kanji_prons[$kanji])) {
                     $pron_kana_vars = [];
 
                     foreach ($kanji_prons[$kanji] as $pron) {
-                        list($pron_str, $prob) = $this->get_pron_prob($pron, $tail, $i, count($matches));
+                        list($pron_str, $prob) = $this->getPronProb($pron, $tail, $i, count($matches));
                         $pron_kana_vars[$pron->type][$pron_str] = $prob * $pron->coef_prob;
                     }
 
                     foreach ($pron_kana_vars as $type => $on_kun_vars) {
-                        foreach ($this->twisters as $twister)
+                        foreach ($this->twisters as $twister) {
                             $on_kun_vars = $twister->twist($on_kun_vars);
+                        }
 
-                        $sort_order = $this->weighted_rand_select($on_kun_vars);
+                        $sort_order = $this->weightedRandSelect($on_kun_vars);
                         $sort_order = array_slice($sort_order, 0, $how_many);
 
-                        foreach ($sort_order as $pron => $weight)
-                            $var_parts[$i][$pron . $tail] = array('kanji' => $kanji, 'kana' => $pron . $tail, 'prob' => $on_kun_vars[$pron], 'type' => $type);
+                        foreach ($sort_order as $pron => $weight) {
+                            $var_parts[$i][$pron . $tail] = ['kanji' => $kanji, 'kana' => $pron . $tail, 'prob' => $on_kun_vars[$pron], 'type' => $type];
+                        }
                     }
-                } else
-                    log_error("Can't find pron for kanji: " . $kanji, false, true);
+                } else {
+                    log_error('Can\'t find pron for kanji: ' . $kanji, false, true);
+                }
             }
 
 
-            $variations = array('' => 1);
+            $variations = ['' => 1];
             //mix and match
             $last_type = '';
 
             foreach ($var_parts as $i => $part) {
                 $new_variations = [];
-                foreach ($variations as $var => $var_prob)
+                foreach ($variations as $var => $var_prob) {
                     foreach ($part as $pron) {
-                        if (rand(0, count($part)) > 20)
+                        if (rand(0, count($part)) > 20) {
                             continue;
+                        }
 
-                        $coef = (@$var_types[$var] && $var_types[$var] != $pron['type']) ? 0.6 : 1;
+                        $coef = ($var_types[$var] && $var_types[$var] != $pron['type']) ? 0.6 : 1;
                         $new_var = $var . $pron['kana'];
                         $new_variations[$new_var] = ($coef * $var_prob * $pron['prob']);
-                        if (@$var_types[$new_var] && $var_types[$new_var] != $pron['type'])
+                        if ($var_types[$new_var] && $var_types[$new_var] != $pron['type']) {
                             unset($var_types[$new_var]);
-                        else
+                        } else {
                             $var_types[$new_var] = $pron['type'];
+                        }
                     }
+                }
                 $variations = $new_variations;
             }
 
             if ($all_kanji) {
-                foreach ($readings as $reading)
+                foreach ($readings as $reading) {
                     $variations_2[$reading] = 1.2;
-                foreach ($this->twisters as $twister)
+                }
+                foreach ($this->twisters as $twister) {
                     $variations_2 = $twister->twist($variations_2);
-                foreach ($variations_2 as $var => $prob)
+                }
+                foreach ($variations_2 as $var => $prob) {
                     $variations[$var] = $prob;
+                }
             }
 
 
@@ -531,16 +577,17 @@ class Reading extends Question {
                 $pattern = '';
                 foreach ($matches as $idx => $match) {
                     if (empty($match[1])) {
-                        if ($i == $idx)
+                        if ($i == $idx) {
                             continue 2;
+                        }
 
                         $pattern .= $match[2];
-                    }
-                    else {
-                        if ($i != $idx)
+                    } else {
+                        if ($i != $idx) {
                             $pattern .= $match[1] . $match[2];
-                        else
+                        } else {
                             $pattern .= '_' . $match[2];
+                        }
                     }
                 }
 
@@ -551,45 +598,47 @@ class Reading extends Question {
             if ($like_str) {
                 $tot = 0;
                 foreach ($matches as $match) {
-                    if (!$match[1])
+                    if (!$match[1]) {
                         $tot += 0.05;
-                    elseif ($match[2])
+                    } elseif ($match[2]) {
                         $tot += 0.3;
-                    else
+                    } else {
                         $tot += 0.25;
+                    }
                 }
 
                 $query = 'SELECT j.word, j.reading FROM jmdict j WHERE j.word != \'' . $word . '\' AND (0' . $like_str . ') LIMIT 10';
 
                 $res = mysql_query_debug($query) or log_db_error($query, false, true);
 
-                while ($row = mysql_fetch_object($res))
-                    if (preg_match($regex_pattern, $row->reading))
+                while ($row = mysql_fetch_object($res)) {
+                    if (preg_match($regex_pattern, $row->reading)) {
                         $variations[$row->reading] = ($tot - 0.25);
+                    }
+                }
             }
 
-            foreach ($readings as $reading)
+            foreach ($readings as $reading) {
                 unset($variations[$reading]);
+            }
 
             $variations = preg_grep("/(っ[っうんあいおえがぐぎげごばぶびべぼだづまむみめもぢでど])|んっ/u", $variations, PREG_GREP_INVERT);
 
             arsort($variations);
             $variations = array_slice($variations, 0, $how_many * 10);
-            $selection = array_slice($this->weighted_rand_select($variations), 0, $how_many);
-
-            //	print_r($selection);
+            $selection = array_slice($this->weightedRandSelect($variations), 0, $how_many);
 
             if (count($selection) < $how_many) {
                 $need = $how_many - count($selection);
-
-                // echo 'Using random backup for ' . ($need) . ' using pattern: <strong>' . $sql_pattern . '</strong><br/>';				
-
-                $query = 'SELECT r.reading FROM jmdict r WHERE r.katakana = \'0\' AND r.word != r.reading AND r.reading NOT IN (\'' . implode('\',\'', $readings) . '\') AND r.reading LIKE \'' . $sql_pattern . '\' ORDER BY (r.njlpt != 0) DESC, RAND() LIMIT ' . $need;
+                $query = 'SELECT r.reading FROM jmdict r WHERE r.katakana = \'0\' AND r.word != r.reading AND r.reading NOT IN (\'' . implode('\',\'',
+                        $readings) . '\') AND r.reading LIKE \'' . $sql_pattern . '\' ORDER BY (r.njlpt != 0) DESC, RAND() LIMIT ' . $need;
                 $res = mysql_query_debug($query) or log_db_error($query, false, true);
 
-                while ($row = mysql_fetch_object($res))
-                    if (preg_match($regex_pattern, $row->reading))
+                while ($row = mysql_fetch_object($res)) {
+                    if (preg_match($regex_pattern, $row->reading)) {
                         $selection[$row->reading] = 0;
+                    }
+                }
 
                 if (count($selection) < min(10, $how_many)) {
                     $query = 'SELECT r.reading FROM jmdict r WHERE r.katakana = \'0\' AND r.reading != r.word ORDER BY RAND() LIMIT ' . (int) (10 * $how_many);
@@ -604,51 +653,59 @@ class Reading extends Question {
                                 $row = mysql_fetch_assoc($res);
                                 $new_var .= $row['reading'];
                             }
-                            if (!empty($match[2]))
+                            if (!empty($match[2])) {
                                 $new_var .= $match[2];
+                            }
                         }
 
-                        if (!in_array($new_var, $readings))
+                        if (!in_array($new_var, $readings)) {
                             $selection[$new_var] = 0.0001;
+                        }
 
-                        if ($sanity_check++ > 100)
+                        if ($sanity_check++ > 100) {
                             die("Reading::get_similar_readings() - sanity_check - Backup selection failure: " . $query);
+                        }
                     }
                 }
             }
         } catch (Exception $e) {
-            log_error('Exception in ' . __FILE__ . ':get_similar_readings(): ' . $e->getMessage() . "\n" . $word . "\n" . print_r($readings, true) . "\n" . print_r($variations), false, true);
+            log_error('Exception in ' . __FILE__ . ':get_similar_readings(): ' . $e->getMessage() . "\n" . $word . "\n" . print_r($readings,
+                    true) . "\n" . print_r($variations), false, true);
         }
         return $selection;
     }
 
-    function weighted_rand_select($population) {
+    public function weightedRandSelect($population)
+    {
         $sort_order = [];
 
-        foreach ($population as $var => $prob)
+        foreach ($population as $var => $prob) {
             $sort_order[$var] = ($prob ? pow(rand() / getrandmax(), 1 / $prob) : 0);
+        }
 
         arsort($sort_order);
         return $sort_order;
     }
 
-    function get_pron_prob($pron, $tail_str, $pos, $tot_len) {
+    public function getPronProb($pron, $tail_str, $pos, $tot_len)
+    {
         $prob = 1.0;
         $pron_str = mb_convert_kana($pron->pron, 'c');
 
         if (($dash_pos = mb_strpos($pron_str, '-')) !== false) {
-            $pron_str = str_replace(array('-'), '', $pron_str);
-            if ($dash_pos == 0) { // -XXX
-                if ($pos == 0)
+            $pron_str = str_replace(['-'], '', $pron_str);
+            if ($dash_pos == 0) {
+                if ($pos == 0) {
                     $prob /= 10;
-                elseif (!$tail_str && $pos >= $tot_len)
+                } elseif (!$tail_str && $pos >= $tot_len) {
                     $prob *= 1.5;
-            }
-            else { // XXX-
-                if ($pos == 0)
+                }
+            } else {
+                if ($pos == 0) {
                     $prob *= 1.5;
-                elseif (!$tail_str && $pos >= $tot_len)
+                } elseif (!$tail_str && $pos >= $tot_len) {
                     $prob /= 10;
+                }
             }
         }
 
@@ -658,103 +715,120 @@ class Reading extends Question {
             $pron_tail_end = mb_substr($pron_tail_str, -1, 1);
 
             if ($tail_str) {
-                if ($pron_tail_str == $tail_str)
-                    return array($pron_prefix_str, 2 * $prob);
+                if ($pron_tail_str == $tail_str) {
+                    return [$pron_prefix_str, 2 * $prob];
+                }
 
                 $tail_end = mb_substr($tail_str, -1, 1);
 
-                if ($pron_tail_end == $tail_end)
-                    return array($pron_prefix_str, 1.2 * $prob);
+                if ($pron_tail_end == $tail_end) {
+                    return [$pron_prefix_str, 1.2 * $prob];
+                }
 
-                if (mb_substr($pron_tail_str, 0, mb_strlen($tail_str)) == $tail_str)
-                    return array($pron_prefix_str, 1 * $prob);
+                if (mb_substr($pron_tail_str, 0, mb_strlen($tail_str)) == $tail_str) {
+                    return [$pron_prefix_str, 1 * $prob];
+                }
 
-                if ($this->verb_to_noun($pron_tail_end) == $tail_end)
-                    return array($pron_prefix_str, (mb_strlen($tail_str) == 1 ? 2 : 1.5) * $prob);
+                if ($this->verbToNoun($pron_tail_end) == $tail_end) {
+                    return [$pron_prefix_str, (mb_strlen($tail_str) == 1 ? 2 : 1.5) * $prob];
+                }
 
-                return array($pron_prefix_str, 0.3 * $prob);
-            }
-            else { // no kana tail in the original word
-                if ($tot_len == 1) // single kanji word
-                    if ($pron_tail_str == $pron_tail_end) // only one trailing char
-                        return array($pron_prefix_str . $this->verb_to_noun($pron_tail_end), 1 * $prob);
-                    else // more than one trailing char
-                        return array($pron_prefix_str . mb_substr($pron_tail_str, 0, -1) . $this->verb_to_noun($pron_tail_end), 0.6 * $prob);
-                elseif (mb_strlen($pron_prefix_str) == 1)  // compound word AND pron is one kana
-                    return array($pron_prefix_str, 0.5 * $prob);
-                else  // compound word AND pron is longer than one kana
-                if ($pron_tail_str == $pron_tail_end) // only one trailing char
-                    return array($pron_prefix_str . $this->verb_to_noun($pron_tail_end), 0.4 * $prob);
-                else // more than one trailing char
-                    return array($pron_prefix_str . mb_substr($pron_tail_str, 0, -1) . $this->verb_to_noun($pron_tail_end), 0.3 * $prob);
+                return [$pron_prefix_str, 0.3 * $prob];
+            } else { // no kana tail in the original word
+                if ($tot_len == 1) {// single kanji word
+                    if ($pron_tail_str == $pron_tail_end) {// only one trailing char
+                        return [$pron_prefix_str . $this->verbToNoun($pron_tail_end), 1 * $prob];
+                    } else {
+                        // more than one trailing char
+                        return [$pron_prefix_str . mb_substr($pron_tail_str, 0, -1) . $this->verbToNoun($pron_tail_end), 0.6 * $prob];
+                    }
+                } elseif (mb_strlen($pron_prefix_str) == 1) { // compound word AND pron is one kana
+                    return [$pron_prefix_str, 0.5 * $prob];
+                } elseif ($pron_tail_str == $pron_tail_end) {
+                    // compound word AND pron is longer than one kana
+                    // only one trailing char
+                    return [$pron_prefix_str . $this->verbToNoun($pron_tail_end), 0.4 * $prob];
+                } else {
+                    // more than one trailing char
+                    return [$pron_prefix_str . mb_substr($pron_tail_str, 0, -1) . $this->verbToNoun($pron_tail_end), 0.3 * $prob];
+                }
             }
         }
 
         // Regular on/kun:
         if ($tail_str) {
-            if ($pron->type == 'on')
-                return array($pron_str, 0.2 * $prob);
-            else
-                return array($pron_str, 0.3 * $prob);
-        }
-        elseif ($tot_len == 1) {
-            if ($pron->type == 'on')
-                return array($pron_str, 0.8 * $prob);
-            else
-                return array($pron_str, 1.0 * $prob);
-        }
-        else {
-            if ($pron->type == 'on')
-                return array($pron_str, 0.9 * $prob);
-            else
-                return array($pron_str, 0.7 * $prob);
+            if ($pron->type == 'on') {
+                return [$pron_str, 0.2 * $prob];
+            } else {
+                return [$pron_str, 0.3 * $prob];
+            }
+        } elseif ($tot_len == 1) {
+            if ($pron->type == 'on') {
+                return [$pron_str, 0.8 * $prob];
+            } else {
+                return [$pron_str, 1.0 * $prob];
+            }
+        } else {
+            if ($pron->type == 'on') {
+                return [$pron_str, 0.9 * $prob];
+            } else {
+                return [$pron_str, 0.7 * $prob];
+            }
         }
     }
 
-    function verb_to_noun($verb_ending) {
-        $array = array('く' => 'き', 'ぐ' => 'ぎ', 'る' => 'り', 'む' => 'み', 'す' => 'し', 'ず' => 'じ', 'つ' => 'ち', 'ぬ' => 'に', 'ぶ' => 'び');
-        return(@$array[$verb_ending] ? $array[$verb_ending] : $verb_ending);
+    public function verbToNoun($verb_ending)
+    {
+        $endingMap = ['く' => 'き', 'ぐ' => 'ぎ', 'る' => 'り', 'む' => 'み', 'す' => 'し', 'ず' => 'じ', 'つ' => 'ち', 'ぬ' => 'に', 'ぶ' => 'び'];
+        return($endingMap[$verb_ending] ? $endingMap[$verb_ending] : $verb_ending);
     }
 
-    function getGradeOptions() {
-        if ($this->isQuiz())
-            return NULL;
+    public function getGradeOptions()
+    {
+        if ($this->isQuiz()) {
+            return null;
+        }
 
-        for ($i = 1; $i <= 5; $i++)
-            $options[] = array('grade' => 'N' . $i, 'label' => 'JLPT ' . $i, 'selected' => ($this->getGrade() == 'N' . $i));
+        for ($i = 1; $i <= 5; $i++) {
+            $options[] = ['grade' => 'N' . $i, 'label' => 'JLPT ' . $i, 'selected' => ($this->getGrade() == 'N' . $i)];
+        }
 
         return $options;
     }
 
-    function getSolutionID() {
+    public function getSolutionID()
+    {
         $sol = $this->getSolution();
         return $sol->jmdict_id;
     }
 
-    public function getDefaultWSizes() {
-        return array(
-            LEVEL_SENSEI => array(4, 6, 6, 6, 10, 10, 10, 5, 10, 5),
-            LEVEL_N5 => array(5, 10, 10, 10, 10, 10, 5),
-            LEVEL_N4 => array(5, 5, 10, 10, 10, 10, 10, 10, 5),
-            LEVEL_N3 => array(5, 5, 5, 10, 10, 10, 5, 10, 5),
-            LEVEL_N2 => array(5, 5, 5, 10, 10, 10, 5, 10, 5),
-            LEVEL_N1 => array(4, 4, 10, 10, 10, 10, 10, 10, 5)
-        );
+    public function getDefaultWSizes()
+    {
+        return [
+            LEVEL_SENSEI => [4, 6, 6, 6, 10, 10, 10, 5, 10, 5],
+            LEVEL_N5 => [5, 10, 10, 10, 10, 10, 5],
+            LEVEL_N4 => [5, 5, 10, 10, 10, 10, 10, 10, 5],
+            LEVEL_N3 => [5, 5, 5, 10, 10, 10, 5, 10, 5],
+            LEVEL_N2 => [5, 5, 5, 10, 10, 10, 5, 10, 5],
+            LEVEL_N1 => [4, 4, 10, 10, 10, 10, 10, 10, 5]
+        ];
     }
 
-    public function getDefaultWGrades() {
-        return array(
-            LEVEL_SENSEI => array(3, 4, 5, 6, 6, 8, 9, -1, -1, -1),
-            LEVEL_N5 => array('N5', 'N5', 1, 'N5', 1, 2, 'N4'),
-            LEVEL_N4 => array('N5', 'N4', 'N4', 2, 'N4', 3, 'N4', 4, 'N2'),
-            LEVEL_N3 => array('N5', 'N4', 'N3', 'N3', 4, 'N3', 'N3', 5, 'N2'),
-            LEVEL_N2 => array('N5', 'N4', 'N3', 'N2', 5, 'N2', 'N2', 6, 'N1'),
-            LEVEL_N1 => array('N4', 'N3', 'N2', 'N1', 9, 'N1', 'N1', 9, -1)
-        );
+    public function getDefaultWGrades()
+    {
+        return [
+            LEVEL_SENSEI => [3, 4, 5, 6, 6, 8, 9, -1, -1, -1],
+            LEVEL_N5 => ['N5', 'N5', 1, 'N5', 1, 2, 'N4'],
+            LEVEL_N4 => ['N5', 'N4', 'N4', 2, 'N4', 3, 'N4', 4, 'N2'],
+            LEVEL_N3 => ['N5', 'N4', 'N3', 'N3', 4, 'N3', 'N3', 5, 'N2'],
+            LEVEL_N2 => ['N5', 'N4', 'N3', 'N2', 5, 'N2', 'N2', 6, 'N1'],
+            LEVEL_N1 => ['N4', 'N3', 'N2', 'N1', 9, 'N1', 'N1', 9, -1]
+        ];
     }
 
-    public function init_twisters() {
-        $this->twisters = array(
+    public function initTwisters()
+    {
+        $this->twisters = [
             new KanaTwister("/([ぢづず])/u", '$transfo = array("ぢ"=>"じ", "づ"=>"ず", "ず"=>"つ"); return $transfo[$match];', 2),
             new KanaTwister("/([ぢづ])/u", 'return remove_tenten($match);', 1.5),
             new KanaTwister("/(([おこごほぼぽそとど])お)/u", 'return $sub_match . "う";', 2),
@@ -777,38 +851,41 @@ class Reading extends Question {
             new KanaTwister("/([がぐぎげごばぶびべぼだでどざずじぜぞ])/u", 'return remove_tenten($match);', 0.5),
             new KanaTwister("/([えけげせぜてでへべぺねめれいきぎちひびぴみに])(?:[^いょゃっ]|$)/u", 'return $match . "い";', 0.05),
             new KanaTwister("/([じず])/u", '$transfo = array("じ" => "ぢ", "ず" => "づ"); return $transfo[$match];', 0.1),
-        );
+        ];
     }
 
-    function editButtonLink() {
-        if ($_SESSION['user']->is_on_translator_probation() && !$_SESSION['user']->get_pref('lang', 'translator_mode'))
+    public function editButtonLink()
+    {
+        if ($_SESSION['user']->is_on_translator_probation() && !$_SESSION['user']->get_pref('lang', 'translator_mode')) {
             return '';
+        }
 
         if ($_SESSION['user']->get_pref('lang', 'vocab_lang') != 'en' || $_SESSION['user']->isEditor()) {
             $solution = $this->getSolution();
-
             return '<a class="icon-button ui-state-default ui-corner-all" title="Languages..." href="#" onclick="show_vocab_translate_dialog(\'' . SERVER_URL . '\', \'' . $solution->jmdict_id . '\', \'' . $this->data['sid'] . '\'); return false;">✍</a>';
-        } else
+        } else {
             return '';
+        }
     }
 
-    public function feedbackFormOptions() {
+    public function feedbackFormOptions()
+    {
 
-        foreach ($this->data['choices'] as $choice)
+        foreach ($this->data['choices'] as $choice) {
             $readings[$choice->reading] = $choice->reading;
+        }
 
-        if (!$this->isQuiz())
-            $forms[] = array('type' => 'reading_wrong_level', 'title' => 'Wrong level', 'param_1' => $this->getSolutionID(), 'param_1_title' => 'Reading(s) for \'' . $this->getSolution()->word . '\' do not belong at this JLPT level.', 'param_3_title' => ' Reading (optional):', 'param_3' => $readings, 'param_1_required' => true, 'param_2_required' => false);
+        if (!$this->isQuiz()) {
+            $forms[] = ['type' => 'reading_wrong_level', 'title' => 'Wrong level', 'param_1' => $this->getSolutionID(), 'param_1_title' => 'Reading(s) for \'' . $this->getSolution()->word . '\' do not belong at this JLPT level.', 'param_3_title' => ' Reading (optional):', 'param_3' => $readings, 'param_1_required' => true, 'param_2_required' => false];
+        }
 
-        $forms[] = array('type' => 'reading_other', 'title' => 'Other...', 'param_1' => $this->getSolutionID(), 'param_1_title' => 'Problem on this word', 'param_3_title' => 'with reading (optional):', 'param_3' => $readings, 'param_1_required' => true, 'param_2_required' => false);
+        $forms[] = ['type' => 'reading_other', 'title' => 'Other...', 'param_1' => $this->getSolutionID(), 'param_1_title' => 'Problem on this word', 'param_3_title' => 'with reading (optional):', 'param_3' => $readings, 'param_1_required' => true, 'param_2_required' => false];
 
         return $forms;
     }
 
-    function hasFeedbackOptions() {
+    public function hasFeedbackOptions()
+    {
         return true;
     }
-
 }
-
-?>
