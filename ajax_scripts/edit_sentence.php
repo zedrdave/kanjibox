@@ -1,6 +1,6 @@
 <?php
 
-if(!@$_SESSION['user'] || !$_SESSION['user']->is_elite())
+if(!@$_SESSION['user'] || !$_SESSION['user']->isElite())
 	die('need to be at least elite');
 mb_internal_encoding('UTF-8');
 	

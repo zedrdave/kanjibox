@@ -3,7 +3,7 @@
 force_logged_in_app();
 
 //  Get list of friends who have this app installed...
-		$user = $_SESSION['user']->get_fb_id();
+		$user = $_SESSION['user']->getFbID();
 		$rs = $facebook->api_client->fql_query("SELECT uid FROM user WHERE has_added_app=1 and uid IN (SELECT uid2 FROM friend WHERE uid1 = $user)");
 		$arFriends = "";
 		

@@ -10,7 +10,7 @@ if (empty($_SESSION['cur_session'])) {
 
 $_SESSION['cur_session']->load_next_wave();
 
-if (!$_SESSION['cur_session']->isQuiz() && $_SESSION['user']->is_logged_in() && $_SESSION['user']->get_pref('drill',
+if (!$_SESSION['cur_session']->isQuiz() && $_SESSION['user']->isLoggedIn() && $_SESSION['user']->get_pref('drill',
         'show_learning_stats')) {
     ?>
     <script type="text/javascript">

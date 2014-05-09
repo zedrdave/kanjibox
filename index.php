@@ -129,7 +129,7 @@ if ($redirect_to_url = (isset($_REQUEST['redirect_to_url']) ? $_REQUEST['redirec
         if (!empty($_SESSION['user']) && $_SESSION['user']->getID() > 0) {
             if ($_SESSION['user']->is_name_hidden() && $_SESSION['user']->get_load_count() < 2) {
                 echo '<div class="info-bar"><p>Due to your Facebook privacy settings, your name cannot be displayed to other users of this application and will therefore not appear in Global Highscores.</p><p>If you wish to appear in the global highscores: please <a href="//www.facebook.com/privacy/?view=profile">change your privacy settings</a>.</p></div>';
-            } elseif (!defined('ADDING') && (!$_SESSION['user']->is_elite() || $_SESSION['user']->isAdministrator())) {
+            } elseif (!defined('ADDING') && (!$_SESSION['user']->isElite() || $_SESSION['user']->isAdministrator())) {
                 include('pandering.php');
             }
         }
@@ -137,7 +137,7 @@ if ($redirect_to_url = (isset($_REQUEST['redirect_to_url']) ? $_REQUEST['redirec
 
         <?php
         echo '<div style="float:left; width:' . ($two_columns ? '80%' : '100%') . ';">';
-        echo '<div id="kb-header">KanjiBox 5.0α' . (($_SESSION['user'] && $_SESSION['user']->is_elite()) ? '<a class="elite" href="' . get_page_url(PAGE_ELITE) . '">エリート</a>' : '') . '</div>';
+        echo '<div id="kb-header">KanjiBox 5.0α' . (($_SESSION['user'] && $_SESSION['user']->isElite()) ? '<a class="elite" href="' . get_page_url(PAGE_ELITE) . '">エリート</a>' : '') . '</div>';
 
         switch ($page) {
             case 'main':

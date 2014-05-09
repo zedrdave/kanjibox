@@ -173,7 +173,7 @@ require_once ABS_PATH . 'libs/stats_lib.php';
             }
 
             $level = $_SESSION['user']->getLevel();
-            $jlpt_level = $_SESSION['user']->get_njlpt_level();
+            $jlpt_level = $_SESSION['user']->getNJLPTLevel();
             echo '<legend>' . $levels[$level] . ($level != $jlpt_level ? '/' . $levels[$jlpt_level] : '') . '</legend>';
 
             if ($jlpt_level == LEVEL_J4 || $jlpt_level == LEVEL_N5) {

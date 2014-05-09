@@ -4,7 +4,7 @@
 if(!@$_SESSION['user']) //  && !$_SESSION['user']->is_admin()
 	die("Need to be logged-in");
 	
-$can_edit = $_SESSION['user']->is_elite();
+$can_edit = $_SESSION['user']->isElite();
 	
 $level = (int) (isset($params['level']) ? $params['level'] : @$_SESSION['user']->getLevel());
 	

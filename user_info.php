@@ -7,5 +7,5 @@ if (!init_app() || empty($_SESSION['user'])) {
     die();
 }
 
-echo 'UniqueID=' . $_SESSION['user']->getID() . '<br/>Name=' . ($_SESSION['user']->get_first_name() ? $_SESSION['user']->get_first_name() : ($_SESSION['user']->get_email() ? strstr($_SESSION['user']->get_email(),
+echo 'UniqueID=' . $_SESSION['user']->getID() . '<br/>Name=' . ($_SESSION['user']->geFirstName() ? $_SESSION['user']->geFirstName() : ($_SESSION['user']->get_email() ? strstr($_SESSION['user']->get_email(),
             '@', true) : 'user_' . $_SESSION['user']->getID())) . '<br/>Email=' . $_SESSION['user']->get_email();

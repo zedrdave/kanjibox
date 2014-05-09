@@ -6,7 +6,7 @@ if (!@$_SESSION['user'] || $_SESSION['user']->getID() <= 0) {
 
 include_js('drill_quiz.js');
 
-if ($_SESSION['user']->is_elite() && $_SESSION['user']->get_pref('general', 'shortcuts')) {
+if ($_SESSION['user']->isElite() && $_SESSION['user']->get_pref('general', 'shortcuts')) {
     include_jquery('hotkeys');
     include_jquery('pulse');
     include_js('shortcuts.js');
@@ -32,7 +32,7 @@ if (!$game_types[$params['type']]) {
 $type = $params['type'];
 $mode = (@$params['mode'] ? $params['mode'] : DRILL_MODE);
 
-if (($type == 'text') && !$_SESSION['user']->is_elite()) {
+if (($type == 'text') && !$_SESSION['user']->isElite()) {
     echo '<div class="page_msg"><a href="http://www.facebook.com/photo.php?pid=3300719&id=5132078849"><img style="margin: 10px 20px 30px 0px; float: left; width: 350px; border: 1px solid black;" src="http://photos-c.ak.fbcdn.net/hphotos-ak-snc3/hs143.snc3/17080_281459173849_5132078849_3300719_3581359_n.jpg"></img></a> Due to its heavy CPU cost, <a href="http://www.facebook.com/photo.php?pid=3300719&id=5132078849">Text Mode</a> drilling is only available to <a href="http://kanjibox.net/kb/page/faq/#elite">エリート</a> users...<br/><br style="clear: both;"/></div>';
     return;
 }

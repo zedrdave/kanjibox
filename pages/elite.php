@@ -46,7 +46,7 @@ function register_kb_code($device_id, $kb_code_array) {
 
 }
 
-if(@$_SESSION['user'] && $_SESSION['user']->is_elite())
+if(@$_SESSION['user'] && $_SESSION['user']->isElite())
 {
 ?>
 <h2>Special Pages:</h2>

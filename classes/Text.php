@@ -555,7 +555,7 @@ class Text extends Vocab
 	
 	function editButtonLink()
 	{	
-		if($_SESSION['user']->is_elite() && !$this->isQuiz()) {
+		if($_SESSION['user']->isElite() && !$this->isQuiz()) {
 			$solution = $this->getSolution();
 			return '<a class="icon-button ui-state-default ui-corner-all" title="Edit..." href="#" onclick="do_load_with_close_button(\'' . SERVER_URL . 'ajax/get_sentence/edit/yes/?id=' . $solution->example_id . '&jmdict_id=' . $solution->id . '\', \'ajax_edit_form\'); return false;">✍</a>';
 		}

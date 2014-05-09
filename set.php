@@ -190,7 +190,7 @@ if (!empty($_REQUEST['set_id']) && is_numeric($_REQUEST['set_id'])) {
                                         if ($set->can_edit()) {
                                             echo "<button onclick=\"location.href ='" . SERVER_URL . "page/play/type/" . $set->get_type() . "/mode/sets/view_set_id/" . $set->set_id . "/'\">Edit</button> ";
                                         }
-                                    } elseif ($_SESSION['user']->is_logged_in()) {
+                                    } elseif ($_SESSION['user']->isLoggedIn()) {
                                         echo" <button id=\"subscribe-to-set\" onclick=\"subscribe_to_set($set->set_id, this); return false;\">Subscribe</button> ";
                                     } else {
                                         echo "<button onclick=\"location.href ='" . SERVER_URL . "?redirect=set_subscribe&set_id=" . $set->set_id . "'\">Log in & Subscribe</button>";

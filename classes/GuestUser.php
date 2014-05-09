@@ -1,53 +1,65 @@
 <?php
 
-class GuestUser extends User {
+class GuestUser extends User
+{
 
-    function __construct() {
-        
+    public function __construct()
+    {
+
     }
 
-    function isAdministrator() {
+    public function isAdministrator()
+    {
         return false;
     }
 
-    function isEditor() {
+    public function isEditor()
+    {
         return false;
     }
 
-    function get_njlpt_level() {
+    public function getNJLPTLevel()
+    {
         return 5;
     }
 
-    function is_guest_user() {
+    public function isGuestUser()
+    {
         return true;
     }
 
-    function is_logged_in() {
+    public function isLoggedIn()
+    {
         return false;
     }
 
-    function getJLPTNumLevel() {
+    public function getJLPTNumLevel()
+    {
         return 5;
     }
 
-    function get_fb_id() {
+    public function getFbID()
+    {
         return 0;
     }
 
-    function getID() {
+    public function getID()
+    {
         return -1;
     }
 
-    function get_first_name() {
+    public function geFirstName()
+    {
         return 'Guest User';
     }
 
-    function getLevel() {
+    public function getLevel()
+    {
         return 5;
     }
 
-    function is_elite() {
+    public function isElite()
+    {
         return false;
     }
-
 }

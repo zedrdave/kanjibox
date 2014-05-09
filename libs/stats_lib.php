@@ -6,7 +6,7 @@ function print_friendsboard($user, $level, $type, $title, $otherlevels = false) 
     global $facebook, $levels;
 
     $friends = $_SESSION['user']->get_friends();
-    $friends[] = $user->get_fb_id();
+    $friends[] = $user->getFbID();
     $friends_id = implode($friends, ',');
 
     // Backup:
@@ -37,7 +37,7 @@ function print_friendsboard($user, $level, $type, $title, $otherlevels = false) 
 
     $i = 1;
     while ($row = mysql_fetch_assoc($res)) {
-        echo "<div class=\"user" . ($user->get_fb_id() == $row['fb_id'] ? " self" : "") . ($row['otherlevel'] ? " otherlevel" : "") . "\"><fb:profile-pic uid=\"" . $row['fb_id'] . "\" size=\"square\" linked=\"true\"></fb:profile-pic>";
+        echo "<div class=\"user" . ($user->getFbID() == $row['fb_id'] ? " self" : "") . ($row['otherlevel'] ? " otherlevel" : "") . "\"><fb:profile-pic uid=\"" . $row['fb_id'] . "\" size=\"square\" linked=\"true\"></fb:profile-pic>";
         if (!$otherlevels && !$row['otherlevel'])
             echo "<div class=\"score_rank\">" . $i++ . "</div>";
         echo "<p>" . ($row['privileges'] > 0 ? '<a href="http://kanjibox.net/kb/page/faq/#elite" title="カッコいい人！">★</a> ' : '') . "<fb:name uid=\"" . $row['fb_id'] . "\" capitalize=\"true\" reflexive=\"true\" ></fb:name></p>";
@@ -77,7 +77,7 @@ function print_globalboard($user, $level, $type, $title, $limit = 5) {
     $self_included = false;
 
     while ($row = mysql_fetch_assoc($res)) {
-        if ($user->get_fb_id() == $row['fb_id']) {
+        if ($user->getFbID() == $row['fb_id']) {
             echo "<div class=\"user self\"><fb:profile-pic uid=\"" . $row['fb_id'] . "\" size=\"square\" linked=\"true\"></fb:profile-pic>";
             $self_included = true;
         } else {
@@ -105,10 +105,10 @@ function print_globalboard($user, $level, $type, $title, $limit = 5) {
     if (!$self_included) {
         if ($rank = $user->get_best_game($type)) {
             echo '<p class="ellipse">...</p>';
-            echo "<div class=\"user self\"><fb:profile-pic uid=\"" . $user->get_fb_id() . "\" size=\"square\" linked=\"true\"></fb:profile-pic>";
+            echo "<div class=\"user self\"><fb:profile-pic uid=\"" . $user->getFbID() . "\" size=\"square\" linked=\"true\"></fb:profile-pic>";
             $font_size = ((int) $rank->rank ? min(100, (int) (150 / (floor(log10($rank->rank)) + 1))) : 100);
             echo "<div class=\"score_rank\"><span style=\"font-size:" . $font_size . "%\">" . $rank->rank . "</span></div>";
-            echo "<p><fb:name uid=\"" . $user->get_fb_id() . "\" capitalize=\"true\" reflexive=\"true\" /></p>";
+            echo "<p><fb:name uid=\"" . $user->getFbID() . "\" capitalize=\"true\" reflexive=\"true\" /></p>";
             echo "<p><strong>" . $rank->score . " Pts</strong></p>";
             //		echo "<p>On: " . date('M jS, Y - g:ia',
             //							strtotime($row['date_played']) + ((7+$timezone) * 3600)) . "</p>";

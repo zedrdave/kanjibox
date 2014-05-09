@@ -5,7 +5,7 @@ require_once 'libs/lib.php';
 <em>To tell the world about your glorious KanjiBox ranking, simply copy the code from one of the boxes on the right and paste it into any HTML page (blog/newboard/online profile etc).<br/>Don't hesitate to post a link on <a href="http://www.facebook.com/kanjibox?v=wall">KanjiBox's wall</a> if you find an interesting way to display your badge somewhere...</em>
 
 <?php
-if (!empty($_SESSION['user']) && $_SESSION['user']->is_elite()) {
+if (!empty($_SESSION['user']) && $_SESSION['user']->isElite()) {
     $kb_types = array('kanji', 'vocab', 'reading', 'text');
 } else {
     $kb_types = array('kanji', 'vocab', 'reading');

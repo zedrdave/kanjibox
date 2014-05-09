@@ -16,7 +16,7 @@ if ($_SESSION['user']->get_pwd_hash() == 'need_to_reset') {
     echo '<div class="error_msg">Your password needs to be reset. Please use the <em>Change password</em> button below to set your access password.</div>';
 }
 
-if ($_SESSION['user']->get_pref('notif', 'post_news') && $_SESSION['user']->get_fb_id() > 0) {
+if ($_SESSION['user']->get_pref('notif', 'post_news') && $_SESSION['user']->getFbID() > 0) {
     global $facebook;
     try {
         if (fb_connect_init()) {
@@ -38,9 +38,9 @@ if ($_SESSION['user']->get_pref('notif', 'post_news') && $_SESSION['user']->get_
     }
 }
 ?>
-<h2 style="margin-top: 10px;">Hello <?php echo $_SESSION['user']->get_first_name() ?>-san, what a fine day to train in Kanji...</h2>
+<h2 style="margin-top: 10px;">Hello <?php echo $_SESSION['user']->geFirstName() ?>-san, what a fine day to train in Kanji...</h2>
 <?php
-if (defined('ADDING') || !$_SESSION['user'] || !$_SESSION['user']->is_logged_in()) {
+if (defined('ADDING') || !$_SESSION['user'] || !$_SESSION['user']->isLoggedIn()) {
     ?>
     <p>Welcome to Kanji Box !</p>
     <p>To start <strong>playing</strong> immediately, just set your <strong>level</strong> below and choose one of the <strong>tabs on the right</strong> ('kana', 'kanji', 'vocab' etc.).</p>
@@ -123,9 +123,9 @@ if ($lang_kanji != 'en') {
         Password: <input type="password" name="set_password" id="set_password" size="10" /> |	Password again: <input type="password" name="set_password_repeat" id="set_password_repeat" size="10" /> <input type="submit" name="submit-new-password" value="Set Password" />
     </form>
     <?php
-    if ($_SESSION['user']->get_fb_id() == 0 || $_SESSION['user']->get_first_name() == '') {
+    if ($_SESSION['user']->getFbID() == 0 || $_SESSION['user']->geFirstName() == '') {
         ?>
-        <p id="set-name-link">Name (<em>optional</em>): <span class="name_info" id="first_name"><?php echo $_SESSION['user']->get_first_name() ?></span> <span class="name_info" id="last_name"><?php echo $_SESSION['user']->get_last_name() ?></span> <a href="#" onclick="$('#set-name').show();
+        <p id="set-name-link">Name (<em>optional</em>): <span class="name_info" id="first_name"><?php echo $_SESSION['user']->geFirstName() ?></span> <span class="name_info" id="last_name"><?php echo $_SESSION['user']->get_last_name() ?></span> <a href="#" onclick="$('#set-name').show();
                 $('#set-name-link').hide();
                 return false;">[change name]</a></p>
         <form id="set-name" class="update-login" action="<?php echo SERVER_URL ?>ajax/update_login_info/" method="post">

@@ -1,5 +1,5 @@
 <?php
-if(! @$_SESSION['user']->is_logged_in())
+if(! @$_SESSION['user']->isLoggedIn())
 {
 	log_error('is_logged_in() == false, in stats.php', true);
 

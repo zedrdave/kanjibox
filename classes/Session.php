@@ -67,7 +67,7 @@ class Session {
     }
 
     function cleanup_before_destroy() {
-        if (@$_SESSION['user'] && $_SESSION['user']->is_logged_in() && $this->question_loader)
+        if (@$_SESSION['user'] && $_SESSION['user']->isLoggedIn() && $this->question_loader)
             $this->question_loader->learnSet($_SESSION['user']->getID(), $this->questions);
 
         $cleaned_up = true;
@@ -175,7 +175,7 @@ class Session {
         $this->game_over = true;
 
         echo '<p>Your final score is <strong>' . (int) $this->tot_score . ' Pt' . ($this->tot_score > 1 ? 's' : '') . '</strong></p>';
-        if ($_SESSION['user']->is_logged_in()) {
+        if ($_SESSION['user']->isLoggedIn()) {
             $is_new_highscore = $this->save_score();
             $new_rank = $_SESSION['user']->get_rank($this->get_type(), false, 0);
             echo '<div class="rank"><img src="' . SERVER_URL . 'img/ranks/rank_' . $new_rank->short_name . '.png" alt="' . $new_rank->pretty_name . '" /></div>';
@@ -386,7 +386,7 @@ class Session {
     }
 
     function save_score() {
-        if (!$_SESSION['user']->is_logged_in() || $this->tot_score == 0)
+        if (!$_SESSION['user']->isLoggedIn() || $this->tot_score == 0)
             return false;
 
         if ($this->score_id)
@@ -419,7 +419,7 @@ class Session {
     }
 
     function is_highscore() {
-        if (!$_SESSION['user']->is_logged_in() || $this->tot_score == 0)
+        if (!$_SESSION['user']->isLoggedIn() || $this->tot_score == 0)
             return false;
 
         if (!$this->score_id)
@@ -451,7 +451,7 @@ class Session {
     }
 
     function feedback_form_options($sid) {
-        if (!$_SESSION['user']->is_logged_in() || !isset($this->questions[$sid]))
+        if (!$_SESSION['user']->isLoggedIn() || !isset($this->questions[$sid]))
             return false;
 
         return $this->questions[$sid]->feedbackFormOptions();

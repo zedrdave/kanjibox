@@ -221,7 +221,7 @@ function force_reload($msg, $url = APP_URL, $alt_msg = '')
 
 function force_logged_in_app()
 {
-    if (!isset($_SESSION['user']) || !$_SESSION['user']->is_logged_in()) {
+    if (!isset($_SESSION['user']) || !$_SESSION['user']->isLoggedIn()) {
         header('Location: login.php');
         die();
     }
@@ -282,7 +282,7 @@ function XX_mysql_query_debug($query)
 
 function require_elite_user()
 {
-    if (@$_SESSION['user'] && $_SESSION['user']->is_elite())
+    if (@$_SESSION['user'] && $_SESSION['user']->isElite())
         return true;
 
     echo '<div class="error">This page is only available for "Elite" level users.</div></body></html>';
