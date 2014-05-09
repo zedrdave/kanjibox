@@ -8,7 +8,7 @@ if(@$params['type'] == 'kanji') {
 	$table_ext = 'kanjis_ext';
 	$table_ext_idx = 'kanji_id';
 	$content_col = 'meaning_';
-	$langs = Kanji::$lang_strings;
+	$langs = Kanji::$langStrings;
 }
 else {
 	$table = 'jmdict';

@@ -23,8 +23,8 @@ try {
 ?>
 <div class="zoom"><span class="japanese"><?php echo $row->kanji?></span></div>
 <div class="details">
-    <strong><?php echo Kanji::get_meaning_str($row->id)?></strong><br/>
-<?php echo Kanji::get_pronunciations($row)?><br/>
+    <strong><?php echo Kanji::getMeaningStr($row->id)?></strong><br/>
+<?php echo Kanji::getPronunciations($row)?><br/>
     <strong>Level: </strong><?php echo $row->njlpt;?>級
 </div>
 <div style="clear:both;" />

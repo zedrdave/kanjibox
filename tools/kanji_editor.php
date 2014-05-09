@@ -22,7 +22,7 @@ if(isset($_REQUEST['submit']) || @$_REQUEST['id']) {
 			$query .= "AND $field = '" . mysql_real_escape_string($_REQUEST[$field]) . "' ";
 	}
 	
-	$pref_lang_kanji = Kanji::$lang_strings[$_SESSION['user']->get_pref('lang', 'kanji_lang')];
+	$pref_lang_kanji = Kanji::$langStrings[$_SESSION['user']->get_pref('lang', 'kanji_lang')];
 	
 	if(@$_REQUEST['translator'])
 		$query .= ' AND (kx.meaning_' . $pref_lang_kanji . ' IS NULL OR kx.meaning_' . $pref_lang_kanji . " = '' OR kx.meaning_" . $pref_lang_kanji . " LIKE '(~)%')";
@@ -54,7 +54,7 @@ if(isset($_REQUEST['submit']) || @$_REQUEST['id']) {
 				echo "<option value=\"$i\""  . ($kanji->grade == $i ? ' selected' : '') . ">$i</option>";
 			echo "</select></span><br/>";
 			
-			foreach(Kanji::$lang_strings as $lang => $full_lang) {
+			foreach(Kanji::$langStrings as $lang => $full_lang) {
 				if(@$_REQUEST['translator'] && $full_lang != 'english' && $full_lang != $pref_lang_kanji)
 					continue;
 				

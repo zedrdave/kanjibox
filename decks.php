@@ -141,7 +141,7 @@ if (!init_app()) {
         }
 
         $lang_kanji = Vocab::$lang_strings[$_SESSION['user']->get_pref('lang', 'vocab_lang')];
-        $lang_vocab = Kanji::$lang_strings[$_SESSION['user']->get_pref('lang', 'kanji_lang')];
+        $lang_vocab = Kanji::$langStrings[$_SESSION['user']->get_pref('lang', 'kanji_lang')];
 
         $extra_jlpt = $include_below ? '>' : '';
         mysql_query('SET SESSION group_concat_max_len = 10000;') or die(mysql_error());

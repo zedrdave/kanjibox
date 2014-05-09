@@ -90,8 +90,8 @@ if ($lang_vocab != 'en') {
 
 if ($lang_kanji != 'en') {
     $tot = DB::count('SELECT COUNT(*) FROM kanjis k WHERE k.njlpt = ?', [$_SESSION['user']->getLevel()]);
-    $translated = DB::count('SELECT COUNT(*) FROM kanjis k LEFT JOIN kanjis_ext kx ON kx.kanji_id = k.id WHERE k.njlpt = $level AND kx.meaning_' . Kanji::$lang_strings[$lang_kanji] . ' IS NOT NULL AND kx.meaning_' . Kanji::$lang_strings[$lang_kanji] . ' != \'\'', []);
-    $need_work = DB::count('SELECT COUNT(*) FROM kanjis k LEFT JOIN kanjis_ext kx ON kx.kanji_id = k.id WHERE k.njlpt = $level AND kx.meaning_' . Kanji::$lang_strings[$lang_kanji] . ' LIKE \'(~)%\'', []);
+    $translated = DB::count('SELECT COUNT(*) FROM kanjis k LEFT JOIN kanjis_ext kx ON kx.kanji_id = k.id WHERE k.njlpt = $level AND kx.meaning_' . Kanji::$langStrings[$lang_kanji] . ' IS NOT NULL AND kx.meaning_' . Kanji::$langStrings[$lang_kanji] . ' != \'\'', []);
+    $need_work = DB::count('SELECT COUNT(*) FROM kanjis k LEFT JOIN kanjis_ext kx ON kx.kanji_id = k.id WHERE k.njlpt = $level AND kx.meaning_' . Kanji::$langStrings[$lang_kanji] . ' LIKE \'(~)%\'', []);
 
     $translated -= $need_work;
     $ratio_good = round(100 * $translated / $tot, 1);
