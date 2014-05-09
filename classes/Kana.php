@@ -5,25 +5,25 @@ require_once 'Question.php';
 class Kana extends Question
 {
 
-    public $table_learning = 'kana_learning';
-    public $table_learning_index = 'kana_id';
-    public $quiz_type = 'kana';
+    public $tableLearning = 'kana_learning';
+    public $tableLearningIndex = 'kana_id';
+    public $quizType = 'kana';
 
-    public function __construct($_mode, $_level, $_grade = -2, $_data = null)
+    public function __construct($mode, $level, $grade = -2, $data = null)
     {
-        parent::__construct($_mode, $_level, $_grade, $_data);
+        parent::__construct($mode, $level, $grade, $data);
     }
 
-    public function displayChoices($next_sid = '')
+    public function displayChoices($nextSID = '')
     {
-        $submit_url = SERVER_URL . 'ajax/submit_answer/?sid=' . $this->data['sid'] . '&amp;time_created=' . (int) $this->created . '&amp;';
+        $submitURL = SERVER_URL . 'ajax/submit_answer/?sid=' . $this->data['sid'] . '&amp;time_created=' . (int) $this->created . '&amp;';
         $choices = $this->data['choices'];
         shuffle($choices);
         foreach ($choices as $choice) {
-            echo '<div class="choice kanji" onclick="submit_answer(\'' . $this->data['sid'] . '\', \'' . $next_sid . '\', \'' . $submit_url . 'answer_id=' . (int) $choice->id . '\'); return false;">' . $choice->kana . '</div>';
+            echo '<div class="choice kanji" onclick="submit_answer(\'' . $this->data['sid'] . '\', \'' . $nextSID . '\', \'' . $submitURL . 'answer_id=' . (int) $choice->id . '\'); return false;">' . $choice->kana . '</div>';
         }
 
-        echo '<div class="choice skip" onclick="submit_answer(\'' . $this->data['sid'] . '\',  \'' . $next_sid . '\', \'' . $submit_url . 'answer_id=' . SKIP_ID . '\'); return false;">&nbsp;?&nbsp;</div>';
+        echo '<div class="choice skip" onclick="submit_answer(\'' . $this->data['sid'] . '\',  \'' . $nextSID . '\', \'' . $submitURL . 'answer_id=' . SKIP_ID . '\'); return false;">&nbsp;?&nbsp;</div>';
     }
 
     public function displayHint()
@@ -32,30 +32,30 @@ class Kana extends Question
         echo $solution->roma . ' (' . ($solution->type == 'kata' ? 'katakana' : 'hiragana') . ')';
     }
 
-    public function displayCorrection($answer_id)
+    public function displayCorrection($answerID)
     {
         $solution = $this->getSolution();
 
         echo "<span class=\"kanji\">" . $solution->kana . "</span> [" . ($solution->type == 'kata' ? 'katakana' : 'hiragana') . "] - " . $solution->roma;
 
-        if ($answer_id != SKIP_ID && !$this->isSolution($answer_id)) {
+        if ($answerID != SKIP_ID && !$this->isSolution($answerID)) {
             echo "<br/><br/>";
-            $wrong = $this->getKanaID((int) $answer_id);
+            $wrong = $this->getKanaID((int) $answerID);
             if (!$wrong) {
-                log_error('Unknown Kana ID: ' . $answer_id, false, true);
+                log_error('Unknown Kana ID: ' . $answerID, false, true);
             }
             echo "<span class=\"kanji\">" . $wrong->kana . "</span> [" . ($wrong->type == 'kata' ? 'katakana' : 'hiragana') . "] - " . $wrong->roma;
         }
     }
 
-    public function getDBData($how_many, $grade, $user_id = -1)
+    public function getDBData($howMany, $grade, $userID = -1)
     {
         if ($this->isQuiz()) {
             log_error('Quiz mode not supported for kana.', false, true);
         } elseif (!$_SESSION['user']) {
-            $picks = $this->getRandomKanas($how_many * 4);
+            $picks = $this->getRandomKanas($howMany * 4);
         } else {
-            $picks = $this->getRandomWeightedKanas($user_id, $how_many * 4);
+            $picks = $this->getRandomWeightedKanas($userID, $howMany * 4);
         }
 
         for ($i = 0; $i < count($picks) - 3; $i+=4) {
@@ -70,7 +70,7 @@ class Kana extends Question
                 if ($_SESSION['user']) {
                     $filler = $this->getRandomKanas((4 - $j), $choice[0]->type, $exclude);
                 } else {
-                    $filler = $this->getRandomWeightedKanas($user_id, (4 - $j), $choice[0]->type, $exclude);
+                    $filler = $this->getRandomWeightedKanas($userID, (4 - $j), $choice[0]->type, $exclude);
                 }
             }
 
@@ -90,40 +90,40 @@ class Kana extends Question
         return $data;
     }
 
-    public function getKanaID($kana_id)
+    public function getKanaID($kanaID)
     {
         $query = 'SELECT `id`, `kana`, UPPER(`roma`) AS `roma`, `type` FROM `kanas` WHERE `id` = ?';
 
         try {
             $stmt = DB::getConnection()->prepare($query);
-            $stmt->execute([$kana_id]);
+            $stmt->execute([$kanaID]);
             return $stmt->fetch(PDO::FETCH_CLASS);
         } catch (PDOException $e) {
             log_db_error($query, $e->getMessage());
         }
     }
 
-    public function getRandomWeightedKanas($user_id, $how_many = 1, $type = null, $exclude = null)
+    public function getRandomWeightedKanas($userID, $howMany = 1, $type = null, $exclude = null)
     {
-        $inputValues = [$user_id];
-        $where_type = '1';
+        $inputValues = [$userID];
+        $whereType = '1';
         if (isset($type)) {
-            $where_type = 'k.type = ?';
+            $whereType = 'k.type = ?';
             $inputValues[] = $type;
         }
 
-        $where_exclude = ($exclude ? 'k.roma NOT IN (' . implode(', ', $exclude) . ')' : '1');
-        $query = 'SELECT * FROM (SELECT  k.`id`, k.`kana`,  UPPER(k.`roma`) AS `roma`, k.`type`, IF(l.curve IS NULL, 1000, curve)+1000*rand() as xcurve from kanas k left join ' . $this->table_learning . ' l on l.user_id = ? AND k.id = l.' . $this->table_learning_index . " WHERE $where_type AND $where_exclude ORDER BY xcurve DESC LIMIT " . $how_many . ') as temp ORDER BY type';
+        $whereExclude = ($exclude ? 'k.roma NOT IN (' . implode(', ', $exclude) . ')' : '1');
+        $query = 'SELECT * FROM (SELECT  k.`id`, k.`kana`,  UPPER(k.`roma`) AS `roma`, k.`type`, IF(l.curve IS NULL, 1000, curve)+1000*rand() as xcurve from kanas k left join ' . $this->tableLearning . ' l on l.user_id = ? AND k.id = l.' . $this->tableLearningIndex . " WHERE $whereType AND $whereExclude ORDER BY xcurve DESC LIMIT " . $howMany . ') as temp ORDER BY type';
 
         try {
             $stmt = DB::getConnection()->prepare($query);
             $stmt->execute($inputValues);
 
-            if ($stmt->rowCount() < $how_many) {
+            if ($stmt->rowCount() < $howMany) {
                 log_error('Can\'t get enough randomized kanas: ' . $query, false, true);
             }
 
-            if ($how_many == 1) {
+            if ($howMany == 1) {
                 return $stmt->fetchObject();
             }
 
@@ -133,25 +133,25 @@ class Kana extends Question
         }
     }
 
-    public function getRandomKanas($how_many = 1, $type = null, $exclude = null)
+    public function getRandomKanas($howMany = 1, $type = null, $exclude = null)
     {
-        $where_type = ($type ? 'k.type = :type' : '1');
-        $where_exclude = ($exclude ? 'k.roma NOT IN (' . implode(', ', $exclude) . ')' : '1');
-        $query = 'SELECT * FROM (SELECT  k.`id`, k.`kana`,  UPPER(k.`roma`) AS `roma`, k.`type` from kanas k WHERE ' . $where_type . ' AND ' . $where_exclude . ' ORDER BY RAND() LIMIT :showmany) as temp ORDER BY type';
+        $whereType = ($type ? 'k.type = :type' : '1');
+        $whereExclude = ($exclude ? 'k.roma NOT IN (' . implode(', ', $exclude) . ')' : '1');
+        $query = 'SELECT * FROM (SELECT  k.`id`, k.`kana`,  UPPER(k.`roma`) AS `roma`, k.`type` from kanas k WHERE ' . $whereType . ' AND ' . $whereExclude . ' ORDER BY RAND() LIMIT :showmany) as temp ORDER BY type';
 
         try {
             $stmt = DB::getConnection()->prepare($query);
             if (!empty($type)) {
                 $stmt->bindValue(':type', $type, PDO::PARAM_STR);
             }
-            $stmt->bindValue(':showmany', $how_many, PDO::PARAM_INT);
+            $stmt->bindValue(':showmany', $howMany, PDO::PARAM_INT);
             $stmt->execute();
 
-            if ($stmt->rowCount() < $how_many) {
+            if ($stmt->rowCount() < $howMany) {
                 log_error('Can\'t get enough randomized kanas: ' . $query, false, true);
             }
 
-            if ($how_many == 1) {
+            if ($howMany == 1) {
                 return $stmt->fetchObject();
             }
 

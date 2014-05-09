@@ -43,7 +43,7 @@ class DB
      */
     protected function __construct()
     {
-        
+
     }
 
     /**
@@ -54,7 +54,7 @@ class DB
      */
     private function __clone()
     {
-        
+
     }
 
     /**
@@ -65,6 +65,6 @@ class DB
      */
     private function __wakeup()
     {
-        
+
     }
 }

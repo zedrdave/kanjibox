@@ -2,45 +2,48 @@
 
 require_once ABS_PATH . 'libs/utf8_lib.php';
 
-class KanaTwister {
+class KanaTwister
+{
 
-    private $pattern = NULL;
-    private $replace_pattern_fn = NULL;
+    private $pattern = null;
+    private $replacePatternFn = null;
 
-    public function __construct($pattern, $replace_function, $prob_coef = 1) {
-        $this->replace_pattern_fn = create_function('$match,$sub_match', $replace_function);
+    public function __construct($pattern, $replaceFunction, $probCoef = 1)
+    {
+        $this->replacePatternFn = create_function('$match,$sub_match', $replaceFunction);
         $this->pattern = $pattern;
-        $this->prob_coef = $prob_coef;
+        $this->probCoef = $probCoef;
     }
 
-    public function twist($array, $append_to_array = true) {
-        if ($append_to_array) {
-            $ret_array = $array;
+    public function twist($array, $appendToArray = true)
+    {
+        if ($appendToArray) {
+            $retArray = $array;
         } else {
-            $ret_array = [];
+            $retArray = [];
         }
 
         foreach ($array as $kana => $prob) {
             $count = preg_match_all($this->pattern, $kana, $matches, PREG_SET_ORDER | PREG_OFFSET_CAPTURE);
 
             if ($count) {
-                $fn = $this->replace_pattern_fn;
+                $fn = $this->replacePatternFn;
                 shuffle($matches);
                 foreach ($matches as $match) {
                     $twisted = substr_replace($kana, $fn($match[1][0], $match[2][0]), $match[1][1], strlen($match[1][0]));
-                    if (!isset($ret_array[$twisted])) {
-                        $ret_array[$twisted] = $prob * $this->prob_coef;
+                    if (!isset($retArray[$twisted])) {
+                        $retArray[$twisted] = $prob * $this->probCoef;
                         break;
                     }
                 }
             }
         }
-        return $ret_array;
+        return $retArray;
     }
-
 }
 
-function add_tenten($char) {
+function addTenten($char)
+{
     // static $convmap = [0x3040, 0x309F, 1, 0xFFFF];
     // return mb_encode_numericentity($char, $convmap, 'UTF-8');
     $codes = utf8ToUnicode($char);
@@ -48,15 +51,17 @@ function add_tenten($char) {
     return unicodeToUtf8($codes);
 }
 
-function remove_tenten($char) {
-//	static $convmap = [0x3040, 0x309F, -1, 0xFFFF];
-//	return mb_convert_encoding(mb_encode_numericentity($char, $convmap, 'UTF-8'), 'ASCII', 'UTF-8');
+function removeTenten($char)
+{
+    //	static $convmap = [0x3040, 0x309F, -1, 0xFFFF];
+    //	return mb_convert_encoding(mb_encode_numericentity($char, $convmap, 'UTF-8'), 'ASCII', 'UTF-8');
     $codes = utf8ToUnicode($char);
     $codes[0] --;
     return unicodeToUtf8($codes);
 }
 
-function add_maru($char) {
+function addMaru($char)
+{
     // static $convmap = [0x3040, 0x309F, 2, 0xFFFF];
     // return mb_encode_numericentity($char, $convmap, 'UTF-8');
     $codes = utf8ToUnicode($char);
@@ -64,21 +69,24 @@ function add_maru($char) {
     return unicodeToUtf8($codes);
 }
 
-function remove_maru($char) {
-// 	static $convmap = [0x3040, 0x309F, -2, 0xFFFF];
-// 	return mb_encode_numericentity($char, $convmap, 'UTF-8');
+function removeMaru($char)
+{
+    // 	static $convmap = [0x3040, 0x309F, -2, 0xFFFF];
+    // 	return mb_encode_numericentity($char, $convmap, 'UTF-8');
     $codes = utf8ToUnicode($char);
     $codes[0]-=2;
     return unicodeToUtf8($codes);
 }
 
-function make_small($char) {
+function makeSmall($char)
+{
     $codes = utf8ToUnicode($char);
     $codes[0] --;
     return unicodeToUtf8($codes);
 }
 
-function make_big($char) {
+function makeBig($char)
+{
     $codes = utf8ToUnicode($char);
     $codes[0] ++;
     return unicodeToUtf8($codes);
