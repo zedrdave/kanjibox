@@ -1,5 +1,4 @@
 <?php
-var_dump($_SESSION['user']);
 if (empty($_SESSION['user'])) {
     die('Need valid session');
 }

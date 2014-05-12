@@ -1,5 +1,5 @@
 <?php
-if (!@$_SESSION['user'] || $_SESSION['user']->getID() <= 0) {
+if (empty($_SESSION['user']) || $_SESSION['user']->getID() <= 0) {
     force_reload("You cannot access this page directly.", get_page_url('home'), "You need to be logged in, in order to use this feature.");
     die();
 }
@@ -12,11 +12,10 @@ if ($_SESSION['user']->isElite() && $_SESSION['user']->get_pref('general', 'shor
     include_js('shortcuts.js');
 }
 
-
 //include_class('Session');
 if (@$params['save_first_game']) {
     if (@$_SESSION['cur_session']) {
-        if ($_SESSION['cur_session']->save_score())
+        if ($_SESSION['cur_session']->saveScore())
             display_user_msg('Highscore successfully saved!', MSG_SUCCESS);
     } else
         display_user_msg('No current game session to save.', MSG_ERROR);
@@ -37,30 +36,32 @@ if (($type == 'text') && !$_SESSION['user']->isElite()) {
     return;
 }
 
-if (@$params['level'])
+if (@$params['level']) {
     $level = $params['level'];
-elseif ($_SESSION['user']->getID())
+}
+elseif ($_SESSION['user']->getID()) {
     $level = $_SESSION['user']->getLevel();
-else
+}
+else {
     $level = LEVEL_N4;
+}
 
-if (substr($level, -4) == 'kyuu')
+
+if (substr($level, -4) == 'kyuu') {
     $level = old_to_new_jlpt($level);
+}
 
-if (isset($_REQUEST['grade']))
+if (isset($_REQUEST['grade'])) {
     $grade = $_REQUEST['grade'];
+}
 
 if (isset($_SESSION['cur_session']) &&
-        ($_SESSION['cur_session']->get_mode() != $mode || $_SESSION['cur_session']->get_type() != $type || $_SESSION['cur_session']->getLevel() != $level || ($_SESSION['cur_session']->isDrill() && isset($grade) && $_SESSION['cur_session']->get_cur_grade() != $grade) || $_SESSION['cur_session']->game_over || @$params['mode'] != $_SESSION['cur_session']->get_mode() || ($_SESSION['cur_session']->get_mode() == SETS_MODE && @$params['set_id'] && $_SESSION['cur_session']->get_set_id() != $params['set_id']) || ($_SESSION['cur_session']->get_mode() == GRAMMAR_SETS_MODE && @$params['set_id'] && $_SESSION['cur_session']->get_set_id() != $params['set_id'])
+        ($_SESSION['cur_session']->getMode() != $mode || $_SESSION['cur_session']->getType() != $type || $_SESSION['cur_session']->getLevel() != $level || ($_SESSION['cur_session']->isDrill() && isset($grade) && $_SESSION['cur_session']->getCurGrade() != $grade) || $_SESSION['cur_session']->gameOver || @$params['mode'] != $_SESSION['cur_session']->getMode() || ($_SESSION['cur_session']->getMode() == SETS_MODE && @$params['set_id'] && $_SESSION['cur_session']->getSetID() != $params['set_id']) || ($_SESSION['cur_session']->getMode() == GRAMMAR_SETS_MODE && @$params['set_id'] && $_SESSION['cur_session']->getSetID() != $params['set_id'])
         )) {
-    $_SESSION['cur_session']->cleanup_before_destroy();
-    $_SESSION['cur_session'] = NULL;  //###DEBUG: save session score?
+    $_SESSION['cur_session']->cleanupBeforeDestroy();
+    $_SESSION['cur_session'] = null;  //###DEBUG: save session score?
 }
-//include_css('drill_quiz.css');
-// Hello, Rikaichan cheaters:
-//echo '<fb:user-agent includes="firefox">';
-//include_css_inline('security.css');
-//echo '</fb:user-agent>';
+
 
 if ($game_types[$type] != KANA) {
     ?>
@@ -85,9 +86,9 @@ if ($mode == GRAMMAR_SETS_MODE) {
     $selected_set = @$params['set_id'];
 
     while ($row = mysql_fetch_object($res)) {
-        $array[$row->set_id] = $row->name . ' (demo)';
+        $array[$row->setID] = $row->name . ' (demo)';
         if (!$selected_set)
-            $selected_set = $row->set_id;
+            $selected_set = $row->setID;
     }
 
     $current_set_menu = 'Current grammar set: ' . get_select_menu($array, '', $selected_set, 'if(this.value) location.href=\'' . get_page_url(PAGE_PLAY, array('type' => $type, 'mode' => GRAMMAR_SETS_MODE)) . "set_id/' + this.value + '/'");
@@ -100,7 +101,7 @@ elseif ($mode == SETS_MODE) {
     <div id="sets_settings">
         <?php
         if (@$_POST['new_set_name']) {
-            $selected_set = LearningSet::create_new($_POST['new_set_name'], $set_type, isset($_POST['public']), isset($_POST['editable']));
+            $selected_set = LearningSet::createNew($_POST['new_set_name'], $set_type, isset($_POST['public']), isset($_POST['editable']));
             if (!$selected_set)
                 die('<div class="error_msg">Error creating set: please contact KB\'s admin if the problem persists.</div>');
         } else
@@ -116,11 +117,11 @@ elseif ($mode == SETS_MODE) {
         if (@$_POST['delete_set_id']) {
             $set = new LearningSet($_REQUEST['delete_set_id']);
 
-            if (!$set->is_valid())
+            if (!$set->isValid())
                 die('<div class="error_msg">Error deleting set: please contact KB\'s admin if the problem persists.</div>');
 
 
-            if ($err = $set->delete_set())
+            if ($err = $set->deleteSet())
                 echo '<div class="error_msg">' . $err . '</div>';
             else
                 echo '<div class="success_msg">Deleted set.</div>';
@@ -128,12 +129,12 @@ elseif ($mode == SETS_MODE) {
         elseif (@$_POST['public_domain_set_id']) {
             $set = new LearningSet($_REQUEST['public_domain_set_id']);
 
-            if (!$set->is_valid())
+            if (!$set->isValid())
                 die('<div class="error_msg">Error updating set: please contact KB\'s admin if the problem persists.</div>');
 
-            $selected_set = $set->set_id;
+            $selected_set = $set->setID;
 
-            if ($err = $set->make_public_domain())
+            if ($err = $set->makePublicDomain())
                 echo '<div class="error_msg">' . $err . '</div>';
             else
                 echo '<div class="success_msg">Set moved to public domain.</div>';
@@ -148,7 +149,7 @@ elseif ($mode == SETS_MODE) {
 
             while ($row = mysql_fetch_object($res)) {
                 if (@$params['editor'] != 'open' && $row->size < 4) {
-                    if (@$selected_set == $row->set_id) {
+                    if (@$selected_set == $row->setID) {
                         if ($keys = array_keys($array))
                             $selected_set = $keys[0];
                         else
@@ -158,8 +159,8 @@ elseif ($mode == SETS_MODE) {
                     }
                 }
                 elseif (!@$selected_set)
-                    $selected_set = $row->set_id;
-                $array[$row->set_id] = ($row->sub ? '' : '• ') . $row->name . " ($row->size)";
+                    $selected_set = $row->setID;
+                $array[$row->setID] = ($row->sub ? '' : '• ') . $row->name . " ($row->size)";
             }
 
             $current_set_menu = 'Current learning set: ' . get_select_menu($array, '', $selected_set, 'if(this.value) location.href=\'' . get_page_url(PAGE_PLAY, array('type' => $type, 'mode' => SETS_MODE)) . "set_id/' + this.value + '/'");
@@ -192,7 +193,7 @@ elseif ($mode == SETS_MODE) {
                             return false;">
                     <p style="margin-bottom:5px;"><a href="https://kanjibox.net/kb/sets/">Use Set Browser &raquo;</a></p>
                     <p style="margin-bottom:10px;"><?php
-                        echo LearningSet::get_all_tag_checkboxes();
+                        echo LearningSet::getAllTagCheckboxes();
                         ?></p><div style="clear:both;"></div>
                     <input type="hidden" name="filter_set_type" value="<?php echo $set_type ?>"></input>
                     <input type="text" size="40" name="filter_str"></input> <input type="submit" name="Search" value="search"></input>
@@ -226,10 +227,10 @@ elseif ($mode == SETS_MODE) {
                     <?php
                     $res = mysql_query('SELECT ls.*, COUNT(*) AS size FROM learning_sets ls LEFT JOIN learning_set_' . $set_type . ' lse ON lse.set_id = ls.set_id WHERE ls.deleted = 0 AND ls.set_type = \'' . $set_type . '\' GROUP BY ls.set_id ORDER BY date_modified DESC LIMIT 10');
                     while ($row = mysql_fetch_object($res)) {
-                        $res_subs = mysql_query('SELECT COUNT(*) AS c FROM learning_set_subs WHERE set_id = ' . $row->set_id) or die(mysql_error());
+                        $res_subs = mysql_query('SELECT COUNT(*) AS c FROM learning_set_subs WHERE set_id = ' . $row->setID) or die(mysql_error());
                         $row_subs = mysql_fetch_object($res_subs);
 
-                        echo '<div class="set_line"><button onclick="do_load(\'' . SERVER_URL . 'ajax/edit_learning_set/?set_id=' . $row->set_id . '\', \'set_details\'); return false;">edit</button><span class="name">' . $row->name . '</span> <span class="size">' . $row->size . '</span>' . ($row->public ? '<span class="prop">public</span>' : '') . ($row->editable ? '<span class="prop">editable</span>' : '') . ($row_subs->c ? ' <span class="set_prop">' . $row_subs->c . ' subscriber' . ($row_subs->c > 1 ? 's' : '') . '</span>' : '') . '</div>';
+                        echo '<div class="set_line"><button onclick="do_load(\'' . SERVER_URL . 'ajax/edit_learning_set/?set_id=' . $row->setID . '\', \'set_details\'); return false;">edit</button><span class="name">' . $row->name . '</span> <span class="size">' . $row->size . '</span>' . ($row->public ? '<span class="prop">public</span>' : '') . ($row->editable ? '<span class="prop">editable</span>' : '') . ($row_subs->c ? ' <span class="set_prop">' . $row_subs->c . ' subscriber' . ($row_subs->c > 1 ? 's' : '') . '</span>' : '') . '</div>';
                     }
                     ?>
                 </fieldset>
@@ -282,16 +283,16 @@ elseif ($mode == SETS_MODE) {
 
 
     <?php
-    if (!$_SESSION['cur_session']->is_quiz()) {
+    if (!$_SESSION['cur_session']->isQuiz()) {
         ?>
         <hr/><div id="footer">
             <?php
             if ($_SESSION['cur_session']->isDrill()) {
 
-                $options = $_SESSION['cur_session']->get_grade_options();
+                $options = $_SESSION['cur_session']->getGradeOptions();
 
                 if ($options) {
-                    $params = $_SESSION['cur_session']->get_params();
+                    $params = $_SESSION['cur_session']->getParams();
                     ?>
                     <div id="control-options">
                         Level: 
@@ -310,14 +311,14 @@ elseif ($mode == SETS_MODE) {
 
                 echo '<div id="footer-stats">';
 
-                if ($_SESSION['user']->is_logged_in()) {
+                if ($_SESSION['user']->isLoggedIn()) {
                     if ($_SESSION['user']->get_pref('drill', 'show_learning_stats')) {
                         ?>
                         <script type="text/javascript">
 
                             $(document).ready(function()
                             {
-                                do_load('<?php echo SERVER_URL . 'ajax/footer_stats_bar/type/' . $_SESSION['cur_session']->get_type(); ?>/', 'footer-stats');
+                                do_load('<?php echo SERVER_URL . 'ajax/footer_stats_bar/type/' . $_SESSION['cur_session']->getType(); ?>/', 'footer-stats');
 
                             });
                         </script>
@@ -326,26 +327,26 @@ elseif ($mode == SETS_MODE) {
                 } else {
                     echo "<div class=\"pleaselog\">You need <a href=\"" . get_page_url(PAGE_PLAY, $params) . "\" requirelogin=\"1\">to login</a> in order to view your live stats.</div>";
                 }
-            } elseif ($_SESSION['cur_session']->is_learning_set()) {
+            } elseif ($_SESSION['cur_session']->isLearningSet()) {
                 echo '<div id="footer-stats">';
                 ?>
                 <script type="text/javascript">
 
                     $(document).ready(function()
                     {
-                        do_load('<?php echo SERVER_URL . 'ajax/footer_stats_bar/type/' . $_SESSION['cur_session']->get_type() . '/mode/' . SETS_MODE . '/'; ?>', 'footer-stats');
+                        do_load('<?php echo SERVER_URL . 'ajax/footer_stats_bar/type/' . $_SESSION['cur_session']->getType() . '/mode/' . SETS_MODE . '/'; ?>', 'footer-stats');
 
                     });
                 </script>
                 <?php
-            } elseif ($_SESSION['cur_session']->is_grammar_set()) {
+            } elseif ($_SESSION['cur_session']->isGrammarSet()) {
                 echo '<div id="footer-stats">';
                 ?>
                 <script type="text/javascript">
 
                     $(document).ready(function()
                     {
-                        // do_load('<?php echo SERVER_URL . 'ajax/footer_stats_bar/type/' . $_SESSION['cur_session']->get_type() . '/mode/' . GRAMMAR_SETS_MODE . '/'; ?>', 'footer-stats');
+                        // do_load('<?php echo SERVER_URL . 'ajax/footer_stats_bar/type/' . $_SESSION['cur_session']->getType() . '/mode/' . GRAMMAR_SETS_MODE . '/'; ?>', 'footer-stats');
 
                     });
                 </script>

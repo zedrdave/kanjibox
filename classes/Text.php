@@ -147,7 +147,7 @@ class Text extends Vocab
 		return array($hint_str, $answer_str, $replaced_solution);
 	}
 	
-	function is_above_level($grade, $jlpt_level, $or_same = true)
+	function isAboveLevel($grade, $jlpt_level, $or_same = true)
 	{		
 		$add = ($or_same ? 1: 0);
 		if($grade[0] == 'N')
@@ -167,7 +167,7 @@ class Text extends Vocab
 		
 		if ($answer_id != SKIP_ID && !$this->isSolution($answer_id))
 		{
-			if (! $wrong = $this->get_vocab_id((int) $answer_id))
+			if (! $wrong = $this->getVocabID((int) $answer_id))
 				log_error('Unknown Vocab ID: ' . $answer_id, true, true);
 				
 			// for($i = 0; $i < mb_strlen($wrong->word, $encoding); $i++)
@@ -215,18 +215,18 @@ class Text extends Vocab
 		}
 		else {
 			if($this->isQuiz())
-				$picks = $this->get_random_vocab ($grade, $grade, $how_many);
+				$picks = $this->getRandomVocab ($grade, $grade, $how_many);
 			elseif($this->isLearningSet())
-				$picks = $this->get_set_weighted_vocab($user_id, $how_many);
+				$picks = $this->getSetWeightedVocab($user_id, $how_many);
 			else
-				$picks = $this->get_random_weighted_vocab($user_id, $grade, $grade, $how_many);
+				$picks = $this->getRandomWeightedVocab($user_id, $grade, $grade, $how_many);
 		
 		
 		
 			foreach($picks as $pick)
 			{
 				$choice = array(0 => $pick);
-				$sims = $this->get_similar_vocab($choice[0], 3, $grade);
+				$sims = $this->getSimilarVocab($choice[0], 3, $grade);
 				$i = 1;
 			
 				foreach($sims as $sim)
@@ -275,7 +275,7 @@ class Text extends Vocab
 		
 	}
 	
-	function get_random_vocab ($grade1 = -1, $grade2 = -1, $how_many = 1, $exclude = NULL) 
+	function getRandomVocab ($grade1 = -1, $grade2 = -1, $how_many = 1, $exclude = NULL) 
 	{		
 		if ($grade1[0] == 'N')
 		{
@@ -329,7 +329,7 @@ class Text extends Vocab
 		return $vocabs;
 	}
 	
-	function get_random_weighted_vocab($user_id, $grade1 = -1, $grade2 = -1, $how_many = 1)
+	function getRandomWeightedVocab($user_id, $grade1 = -1, $grade2 = -1, $how_many = 1)
 	{
 		if ($grade1[0] == 'N')
 		{
@@ -351,7 +351,7 @@ class Text extends Vocab
 		$query = "SELECT sub.*, jx.gloss_english AS `fullgloss`, e.example_str, e.english AS example_english FROM (SELECT j.`id` AS `id`, j.`word` AS `word`, j.`reading` AS `reading`, j.katakana, j.usually_kana, j.pos_redux, `j`.`njlpt` AS `njlpt`, `j`.`njlpt_r` AS `njlpt_r`, IF(l.curve IS NULL, 1000, l.curve)+1000*rand() as xcurve, ea.example_id
 		FROM `jmdict` j 
 		LEFT JOIN example_answers AS ea ON ea.jmdict_id = j.id
-		LEFT JOIN " . $this->table_learning . " l on l.user_id = '" . (int) $user_id . "' AND j.id = l." . $this->table_learning_index . "
+		LEFT JOIN " . $this->tableLearning . " l on l.user_id = '" . (int) $user_id . "' AND j.id = l." . $this->tableLearningIndex . "
 		WHERE  j.njlpt > 0 ";
 	
 		if ($grade1 > 0)
@@ -389,7 +389,7 @@ class Text extends Vocab
 	
 	}
 	
-	function get_set_weighted_vocab($user_id, $how_many = 1)
+	function getSetWeightedVocab($user_id, $how_many = 1)
 	{
 		// $query_where = " WHERE lse.set_id = $this->set_id";
 			
@@ -398,7 +398,7 @@ class Text extends Vocab
 		$query = "SELECT j.*, jx.*, jx.gloss_english AS `fullgloss`, e.example_str, e.english AS example_english, e.example_id FROM (SELECT l.`jmdict_id` AS `id`, IF(l.curve IS NULL, 1000, l.curve)+1000*rand() as xcurve, ea.example_id
 		FROM learning_set_vocab ls
 		JOIN example_answers AS ea ON ea.jmdict_id = ls.jmdict_id
-		LEFT JOIN $this->table_learning l ON l.user_id = '" . (int) $user_id . "' AND ls.jmdict_id = l.$this->table_learning_index ";
+		LEFT JOIN $this->tableLearning l ON l.user_id = '" . (int) $user_id . "' AND ls.jmdict_id = l.$this->tableLearningIndex ";
 
 		$query .= 	'WHERE ls.set_id = ' . $this->set_id . ' ORDER BY xcurve DESC';
 		$query .= '  LIMIT ' . (5 * $how_many) . ') AS sub
@@ -448,7 +448,7 @@ class Text extends Vocab
 	}
 	
 	
-	function get_similar_vocab ($jmdict, $howmany = 1, $grade1 = -1, $grade2 = -1) 
+	function getSimilarVocab ($jmdict, $howmany = 1, $grade1 = -1, $grade2 = -1) 
 	{		
 		$grade = $grade1;
 		

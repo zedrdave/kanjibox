@@ -5,8 +5,8 @@ require_elite_user();
 require_once ABS_PATH . 'libs/stats_lib.php';
 include_css('stats.css');
 
-$ranks = User::get_ranks();
-$levels = Session::$level_names;
+$ranks = User::getRanks();
+$levels = Session::$levelNames;
 
 foreach ($levels as $level => $level_name) {
     echo get_rank_pop_table($level);
@@ -16,7 +16,7 @@ function get_rank_pop_table($level) {
     $is_admin = $_SESSION['user']->isAdministrator();
 
 
-    $table = '<br/><table class="rankstats"><caption>' . Session::$level_names[$level] . '</caption>';
+    $table = '<br/><table class="rankstats"><caption>' . Session::$levelNames[$level] . '</caption>';
     $table .= '<tr class="header"><th style="border:none;"></th>';
 
     $types = array(TYPE_KANJI, TYPE_VOCAB, TYPE_READING, TYPE_TEXT);
@@ -46,7 +46,7 @@ function get_rank_pop_table($level) {
 }
 
 function get_rank_population($total) {
-    foreach (User::get_ranks() as $rank => $rank_long) {
+    foreach (User::getRanks() as $rank => $rank_long) {
         $pops[$rank] = 0;
     }
 

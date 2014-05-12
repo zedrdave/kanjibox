@@ -10,7 +10,7 @@ mb_internal_encoding("UTF-8");
 $res = mysql_query("SELECT gs.set_id, gs.name FROM grammar_sets gs");
 $grammar_sets = array(-1 => '[none]');
 while ($row = mysql_fetch_object($res))
-    $grammar_sets[$row->set_id] = $row->name;
+    $grammar_sets[$row->setID] = $row->name;
 
 $set_id = (int) @$_REQUEST['set_id'];
 if (!$set_id)

@@ -39,22 +39,22 @@ else {
 		echo "<div class=\"set_line\">";
 		
 		if(!$row->sub_user_id && $row->user_id != $user_id)
-			echo"<button onclick=\"subscribe_to_set($row->set_id, this); return false;\">subscribe</button> ";
+			echo"<button onclick=\"subscribe_to_set($row->setID, this); return false;\">subscribe</button> ";
 
 		if($_SESSION['user']->isAdministrator())
-			echo '<button onclick="do_load(\'' . SERVER_URL . 'ajax/edit_learning_set/?set_id=' . $row->set_id . '\', \'set_details\'); return false;">edit</button> ';
+			echo '<button onclick="do_load(\'' . SERVER_URL . 'ajax/edit_learning_set/?set_id=' . $row->setID . '\', \'set_details\'); return false;">edit</button> ';
 		else
-			echo '<button onclick="do_load(\'' . SERVER_URL . 'ajax/edit_learning_set/?set_id=' . $row->set_id . '\', \'set_details\'); return false;">' . ($row->editable && $row->sub_user_id ? 'edit' : 'view')  . '</button> ';
+			echo '<button onclick="do_load(\'' . SERVER_URL . 'ajax/edit_learning_set/?set_id=' . $row->setID . '\', \'set_details\'); return false;">' . ($row->editable && $row->sub_user_id ? 'edit' : 'view')  . '</button> ';
 			// echo"<button onclick=\"show_set_id($row->set_id); return false;\"". (!$row->sub_user_id ?  ' style="display:none;"' : '') . ">" . ($row->editable ? 'edit' : 'view') . "</button> ";
 		
-		echo "<span class=\"name\" id=\"set_name_$row->set_id\">$row->name</span> <span class=\"size\">$row->set_size";
+		echo "<span class=\"name\" id=\"set_name_$row->setID\">$row->name</span> <span class=\"size\">$row->set_size";
 		echo ($row->set_size == 1 ? ' entry' : ' entries');
 			
 		echo "</span>";
 		if($row->editable)
 			echo '<span class="prop">editable</span>';
 
-		$res_tag = mysql_query("SELECT t.* FROM learning_set_tags lst LEFT JOIN tags t ON t.tag_id = lst.tag_id WHERE lst.set_id = $row->set_id");
+		$res_tag = mysql_query("SELECT t.* FROM learning_set_tags lst LEFT JOIN tags t ON t.tag_id = lst.tag_id WHERE lst.set_id = $row->setID");
 		while($tag_row = mysql_fetch_object($res_tag))
 			echo "<span class=\"tag_box\">$tag_row->tag</span>";
 

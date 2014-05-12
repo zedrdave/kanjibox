@@ -34,7 +34,7 @@ for($i = 5; $i > 0; $i--) {
 }
 
 echo '<ul>';
-foreach(Vocab::$lang_strings as $lang => $lang_full) {
+foreach(Vocab::$langStrings as $lang => $lang_full) {
 	if($lang == 'en') {
 		continue;
     }

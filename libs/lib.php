@@ -62,15 +62,15 @@ function init_app($ajax = false)
         $_SESSION['params']['device'] = 'tablet';
     }
 
-    if (!empty($_SESSION['user']) && $_SESSION['user']->is_logged_in()) {
-        $_SESSION['user']->inc_load_count();
-        $_SESSION['user']->set_logged_in(true);
-        $levels = Session::$level_names;
+    if (!empty($_SESSION['user']) && $_SESSION['user']->isLoggedIn()) {
+        $_SESSION['user']->incLoadCount();
+        $_SESSION['user']->setLoggedIn(true);
+        $levels = Session::$levelNames;
         if (!in_array($_SESSION['user']->getLevel(), $levels)) {
-            $_SESSION['user']->update_level($_SESSION['user']->get_njlpt_level());
+            $_SESSION['user']->update_level($_SESSION['user']->getNJLPTLevel());
         }
 
-        $fb_id = $_SESSION['user']->get_fb_id();
+        $fb_id = $_SESSION['user']->getFbID();
 
         return true;
     } elseif (!$ajax) {
@@ -476,7 +476,7 @@ function get_badge($rank_array, $caption_type)
         $rank_array->level = $_SESSION['user']->getLevel();
     }
     $level_jp = $levels[$rank_array->level];
-    $level = Session::$level_names[$rank_array->level];
+    $level = Session::$levelNames[$rank_array->level];
 
     switch ($caption_type) {
         case 0:

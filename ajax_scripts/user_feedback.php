@@ -1,6 +1,6 @@
 <?php
 
-if (!empty($_SESSION['user'])) {
+if (empty($_SESSION['user'])) {
     log_error('You need to be logged to access this function.', false, true);
 }
 

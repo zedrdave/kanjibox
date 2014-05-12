@@ -6,7 +6,7 @@ require_once ABS_PATH . 'libs/util_lib.php';
 include_css('scores.css');
 include_js('ajax.js');
 
-$levels = Session::$level_names;
+$levels = Session::$levelNames;
 ?>
 <script type="text/javascript">
     $(document).ready(function()
@@ -58,7 +58,7 @@ if ($cur_type == 'main') {
             <?php
             $game = $_SESSION['user']->getHighscore($level, $type);
             if ($game) {
-                $rank = $_SESSION['user']->get_rank($type);
+                $rank = $_SESSION['user']->getRank($type);
 
                 echo '<table class="twocols"><tr><td><span class="label">Personal Highscore:</span><div class="value" style="text-align:left;">' . $game->score . ' Pts</div></td>';
                 $rank_ratio = (($rank->tot_count - $rank->rank + 1) / $rank->tot_count);
@@ -125,7 +125,7 @@ if ($cur_type == 'main') {
             <tr>
                 <td>
                     <?php
-                    $_SESSION['user']->print_highscores($cur_type, "You:");
+                    $_SESSION['user']->printHighscores($cur_type, "You:");
                     ?>
                 </td>
                 <td>

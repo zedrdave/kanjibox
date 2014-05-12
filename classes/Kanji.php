@@ -51,7 +51,7 @@ class Kanji extends Question
         if ($this->isQuiz() || $_SESSION['user']->get_pref('drill', 'show_english')) {
             if ($solution->missing_lang) {
                 echo '<div class="missing_lang meaning">' . $meanStr;
-                if (!$_SESSION['user']->is_on_translator_probation()) {
+                if (!$_SESSION['user']->isOnTranslatorProbation()) {
                     echo ' <a class="" href="#" onclick="show_kanji_translate_dialog(\'' . SERVER_URL . '\', \'' . $solution->id . '\', \'' . $this->data['sid'] . '\'); return false;"><img src="' . SERVER_URL . 'img/flags/' . $_SESSION['user']->get_pref('lang',
                         'kanji_lang') . '.png" class="missing_lang_icon' . ($this->isQuiz() ? ' disabled' : '') . '" /></a>';
                 }
@@ -245,7 +245,7 @@ class Kanji extends Question
                 'translator_mode'));
 
         if ($translatorMode) {
-            if ($_SESSION['user']->is_on_translator_probation()) {
+            if ($_SESSION['user']->isOnTranslatorProbation()) {
                 $query .= ' AND kx.meaning_' . Kanji::$langStrings[$_SESSION['user']->get_pref('lang', 'kanji_lang')] . " LIKE '(~)%'";
             } else {
                 $query .= ' AND (kx.meaning_' . Kanji::$langStrings[$_SESSION['user']->get_pref('lang', 'kanji_lang')] . ' IS NULL OR kx.meaning_' . Kanji::$langStrings[$_SESSION['user']->get_pref('lang',
@@ -493,7 +493,7 @@ k.`njlpt`
 
     public function getKanjiExamplesStr($kanjiID)
     {
-        $query = 'SELECT j.`id`, `word`, `reading`, ' . Vocab::get_query_gloss() . ' FROM `kanji2word` k2w LEFT JOIN `jmdict` j ON j.id = k2w.word_id LEFT JOIN jmdict_ext jx on jx.jmdict_id = j.id WHERE k2w.`kanji_id` = :id GROUP BY j.id ORDER BY pri + rand() * 3 ASC LIMIT 3';
+        $query = 'SELECT j.`id`, `word`, `reading`, ' . Vocab::getQueryGloss() . ' FROM `kanji2word` k2w LEFT JOIN `jmdict` j ON j.id = k2w.word_id LEFT JOIN jmdict_ext jx on jx.jmdict_id = j.id WHERE k2w.`kanji_id` = :id GROUP BY j.id ORDER BY pri + rand() * 3 ASC LIMIT 3';
         try {
             $stmt = DB::getConnection()->prepare($query);
             $stmt->bindValue(':id', $kanjiID, PDO::PARAM_INT);
@@ -569,7 +569,7 @@ k.`njlpt`
 
     public function editButtonLink()
     {
-        if ($_SESSION['user']->is_on_translator_probation() && !$_SESSION['user']->get_pref('lang', 'translator_mode')) {
+        if ($_SESSION['user']->isOnTranslatorProbation() &&  !$_SESSION['user']->get_pref('lang', 'translator_mode')) {
             return '';
         }
 

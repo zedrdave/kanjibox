@@ -12,7 +12,7 @@ include_jquery('pulse');
 
 <iframe src="//www.facebook.com/plugins/like.php?href=http%3A%2F%2Fwww.facebook.com%2Fkanjibox&amp;layout=box_count&amp;show_faces=false&amp;width=250&amp;action=like&amp;colorscheme=light&amp;height=65" scrolling="no" frameborder="0" style="border:none; overflow:hidden; width:60px; height:65px;float:right;" allowTransparency="true"></iframe>
 <?php
-if ($_SESSION['user']->get_pwd_hash() == 'need_to_reset') {
+if ($_SESSION['user']->getPwdHash() == 'need_to_reset') {
     echo '<div class="error_msg">Your password needs to be reset. Please use the <em>Change password</em> button below to set your access password.</div>';
 }
 
@@ -38,7 +38,7 @@ if ($_SESSION['user']->get_pref('notif', 'post_news') && $_SESSION['user']->getF
     }
 }
 ?>
-<h2 style="margin-top: 10px;">Hello <?php echo $_SESSION['user']->geFirstName() ?>-san, what a fine day to train in Kanji...</h2>
+<h2 style="margin-top: 10px;">Hello <?php echo $_SESSION['user']->getFirstName() ?>-san, what a fine day to train in Kanji...</h2>
 <?php
 if (defined('ADDING') || !$_SESSION['user'] || !$_SESSION['user']->isLoggedIn()) {
     ?>
@@ -58,7 +58,7 @@ if (defined('ADDING') || !$_SESSION['user'] || !$_SESSION['user']->isLoggedIn())
 $lang_vocab = $_SESSION['user']->get_pref('lang', 'vocab_lang');
 $lang_kanji = $_SESSION['user']->get_pref('lang', 'kanji_lang');
 
-if ($_SESSION['user']->is_on_translator_probation()) {
+if ($_SESSION['user']->isOnTranslatorProbation()) {
     ?>
     <div style="padding: 5px; border: 1px solid #D11B00; background-color:#FF8803; margin-bottom:20px;"><h3 style="margin:0 0 5px 0">Translator Probation</h3>
         Sorry, but due to repeated flagging of your translations, the translation features on your account have automatically been restricted...<br/>Please use <i>Translator Mode</i> to go over past translations and fix them according to the <a href="/page/international/">translation guidelines</a> before you keep on translating new entries.
@@ -74,8 +74,8 @@ if ($_SESSION['user']->is_on_translator_probation()) {
 <?php
 if ($lang_vocab != 'en') {
     $tot = DB::count('SELECT COUNT(*) FROM jmdict j WHERE j.njlpt = ?', [$_SESSION['user']->getLevel()]);
-    $translated = DB::count('SELECT COUNT(*) FROM jmdict j LEFT JOIN jmdict_ext jx ON jx.jmdict_id = j.id WHERE j.njlpt = $level AND jx.gloss_' . Vocab::$lang_strings[$lang_vocab] . ' IS NOT NULL AND jx.gloss_' . Vocab::$lang_strings[$lang_vocab] . ' != \'\'', []);
-    $need_work = DB::count('SELECT COUNT(*) AS c FROM jmdict j LEFT JOIN jmdict_ext jx ON jx.jmdict_id = j.id WHERE j.njlpt = $level AND jx.gloss_' . Vocab::$lang_strings[$lang_vocab] . ' LIKE \'(~)%\'', []);
+    $translated = DB::count('SELECT COUNT(*) FROM jmdict j LEFT JOIN jmdict_ext jx ON jx.jmdict_id = j.id WHERE j.njlpt = $level AND jx.gloss_' . Vocab::$langStrings[$lang_vocab] . ' IS NOT NULL AND jx.gloss_' . Vocab::$langStrings[$lang_vocab] . ' != \'\'', []);
+    $need_work = DB::count('SELECT COUNT(*) AS c FROM jmdict j LEFT JOIN jmdict_ext jx ON jx.jmdict_id = j.id WHERE j.njlpt = $level AND jx.gloss_' . Vocab::$langStrings[$lang_vocab] . ' LIKE \'(~)%\'', []);
 
     $translated -= $need_work;
     $ratio_good = round(100 * $translated / $tot, 1);
@@ -109,11 +109,11 @@ if ($lang_kanji != 'en') {
 <h2>Settings</h2>
 <fieldset><legend>Login Info</legend>
     <div id="ajax-result" style="display:none;"></div>
-    <div id="login-mail">Email:  <span class="login"><?php echo $_SESSION['user']->get_email(); ?></span> <a href="#" style="font-size:90%" onclick="$('#login-mail').hide();
+    <div id="login-mail">Email:  <span class="login"><?php echo $_SESSION['user']->getEmail(); ?></span> <a href="#" style="font-size:90%" onclick="$('#login-mail').hide();
             $('#set-login-mail').show();
             return false;">[change]</a></div>
     <form id="set-login-mail" class="update-login" action="<?php echo SERVER_URL ?>ajax/update_login_info/" method="post">
-        Login (your email): <input type="text" size="40" name="set_login" id="set_login" value="<?php echo $_SESSION['user']->get_email(); ?>" />
+        Login (your email): <input type="text" size="40" name="set_login" id="set_login" value="<?php echo $_SESSION['user']->getEmail(); ?>" />
         <input type="submit" name="submit-new-login" id="submit-new-login" value="Set Login" />
     </form>
     <p id="set-password-link"><a href="#" onclick="$('#set-password').show();
@@ -123,9 +123,9 @@ if ($lang_kanji != 'en') {
         Password: <input type="password" name="set_password" id="set_password" size="10" /> |	Password again: <input type="password" name="set_password_repeat" id="set_password_repeat" size="10" /> <input type="submit" name="submit-new-password" value="Set Password" />
     </form>
     <?php
-    if ($_SESSION['user']->getFbID() == 0 || $_SESSION['user']->geFirstName() == '') {
+    if ($_SESSION['user']->getFbID() == 0 || $_SESSION['user']->getFirstName() == '') {
         ?>
-        <p id="set-name-link">Name (<em>optional</em>): <span class="name_info" id="first_name"><?php echo $_SESSION['user']->geFirstName() ?></span> <span class="name_info" id="last_name"><?php echo $_SESSION['user']->get_last_name() ?></span> <a href="#" onclick="$('#set-name').show();
+        <p id="set-name-link">Name (<em>optional</em>): <span class="name_info" id="first_name"><?php echo $_SESSION['user']->getFirstName() ?></span> <span class="name_info" id="last_name"><?php echo $_SESSION['user']->getLastName() ?></span> <a href="#" onclick="$('#set-name').show();
                 $('#set-name-link').hide();
                 return false;">[change name]</a></p>
         <form id="set-name" class="update-login" action="<?php echo SERVER_URL ?>ajax/update_login_info/" method="post">
@@ -137,7 +137,7 @@ if ($lang_kanji != 'en') {
     <script type="text/javascript">
         $(document).ready(function() {
 <?php
-if ($_SESSION['user']->is_pwd_empty()) {
+if ($_SESSION['user']->isPwdEmpty()) {
     ?>
                 $('#ajax-result').show().html("<em>You don't have any password set. Use the button below to set a password.</em>");
     <?php
@@ -272,7 +272,7 @@ if ($_SESSION['user']->is_pwd_empty()) {
     <fieldset><legend>Level</legend>
         You are training for level: <select name="level" id="level" onchange="show_and_blink('save_prefs');
                         return true;" clickthrough="true" ><?php
-                                                $levels = Session::$level_names;
+                                                $levels = Session::$levelNames;
                                                 foreach ($levels as $level => $label)
                                                     echo "<option value=\"$level\"" . ($_SESSION['user']->getLevel() == $level ? ' selected' : ' ') . ">$label</option>"
                                                     ?></select>

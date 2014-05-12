@@ -45,7 +45,7 @@ $query = "SELECT du.*, u.fb_id, ux.first_name, ux.last_name, u.privileges AS use
 		$query .= " AND du.need_work = 1 ";
 
 	if(@$params['lang'])
-		$query .= " AND (du.col_name = 'meaning_" . @Kanji::$langStrings[$params['lang']] . "' OR du.col_name = 'gloss_" . @Vocab::$lang_strings[$params['lang']] . "')";
+		$query .= " AND (du.col_name = 'meaning_" . @Kanji::$langStrings[$params['lang']] . "' OR du.col_name = 'gloss_" . @Vocab::$langStrings[$params['lang']] . "')";
 	
 $query .= " GROUP BY du.update_id ORDER BY du.table_name, du.col_name, du.id_name, du.id_value, du.id_name_2, du.id_val_2, du.ts ASC";
 	

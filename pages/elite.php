@@ -40,7 +40,7 @@ function register_kb_code($device_id, $kb_code_array) {
 		return -2;
 	}
 	
-	$_SESSION['user']->upgrade_account($device_id, $build, $kb_code);
+	$_SESSION['user']->upgradeAccount($device_id, $build, $kb_code);
 	display_user_msg("Your account has been successfully upgraded.<br/>Welcome to the Elite!", MSG_SUCCESS);
 	return 1;
 

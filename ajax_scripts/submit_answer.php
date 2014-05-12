@@ -13,7 +13,7 @@ $answer_id = $_REQUEST['answer_id'];
 $time = (int) min(30, $_REQUEST['countdown']);
 
 $div_id = 'sol_' . $sid;
-$class = $_SESSION['cur_session']->display_solution($sid, $answer_id);
+$class = $_SESSION['cur_session']->displaySolution($sid, $answer_id);
 
 
 switch ($class) {
@@ -37,7 +37,7 @@ if (!$_SESSION['user']->get_pref('general', 'auto_vanish'))
     $timeout = 1000 * 120;
 
 $_SESSION['cur_session']->registerAnswer($sid, $answer_id, $time);
-$load_next = $_SESSION['cur_session']->all_answered();
+$load_next = $_SESSION['cur_session']->allAnswered();
 
 if ($load_next)
     $timeout = min(5000, (int) ($timeout / 2));
@@ -49,7 +49,7 @@ $keep_last_n_sols = 2;
 <?php
 if ($_SESSION['cur_session']->isQuiz()) {
     ?>
-        $('#score').html("<?php echo $_SESSION['cur_session']->get_score_str() ?>");
+        $('#score').html("<?php echo $_SESSION['cur_session']->getScoreStr() ?>");
 
     <?php
 }
@@ -138,5 +138,5 @@ if ($load_next)
 flush();
 
 if ($load_next) {
-    $_SESSION['cur_session']->load_next_wave();
+    $_SESSION['cur_session']->loadNextWave();
 }

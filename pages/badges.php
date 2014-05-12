@@ -11,7 +11,7 @@ if (!empty($_SESSION['user']) && $_SESSION['user']->isElite()) {
     $kb_types = array('kanji', 'vocab', 'reading');
 }
 foreach ($kb_types as $kb_type) {
-    $rank_array = $_SESSION['user']->get_rank($kb_type, false, 3600);
+    $rank_array = $_SESSION['user']->getRank($kb_type, false, 3600);
     if (!$rank_array) {
         continue;
     }

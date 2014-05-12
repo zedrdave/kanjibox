@@ -203,7 +203,7 @@ function get_select_menu($array, $select_id = '', $selected = '', $on_change = '
 function get_jlpt_menu($id, $selected, $onchange = '')
 {
     // $levels = array(5 => 'N5', 4 => 'N4', 3 => 'N3', 2 => 'N2', 1 => 'N1', 0 => '先生');
-    return get_select_menu(Session::$level_names, $id, $selected, $onchange);
+    return get_select_menu(Session::$levelNames, $id, $selected, $onchange);
 }
 
 function display_select_menu($array, $select_id = '', $selected = '', $on_change = '', $first_default = '')

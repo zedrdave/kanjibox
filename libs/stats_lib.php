@@ -5,7 +5,7 @@ global $facebook;
 function print_friendsboard($user, $level, $type, $title, $otherlevels = false) {
     global $facebook, $levels;
 
-    $friends = $_SESSION['user']->get_friends();
+    $friends = $_SESSION['user']->getFriends();
     $friends[] = $user->getFbID();
     $friends_id = implode($friends, ',');
 
@@ -103,7 +103,7 @@ function print_globalboard($user, $level, $type, $title, $limit = 5) {
     }
 
     if (!$self_included) {
-        if ($rank = $user->get_best_game($type)) {
+        if ($rank = $user->getBestGame($type)) {
             echo '<p class="ellipse">...</p>';
             echo "<div class=\"user self\"><fb:profile-pic uid=\"" . $user->getFbID() . "\" size=\"square\" linked=\"true\"></fb:profile-pic>";
             $font_size = ((int) $rank->rank ? min(100, (int) (150 / (floor(log10($rank->rank)) + 1))) : 100);

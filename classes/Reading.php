@@ -49,7 +49,7 @@ class Reading extends Question
             if ($_SESSION['user']->get_pref('drill', 'show_reading_translation')) {
                 if ($solution->missing_lang) {
                     echo '<div class="missing_lang">' . $solution->fullgloss;
-                    if (!$_SESSION['user']->is_on_translator_probation()) {
+                    if (!$_SESSION['user']->isOnTranslatorProbation()) {
                         echo ' <a class="" href="#" onclick="show_vocab_translate_dialog(\'' . SERVER_URL . '\', \'' . $solution->id . '\', \'' . $this->data['sid'] . '\'); return false;"><img src="' . SERVER_URL . 'img/flags/' . $_SESSION['user']->get_pref('lang',
                             'vocab_lang') . '.png" class="missing_lang_icon' . ($this->isQuiz() ? ' disabled' : '') . '" /></a>';
                     }
@@ -113,7 +113,7 @@ class Reading extends Question
 
         if ($solution->missing_lang) {
             echo '<div class="missing_lang">' . $solution->fullgloss;
-            if (!$_SESSION['user']->is_on_translator_probation()) {
+            if (!$_SESSION['user']->isOnTranslatorProbation()) {
                 echo ' <a class="" href="#" onclick="show_vocab_translate_dialog(\'' . SERVER_URL . '\', \'' . $solution->id . '\', \'' . $this->data['sid'] . '\'); return false;"><img src="' . SERVER_URL . 'img/flags/' . $_SESSION['user']->get_pref('lang',
                     'vocab_lang') . '.png" class="missing_lang_icon' . ($this->isQuiz() ? ' disabled' : '') . '" /></a>';
             }
@@ -135,10 +135,10 @@ class Reading extends Question
 
     public function learnSet($userID, $learningSet, $learnOthers = false)
     {
-        return parent::learn_set($userID, $learningSet, $learnOthers);
+        return parent::learnSet($userID, $learningSet, $learnOthers);
     }
 
-    public function getDBData($howMany, $grade)
+    public function getDBData($howMany, $grade, $userID = -1)
     {
         if ($this->isQuiz() || !empty($_SESSION['user'])) {
             $picks = $this->getRandomReadings($grade, $grade, $howMany);
@@ -276,7 +276,7 @@ class Reading extends Question
             $easiest = '1';
         }
 
-        $query = 'SELECT j.*, jx.pos, ' . Vocab::get_query_gloss() . ' FROM (SELECT j.`id` AS `id`, j.`word` AS `word`, j.`reading`, `j`.`njlpt` AS `njlpt`, `j`.`njlpt_r` AS `njlpt_r`  FROM `jmdict` j WHERE j.word != j.reading AND j.katakana = \'0\' AND j.usually_kana = 0 AND j.njlpt > 0 ';
+        $query = 'SELECT j.*, jx.pos, ' . Vocab::getQueryGloss() . ' FROM (SELECT j.`id` AS `id`, j.`word` AS `word`, j.`reading`, `j`.`njlpt` AS `njlpt`, `j`.`njlpt_r` AS `njlpt_r`  FROM `jmdict` j WHERE j.word != j.reading AND j.katakana = \'0\' AND j.usually_kana = 0 AND j.njlpt > 0 ';
 
         if ($grade1 > 0) {
             $grade1 = (int) $grade1;
@@ -328,7 +328,7 @@ class Reading extends Question
     public function getSetWeightedReadings($howMany = 1)
     {
 
-        $query = "SELECT j.*, jx.pos, " . Vocab::get_query_gloss() . " FROM (SELECT j.`id` AS `id`, j.`word` AS `word`, j.`reading` AS `reading`, `j`.`njlpt` AS `njlpt`, `j`.`njlpt_r` AS `njlpt_r`, IF(l.curve IS NULL, 1000, l.curve)+1000*rand() as xcurve
+        $query = "SELECT j.*, jx.pos, " . Vocab::getQueryGloss() . " FROM (SELECT j.`id` AS `id`, j.`word` AS `word`, j.`reading` AS `reading`, `j`.`njlpt` AS `njlpt`, `j`.`njlpt_r` AS `njlpt_r`, IF(l.curve IS NULL, 1000, l.curve)+1000*rand() as xcurve
 		FROM learning_set_vocab ls LEFT JOIN `jmdict` j ON j.id = ls.jmdict_id
 		LEFT JOIN " . $this->tableLearning . " l on l.user_id = '" . (int) $_SESSION['user']->getID() . "' AND j.id = l." . $this->tableLearningIndex . "
 		WHERE ls.set_id = $this->set_id AND j.word != j.reading AND j.katakana = '0' AND j.usually_kana = 0 ";
@@ -380,7 +380,7 @@ class Reading extends Question
             $easiest = '1';
         }
 
-        $query = "SELECT j.*, jx.pos, " . Vocab::get_query_gloss() . " FROM (SELECT j.`id` AS `id`, j.`word` AS `word`, j.`reading` AS `reading`, `j`.`njlpt` AS `njlpt`, `j`.`njlpt_r` AS `njlpt_r`, IF(l.curve IS NULL, 1000, l.curve)+1000*rand() as xcurve
+        $query = "SELECT j.*, jx.pos, " . Vocab::getQueryGloss() . " FROM (SELECT j.`id` AS `id`, j.`word` AS `word`, j.`reading` AS `reading`, `j`.`njlpt` AS `njlpt`, `j`.`njlpt_r` AS `njlpt_r`, IF(l.curve IS NULL, 1000, l.curve)+1000*rand() as xcurve
 		FROM `jmdict` j
 		LEFT JOIN " . $this->tableLearning . " l on l.user_id = '" . (int) $_SESSION['user']->getID() . "' AND j.id = l." . $this->tableLearningIndex . "
 		WHERE  j.word != j.reading AND j.katakana = '0' AND j.usually_kana = 0 AND j.njlpt >0 ";
@@ -883,7 +883,7 @@ class Reading extends Question
 
     public function editButtonLink()
     {
-        if ($_SESSION['user']->is_on_translator_probation() && !$_SESSION['user']->get_pref('lang', 'translator_mode')) {
+        if ($_SESSION['user']->isOnTranslatorProbation() && !$_SESSION['user']->get_pref('lang', 'translator_mode')) {
             return '';
         }
 

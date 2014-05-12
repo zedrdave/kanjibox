@@ -175,7 +175,7 @@ if (isset($params['question_id'])) {
             - Set: <select name="set_id" id="set_id" onchange="show_question_save_button();"><option value="0">Select a set...</option><?php
     $res = mysql_query("SELECT * FROM grammar_sets");
     while ($row = mysql_fetch_object($res)) {
-        echo "<option value=\"$row->set_id\"" . ($row->set_id == @$question->set_id ? ' selected' : '') . ">$row->set_id. $row->name</option>";
+        echo "<option value=\"$row->setID\"" . ($row->setID == @$question->setID ? ' selected' : '') . ">$row->setID. $row->name</option>";
     }
     ?></select>
         </p>

@@ -10,7 +10,7 @@ if (!$_SESSION['user']->get_pref('drill', 'show_learning_stats')) {
 }
 
 if ($_SESSION['cur_session']) {
-    $grade = $_SESSION['cur_session']->get_cur_grade();
+    $grade = $_SESSION['cur_session']->getCurGrade();
 } else {
     $grade = Question::levelToGrade($_SESSION['user']->getLevel());
 }
@@ -18,7 +18,7 @@ if ($_SESSION['cur_session']) {
 require_once ABS_PATH . 'libs/stats_lib.php';
 
 if ($params['mode'] == SETS_MODE) {
-    $count = $_SESSION['cur_session']->get_set_count();
+    $count = $_SESSION['cur_session']->getSetCount();
     if ($count > 1200) {
         return;
     }
@@ -27,7 +27,7 @@ if ($params['mode'] == SETS_MODE) {
 switch ($params['type']) {
     case 'kanji':
         if ($params['mode'] == SETS_MODE) {
-            echo print_kanji_set_stats($_SESSION['user']->getID(), $_SESSION['cur_session']->get_set_id(), 720, ' ');
+            echo print_kanji_set_stats($_SESSION['user']->getID(), $_SESSION['cur_session']->getSetID(), 720, ' ');
         } elseif ($grade[0] == 'N') {
             echo printJLPTLevels($_SESSION['user']->getID(), (int) $grade[1], 600, ' ');
         } elseif ($grade >= 1 && $grade <= 9) {
@@ -38,7 +38,7 @@ switch ($params['type']) {
     case 'vocab':
     case 'text':
         if ($params['mode'] == SETS_MODE) {
-            echo print_vocab_set_stats($_SESSION['user']->getID(), $_SESSION['cur_session']->get_set_id(), 720, ' ');
+            echo print_vocab_set_stats($_SESSION['user']->getID(), $_SESSION['cur_session']->getSetID(), 720, ' ');
         } elseif ($grade[0] == 'N') {
             echo print_vocab_jlpt_levels($_SESSION['user']->getID(), (int) $grade[1], 600, ' ');
         }
@@ -46,7 +46,7 @@ switch ($params['type']) {
 
     case 'reading':
         if ($params['mode'] == SETS_MODE) {
-            echo print_reading_set_stats($_SESSION['user']->getID(), $_SESSION['cur_session']->get_set_id(), 720, ' ');
+            echo print_reading_set_stats($_SESSION['user']->getID(), $_SESSION['cur_session']->getSetID(), 720, ' ');
         } elseif ($grade[0] == 'N') {
             echo printReadingJLPTLevels($_SESSION['user']->getID(), (int) $grade[1], 600, ' ');
         }

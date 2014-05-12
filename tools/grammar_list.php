@@ -24,7 +24,7 @@ else {
 	$res = mysql_query("SELECT gs.set_id, gs.name FROM grammar_sets gs");
 	$array = array(-1 => '[none]');
 	while($row = mysql_fetch_object($res))
-		$array[$row->set_id] = $row->name;
+		$array[$row->setID] = $row->name;
 
 		$set_id = (int) @$_REQUEST['set_id'];
 		if(! $set_id)
@@ -38,7 +38,7 @@ else {
 $grammar_sets = [];
 $res = mysql_query("SELECT * FROM grammar_sets ORDER BY short_name");
 while($row = mysql_fetch_object($res))
-	$grammar_sets[$row->set_id] = $row->name;
+	$grammar_sets[$row->setID] = $row->name;
 	
 $res_demo = mysql_query("SELECT COUNT(*) AS c FROM grammar_questions sq WHERE in_demo = 1 " . ($user_id ? "AND sq.user_id = $user_id" : "") . ($set_id > 0 ? " AND sq.set_id = $set_id" : "") . ($set_id == -1 ? " AND (sq.set_id <= 0 OR sq.set_id IS NULL)" : "")) or die(mysql_error());
 $demo_row = mysql_fetch_object($res_demo);
@@ -103,7 +103,7 @@ while($question = mysql_fetch_object($res)) {
 	}
 	?>
 	<p>Set: <?php
-	display_select_menu($grammar_sets, 'question_id_' . $question->question_id . '_set_id', $question->set_id, "update_set_id($question->question_id,this.value);", '-');
+	display_select_menu($grammar_sets, 'question_id_' . $question->question_id . '_set_id', $question->setID, "update_set_id($question->question_id,this.value);", '-');
 
 	?> | JLPT: N<?php echo $question->njlpt ?> | Demo: <input type="checkbox" name="question_id_<?php echo $question->question_id ?>_in_demo'" <?php echo $question->in_demo ? 'checked="checked"' : '' ?> onchange="update_demo(<?php echo $question->question_id ?>, this.checked);" /></p>
     <p class="question-en"><?php echo $question->english ?><p>

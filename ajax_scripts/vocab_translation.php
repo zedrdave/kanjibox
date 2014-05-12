@@ -13,7 +13,7 @@ if(isset($_REQUEST['update'])) {
 		
 	$jmdict_id = (int) $_REQUEST['jmdict_id'];
 	
-	if(!isset($_REQUEST['lang']) || !isset(Vocab::$lang_strings[$_REQUEST['lang']]))
+	if(!isset($_REQUEST['lang']) || !isset(Vocab::$langStrings[$_REQUEST['lang']]))
 		return;
 	
 	$lang = $_REQUEST['lang'];
@@ -39,18 +39,18 @@ if(isset($_REQUEST['update'])) {
 			echo 'Empty translation.';
 		}
 		else {
-			mysql_query("UPDATE jmdict_ext SET gloss_" . Vocab::$lang_strings[$lang] . " = NULL WHERE jmdict_id = " . $jmdict_id) or die(mysql_error());
-			echo "Set " . ucwords(Vocab::$lang_strings[$lang]) . " translation to: Null<br/>";
+			mysql_query("UPDATE jmdict_ext SET gloss_" . Vocab::$langStrings[$lang] . " = NULL WHERE jmdict_id = " . $jmdict_id) or die(mysql_error());
+			echo "Set " . ucwords(Vocab::$langStrings[$lang]) . " translation to: Null<br/>";
 			
 		}
 		
 		return;
 	}
 	
-	$ret = post_db_correction('jmdict_ext', 'jmdict_id', $jmdict_id, 'gloss_' . Vocab::$lang_strings[$lang], $new_gloss, true, '', '', false, '', $need_work);
+	$ret = post_db_correction('jmdict_ext', 'jmdict_id', $jmdict_id, 'gloss_' . Vocab::$langStrings[$lang], $new_gloss, true, '', '', false, '', $need_work);
 	echo '<div>';
 	if($ret != 'Value unchanged')
-		echo "Updating " . ucwords(Vocab::$lang_strings[$lang]) . " translation to: <span id=\"newtranslation\">$new_gloss</span><br/>";
+		echo "Updating " . ucwords(Vocab::$langStrings[$lang]) . " translation to: <span id=\"newtranslation\">$new_gloss</span><br/>";
 	echo $ret;
 	echo '</div>';
 	
@@ -85,7 +85,7 @@ if(@$params['jmdict_id']) {
 		
 		// echo "<p><img src=\"" . SERVER_URL . "/img/flags/en.png\" alt=\"uk-flag\" style=\"vertical-align:bottom; margin:0 3px 0 0;\" /> <i>$row->gloss_english</i></p>";
 		
-		foreach(Vocab::$lang_strings as $lang => $full_lang) {
+		foreach(Vocab::$langStrings as $lang => $full_lang) {
 			$gloss = "gloss_$full_lang";
 			if($pref_lang == $lang) {
 				echo "<p><img src=\"" . SERVER_URL . "/img/flags/$lang.png\" alt=\"$lang-flag\" style=\"vertical-align:bottom; margin:0 3px 0 0;\" /> " . ucwords($full_lang) . ":</p>";

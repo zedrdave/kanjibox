@@ -14,10 +14,10 @@ if (!$_REQUEST['set_id']) {
 }
 
 $set = new LearningSet($_REQUEST['set_id']);
-if (!$set->is_valid()) {
+if (!$set->isValid()) {
     die('invalid set');
 }
-if (!$set->is_owner() && !$set->is_public()) {
+if (!$set->isOwner() && !$set->isPublic()) {
     die('This set is not public');
 }
 ?>
@@ -28,7 +28,7 @@ if (!$set->is_owner() && !$set->is_public()) {
         <meta http-equiv="Content-type" content="text/html; charset=utf-8" />
     </head>
     <body><pre>
-            <?php echo $set->get_export(); ?>
+            <?php echo $set->getExport(); ?>
         </pre>
     </body>
 </html>

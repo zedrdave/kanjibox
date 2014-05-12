@@ -140,7 +140,7 @@ if (!init_app()) {
             $extra = '';
         }
 
-        $lang_kanji = Vocab::$lang_strings[$_SESSION['user']->get_pref('lang', 'vocab_lang')];
+        $lang_kanji = Vocab::$langStrings[$_SESSION['user']->get_pref('lang', 'vocab_lang')];
         $lang_vocab = Kanji::$langStrings[$_SESSION['user']->get_pref('lang', 'kanji_lang')];
 
         $extra_jlpt = $include_below ? '>' : '';

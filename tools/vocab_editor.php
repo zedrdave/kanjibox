@@ -7,7 +7,7 @@ $pretty_numbers = array(1 => '①', 2 => '②', 3 => '③', 4 => '④', 5 => '�
 
 $pretty_num_regex = implode('|', array_slice($pretty_numbers, 0, 21));
 
-$lang_vocab = Vocab::$lang_strings[$_SESSION['user']->get_pref('lang', 'vocab_lang')];
+$lang_vocab = Vocab::$langStrings[$_SESSION['user']->get_pref('lang', 'vocab_lang')];
 
 if(isset($_REQUEST['submit'])) {
 	$query = "SELECT * FROM jmdict j LEFT JOIN jmdict_ext jx ON jx.jmdict_id = j.id WHERE 1 ";
@@ -81,7 +81,7 @@ else {
 			
 			$english_sense_count = count(preg_split("/$pretty_num_regex/", $word->gloss_english));
 			
-			foreach(Vocab::$lang_strings as $lang => $full_lang) {
+			foreach(Vocab::$langStrings as $lang => $full_lang) {
 				if(@$_REQUEST['translator'] && $full_lang != 'english' && $full_lang != $lang_vocab)
 					continue;
 				
@@ -132,7 +132,7 @@ else {
 
 			$english_sense_count = count(preg_split("/$pretty_num_regex/", $word->gloss_english));
 						
-			foreach(Vocab::$lang_strings as $lang => $full_lang) {
+			foreach(Vocab::$langStrings as $lang => $full_lang) {
 				$gloss = "gloss_$full_lang";
 				echo "<p><img src=\"" . SERVER_URL . "/img/flags/$lang.png\" alt=\"$lang-flag\" style=\"vertical-align:bottom; margin:0 3px 0 0;\" /><span class=\"gloss\" style=\"font-style:italic;\">" . $word->$gloss . "</span></p>";
 			}

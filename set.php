@@ -31,12 +31,12 @@ if (!empty($params['mode']) && $params['mode'] == 'search') {
     }
 }
 
-$all_tags = LearningSet::get_all_tags(true);
+$all_tags = LearningSet::getAllTags(true);
 
 if (!empty($_REQUEST['set_id']) && is_numeric($_REQUEST['set_id'])) {
     $set_id = (int) $_REQUEST['set_id'];
     $set = new LearningSet($set_id);
-    $title = 'KanjiBox Study Set &raquo; ' . $set->get_name();
+    $title = 'KanjiBox Study Set &raquo; ' . $set->getName();
 } else {
     $set_id = null;
     $set = null;
@@ -59,15 +59,15 @@ if (!empty($_REQUEST['set_id']) && is_numeric($_REQUEST['set_id'])) {
         include_css('faq.css');
         ?>
         <meta property="og:title" content="<?php
-        echo ($set ? 'Study Set: ' . str_replace('"', '\"', mb_substr($set->get_name(), 0, 50)) : 'KanjiBox Japanese Study Sets')
+        echo ($set ? 'Study Set: ' . str_replace('"', '\"', mb_substr($set->getName(), 0, 50)) : 'KanjiBox Japanese Study Sets')
         ?>"/>
-        <meta property="og:url" content="<?php echo (SERVER_URL . ($set ? 'set/' . $set->set_id . '/' : 'sets/'))?>"/>
+        <meta property="og:url" content="<?php echo (SERVER_URL . ($set ? 'set/' . $set->setID . '/' : 'sets/'))?>"/>
         <meta property="og:type" content="article"/>
         <meta property="og:image" content="http://kanjibox.net/kb/img/kb_large.png"/>
         <meta property="og:site_name" content="KanjiBox"/>
         <meta property="og:description" content="<?php
-        if ($set && $set->is_valid()) {
-            echo str_replace('"', '\"', strip_tags($set->get_description()));
+        if ($set && $set->isValid()) {
+            echo str_replace('"', '\"', strip_tags($set->getDescription()));
         } else {
             echo "Japanese study sets compiled by users of KanjiBox to help them study a particular aspect (textbook, exam, film, manga...) of Japanese.";
         }
@@ -173,50 +173,50 @@ if (!empty($_REQUEST['set_id']) && is_numeric($_REQUEST['set_id'])) {
                         <?php
                         if ($set_id) {
 
-                            if (!$set->is_valid()) {
+                            if (!$set->isValid()) {
                                 echo '<div class="error_msg">This set is private or has been deleted.</div>';
                             } else {
-                                echo "<legend>" . $set->get_name() . "</legend>";
+                                echo "<legend>" . $set->getName() . "</legend>";
                                 ?>
                                 <p style="margin-bottom:10px;"><?php
-                                    if ($set->is_owner() || $set->is_subscribed()) {
-                                        if ($set->is_owner()) {
+                                    if ($set->isOwner() || $set->isSubscribed()) {
+                                        if ($set->isOwner()) {
                                             echo '<span class="subscribed-status">Author</span>';
                                         } else {
                                             echo '<span class="subscribed-status">Subscribed</span>';
                                         }
 
-                                        echo "<button onclick=\"location.href ='" . SERVER_URL . "page/play/type/" . $set->get_type() . "/mode/sets/set_id/" . $set->set_id . "/'\">Play</button> ";
-                                        if ($set->can_edit()) {
-                                            echo "<button onclick=\"location.href ='" . SERVER_URL . "page/play/type/" . $set->get_type() . "/mode/sets/view_set_id/" . $set->set_id . "/'\">Edit</button> ";
+                                        echo "<button onclick=\"location.href ='" . SERVER_URL . "page/play/type/" . $set->getType() . "/mode/sets/set_id/" . $set->setID . "/'\">Play</button> ";
+                                        if ($set->canEdit()) {
+                                            echo "<button onclick=\"location.href ='" . SERVER_URL . "page/play/type/" . $set->getType() . "/mode/sets/view_set_id/" . $set->setID . "/'\">Edit</button> ";
                                         }
                                     } elseif ($_SESSION['user']->isLoggedIn()) {
-                                        echo" <button id=\"subscribe-to-set\" onclick=\"subscribe_to_set($set->set_id, this); return false;\">Subscribe</button> ";
+                                        echo" <button id=\"subscribe-to-set\" onclick=\"subscribe_to_set($set->setID, this); return false;\">Subscribe</button> ";
                                     } else {
-                                        echo "<button onclick=\"location.href ='" . SERVER_URL . "?redirect=set_subscribe&set_id=" . $set->set_id . "'\">Log in & Subscribe</button>";
+                                        echo "<button onclick=\"location.href ='" . SERVER_URL . "?redirect=set_subscribe&set_id=" . $set->setID . "'\">Log in & Subscribe</button>";
                                     }
 
-                                    echo "<button onclick=\"location.href ='" . SERVER_URL . "export/set_export.php?set_id=" . $set->set_id . "'\">Export as Text</button>";
+                                    echo "<button onclick=\"location.href ='" . SERVER_URL . "export/set_export.php?set_id=" . $set->setID . "'\">Export as Text</button>";
 
-                                    if ($set->can_admin()) {
-                                        echo " (public: <input type=\"checkbox\" name=\"set_public\" id=\"set_public\" value=\"1\" onclick=\"update_set_public(" . $set->set_id . ", this.checked)\"" . ($set->is_public() ? ' checked' : '') . (!$set->can_admin() ? ' disabled' : '') . "></input>" . (($set->is_public() && $set->can_admin() && $set->get_subs_count()) ? '<span style="color:red;">access</span>' : 'access') . ", <input type=\"checkbox\" name=\"set_editable\" id=\"set_editable\" value=\"1\" onclick=\"update_set_editable(" . $set->set_id . ", this.checked)\"" . ($set->is_editable() ? ' checked' : '') . (!$set->can_admin() ? ' disabled' : '') . "></input>edit)";
+                                    if ($set->canAdmin()) {
+                                        echo " (public: <input type=\"checkbox\" name=\"set_public\" id=\"set_public\" value=\"1\" onclick=\"update_set_public(" . $set->setID . ", this.checked)\"" . ($set->isPublic() ? ' checked' : '') . (!$set->canAdmin() ? ' disabled' : '') . "></input>" . (($set->isPublic() && $set->canAdmin() && $set->getSubsCount()) ? '<span style="color:red;">access</span>' : 'access') . ", <input type=\"checkbox\" name=\"set_editable\" id=\"set_editable\" value=\"1\" onclick=\"update_set_editable(" . $set->setID . ", this.checked)\"" . ($set->isEditable() ? ' checked' : '') . (!$set->canAdmin() ? ' disabled' : '') . "></input>edit)";
                                     }
-                                    ?> <span style="margin-left:10px;" class="fb-like" data-href="<?php echo SERVER_URL . 'set/' . $set->set_id . '/'?>" data-send="false" data-layout="button_count" data-width="100" data-show-faces="false"></span>
+                                    ?> <span style="margin-left:10px;" class="fb-like" data-href="<?php echo SERVER_URL . 'set/' . $set->setID . '/'?>" data-send="false" data-layout="button_count" data-width="100" data-show-faces="false"></span>
                                 </p>
                                 <?php
                                 echo "<div class=\"description\">";
-                                if ($set->can_edit()) {
-                                    echo "<textarea id=\"set_description\" onchange=\"update_set_desc(" . $set->set_id . ", this.value);\" style=\"display:none;\">" . $set->get_description() . "</textarea><p id=\"set_description_static\" onclick=\"$(this).hide(); $('#set_description').show(); return false;\">" . ($set->get_description() ? nl2br($set->get_description()) : '...') . "</p>";
+                                if ($set->canEdit()) {
+                                    echo "<textarea id=\"set_description\" onchange=\"update_set_desc(" . $set->setID . ", this.value);\" style=\"display:none;\">" . $set->getDescription() . "</textarea><p id=\"set_description_static\" onclick=\"$(this).hide(); $('#set_description').show(); return false;\">" . ($set->getDescription() ? nl2br($set->getDescription()) : '...') . "</p>";
                                 } else {
-                                    echo '<p>' . nl2br($set->get_description()) . '</p>';
+                                    echo '<p>' . nl2br($set->getDescription()) . '</p>';
                                 }
 
-                                echo '<div class="tags">' . $set->show_tag_checkboxes() . '</div><div style="clear: both;"></div>';
+                                echo '<div class="tags">' . $set->showTagCheckboxes() . '</div><div style="clear: both;"></div>';
 
                                 echo "</div>";
-                                $rows = $set->get_entry_data();
+                                $rows = $set->getEntryData();
 
-                                $set_author = $set->get_author_name();
+                                $set_author = $set->getAuthorName();
 
                                 if (count($rows) > 5 && count($rows) < 1000) {
                                     echo '<div style="margin-bottom: 10px;"><p style="float: left; margin-right: 4px;">Levels: </p><div class="set-difficulty-bar">';
@@ -243,14 +243,14 @@ if (!empty($_REQUEST['set_id']) && is_numeric($_REQUEST['set_id'])) {
 
                                 if (!$params['show'] && count($rows) > 1000) {
                                     $rows = array_slice($rows, 0, 500);
-                                    echo "<div style=\"font-weight:bold;\">First " . count($rows) . ' <span class="minor">entries</span> [<a href="' . SERVER_URL . 'set/' . $set->set_id . '/name/' . make_url_name($set->get_name()) . '/show/all/' . '">show all</a>]';
+                                    echo "<div style=\"font-weight:bold;\">First " . count($rows) . ' <span class="minor">entries</span> [<a href="' . SERVER_URL . 'set/' . $set->setID . '/name/' . make_url_name($set->getName()) . '/show/all/' . '">show all</a>]';
                                 } else {
                                     echo "<div style=\"font-weight:bold;\">" . count($rows) . ' <span class="minor">entries</span>';
                                 }
-                                echo ($set_author ? ' &mdash; <span class="minor">Created by</span> ' . $set_author : '') . ' &mdash; <span class="minor">Last modified:</span> ' . $set->get_date_modified() . "</div>";
+                                echo ($set_author ? ' &mdash; <span class="minor">Created by</span> ' . $set_author : '') . ' &mdash; <span class="minor">Last modified:</span> ' . $set->getDateModified() . "</div>";
 
-                                $is_kanji = ($set->get_type() == TYPE_KANJI);
-                                $jlpt2char = LearningSet::$jlpt2char;
+                                $is_kanji = ($set->getType() == TYPE_KANJI);
+                                $jlpt2char = LearningSet::$jlpt2Char;
 
                                 if (!count($rows)) {
                                     echo '<em>Empty set</em>';
@@ -362,7 +362,7 @@ if (!empty($_REQUEST['set_id']) && is_numeric($_REQUEST['set_id'])) {
                 </div>
                 <script type="text/javascript">
     <?php
-    if ($set && $set->can_edit()) {
+    if ($set && $set->canEdit()) {
         ?>
                         function update_tag(set_id, tag_id, val)
                         {
@@ -412,7 +412,7 @@ if (!empty($_REQUEST['set_id']) && is_numeric($_REQUEST['set_id'])) {
     }
 
     if (isset($_REQUEST['redirected_subscribe'])) {
-        echo "\nsubscribe_to_set(" . $set->set_id . ", '#subscribe-to-set');\n";
+        echo "\nsubscribe_to_set(" . $set->setID . ", '#subscribe-to-set');\n";
     }
     ?>
 

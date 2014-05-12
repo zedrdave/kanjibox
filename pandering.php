@@ -1,5 +1,5 @@
 <?php
-if ($_SESSION['user']->get_load_count() % 2 != 0) {
+if ($_SESSION['user']->getLoadCount() % 2 != 0) {
     
 } else {
     ?>

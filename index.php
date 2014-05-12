@@ -127,7 +127,7 @@ if ($redirect_to_url = (isset($_REQUEST['redirect_to_url']) ? $_REQUEST['redirec
         <?php
         $two_columns = false;
         if (!empty($_SESSION['user']) && $_SESSION['user']->getID() > 0) {
-            if ($_SESSION['user']->is_name_hidden() && $_SESSION['user']->get_load_count() < 2) {
+            if ($_SESSION['user']->isNameHidden() && $_SESSION['user']->getLoadCount() < 2) {
                 echo '<div class="info-bar"><p>Due to your Facebook privacy settings, your name cannot be displayed to other users of this application and will therefore not appear in Global Highscores.</p><p>If you wish to appear in the global highscores: please <a href="//www.facebook.com/privacy/?view=profile">change your privacy settings</a>.</p></div>';
             } elseif (!defined('ADDING') && (!$_SESSION['user']->isElite() || $_SESSION['user']->isAdministrator())) {
                 include('pandering.php');
@@ -278,7 +278,7 @@ if ($redirect_to_url = (isset($_REQUEST['redirect_to_url']) ? $_REQUEST['redirec
                 );
 
 <?php
-if ($_SESSION['user'] && ($_SESSION['user']->get_load_count() % 20 == 0)) {
+if ($_SESSION['user'] && ($_SESSION['user']->getLoadCount() % 20 == 0)) {
     echo "do_load('" . SERVER_URL . "ajax/get_messages/', 'new-kb-msgs');";
 }
 ?>

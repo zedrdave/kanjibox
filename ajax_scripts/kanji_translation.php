@@ -13,20 +13,20 @@ if(isset($_REQUEST['update'])) {
 	$kanji_id = (int) $_REQUEST['kanji_id'];
 	$new_gloss = $_REQUEST['new_gloss'];
 	
-	if(!isset($_REQUEST['lang']) || !isset(Vocab::$lang_strings[$_REQUEST['lang']]))
+	if(!isset($_REQUEST['lang']) || !isset(Vocab::$langStrings[$_REQUEST['lang']]))
 		return;
 	
 	$lang = $_REQUEST['lang'];
 	
 	
-	$ret = post_db_correction('kanjis_ext', 'kanji_id', $kanji_id, 'meaning_' . Vocab::$lang_strings[$lang], $new_gloss, true);
+	$ret = post_db_correction('kanjis_ext', 'kanji_id', $kanji_id, 'meaning_' . Vocab::$langStrings[$lang], $new_gloss, true);
 	
-	if(@$_SESSION['cur_session'] && $q = $_SESSION['cur_session']->get_question(@$_REQUEST['sid']))
+	if(@$_SESSION['cur_session'] && $q = $_SESSION['cur_session']->getQuestion(@$_REQUEST['sid']))
 		$q->updateMeaningStr($new_gloss);
 	
 	echo '<div>';
 	if($ret != 'Value unchanged')
-		echo "Updating " . ucwords(Vocab::$lang_strings[$lang]) . " translation to: <span id=\"newtranslation\">$new_gloss" . (@$_REQUEST['traditional'] ? ' (旧)' : '') . "</span><br/>";
+		echo "Updating " . ucwords(Vocab::$langStrings[$lang]) . " translation to: <span id=\"newtranslation\">$new_gloss" . (@$_REQUEST['traditional'] ? ' (旧)' : '') . "</span><br/>";
 	echo $ret;
 	echo '</div>';
 	
@@ -52,7 +52,7 @@ if(@$params['kanji_id']) {
 				
 		// echo "<p><img src=\"" . SERVER_URL . "/img/flags/en.png\" alt=\"uk-flag\" style=\"vertical-align:bottom; margin:0 3px 0 0;\" /> <i>$row->gloss_english</i></p>";
 		
-		foreach(Vocab::$lang_strings as $lang => $full_lang) {
+		foreach(Vocab::$langStrings as $lang => $full_lang) {
 			$meaning_col = "meaning_$full_lang";
 			if($pref_lang == $lang) {
 				if(substr($row->$meaning_col, 0, 3) == '(~)')

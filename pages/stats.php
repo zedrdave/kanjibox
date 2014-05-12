@@ -5,7 +5,7 @@ require_once ABS_PATH . 'libs/stats_lib.php';
 include_css('stats.css');
 include_js('ajax.js');
 
-$levels = Session::$level_names;
+$levels = Session::$levelNames;
 ?>
 <div class="subtabs">
     <?php

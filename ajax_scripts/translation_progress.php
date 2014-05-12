@@ -15,7 +15,7 @@ else {
 	$table_ext = 'jmdict_ext';
 	$table_ext_idx = 'jmdict_id';
 	$content_col = 'gloss_';
-	$langs = Vocab::$lang_strings;
+	$langs = Vocab::$langStrings;
 }
 
 function my_mysql_query($query) {

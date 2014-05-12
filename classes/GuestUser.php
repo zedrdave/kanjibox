@@ -5,7 +5,7 @@ class GuestUser extends User
 
     public function __construct()
     {
-
+        
     }
 
     public function isAdministrator()
@@ -48,7 +48,7 @@ class GuestUser extends User
         return -1;
     }
 
-    public function geFirstName()
+    public function getFirstName()
     {
         return 'Guest User';
     }
