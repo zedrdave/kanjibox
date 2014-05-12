@@ -2,15 +2,16 @@
 
 mb_internal_encoding('UTF-8');
 
-function mb_ord($char) {
+function mb_ord($char)
+{
     return (strlen($char) < 2) ?
-            ord($char) : 256 * mb_ord(substr($char, 0, -1)) + ord(substr($char, -1));
+        ord($char) : 256 * mb_ord(substr($char, 0, -1)) + ord(substr($char, -1));
 }
 
-function mb_chr($string) {
+function mb_chr($string)
+{
     return html_entity_decode('&#' . intval($string) . ';');
 }
-
 $i = 0;
 define('V_ICHIDAN', $i++);
 define('V_GODAN', $i++);
@@ -36,13 +37,16 @@ define('VM_PRESENT_NEG', $i++);
 
 define('I_STEM', $i++);
 
-class Verb {
+class Verb
+{
 
-    function __construct($jmdict_id) {
-
+    function __construct($jmdict_id)
+    {
+        
     }
 
-    function printAllForms($verb, $reading) {
+    function printAllForms($verb, $reading)
+    {
         $vc = $this->vClassForVerb($verb, $reading);
         echo 'Form: ' . $this->vClassToString($vc) . '<br/>';
 
@@ -59,7 +63,8 @@ class Verb {
         echo "'I' Stem: ", $this->getForm(I_STEM, $verb, $reading) . '<br/>';
     }
 
-    function getForm($form, $verb, $reading) {
+    function getForm($form, $verb, $reading)
+    {
         $vc = $this->vClassForVerb($verb, $reading);
         if ($vc == V_UNKNOWN) {
             return 'n/a';
@@ -124,23 +129,27 @@ class Verb {
         }
 
         if ($form == VM_PRESENT || $form == VM_PAST) {
-            if ($verb == 'いらっしゃる' || $reading == 'おっしゃる' || $verb == '下さる' || $reading == 'ござる' || mb_substr($reading, -3) == 'なさる') {
+            if ($verb == 'いらっしゃる' || $reading == 'おっしゃる' || $verb == '下さる' || $reading == 'ござる' || mb_substr($reading,
+                    -3) == 'なさる') {
                 return (mb_substr($verb, 0, -1) . $suffix);
             }
         }
 
         if ($vc == V_GODAN) {
-            return mb_substr($verb, 0, -1) . $this->mixRecessiveKanaWithKana(mb_substr($verb, -1), mb_substr($suffix, 0, 1)) . mb_substr($suffix, 1);
+            return mb_substr($verb, 0, -1) . $this->mixRecessiveKanaWithKana(mb_substr($verb, -1),
+                    mb_substr($suffix, 0, 1)) . mb_substr($suffix, 1);
         }
 
         if ($vc == V_ICHIDAN) {
-            return mb_substr($verb, 0, -2) . $this->mixDominantKanaWithKana(mb_substr($verb, -2, 1), mb_substr($suffix, 0, 1)) . mb_substr($suffix, 1);
+            return mb_substr($verb, 0, -2) . $this->mixDominantKanaWithKana(mb_substr($verb, -2, 1),
+                    mb_substr($suffix, 0, 1)) . mb_substr($suffix, 1);
         }
 
         return 'n/a';
     }
 
-    function mixDominantKanaWithKana($k1, $k2) {
+    function mixDominantKanaWithKana($k1, $k2)
+    {
         switch (mb_ord(mb_convert_encoding($k2, 'UTF-16', 'UTF-8'))) {
             case 0x3042: // あ
             case 0x3046: // う
@@ -153,7 +162,8 @@ class Verb {
         }
     }
 
-    function mixRecessiveKanaWithKana($k1_char, $k2_char) {
+    function mixRecessiveKanaWithKana($k1_char, $k2_char)
+    {
         $k1 = mb_ord(mb_convert_encoding($k1_char, 'UTF-16', 'UTF-8'));
         $k2 = mb_ord(mb_convert_encoding($k2_char, 'UTF-16', 'UTF-8'));
 
@@ -250,7 +260,8 @@ class Verb {
         return '?';
     }
 
-    function mixKana($k1, $k2) {
+    function mixKana($k1, $k2)
+    {
         switch ($k1) {
             case 0x304f: // く
                 switch ($k2) {
@@ -350,7 +361,8 @@ class Verb {
         }
     }
 
-    function vClassForVerb($verb, $reading) {
+    function vClassForVerb($verb, $reading)
+    {
         if (mb_strlen($verb) <= 1) {
             return V_UNKNOWN;
         }
@@ -477,7 +489,8 @@ class Verb {
         return V_UNKNOWN;
     }
 
-    function vClassToString($vc) {
+    function vClassToString($vc)
+    {
         switch ($vc) {
             case V_GODAN:
                 return 'godan (う-dropping)';
@@ -494,7 +507,8 @@ class Verb {
         }
     }
 
-    function getVowelForKana($c) {
+    function getVowelForKana($c)
+    {
         switch ($c) {
             case 0x3042: // あ
             case 0x304b: // か
@@ -581,7 +595,8 @@ class Verb {
         }
     }
 
-    function getConsonnant($kana) {
+    function getConsonnant($kana)
+    {
         if ($kana <= 0x3040) {
             return '-';
         }
@@ -628,5 +643,4 @@ class Verb {
 
         return '-';
     }
-
 }

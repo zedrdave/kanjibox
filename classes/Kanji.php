@@ -1,7 +1,5 @@
 <?php
 
-require_once 'Question.php';
-
 define('OPTIONS_UNIQUE_PRON', 1);
 define('OPTIONS_UNIQUE_ENG', 2);
 
@@ -569,7 +567,7 @@ k.`njlpt`
 
     public function editButtonLink()
     {
-        if ($_SESSION['user']->isOnTranslatorProbation() &&  !$_SESSION['user']->get_pref('lang', 'translator_mode')) {
+        if ($_SESSION['user']->isOnTranslatorProbation() && !$_SESSION['user']->get_pref('lang', 'translator_mode')) {
             return '';
         }
 

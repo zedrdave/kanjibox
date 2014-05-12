@@ -1,7 +1,5 @@
 <?php
 
-require_once 'Question.php';
-
 class Kana extends Question
 {
 
