@@ -82,7 +82,7 @@ elseif(@$_POST['copy_jmdict_id']) {
 		
 	foreach(['word', 'reading'] as $key)
 		if(isset($_POST[$key]))
-			$$key = "'" . mysql_real_escape_string($_POST[$key]) . "'";
+			$$key = "'" . DB::getConnection()->quote($_POST[$key]) . "'";
 		else
 			$$key = "`$key`";
 		

@@ -303,20 +303,20 @@ function post_db_correction($table_name, $id_name, $id_value, $col_name, $new_va
     if (!$_SESSION['user']) {
         return 'no logged-in user';
     }
-    $table_name = mysql_real_escape_string($table_name);
-    $col_name = mysql_real_escape_string($col_name);
-    $id_name = mysql_real_escape_string($id_name);
+    $table_name = DB::getConnection()->quote($table_name);
+    $col_name = DB::getConnection()->quote($col_name);
+    $id_name = DB::getConnection()->quote($id_name);
     $_table_name = "`" . str_replace("`", "", $table_name) . "`";
     $_col_name = "`" . str_replace("`", "", $col_name) . "`";
     $_id_name = "`" . str_replace("`", "", $id_name) . "`";
     $id_value = (int) $id_value;
-    $new_value = mysql_real_escape_string($new_value);
-    $user_cmt = mysql_real_escape_string($user_cmt);
+    $new_value = DB::getConnection()->quote($new_value);
+    $user_cmt = DB::getConnection()->quote($user_cmt);
     $need_work = (int) $need_work;
 
     if ($id_name_2) {
-        $select_id_2 = ' AND `' . str_replace("`", "", $id_name_2) . "` = '" . mysql_real_escape_string($id_value_2) . "'";
-        $insert_id_2 = ", id_name_2 = '" . mysql_real_escape_string($id_name_2) . "', id_val_2 = '" . mysql_real_escape_string($id_value_2) . "'";
+        $select_id_2 = ' AND `' . str_replace("`", "", $id_name_2) . "` = '" . DB::getConnection()->quote($id_value_2) . "'";
+        $insert_id_2 = ", id_name_2 = '" . DB::getConnection()->quote($id_name_2) . "', id_val_2 = '" . DB::getConnection()->quote($id_value_2) . "'";
     } else {
         $select_id_2 = '';
         $insert_id_2 = '';
@@ -330,7 +330,7 @@ function post_db_correction($table_name, $id_name, $id_value, $col_name, $new_va
         return 'More than one matching db row';
 
     $row = mysql_fetch_object($res);
-    $old_value = mysql_real_escape_string($row->old_value);
+    $old_value = DB::getConnection()->quote($row->old_value);
     if ($old_value == $new_value)
         return 'Value unchanged';
 
@@ -404,7 +404,7 @@ function execute_query_with_hash($query, $payload, $apply = true)
 function execute_query($query, $apply = true, $force_run_again = false)
 {
 
-    $res = mysql_query('SELECT * FROM data_update_queries WHERE query_str = \'' . mysql_real_escape_string($query) . "'") or die(mysql_error());
+    $res = mysql_query('SELECT * FROM data_update_queries WHERE query_str = \'' . DB::getConnection()->quote($query) . "'") or die(mysql_error());
     if (mysql_num_rows($res) > 0) {
         $row = mysql_fetch_object($res);
         if (!$force_run_again && ($row->applied || !$apply))
@@ -414,7 +414,7 @@ function execute_query($query, $apply = true, $force_run_again = false)
             mysql_query("UPDATE data_update_queries SET applied = 1 WHERE update_query_id = $row->update_query_id") or die(mysql_error());
         }
     } else {
-        mysql_query("INSERT INTO data_update_queries SET user_id = " . $_SESSION['user']->getID() . ", query_str = '" . mysql_real_escape_string($query) . "', applied = " . (int) $apply) or die(mysql_error());
+        mysql_query("INSERT INTO data_update_queries SET user_id = " . $_SESSION['user']->getID() . ", query_str = '" . DB::getConnection()->quote($query) . "', applied = " . (int) $apply) or die(mysql_error());
     }
     if ($apply) {
         mysql_query($query) or die(mysql_error());

@@ -491,9 +491,9 @@ class User
     {
         $query = 'FROM `games` WHERE `user_id` = \'' . $this->getID() . '\'';
         if ($level)
-            $query .= ' AND `level` = \'' . mysql_real_escape_string($level) . '\' ';
+            $query .= ' AND `level` = \'' . DB::getConnection()->quote($level) . '\' ';
         if ($type)
-            $query .= ' AND `type` = \'' . mysql_real_escape_string($type) . '\'';
+            $query .= ' AND `type` = \'' . DB::getConnection()->quote($type) . '\'';
 
         $query = 'SELECT COUNT(*) as c ' . $query;
         $res = mysql_query_debug($query) or log_db_error($select_query, false, true);
@@ -717,7 +717,7 @@ class User
 
     public function getBestGame($type)
     {
-        $query = 'SELECT r.*, g.*, g.date_started AS date_played, TIMEDIFF(g.date_ended, g.date_started) AS duration FROM ranking  r JOIN games g ON g.id = r.game_id WHERE r.user_id = ' . (int) $this->getID() . ' AND r.level = \'' . mysql_real_escape_string($this->getLevel()) . '\' AND r.type = \'' . mysql_real_escape_string($type) . '\' LIMIT 1';
+        $query = 'SELECT r.*, g.*, g.date_started AS date_played, TIMEDIFF(g.date_ended, g.date_started) AS duration FROM ranking  r JOIN games g ON g.id = r.game_id WHERE r.user_id = ' . (int) $this->getID() . ' AND r.level = \'' . DB::getConnection()->quote($this->getLevel()) . '\' AND r.type = \'' . DB::getConnection()->quote($type) . '\' LIMIT 1';
 
         $res = mysql_query_debug($query) or log_db_error($query);
 
@@ -755,7 +755,7 @@ class User
 
     public function upgradeAccount($device_id, $build, $kb_code)
     {
-        $query = 'UPDATE `users` SET `last_played` = NOW(), `active` = 1, build = ' . (int) $build . ', kb_code = \'' . mysql_real_escape_string($kb_code) . '\', privileges = 1 WHERE `id` = ' . (int) $this->getID();
+        $query = 'UPDATE `users` SET `last_played` = NOW(), `active` = 1, build = ' . (int) $build . ', kb_code = \'' . DB::getConnection()->quote($kb_code) . '\', privileges = 1 WHERE `id` = ' . (int) $this->getID();
         mysql_query_debug($query) or log_db_error($query, false, true);
 
         $this->data->privileges = 1;
@@ -846,14 +846,14 @@ class User
         if (empty($login))
             return;
 
-        $query = 'SELECT COUNT(*) AS c FROM `users_ext` WHERE `login_email` = \'' . mysql_real_escape_string($login) . '\' AND `user_id` != ' . (int) $this->getID();
+        $query = 'SELECT COUNT(*) AS c FROM `users_ext` WHERE `login_email` = \'' . DB::getConnection()->quote($login) . '\' AND `user_id` != ' . (int) $this->getID();
         $res = mysql_query_debug($query) or die(mysql_error());
         $row = mysql_fetch_object($res);
         if ($row->c > 0)
             return '<div class="error_msg">This login email is already taken.</div>';
 
 
-        $query = 'UPDATE `users_ext` SET `login_email` = \'' . mysql_real_escape_string($login) . '\' WHERE `user_id` = ' . (int) $this->getID();
+        $query = 'UPDATE `users_ext` SET `login_email` = \'' . DB::getConnection()->quote($login) . '\' WHERE `user_id` = ' . (int) $this->getID();
 
         if (mysql_query_debug($query)) {
             $this->data->login_email = $login;
@@ -879,7 +879,7 @@ class User
             if (!empty($last_name))
                 $this->data->last_name = $last_name;
 
-            $query = 'UPDATE `users_ext` SET  `first_name` = \'' . mysql_real_escape_string($this->data->first_name) . '\',  `last_name` = \'' . mysql_real_escape_string($this->data->last_name) . '\' WHERE user_id = ' . $this->getID();
+            $query = 'UPDATE `users_ext` SET  `first_name` = \'' . DB::getConnection()->quote($this->data->first_name) . '\',  `last_name` = \'' . DB::getConnection()->quote($this->data->last_name) . '\' WHERE user_id = ' . $this->getID();
 
             if (mysql_query_debug($query)) {
                 return '<div class="success_msg">Your name was updated</div>';
@@ -893,7 +893,7 @@ class User
         if (empty($pwd))
             return;
 
-        $query = 'UPDATE `users_ext` SET `login_pwd` = MD5(\'' . mysql_real_escape_string($pwd) . '\') WHERE `user_id` = ' . (int) $this->getID();
+        $query = 'UPDATE `users_ext` SET `login_pwd` = MD5(\'' . DB::getConnection()->quote($pwd) . '\') WHERE `user_id` = ' . (int) $this->getID();
 
         if (mysql_query_debug($query)) {
 

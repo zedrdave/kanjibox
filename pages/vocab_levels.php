@@ -21,7 +21,7 @@ $level_array = array(5 => 'N5', 4 => 'N4', 3 => 'N3', 2 => 'N2', 1 => 'N1', 0 =>
 	
 	$query_where = ' WHERE ';
 	if(!empty($_REQUEST['contains'])) {
-		$str = mysql_real_escape_string($_REQUEST['contains']);
+		$str = DB::getConnection()->quote($_REQUEST['contains']);
 		
 		if(@$_REQUEST['exact_match'])
 			$query_where .= " word = '$str' OR reading = '$str'";

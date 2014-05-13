@@ -34,7 +34,7 @@ $query = "SELECT du.*, u.fb_id, ux.first_name, ux.last_name, u.privileges AS use
 	}
 	
 	if(!empty($_REQUEST['table_name']))
-		$query .= " AND du.table_name = '" . mysql_real_escape_string($_REQUEST['table_name']) . "' ";
+		$query .= " AND du.table_name = '" . DB::getConnection()->quote($_REQUEST['table_name']) . "' ";
 
 	if(@$_REQUEST['reviewed'] === '1')
 		$query .= " AND du.reviewed = 1 ";

@@ -292,7 +292,7 @@ if (!empty($_REQUEST['set_id']) && is_numeric($_REQUEST['set_id'])) {
                                     echo '<legend>' . ($_REQUEST['set_type'] != '' ? ucwords($_REQUEST['set_type']) . ' ' : '') . "Sets matching <em>" . htmlentities($search_str,
                                         ENT_COMPAT, 'UTF-8') . "</em></legend>";
 
-                                    $query = "SELECT ls.*, GROUP_CONCAT(DISTINCT lst.tag_id SEPARATOR ',') AS tags FROM learning_sets ls LEFT JOIN learning_set_tags lst ON lst.set_id = ls.set_id WHERE ls.deleted = 0 AND ls.public = 1 AND (ls.name LIKE '%" . mysql_real_escape_string($search_str) . "%' OR ls.description LIKE '%" . mysql_real_escape_string($search_str) . "%')";
+                                    $query = "SELECT ls.*, GROUP_CONCAT(DISTINCT lst.tag_id SEPARATOR ',') AS tags FROM learning_sets ls LEFT JOIN learning_set_tags lst ON lst.set_id = ls.set_id WHERE ls.deleted = 0 AND ls.public = 1 AND (ls.name LIKE '%" . DB::getConnection()->quote($search_str) . "%' OR ls.description LIKE '%" . DB::getConnection()->quote($search_str) . "%')";
 
                                     if ($_REQUEST['set_type'] == 'kanji' || $_REQUEST['set_type'] == 'vocab') {
                                         $query .= " AND ls.set_type = '" . $_REQUEST['set_type'] . "' ";

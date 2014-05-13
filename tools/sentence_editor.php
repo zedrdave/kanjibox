@@ -12,9 +12,9 @@ if(isset($_REQUEST['submit'])) {
 	if(@$_REQUEST['example_id'])
 		$query_where .= ' AND example_id = ' . (int) $_REQUEST['example_id'];
 	if(@$_REQUEST['example_str'])
-		$query_where .= " AND example_str LIKE '%" . mysql_real_escape_string($_REQUEST['example_str']) . "%'";
+		$query_where .= " AND example_str LIKE '%" . DB::getConnection()->quote($_REQUEST['example_str']) . "%'";
 	if(@$_REQUEST['english'])
-		$query_where .= " AND english LIKE '%" . mysql_real_escape_string($_REQUEST['english']) . "%'";
+		$query_where .= " AND english LIKE '%" . DB::getConnection()->quote($_REQUEST['english']) . "%'";
 
 	if(@$_REQUEST['part_word'] || @$_REQUEST['part_jmdict_id']) {
 		$query_from .= "LEFT JOIN example_parts ep ON ep.example_id = e.example_id ";
@@ -23,7 +23,7 @@ if(isset($_REQUEST['submit'])) {
 		}
 		if(@$_REQUEST['part_word']) {
 			$query_from .= "JOIN jmdict j ON ep.jmdict_id = j.id ";
-			$query_where .= ' AND j.word = \'' . mysql_real_escape_string($_REQUEST['part_word']) . '\'';
+			$query_where .= ' AND j.word = \'' . DB::getConnection()->quote($_REQUEST['part_word']) . '\'';
 		}
 	}
 
@@ -35,7 +35,7 @@ if(isset($_REQUEST['submit'])) {
 
 		if(@$_REQUEST['example_str_not'])
 			foreach(explode(',', $_REQUEST['example_str_not']) as $word)
-				$query_where .= " AND example_str NOT LIKE '%" . mysql_real_escape_string(trim($word)) . "%'";
+				$query_where .= " AND example_str NOT LIKE '%" . DB::getConnection()->quote(trim($word)) . "%'";
 		
 		$query_where .= " GROUP BY e.example_id ORDER BY e.njlpt DESC, e.njlpt_r DESC";
 	

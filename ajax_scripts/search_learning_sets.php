@@ -24,7 +24,7 @@ $query .= "WHERE ls.deleted = 0 AND ls.set_type = '$type' ";
 $query .= "AND ls.public = 1 ";
 
 if($filter_str)
-	$query .= "AND (ls.name LIKE '%" . mysql_real_escape_string($filter_str) . "%' OR ls.description LIKE '%" . mysql_real_escape_string($filter_str) . "%')";
+	$query .= "AND (ls.name LIKE '%" . DB::getConnection()->quote($filter_str) . "%' OR ls.description LIKE '%" . DB::getConnection()->quote($filter_str) . "%')";
 	
 $query .= " GROUP BY ls.set_id ORDER BY ls.date_modified DESC LIMIT 100";
 

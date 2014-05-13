@@ -448,7 +448,7 @@ class Session
         if ($this->scoreID) {
             $query = 'UPDATE `games` SET ';
         } else {
-            $query = 'INSERT INTO `games` SET `user_id`=' . $_SESSION['user']->getID() . ', `level` = \'' . mysql_real_escape_string($this->sessionLevel) . '\', `date_started` = \'' . date("Y-m-d H:i:s",
+            $query = 'INSERT INTO `games` SET `user_id`=' . $_SESSION['user']->getID() . ', `level` = \'' . DB::getConnection()->quote($this->sessionLevel) . '\', `date_started` = \'' . date("Y-m-d H:i:s",
                     $this->startTime) . '\', ';
         }
 

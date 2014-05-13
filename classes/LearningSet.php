@@ -45,7 +45,7 @@ class LearningSet
     public static function createNew($name, $type, $public = true, $editable = false)
     {
         $public = $public || $editable;
-        $query = 'INSERT INTO learning_sets SET user_id = ' . $_SESSION['user']->getID() . ", set_type = '" . mysql_real_escape_string($type) . "', date_created = NOW(), date_modified = NOW(), public = " . (int) $public . ", editable = " . (int) $editable . ", name = '" . mysql_real_escape_string($name) . "'";
+        $query = 'INSERT INTO learning_sets SET user_id = ' . $_SESSION['user']->getID() . ", set_type = '" . DB::getConnection()->quote($type) . "', date_created = NOW(), date_modified = NOW(), public = " . (int) $public . ", editable = " . (int) $editable . ", name = '" . DB::getConnection()->quote($name) . "'";
         $res = mysql_query($query) or log_db_error($query, '', false, true);
 
         return mysql_insert_id();
@@ -135,7 +135,7 @@ class LearningSet
             return 'Only owner can edit this.';
         }
 
-        $query = 'UPDATE learning_sets SET name = \'' . mysql_real_escape_string($newName) . '\' WHERE set_id = ' . $this->setID;
+        $query = 'UPDATE learning_sets SET name = \'' . DB::getConnection()->quote($newName) . '\' WHERE set_id = ' . $this->setID;
         $res = mysql_query($query) or log_db_error($query, '', false, true);
 
         $this->data->name = $newName;
@@ -289,11 +289,11 @@ class LearningSet
                 foreach ($lines as $line) {
                     $items = explode("\t", $line);
                     if (count($items) == 1) {
-                        $query .= ' OR j.word = \'' . mysql_real_escape_string($line) . "'";
+                        $query .= ' OR j.word = \'' . DB::getConnection()->quote($line) . "'";
                     } else if (count($items) == 2) {
                         preg_match_all('/[\\x{3040}-\\x{30FF}\\x{4E00}-\\x{9FA5}]+/u', $items[1], $matches,
                             PREG_PATTERN_ORDER);
-                        $query .= ' OR (j.word = \'' . mysql_real_escape_string($items[0]) . "'";
+                        $query .= ' OR (j.word = \'' . DB::getConnection()->quote($items[0]) . "'";
 
                         if (count($matches[0]) == 1)
                             $query .= ' AND j.reading = \'' . $matches[0][0] . '\'';

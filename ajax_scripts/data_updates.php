@@ -32,21 +32,21 @@ if (!empty($_REQUEST['validate']) && !empty($_REQUEST['update_id'])) {
             }
 
             if (!$row->applied || ($need_work != (substr($row->new_value, 0, 3) == '(~)'))) {
-                $table_name = mysql_real_escape_string($row->table_name);
-                $col_name = mysql_real_escape_string($row->col_name);
-                $id_name = mysql_real_escape_string($row->id_name);
+                $table_name = DB::getConnection()->quote($row->table_name);
+                $col_name = DB::getConnection()->quote($row->col_name);
+                $id_name = DB::getConnection()->quote($row->id_name);
                 $_table_name = "`" . str_replace("`", "", $row->table_name) . "`";
                 $_col_name = "`" . str_replace("`", "", $row->col_name) . "`";
                 $_id_name = "`" . str_replace("`", "", $row->id_name) . "`";
                 $id_value = (int) $row->id_value;
 
                 if ($row->id_name_2) {
-                    $select_id_2 = ' AND `' . str_replace("`", "", $row->id_name_2) . "` = '" . mysql_real_escape_string($row->id_val_2) . "'";
+                    $select_id_2 = ' AND `' . str_replace("`", "", $row->id_name_2) . "` = '" . DB::getConnection()->quote($row->id_val_2) . "'";
                 } else {
                     $select_id_2 = '';
                 }
 
-                $query = "UPDATE $_table_name SET $_col_name = '" . ($need_work ? '(~)' : '') . mysql_real_escape_string($row->new_value) . "' WHERE $_id_name = $id_value $select_id_2";
+                $query = "UPDATE $_table_name SET $_col_name = '" . ($need_work ? '(~)' : '') . DB::getConnection()->quote($row->new_value) . "' WHERE $_id_name = $id_value $select_id_2";
 
                 $res = mysql_query($query) or die(mysql_error());
             }
@@ -85,21 +85,21 @@ if (!empty($_REQUEST['validate']) && !empty($_REQUEST['update_id'])) {
         $row = mysql_fetch_object($res);
 
         if (!$row->applied || ($need_work != (substr($row->new_value, 0, 3) == '(~)'))) {
-            $table_name = mysql_real_escape_string($row->table_name);
-            $col_name = mysql_real_escape_string($row->col_name);
-            $id_name = mysql_real_escape_string($row->id_name);
+            $table_name = DB::getConnection()->quote($row->table_name);
+            $col_name = DB::getConnection()->quote($row->col_name);
+            $id_name = DB::getConnection()->quote($row->id_name);
             $_table_name = "`" . str_replace("`", "", $row->table_name) . "`";
             $_col_name = "`" . str_replace("`", "", $row->col_name) . "`";
             $_id_name = "`" . str_replace("`", "", $row->id_name) . "`";
             $id_value = (int) $row->id_value;
 
-            if ($row->id_name_2)
-                $select_id_2 = ' AND `' . str_replace("`", "", $row->id_name_2) . "` = '" . mysql_real_escape_string($row->id_val_2) . "'";
-            else
+            if ($row->id_name_2) {
+                $select_id_2 = ' AND `' . str_replace("`", "", $row->id_name_2) . "` = '" . DB::getConnection()->quote($row->id_val_2) . "'";
+            } else {
                 $select_id_2 = '';
+            }
 
-            $query = "UPDATE $_table_name SET $_col_name = '" . ($need_work ? '(~)' : '') . mysql_real_escape_string($row->new_value) . "' WHERE $_id_name = $id_value $select_id_2";
-            // $query = "SELECT * FROM $_table_name WHERE $_id_name = $id_value" . $select_id_2;
+            $query = "UPDATE $_table_name SET $_col_name = '" . ($need_work ? '(~)' : '') . DB::getConnection()->quote($row->new_value) . "' WHERE $_id_name = $id_value $select_id_2";
             $res = mysql_query($query) or die(mysql_error());
         }
 
@@ -134,26 +134,25 @@ if (@$_REQUEST['revert'] && @$_REQUEST['update_id']) {
         $row = mysql_fetch_object($res);
         $restored_value = $row->old_value;
 
-        $table_name = mysql_real_escape_string($row->table_name);
-        $col_name = mysql_real_escape_string($row->col_name);
-        $id_name = mysql_real_escape_string($row->id_name);
+        $table_name = DB::getConnection()->quote($row->table_name);
+        $col_name = DB::getConnection()->quote($row->col_name);
+        $id_name = DB::getConnection()->quote($row->id_name);
         $_table_name = "`" . str_replace("`", "", $row->table_name) . "`";
         $_col_name = "`" . str_replace("`", "", $row->col_name) . "`";
         $_id_name = "`" . str_replace("`", "", $row->id_name) . "`";
         $id_value = (int) $row->id_value;
 
-        if ($row->id_name_2)
-            $select_id_2 = ' AND `' . str_replace("`", "", $row->id_name_2) . "` = '" . mysql_real_escape_string($row->id_val_2) . "'";
-        else
+        if ($row->id_name_2) {
+            $select_id_2 = ' AND `' . str_replace("`", "", $row->id_name_2) . "` = '" . DB::getConnection()->quote($row->id_val_2) . "'";
+        } else {
             $select_id_2 = '';
+        }
 
-        $query = "UPDATE $_table_name SET $_col_name = '" . mysql_real_escape_string($restored_value) . "' WHERE $_id_name = $id_value $select_id_2";
-        // $query = "SELECT * FROM $_table_name WHERE $_id_name = $id_value" . $select_id_2;
+        $query = "UPDATE $_table_name SET $_col_name = '" . DB::getConnection()->quote($restored_value) . "' WHERE $_id_name = $id_value $select_id_2";
         $res = mysql_query($query) or die(mysql_error());
 
         $query = "UPDATE data_updates SET applied = 0 WHERE update_id IN (" . implode(',', $update_ids) . ")";
         $res = mysql_query($query) or die(mysql_error());
-
 
         echo "<div><div id=\"data_update_success\">Reverted $c update(s).</div><br/>Restored to value: <i>$restored_value</i></div>";
     }

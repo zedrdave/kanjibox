@@ -129,7 +129,7 @@ if (!init_app()) {
             $num_examples = 3;
         }
 
-        $user_id = mysql_real_escape_string($_SESSION['user']->getID());
+        $user_id = DB::getConnection()->quote($_SESSION['user']->getID());
 
         $newtoo = (!empty($_REQUEST['newtoo']) ? true : false);
         $include_below = (!empty($_REQUEST['include_below']) ? true : false);

@@ -14,7 +14,7 @@ if(isset($_REQUEST['delete_id']) ) {
 		$jmdict_id = (int) $_REQUEST['jmdict_id'];
 		$query = "DELETE FROM example_answers WHERE example_id = $sent_id AND jmdict_id = $jmdict_id LIMIT 1";
 	
-		mysql_query("INSERT INTO data_update_queries SET user_id = " . $_SESSION['user']->getID() . ", query_str = '" . mysql_real_escape_string($query) . "', applied = 1");
+		mysql_query("INSERT INTO data_update_queries SET user_id = " . $_SESSION['user']->getID() . ", query_str = '" . DB::getConnection()->quote($query) . "', applied = 1");
 	
 		mysql_query($query) or die(mysql_error());
 		echo "<div class=\"message\">Deleted answer: ($sent_id, $jmdict_id)</div>";
@@ -22,12 +22,12 @@ if(isset($_REQUEST['delete_id']) ) {
 	else {
 		$sent_id = (int) $_REQUEST['delete_id'];
 		$query = "DELETE FROM examples WHERE example_id = $sent_id LIMIT 1";
-		mysql_query("INSERT INTO data_update_queries SET user_id = " . $_SESSION['user']->getID() . ", query_str = '" . mysql_real_escape_string($query) . "', applied = 1");
+		mysql_query("INSERT INTO data_update_queries SET user_id = " . $_SESSION['user']->getID() . ", query_str = '" . DB::getConnection()->quote($query) . "', applied = 1");
 	
 		mysql_query($query) or die(mysql_error());
 		echo "<div class=\"message\">Deleted sentence ID: $sent_id</div>";
 		$query = "DELETE FROM example_parts WHERE example_id = $sent_id";	
-		mysql_query("INSERT INTO data_update_queries SET user_id = " . $_SESSION['user']->getID() . ", query_str = '" . mysql_real_escape_string($query) . "', applied = 1");
+		mysql_query("INSERT INTO data_update_queries SET user_id = " . $_SESSION['user']->getID() . ", query_str = '" . DB::getConnection()->quote($query) . "', applied = 1");
 		mysql_query($query) or die(mysql_error());		
 		echo "<div class=\"message\">Deleted " . mysql_affected_rows() . " sentence parts.</div>";
 		return;
@@ -38,7 +38,7 @@ if(isset($_REQUEST['create'])) {
 		echo '<div class="message">Error: please provide at least Japanese text.</div>';
 		return;
 	}
-	elseif(mysql_query("INSERT INTO examples SET example_str = '" . mysql_real_escape_string($_REQUEST['example_str']) . "', english = '" . mysql_real_escape_string($_REQUEST['english']) . '\', status = \'kanjibox\'')) {
+	elseif(mysql_query("INSERT INTO examples SET example_str = '" . DB::getConnection()->quote($_REQUEST['example_str']) . "', english = '" . DB::getConnection()->quote($_REQUEST['english']) . '\', status = \'kanjibox\'')) {
 		$example_id = mysql_insert_id();
 		
 		echo '<div class="message">Created new sentence ID: ' . $example_id . '</div>';

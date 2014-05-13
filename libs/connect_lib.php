@@ -128,7 +128,7 @@ function display_login_page($redirect_to_url = '', $header_msg = 'In order to us
 
                         /*
                           if (!empty($_POST['login'])) {
-                          $res = mysql_query("SELECT login_pwd FROM users_ext ux WHERE ux.login_email = '" . mysql_real_escape_string($_POST['login']) . "'") or die(mysql_error());
+                          $res = mysql_query("SELECT login_pwd FROM users_ext ux WHERE ux.login_email = '" . DB::getConnection()->quote($_POST['login']) . "'") or die(mysql_error());
                           $row = mysql_fetch_object($res);
                           if ($row && $row->login_pwd == 'need_to_reset') {
                           echo "<div class=\"error_msg\">Your password needs to be reset before you can log in. Please follow <a href=\"https://kanjibox.net/kb/?pwd_reset=1\">these instructions</a> to reset your password.</div>";
@@ -276,7 +276,7 @@ function display_pwd_reset_page() {
 
                         get_db_conn();
 
-                        $res = mysql_query('SELECT * FROM users u LEFT JOIN users_ext ux ON ux.user_id = u.id WHERE ux.login_email = \'' . mysql_real_escape_string($login_email) . '\' AND ux.login_email != \'\' AND ux.login_email IS NOT NULL AND u.id = ' . (int) $user_id) or die('DB error');
+                        $res = mysql_query('SELECT * FROM users u LEFT JOIN users_ext ux ON ux.user_id = u.id WHERE ux.login_email = \'' . DB::getConnection()->quote($login_email) . '\' AND ux.login_email != \'\' AND ux.login_email IS NOT NULL AND u.id = ' . (int) $user_id) or die('DB error');
 
                         if (!$row = mysql_fetch_object($res))
                             log_pwd_reset('Cannot find account for this email.');
@@ -285,7 +285,7 @@ function display_pwd_reset_page() {
                             log_pwd_reset('Invalid recovery code.');
 
                         if (!empty($_REQUEST['pwd']) && $_REQUEST['pwd']) {
-                            if (mysql_query('UPDATE users_ext SET login_pwd = MD5(\'' . mysql_real_escape_string($_REQUEST['pwd']) . '\') WHERE user_id = ' . (int) $user_id)) {
+                            if (mysql_query('UPDATE users_ext SET login_pwd = MD5(\'' . DB::getConnection()->quote($_REQUEST['pwd']) . '\') WHERE user_id = ' . (int) $user_id)) {
                                 echo "<h3>Your password has been successfully reset!</h3>";
                                 echo '<a href="' . SERVER_URL . '">Play &raquo;</a>';
                                 log_pwd_reset('Password reset for account: ' . $user_id . ' (email: ' . $login_email . ')', false, false);

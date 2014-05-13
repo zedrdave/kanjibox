@@ -435,7 +435,7 @@ class Text extends Vocab
 		FROM example_decoys ed
 		JOIN `jmdict` j ON j.id = ed.jmdict_id_decoy LEFT JOIN jmdict_ext jx ON jx.jmdict_id = j.id ';
 
-        $query .= 'WHERE ed.jmdict_id = \'' . mysql_real_escape_string($jmdict->id) . '\' 
+        $query .= 'WHERE ed.jmdict_id = \'' . DB::getConnection()->quote($jmdict->id) . '\' 
 			AND ed.example_id = \'' . (int) $jmdict->example_id . '\' 
 			AND j.id != \'' . (int) ($jmdict->id) . '\'';
 
@@ -466,7 +466,7 @@ class Text extends Vocab
 
     // function get_vocab_id($vocab_id) 
     // {	
-    // 	 $query = "SELECT j.`id` AS `id`, j.`word` AS `word`, j.`reading` AS `reading`, jx.gloss_english AS fullgloss, j.katakana FROM `jmdict` j LEFT JOIN jmdict_ext jx ON jx.jmdict_id = j.id WHERE j.`id` = '" . mysql_real_escape_string($vocab_id) . "' LIMIT 1";
+    // 	 $query = "SELECT j.`id` AS `id`, j.`word` AS `word`, j.`reading` AS `reading`, jx.gloss_english AS fullgloss, j.katakana FROM `jmdict` j LEFT JOIN jmdict_ext jx ON jx.jmdict_id = j.id WHERE j.`id` = '" . DB::getConnection()->quote($vocab_id) . "' LIMIT 1";
     // 	
     // 	  $res = mysql_query_debug($query) or log_db_error($query, false, true);
     // 	  return mysql_fetch_object($res);

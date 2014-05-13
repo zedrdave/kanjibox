@@ -15,11 +15,11 @@ if(isset($_REQUEST['submit']) || @$_REQUEST['id']) {
 		$query .= ') ';
 	}
 	if(!empty($_REQUEST['prons']))
-		$query .= "AND prons LIKE '%" . mysql_real_escape_string($_REQUEST['prons']) . "%' ";
+		$query .= "AND prons LIKE '%" . DB::getConnection()->quote($_REQUEST['prons']) . "%' ";
 	
 	foreach(array('kanji', 'njlpt', 'grade', 'strokes') as $field) {
 		if(!empty($_REQUEST[$field]))
-			$query .= "AND $field = '" . mysql_real_escape_string($_REQUEST[$field]) . "' ";
+			$query .= "AND $field = '" . DB::getConnection()->quote($_REQUEST[$field]) . "' ";
 	}
 	
 	$pref_lang_kanji = Kanji::$langStrings[$_SESSION['user']->get_pref('lang', 'kanji_lang')];

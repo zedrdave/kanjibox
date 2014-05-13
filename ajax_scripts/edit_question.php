@@ -126,31 +126,22 @@ if (isset($params['question_id'])) {
         echo '<div class="message">Updated demo status for question id: ' . (int) $params['question_id'] . '</div>';
         return;
     } elseif (isset($_REQUEST['update_reviewed'])) {
-        // $res = mysql_query("SELECT * FROM grammar_answers WHERE question_id = " . (int) $params['question_id'] . " AND jmdict_id = " . (int) $params['jmdict_id']);
-        // $answer = mysql_fetch_object($res);
-        //         if(! $answer) {
-        // 	echo '<div class="message">This answer seems to have been deleted already. Please refresh the page and try again.</div>';
-        //         }
-        //         else {
-        $query = "REPLACE INTO grammar_answer_reviews SET user_id = " . $_SESSION['user']->getID() . ", status = '" . mysql_real_escape_string($_REQUEST['update_reviewed']) . "', question_id = " . (int) $params['question_id'] . ", jmdict_id = " . (int) $params['jmdict_id'];
+        $query = "REPLACE INTO grammar_answer_reviews SET user_id = " . $_SESSION['user']->getID() . ", status = '" . DB::getConnection()->quote($_REQUEST['update_reviewed']) . "', question_id = " . (int) $params['question_id'] . ", jmdict_id = " . (int) $params['jmdict_id'];
         $res = mysql_query($query);
-        if (!$res)
+        if (!$res) {
             echo '<div class="message">Database error: could not update review status: ' . mysql_error() . '<br/>' . $query . '</div>';
-        // }
+        }
         return;
-    }
-    elseif (isset($_REQUEST['delete_answer_id'])) {
+    } elseif (isset($_REQUEST['delete_answer_id'])) {
         $answer_id = (int) $_REQUEST['delete_answer_id'];
         echo '<div class="message">Deleting answer: ' . $question->question_id . '-' . $answer_id . '...</div>';
 
         mysql_query("DELETE FROM grammar_answers WHERE jmdict_id = " . (int) $_REQUEST['delete_answer_id'] . " AND question_id = $question->question_id") or die(mysql_error());
-
         mysql_query('UPDATE grammar_sets SET date_last = NOW() WHERE set_id = (SELECT set_id FROM grammar_questions WHERE question_id = ' . $question->question_id . ' LIMIT 1)') or die(mysql_error());
 
-        if (@$_REQUEST['no_content'])
+        if ($_REQUEST['no_content']) {
             return;
-
-        // return;
+        }
     }
 
 
@@ -182,30 +173,30 @@ if (isset($params['question_id'])) {
         <p id="question-str"><?php echo $sent->example_str?></p>
         <input type="hidden" name="update_data" value="1"/>
         <p>Answer position: <a href="#" onclick="move_selection(-1);
-                    highlight_text();
-                    return false;">←</a> <a href="#" onclick="extend_selection(-1);
-                            highlight_text();
-                            return false;">-</a> <input type="hidden" name="pos_start" id="pos_start" value="<?php echo $question->pos_start?>" />[<span id="pos_start_txt" /> ~ <span id="pos_end_txt" />]<input type="hidden" name="pos_end" id="pos_end" value="<?php echo $question->pos_end?>" onchange="show_question_save_button();" /> <a href="#" onclick="extend_selection(1);
-                                    highlight_text();
-                                    return false;">+</a> <a href="#" onclick="move_selection(1);
-                                            highlight_text();
-                                            return false;">→</a><?php
-            if ($question->pos_start == 0 && $question->pos_end == 0)
-                echo ' <span class="notice">(set answer position)</span>';
-            else {
-                $substr = mb_substr($sent->example_str, $question->pos_start, $question->pos_end - $question->pos_start,
-                    'utf-8');
-                if ($substr != $word->word && $substr != $word->reading)
-                    echo ' <span class="notice">(selection not matching answer)</span>';
-            }
-    ?></p>
+                highlight_text();
+                return false;">←</a> <a href="#" onclick="extend_selection(-1);
+                        highlight_text();
+                        return false;">-</a> <input type="hidden" name="pos_start" id="pos_start" value="<?php echo $question->pos_start?>" />[<span id="pos_start_txt" /> ~ <span id="pos_end_txt" />]<input type="hidden" name="pos_end" id="pos_end" value="<?php echo $question->pos_end?>" onchange="show_question_save_button();" /> <a href="#" onclick="extend_selection(1);
+                                highlight_text();
+                                return false;">+</a> <a href="#" onclick="move_selection(1);
+                                        highlight_text();
+                                        return false;">→</a><?php
+                               if ($question->pos_start == 0 && $question->pos_end == 0)
+                                   echo ' <span class="notice">(set answer position)</span>';
+                               else {
+                                   $substr = mb_substr($sent->example_str, $question->pos_start,
+                                       $question->pos_end - $question->pos_start, 'utf-8');
+                                   if ($substr != $word->word && $substr != $word->reading)
+                                       echo ' <span class="notice">(selection not matching answer)</span>';
+                               }
+                               ?></p>
         <p>JLPT: N<input type="text" size="1" name="njlpt" value="<?php echo $question->njlpt?>" onchange="show_question_save_button();" /></p>
-            <?php
-            if ($_SESSION['user']->isAdministrator())
-                echo '<p>User id: <input type="text" size="10" name="user_id" value="' . $question->user_id . '" onchange="show_question_save_button();" /></p>';
-            else
-                echo '<input type="hidden" name="user_id" value="' . $question->user_id . '" />';
-            ?>
+        <?php
+        if ($_SESSION['user']->isAdministrator())
+            echo '<p>User id: <input type="text" size="10" name="user_id" value="' . $question->user_id . '" onchange="show_question_save_button();" /></p>';
+        else
+            echo '<input type="hidden" name="user_id" value="' . $question->user_id . '" />';
+        ?>
         <input type="submit" id="save-question-info" class="save-button" style="display:none;" name="save" value="Save" />
     </form>
     <br/>
@@ -213,13 +204,13 @@ if (isset($params['question_id'])) {
     <p><span class="good-answer" id="picked-answer"><?php echo $word->word?></span> 【<?php echo ($word->reading)?>】 (N<?php echo ($word->njlpt)?>) - <small><?php echo $word->gloss?></small></p>
 
     <br/>
-        <?php
-        $res = mysql_query('SELECT *, jx.gloss_english as gloss FROM grammar_answers sa LEFT JOIN jmdict j ON sa.jmdict_id = j.id LEFT JOIN jmdict_ext jx ON jx.jmdict_id = j.id WHERE sa.question_id = ' . (int) $question->question_id . ' GROUP BY sa.jmdict_id') or die(mysql_error());
+    <?php
+    $res = mysql_query('SELECT *, jx.gloss_english as gloss FROM grammar_answers sa LEFT JOIN jmdict j ON sa.jmdict_id = j.id LEFT JOIN jmdict_ext jx ON jx.jmdict_id = j.id WHERE sa.question_id = ' . (int) $question->question_id . ' GROUP BY sa.jmdict_id') or die(mysql_error());
 
-        echo "Wrong answers (" . mysql_num_rows($res) . "):<br/>";
+    echo "Wrong answers (" . mysql_num_rows($res) . "):<br/>";
 
-        while ($bad_answer = mysql_fetch_object($res)) {
-            ?>
+    while ($bad_answer = mysql_fetch_object($res)) {
+        ?>
         <p class="spaced-line"><span class="bad-answer"><?php echo ($bad_answer->usually_kana || $bad_answer->reading == $bad_answer->word ? $bad_answer->reading : $bad_answer->word . '【' . $bad_answer->reading . '】')?></span> (N<?php echo ($bad_answer->njlpt)?>) <a class="delete-button" href="#" onclick="delete_wrong_answer( < ? echo $question - > question_id.', '.$bad_answer - > jmdict_id; ? > ); return false;">×</a> - <small><?php echo $bad_answer->gloss?></small></p>
         <?php
     }

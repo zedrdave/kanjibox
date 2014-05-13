@@ -61,7 +61,7 @@ function safe_comma_list($array)
     if (!$array || !is_array($array)) {
         return "''";
     }
-    return "'" . implode('\', \'', array_map('mysql_real_escape_string', $array)) . "'";
+    return "'" . implode('\', \'', array_map('DB::getConnection()->quote', $array)) . "'";
 }
 
 function is_assoc($array)

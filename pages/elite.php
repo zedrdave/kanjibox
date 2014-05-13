@@ -33,7 +33,7 @@ function register_kb_code($device_id, $kb_code_array) {
 		return 0;
 	}
 
-	$res = mysql_query('SELECT * FROM users WHERE device_id = \'' . mysql_real_escape_string($device_id) . "'") or die("SQL Error.");
+	$res = mysql_query('SELECT * FROM users WHERE device_id = \'' . DB::getConnection()->quote($device_id) . "'") or die("SQL Error.");
 	if($row = mysql_fetch_assoc($res))
 	{
 		display_user_msg("This KB Code has already been claimed by another account. Please contact us if you think this is a mistake.", MSG_ERROR);

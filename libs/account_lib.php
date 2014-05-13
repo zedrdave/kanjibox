@@ -138,7 +138,7 @@ function display_new_account_page() {
                     }
 
                     if ($no_error) {
-                        $query = 'SELECT * FROM users_ext ux WHERE ux.login_email = \'' . mysql_real_escape_string($_REQUEST['login_mail']) . '\' AND ux.login_email != \'\' AND ux.login_email IS NOT NULL';
+                        $query = 'SELECT * FROM users_ext ux WHERE ux.login_email = \'' . DB::getConnection()->quote($_REQUEST['login_mail']) . '\' AND ux.login_email != \'\' AND ux.login_email IS NOT NULL';
                         $res = mysql_query($query) or die(mysql_error());
 
                         if ($row = mysql_fetch_object($res)) {
@@ -151,7 +151,7 @@ function display_new_account_page() {
                         mysql_query("INSERT INTO users SET privileges = 0, device_id = NULL, fb_id = NULL") or die(mysql_error());
 
                         $user_id = mysql_insert_id();
-                        mysql_query("INSERT INTO users_ext SET login_email = '" . mysql_real_escape_string($_REQUEST['login_mail']) . "', login_pwd = MD5('" . mysql_real_escape_string($_POST['password']) . "'), user_id = $user_id, first_name = '" . mysql_real_escape_string($_REQUEST['first_name']) . "', last_name = '" . mysql_real_escape_string($_REQUEST['last_name']) . "'") or die(mysql_error());
+                        mysql_query("INSERT INTO users_ext SET login_email = '" . DB::getConnection()->quote($_REQUEST['login_mail']) . "', login_pwd = MD5('" . DB::getConnection()->quote($_POST['password']) . "'), user_id = $user_id, first_name = '" . DB::getConnection()->quote($_REQUEST['first_name']) . "', last_name = '" . DB::getConnection()->quote($_REQUEST['last_name']) . "'") or die(mysql_error());
 
                         echo '<div class="success_msg">Account successfully created for login <em>' . htmlentities($_REQUEST['login_mail']) . '</em>. You can now <a href="' . SERVER_URL . '">login from the main page</a>.</div>';
                     }

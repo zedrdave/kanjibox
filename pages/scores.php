@@ -77,14 +77,14 @@ if ($cur_type == 'main') {
     }
     echo '</div>';
     /*
-      $query = "DELETE FROM ranking WHERE level = '" . mysql_real_escape_string($level) . "' AND type = '" . mysql_real_escape_string($type) . "'";
+      $query = "DELETE FROM ranking WHERE level = '" . DB::getConnection()->quote($level) . "' AND type = '" . DB::getConnection()->quote($type) . "'";
       mysql_query($query) or log_db_error($query, true, true);
 
       $query = "INSERT INTO ranking (SELECT NULL, u.id as user_id, g.type as type, g.level as level, @rownum:=@rownum+1 as rank, g.id as game_id, NOW()
       FROM (SELECT @rownum:=0) r, `users` u
-      JOIN `games` g ON g.`user_id` = u.id AND g.`level` = u.level AND g.type = '" . mysql_real_escape_string($type) . "'
+      JOIN `games` g ON g.`user_id` = u.id AND g.`level` = u.level AND g.type = '" . DB::getConnection()->quote($type) . "'
       LEFT JOIN games g2 ON g.user_id = g2.user_id AND g2.`level` = g.level AND g2.type = g.type AND (g.score < g2.score OR (g.score = g2.score AND g.date_ended > g2.date_ended))
-      WHERE u.active = 1 AND u.level = '" . mysql_real_escape_string($level) . "' AND g2.score IS NULL
+      WHERE u.active = 1 AND u.level = '" . DB::getConnection()->quote($level) . "' AND g2.score IS NULL
       ORDER BY g.score DESC, TIMEDIFF(g.date_ended, g.date_started) ASC)";
       $res = mysql_query($query) or die(mysql_error());
 

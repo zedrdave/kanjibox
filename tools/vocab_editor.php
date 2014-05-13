@@ -22,9 +22,9 @@ if(isset($_REQUEST['submit'])) {
 	foreach(array('word', 'reading', 'njlpt', 'njlpt_r') as $field) {
 		if(!empty($_REQUEST[$field])) {
 			if(@$_REQUEST['exact_match'])
-				$query .= "AND $field = '" . mysql_real_escape_string($_REQUEST[$field]) . "' ";
+				$query .= "AND $field = '" . DB::getConnection()->quote($_REQUEST[$field]) . "' ";
 			else
-				$query .= "AND $field LIKE '%" . mysql_real_escape_string($_REQUEST[$field]) . "%' ";
+				$query .= "AND $field LIKE '%" . DB::getConnection()->quote($_REQUEST[$field]) . "%' ";
 		}
 	}
 	

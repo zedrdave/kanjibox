@@ -74,8 +74,8 @@ function parse_jp_sentence($sentence, $include_particles = true, $output_debug =
 		if(!$include_particles && $is_kana && mb_strlen($word) <= 1)
 			continue;
 		
-		$word = mysql_real_escape_string($word);
-		$hiragana = mysql_real_escape_string($hiragana);
+		$word = DB::getConnection()->quote($word);
+		$hiragana = DB::getConnection()->quote($hiragana);
 		
 		$can_add_te_suffix = false;
 		
