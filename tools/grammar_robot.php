@@ -12,17 +12,17 @@ mb_internal_encoding("UTF-8");
 	$res = mysql_query("SELECT gs.set_id, gs.name FROM grammar_sets gs");
 	$grammar_setsv = array(-1 => '[none]');
 	while($row = mysql_fetch_object($res))
-		$grammar_sets[$row->setID] = $row->name;
+		$grammar_sets[$row->id] = $row->name;
 
-	$set_id = (int) @$_REQUEST['set_id'];
-	if(! $set_id)
-		$set_id = (int) @$params['set_id'];
+	$setID = (int) @$_REQUEST['set_id'];
+	if(! $setID)
+		$setID = (int) @$params['set_id'];
 	
 	echo 'Select set: ';
-	display_select_menu($grammar_sets, 'set_id', $set_id, "window.location.href = 'https://kanjibox.net/kb/tools/grammar_robot/set_id/' + this.value + '/';", '-');
+	display_select_menu($grammar_sets, 'set_id', $setID, "window.location.href = 'https://kanjibox.net/kb/tools/grammar_robot/set_id/' + this.value + '/';", '-');
 	echo '<br/>';
 
-	if(@$set_id)
+	if(@$setID)
 	{
 	$answers = [];
 
@@ -30,7 +30,7 @@ mb_internal_encoding("UTF-8");
 	<form id="make-wrong-answers-form" action="/kb/ajax/grammar_robot_step_2/" method="post" onsubmit="if($('.choice > input:checked').length >= 4) { return true; } else { alert('Please first at least 4 answers in this set.'); return false; };">
 	<div style="margin-top:20px;">
 		<?php
-	$res_correct_answers = mysql_query("SELECT j.*, jg.gloss_english as gloss, COUNT(*) AS c FROM grammar_questions sq JOIN jmdict j ON j.id = sq.jmdict_id JOIN jmdict_ext jg ON jg.jmdict_id = j.id LEFT JOIN users_ext ux ON ux.user_id = sq.user_id WHERE sq.set_id = $set_id GROUP BY j.id ORDER BY c ASC, j.word ASC") or die(mysql_error());
+	$res_correct_answers = mysql_query("SELECT j.*, jg.gloss_english as gloss, COUNT(*) AS c FROM grammar_questions sq JOIN jmdict j ON j.id = sq.jmdict_id JOIN jmdict_ext jg ON jg.jmdict_id = j.id LEFT JOIN users_ext ux ON ux.user_id = sq.user_id WHERE sq.set_id = $setID GROUP BY j.id ORDER BY c ASC, j.word ASC") or die(mysql_error());
 	while($answer = mysql_fetch_object($res_correct_answers)) {
 		$answers[$answer->id] = array('correct' => $answer->c, 'wrong' => 0, 'jmdict' => $answer);
 		$word = ($answer->usually_kana || $answer->word == $answer->reading ? $answer->reading : "$answer->word 【" . $answer->reading . "】");
@@ -40,7 +40,7 @@ mb_internal_encoding("UTF-8");
 	</div><p style="clear:both;"><a href="#" onclick="$('.choice > input:not(:checked)').prop('checked', true).change(); return false;">[select all]</a>&nbsp;&nbsp;&nbsp;<a href="#" onclick="$('.choice > input:checked').prop('checked', false).change() ; return false;">[deselect all]</a></p>
 
 	<p><strong>Total Answers:</strong> <input type="text" id="answers_tot" disabled="true" value="0" size="3"></input> | <strong>Total Questions:</strong> <input type="text" id="questions_tot" disabled="true" value="0" size="3"></input></p>
-	<input type="hidden" name="set_id" id="set_id" value="<?php echo $set_id; ?>"></input>
+	<input type="hidden" name="set_id" id="set_id" value="<?php echo $setID; ?>"></input>
 	<p style="text-align:center;"><input type="submit" name="make-wrong-answers" value="Suggest Wrong Answers"></input></p>
 </form>
 <div id="ajax-result"></div>

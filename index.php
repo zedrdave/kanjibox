@@ -75,8 +75,8 @@ if ((!empty($params['redirect']) && $params['redirect'] === 'back_to_forum') || 
     exit();
 }
 if ((!empty($params['redirect']) && $params['redirect'] === 'set_subscribe') || (!empty($_REQUEST['redirect']) && $_REQUEST['redirect'] === 'set_subscribe')) {
-    $set_id = (int) (isset($params['set_id']) ? $params['set_id'] : $_REQUEST['set_id']);
-    header('Location: http://kanjibox.net/kb/set/' . $set_id . '/?redirected_subscribe=1');
+    $setID = (int) (isset($params['set_id']) ? $params['set_id'] : $_REQUEST['set_id']);
+    header('Location: http://kanjibox.net/kb/set/' . $setID . '/?redirected_subscribe=1');
     exit();
 }
 if ($redirect_to_url = (isset($_REQUEST['redirect_to_url']) ? $_REQUEST['redirect_to_url'] : null)) {
@@ -162,10 +162,10 @@ if ($redirect_to_url = (isset($_REQUEST['redirect_to_url']) ? $_REQUEST['redirec
         }
 
         if (isset($_REQUEST['save_prefs']) && isset($_SESSION['user'])) {
-            $_SESSION['user']->update_prefs($_POST);
+            $_SESSION['user']->updatePreferences($_POST);
         }
         if (isset($_SESSION['user'])) {
-            $lang = $_SESSION['user']->get_pref('lang', 'vocab_lang');
+            $lang = $_SESSION['user']->getPreference('lang', 'vocab_lang');
         } else {
             $lang = 'en';
         }

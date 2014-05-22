@@ -3,13 +3,13 @@ if (!@$_SESSION['user'] || !$_SESSION['user']->isEditor())
     die("editors only");
 
 if (!empty($_REQUEST['delete_id'])) {
-    $delete_id = (int) $_REQUEST['delete_id'];
-    mysql_query('UPDATE grammar_sets SET date_last = NOW() WHERE set_id = (SELECT set_id FROM grammar_questions WHERE question_id = ' . $delete_id . ' LIMIT 1)') or die(mysql_error());
+    $deleteID = (int) $_REQUEST['delete_id'];
+    mysql_query('UPDATE grammar_sets SET date_last = NOW() WHERE set_id = (SELECT set_id FROM grammar_questions WHERE question_id = ' . $deleteID . ' LIMIT 1)') or die(mysql_error());
 
-    mysql_query('DELETE FROM grammar_answers WHERE question_id = ' . $delete_id) or die(mysql_error());
-    mysql_query('DELETE FROM grammar_questions WHERE question_id = ' . $delete_id . ' LIMIT 1') or die(mysql_error());
+    mysql_query('DELETE FROM grammar_answers WHERE question_id = ' . $deleteID) or die(mysql_error());
+    mysql_query('DELETE FROM grammar_questions WHERE question_id = ' . $deleteID . ' LIMIT 1') or die(mysql_error());
 
-    echo '<div class="message">Deleted question ID: ' . $delete_id . '</div>';
+    echo '<div class="message">Deleted question ID: ' . $deleteID . '</div>';
     return;
 }
 
@@ -39,15 +39,23 @@ if (isset($_REQUEST['sentence_id']) && !empty($_REQUEST['jmdict_id'])) {
                 echo '<div class="message">Warning! The selected sentence doesn\'t appear to contain the answer...</div>';
             else
                 $pos_end = $pos_start + mb_strlen($word->reading, 'UTF-8');
-        } else
+        } else {
             $pos_end = $pos_start + mb_strlen($word->word, 'UTF-8');
+        }
 
-        if ($pos_start === FALSE)
+        if ($pos_start === false) {
             $pos_start = 0;
+        }
 
-        mysql_query("INSERT INTO grammar_questions SET sentence_id = " . (int) $sent->example_id . ", jmdict_id = " . (int) $word->id . ", pos_start = " . (int) $pos_start . ", pos_end = " . (int) $pos_end . ", njlpt = " . ((int) $word->njlpt) . ", user_id = " . (int) $_SESSION['user']->getID()) or die(mysql_error());
-
-        $params['question_id'] = mysql_insert_id();
+        $params['question_id'] = DB::insert('INSERT INTO grammar_questions SET sentence_id = :example_id, jmdict_id = :jmdict_id, pos_start = :pos_start, pos_end = :pos_end, njlpt = :njlpt, user_id = :user_id',
+                [
+                ':example_id' => $sent->example_id,
+                ':jmdict_id' => (int) $word->id,
+                ':pos_start' => (int) $pos_start,
+                ':pos_end' => (int) $pos_end,
+                ':njlpt' => $word->njlpt,
+                ':user_id' => $_SESSION['user']->getID(),
+        ]);
 
         mysql_query('UPDATE grammar_sets SET date_last = NOW() WHERE set_id = (SELECT set_id FROM grammar_questions WHERE question_id = ' . $params['question_id'] . ' LIMIT 1)') or die(mysql_error());
     }
@@ -74,15 +82,16 @@ if (isset($params['question_id'])) {
             if ($rowCount > 0) {
                 echo '<div class="message">Wrong answer has already been added...</div>';
             } else {
-                mysql_query("INSERT INTO grammar_answers SET jmdict_id = $jmdict_id, question_id = $question->question_id") or die(mysql_error());
+                DB::insert('INSERT INTO grammar_answers SET jmdict_id = :jmdict_id, question_id = :question_id',
+                    [':jmdict_id' => $jmdict_id, ':question_id' => $question->question_id]);
                 mysql_query('UPDATE grammar_sets SET date_last = NOW() WHERE set_id = (SELECT set_id FROM grammar_questions WHERE question_id = ' . $question->question_id . ' LIMIT 1)') or die(mysql_error());
             }
 
-            if (@$_REQUEST['no_content'])
+            if ($_REQUEST['no_content']) {
                 return;
+            }
         }
-    }
-    elseif (isset($_REQUEST['update_data'])) {
+    } elseif (isset($_REQUEST['update_data'])) {
         $njlpt = (int) @$_REQUEST['njlpt'];
         if ($njlpt < 0)
             $njlpt = 0;
@@ -166,7 +175,7 @@ if (isset($params['question_id'])) {
             - Set: <select name="set_id" id="set_id" onchange="show_question_save_button();"><option value="0">Select a set...</option><?php
     $res = mysql_query("SELECT * FROM grammar_sets");
     while ($row = mysql_fetch_object($res)) {
-        echo "<option value=\"$row->setID\"" . ($row->setID == @$question->setID ? ' selected' : '') . ">$row->setID. $row->name</option>";
+        echo "<option value=\"$row->id\"" . ($row->id == @$question->id ? ' selected' : '') . ">$row->id. $row->name</option>";
     }
     ?></select>
         </p>

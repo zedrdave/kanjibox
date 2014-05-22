@@ -5,36 +5,45 @@ define('MAX_VOCAB_ENTRIES', 2000);
 class LearningSet
 {
 
-    public $setID;
+    public $id;
     private $data;
     private $entryData;
     public static $jlpt2Char = [0 => '', 1 => '①', 2 => '②', 3 => '③', 4 => '④', 5 => '⑤'];
 
-    public function __construct($setID)
+    public function __construct($id)
     {
         $this->valid = false;
         $this->entryData = null;
 
-        if (!(int) $setID) {
+        if (!(int) $id) {
             return;
         }
 
-        $query = 'SELECT ls.*, IFNULL(subs.user_id, 0) AS sub_id FROM learning_sets ls LEFT JOIN learning_set_subs subs ON subs.set_id = ls.set_id AND subs.user_id = ' . $_SESSION['user']->getID() . ' WHERE ls.set_id = ' . (int) $setID;
+        $query = 'SELECT ls.*, IFNULL(subs.user_id, 0) AS sub_id FROM learning_sets ls LEFT JOIN learning_set_subs subs ON subs.set_id = ls.set_id AND subs.user_id = :userid WHERE ls.set_id = :setid';
         if (!$_SESSION['user']->isAdministrator()) {
-            $query .= ' AND (ls.public = 1 OR ls.user_id = ' . $_SESSION['user']->getID() . ')';
-        }
-        $res = mysql_query($query) or log_db_error($query, '', false, true);
-        if (mysql_num_rows($res) == 0) {
-            return;
+            $query .= ' AND (ls.public = 1 OR ls.user_id = :userid)';
         }
 
-        $this->setID = $setID;
-        $this->data = mysql_fetch_object($res);
-        if ($this->data->set_type != TYPE_KANJI && $this->data->set_type != TYPE_VOCAB) {
-            $this->data->set_type = TYPE_VOCAB;
-        }
+        try {
+            $stmt = DB::getConnection()->prepare($query);
+            $stmt->bindValue(':userid', $_SESSION['user']->getID(), PDO::PARAM_INT);
+            $stmt->bindValue(':setid', $id, PDO::PARAM_INT);
+            $stmt->execute();
 
-        $this->valid = true;
+            if ($stmt->rowCount() == 0) {
+                return;
+            }
+
+            $this->id = $id;
+            $this->data = $stmt->fetchObject();
+            if ($this->data->set_type != TYPE_KANJI && $this->data->set_type != TYPE_VOCAB) {
+                $this->data->set_type = TYPE_VOCAB;
+            }
+            $this->valid = true;
+        } catch (PDOException $e) {
+            log_db_error($query, $e->getMessage(), false, true);
+            return false;
+        }
     }
 
     public function isValid()
@@ -44,11 +53,15 @@ class LearningSet
 
     public static function createNew($name, $type, $public = true, $editable = false)
     {
-        $public = $public || $editable;
-        $query = 'INSERT INTO learning_sets SET user_id = ' . $_SESSION['user']->getID() . ", set_type = '" . DB::getConnection()->quote($type) . "', date_created = NOW(), date_modified = NOW(), public = " . (int) $public . ", editable = " . (int) $editable . ", name = '" . DB::getConnection()->quote($name) . "'";
-        $res = mysql_query($query) or log_db_error($query, '', false, true);
-
-        return mysql_insert_id();
+        return DB::insert('INSERT INTO learning_sets SET user_id = :userid, set_type = :settype, date_created = NOW(), date_modified = NOW(), public = :public, editable = :editable, name = :name',
+                [
+                ':userid' => $_SESSION['user']->getID(),
+                ':settype' => $type,
+                ':public' => $public || $editable,
+                ':editable' => $editable,
+                ':name' => $name,
+                ]
+        );
     }
 
     public function getName()
@@ -135,7 +148,7 @@ class LearningSet
             return 'Only owner can edit this.';
         }
 
-        $query = 'UPDATE learning_sets SET name = \'' . DB::getConnection()->quote($newName) . '\' WHERE set_id = ' . $this->setID;
+        $query = 'UPDATE learning_sets SET name = \'' . DB::getConnection()->quote($newName) . '\' WHERE set_id = ' . $this->id;
         $res = mysql_query($query) or log_db_error($query, '', false, true);
 
         $this->data->name = $newName;
@@ -169,7 +182,7 @@ class LearningSet
         try {
             $stmt = DB::getConnection()->prepare($query);
             $stmt->bindValue(':propvalue', $value, PDO::PARAM_STR);
-            $stmt->bindValue(':setid', $this->setID, PDO::PARAM_INT);
+            $stmt->bindValue(':setid', $this->id, PDO::PARAM_INT);
             $stmt->execute();
             $stmt = null;
 
@@ -192,7 +205,7 @@ class LearningSet
         try {
             $stmt = DB::getConnection()->prepare($query);
             $stmt->bindValue(':newdescription', $newDesc, PDO::PARAM_STR);
-            $stmt->bindValue(':setid', $this->setID, PDO::PARAM_INT);
+            $stmt->bindValue(':setid', $this->id, PDO::PARAM_INT);
             $stmt->execute();
 
             $this->data->description = $newDesc;
@@ -204,7 +217,7 @@ class LearningSet
 
     public function showTags()
     {
-        $query = 'SELECT GROUP_CONCAT(tags.tag SEPARATOR \', \') AS tag_string FROM learning_set_tags lst LEFT JOIN tags ON tags.tag_id = lst.tag_id WHERE lst.set_id = ' . $this->setID . ' GROUP BY lst.set_id ORDER BY tags.tag';
+        $query = 'SELECT GROUP_CONCAT(tags.tag SEPARATOR \', \') AS tag_string FROM learning_set_tags lst LEFT JOIN tags ON tags.tag_id = lst.tag_id WHERE lst.set_id = ' . $this->id . ' GROUP BY lst.set_id ORDER BY tags.tag';
         $res = mysql_query($query) or log_db_error($query, '', false, true);
         $row = mysql_fetch_object($res);
 
@@ -227,7 +240,7 @@ class LearningSet
                 return $newEntries;
             }
 
-            $query = 'SELECT k.kanji, k.njlpt, kx.kanji_id, kx.prons, kx.meaning_english, ls.set_id FROM kanjis k LEFT JOIN kanjis_ext kx ON kx.kanji_id = k.id LEFT JOIN learning_set_kanji ls ON ls.set_id = ' . $this->setID . ' AND ls.kanji_id = k.id WHERE k.kanji IN (\'' . implode($kanjis,
+            $query = 'SELECT k.kanji, k.njlpt, kx.kanji_id, kx.prons, kx.meaning_english, ls.set_id FROM kanjis k LEFT JOIN kanjis_ext kx ON kx.kanji_id = k.id LEFT JOIN learning_set_kanji ls ON ls.set_id = ' . $this->id . ' AND ls.kanji_id = k.id WHERE k.kanji IN (\'' . implode($kanjis,
                     "','") . "') ORDER BY k.njlpt DESC, k.strokes ASC";
 
             $res = mysql_query($query) or die(mysql_error());
@@ -251,7 +264,7 @@ class LearningSet
                 if (!count($ids))
                     $ids[] = 0;
 
-                $query = 'SELECT jx.jmdict_id, j.word, j.njlpt, j.njlpt_r, j.reading, jx.gloss_english, j.katakana, j.usually_kana, ls.set_id FROM jmdict j LEFT JOIN jmdict_ext jx ON jx.jmdict_id = j.id LEFT JOIN learning_set_vocab ls ON ls.set_id = ' . $this->setID . ' AND ls.jmdict_id = j.id WHERE j.id IN (' . implode(',',
+                $query = 'SELECT jx.jmdict_id, j.word, j.njlpt, j.njlpt_r, j.reading, jx.gloss_english, j.katakana, j.usually_kana, ls.set_id FROM jmdict j LEFT JOIN jmdict_ext jx ON jx.jmdict_id = j.id LEFT JOIN learning_set_vocab ls ON ls.set_id = ' . $this->id . ' AND ls.jmdict_id = j.id WHERE j.id IN (' . implode(',',
                         $ids) . ')';
             }
             elseif (substr($searchStr, 0, 6) == "JMDICT") {
@@ -276,12 +289,12 @@ class LearningSet
                 if (!$words || count($words) == 0)
                     return $newEntries;
 
-                $query = 'SELECT jx.jmdict_id, j.word, j.njlpt, j.njlpt_r, j.reading, jx.gloss_english, j.katakana, j.usually_kana, ls.set_id FROM jmdict j LEFT JOIN jmdict_ext jx ON jx.jmdict_id = j.id LEFT JOIN learning_set_vocab ls ON ls.set_id = ' . $this->setID . ' AND ls.jmdict_id = j.id WHERE j.word IN (\'' . implode($words,
+                $query = 'SELECT jx.jmdict_id, j.word, j.njlpt, j.njlpt_r, j.reading, jx.gloss_english, j.katakana, j.usually_kana, ls.set_id FROM jmdict j LEFT JOIN jmdict_ext jx ON jx.jmdict_id = j.id LEFT JOIN learning_set_vocab ls ON ls.set_id = ' . $this->id . ' AND ls.jmdict_id = j.id WHERE j.word IN (\'' . implode($words,
                         "','") . '\') ORDER BY j.njlpt DESC, j.njlpt_r DESC';
             }
             elseif (substr($searchStr, 0, 4) == "LIST") {
 
-                $query = 'SELECT jx.jmdict_id, j.word, j.njlpt, j.njlpt_r, j.reading, jx.gloss_english, j.katakana, j.usually_kana, ls.set_id FROM jmdict j LEFT JOIN jmdict_ext jx ON jx.jmdict_id = j.id LEFT JOIN learning_set_vocab ls ON ls.set_id = ' . $this->setID . ' AND ls.jmdict_id = j.id WHERE 0';
+                $query = 'SELECT jx.jmdict_id, j.word, j.njlpt, j.njlpt_r, j.reading, jx.gloss_english, j.katakana, j.usually_kana, ls.set_id FROM jmdict j LEFT JOIN jmdict_ext jx ON jx.jmdict_id = j.id LEFT JOIN learning_set_vocab ls ON ls.set_id = ' . $this->id . ' AND ls.jmdict_id = j.id WHERE 0';
 
 
                 $lines = explode("\n", $searchStr);
@@ -317,7 +330,7 @@ class LearningSet
                 $newEntryIDs = parse_jp_sentence($searchStr, false, false);
 
                 if ($newEntryIDs) {
-                    $query = "SELECT jx.jmdict_id, j.word, j.njlpt, j.njlpt_r, j.reading, jx.gloss_english, j.katakana, j.usually_kana, ls.set_id FROM jmdict j LEFT JOIN jmdict_ext jx ON jx.jmdict_id = j.id LEFT JOIN learning_set_vocab ls ON ls.set_id = $this->setID AND ls.jmdict_id = j.id WHERE j.id IN (" . implode(',',
+                    $query = "SELECT jx.jmdict_id, j.word, j.njlpt, j.njlpt_r, j.reading, jx.gloss_english, j.katakana, j.usually_kana, ls.set_id FROM jmdict j LEFT JOIN jmdict_ext jx ON jx.jmdict_id = j.id LEFT JOIN learning_set_vocab ls ON ls.set_id = $this->id AND ls.jmdict_id = j.id WHERE j.id IN (" . implode(',',
                             $newEntryIDs) . ")";
                 }
             } else {
@@ -332,7 +345,7 @@ class LearningSet
                     return $newEntries;
                 }
 
-                $query = 'SELECT jx.jmdict_id, j.word, j.njlpt, j.njlpt_r, j.reading, jx.gloss_english, j.katakana, j.usually_kana, ls.set_id FROM jmdict j LEFT JOIN jmdict_ext jx ON jx.jmdict_id = j.id LEFT JOIN learning_set_vocab ls ON ls.set_id = ' . $this->setID . ' AND ls.jmdict_id = j.id WHERE j.word IN (\'' . implode($words,
+                $query = 'SELECT jx.jmdict_id, j.word, j.njlpt, j.njlpt_r, j.reading, jx.gloss_english, j.katakana, j.usually_kana, ls.set_id FROM jmdict j LEFT JOIN jmdict_ext jx ON jx.jmdict_id = j.id LEFT JOIN learning_set_vocab ls ON ls.set_id = ' . $this->id . ' AND ls.jmdict_id = j.id WHERE j.word IN (\'' . implode($words,
                         "','") . '\') OR j.reading IN (\'' . implode($words, "','") . "') ORDER BY j.njlpt DESC, j.njlpt_r DESC";
             }
 
@@ -353,7 +366,7 @@ class LearningSet
         $query = 'UPDATE learning_sets SET date_modified = NOW() WHERE set_id = :setid';
         try {
             $stmt = DB::getConnection()->prepare($query);
-            $stmt->bindValue(':setid', $this->setID, PDO::PARAM_INT);
+            $stmt->bindValue(':setid', $this->id, PDO::PARAM_INT);
             $stmt->execute();
             $stmt = null;
         } catch (PDOException $e) {
@@ -366,7 +379,7 @@ class LearningSet
         $query = 'SELECT date_modified FROM learning_sets WHERE set_id = :setid';
         try {
             $stmt = DB::getConnection()->prepare($query);
-            $stmt->bindValue(':setid', $this->setID, PDO::PARAM_INT);
+            $stmt->bindValue(':setid', $this->id, PDO::PARAM_INT);
             $stmt->execute();
             return $stmt->fetchColumn();
         } catch (PDOException $e) {
@@ -409,7 +422,7 @@ class LearningSet
 
         $query = 'INSERT IGNORE INTO learning_set_' . $this->getType() . ' (set_id, ' . $this->getSetEntryIndex() . ') VALUES ';
         foreach ($arr as $entry_id) {
-            $query .= "($this->setID, " . (int) $entry_id . "), ";
+            $query .= "($this->id, " . (int) $entry_id . "), ";
         }
 
         $query = substr($query, 0, -2);
@@ -435,7 +448,7 @@ class LearningSet
         $query = 'DELETE FROM learning_set_' . $this->getType() . ' WHERE set_id = :setid AND ' . $this->getSetEntryIndex() . ' = :entryindex LIMIT 1';
         try {
             $stmt = DB::getConnection()->prepare($query);
-            $stmt->bindValue(':setid', $this->setID, PDO::PARAM_INT);
+            $stmt->bindValue(':setid', $this->id, PDO::PARAM_INT);
             $stmt->bindValue(':entryindex', $id, PDO::PARAM_INT);
             $stmt->execute();
             $this->markSetUpdated();
@@ -455,7 +468,7 @@ class LearningSet
 
         $this->entryData = NULL;
 
-        $query = "DELETE ls.* FROM learning_set_" . $this->getType() . " ls LEFT JOIN " . $this->getSetJoinTable() . " t ON t.id = ls." . $this->getSetEntryIndex() . " WHERE ls.set_id = $this->setID AND t.njlpt = " . (int) $level;
+        $query = "DELETE ls.* FROM learning_set_" . $this->getType() . " ls LEFT JOIN " . $this->getSetJoinTable() . " t ON t.id = ls." . $this->getSetEntryIndex() . " WHERE ls.set_id = $this->id AND t.njlpt = " . (int) $level;
         mysql_query($query);
 
         $this->markSetUpdated();
@@ -470,7 +483,7 @@ class LearningSet
 
         $this->entryData = NULL;
 
-        $query = 'DELETE ls.* FROM learning_set_' . $this->getType() . ' ls LEFT JOIN learning_set_' . $this->getType() . ' ls2 ON ls.' . $this->getSetEntryIndex() . ' = ls2.' . $this->getSetEntryIndex() . " WHERE ls.set_id = $this->setID AND ls2.set_id = " . (int) $setID . " AND ls2.set_id IS NOT NULL";
+        $query = 'DELETE ls.* FROM learning_set_' . $this->getType() . ' ls LEFT JOIN learning_set_' . $this->getType() . ' ls2 ON ls.' . $this->getSetEntryIndex() . ' = ls2.' . $this->getSetEntryIndex() . " WHERE ls.set_id = $this->id AND ls2.set_id = " . (int) $setID . " AND ls2.set_id IS NOT NULL";
         mysql_query($query);
 
         $this->markSetUpdated();
@@ -482,7 +495,7 @@ class LearningSet
         $query = 'INSERT IGNORE INTO learning_set_subs SET user_id = :userid, set_id = :setid';
         try {
             $stmt = DB::getConnection()->prepare($query);
-            $stmt->bindValue(':setid', $this->setID, PDO::PARAM_INT);
+            $stmt->bindValue(':setid', $this->id, PDO::PARAM_INT);
             $stmt->bindValue(':userid', $_SESSION['user']->getID(), PDO::PARAM_INT);
             $stmt->execute();
             $stmt = null;
@@ -499,9 +512,9 @@ class LearningSet
         }
 
         if ($this->getType() == TYPE_KANJI) {
-            $res = mysql_query("SELECT kx.kanji_id, kx.kanji_id AS id, k.kanji, kx.prons, kx.meaning_english, k.njlpt FROM learning_set_kanji ls LEFT JOIN kanjis k ON k.id = ls.kanji_id LEFT JOIN kanjis_ext kx ON kx.kanji_id = ls.kanji_id WHERE ls.set_id = $this->setID ORDER BY k.njlpt DESC, k.strokes ASC");
+            $res = mysql_query("SELECT kx.kanji_id, kx.kanji_id AS id, k.kanji, kx.prons, kx.meaning_english, k.njlpt FROM learning_set_kanji ls LEFT JOIN kanjis k ON k.id = ls.kanji_id LEFT JOIN kanjis_ext kx ON kx.kanji_id = ls.kanji_id WHERE ls.set_id = $this->id ORDER BY k.njlpt DESC, k.strokes ASC");
         } else {
-            $res = mysql_query("SELECT jx.jmdict_id, jx.jmdict_id AS id, j.word, j.njlpt, j.njlpt_r, j.reading, jx.gloss_english, j.usually_kana, j.katakana, ls.set_id FROM learning_set_vocab ls LEFT JOIN jmdict j ON j.id = ls.jmdict_id LEFT JOIN jmdict_ext jx ON jx.jmdict_id = j.id WHERE ls.set_id = $this->setID ORDER BY j.njlpt DESC, j.njlpt_r DESC");
+            $res = mysql_query("SELECT jx.jmdict_id, jx.jmdict_id AS id, j.word, j.njlpt, j.njlpt_r, j.reading, jx.gloss_english, j.usually_kana, j.katakana, ls.set_id FROM learning_set_vocab ls LEFT JOIN jmdict j ON j.id = ls.jmdict_id LEFT JOIN jmdict_ext jx ON jx.jmdict_id = j.id WHERE ls.set_id = $this->id ORDER BY j.njlpt DESC, j.njlpt_r DESC");
         }
 
         if (!$res) {
@@ -538,20 +551,20 @@ class LearningSet
             if ($this->canEdit()) {
                 $ret .= ' <a href="#" onclick="$(this).hide(); $(\'#set-bulk-remove\').show(); return false;">| Bulk remove &raquo;</a>';
                 $ret .= '<div id="set-bulk-remove" style="display: none;">';
-                $ret .= '<p>Remove all entries at level: <select onchange="if(this.value != \'\')  bulk_remove_level_from_set(' . $this->setID . ', this.value);">';
+                $ret .= '<p>Remove all entries at level: <select onchange="if(this.value != \'\')  bulk_remove_level_from_set(' . $this->id . ', this.value);">';
                 $ret .= '<option value="">-</option>';
 
                 for ($i = 5; $i >= 0; $i--) {
                     $ret .= '<option value="' . $i . '">N' . $i . '</option>';
                 }
                 $ret .= "</select></p>\n";
-                $query = 'SELECT ls.*, subs.set_id AS sub FROM learning_sets ls LEFT JOIN learning_set_subs subs ON subs.set_id = ls.set_id AND subs.user_id = ' . $_SESSION['user']->getID() . ' WHERE ls.deleted = 0 AND (ls.user_id = ' . $_SESSION['user']->getID() . " OR subs.set_id IS NOT NULL) AND set_type = '" . $this->getType() . "' AND ls.set_id != " . $this->setID . " ORDER BY date_modified";
+                $query = 'SELECT ls.*, subs.set_id AS sub FROM learning_sets ls LEFT JOIN learning_set_subs subs ON subs.set_id = ls.set_id AND subs.user_id = ' . $_SESSION['user']->getID() . ' WHERE ls.deleted = 0 AND (ls.user_id = ' . $_SESSION['user']->getID() . " OR subs.set_id IS NOT NULL) AND set_type = '" . $this->getType() . "' AND ls.set_id != " . $this->id . " ORDER BY date_modified";
                 $res = mysql_query($query) or log_db_error($query, '', false, true);
 
-                $ret .= '<p>Remove all entries also in set: <select onchange="if(this.value != \'\') bulk_remove_other_set_from_set(' . $this->setID . ', this.value);">';
+                $ret .= '<p>Remove all entries also in set: <select onchange="if(this.value != \'\') bulk_remove_other_set_from_set(' . $this->id . ', this.value);">';
                 $ret .= '<option value="">-</option>';
                 while ($row = mysql_fetch_object($res)) {
-                    $ret .= '<option value="' . $row->setID . '">' . ($row->sub ? '' : '• ') . $row->name . '</option>';
+                    $ret .= '<option value="' . $row->id . '">' . ($row->sub ? '' : '• ') . $row->name . '</option>';
                 }
                 $ret .= "</select></p>\n";
                 $ret .= '</div>';
@@ -562,7 +575,7 @@ class LearningSet
                 $ret .= "<div class=\"set_content_line\">";
 
                 if ($this->canEdit()) {
-                    $ret .= "<button class=\"remove_entry\" onclick=\"remove_entry_from_set('" . SERVER_URL . "ajax/edit_learning_set/', $this->setID, $row->id, \$(this).parent());\">×</button> ";
+                    $ret .= "<button class=\"remove_entry\" onclick=\"remove_entry_from_set('" . SERVER_URL . "ajax/edit_learning_set/', $this->id, $row->id, \$(this).parent());\">×</button> ";
                 }
 
                 if ($this->getType() == TYPE_KANJI) {
@@ -582,13 +595,13 @@ class LearningSet
 
         if ($this->getType() == TYPE_KANJI) {
             $ret = "# KB kanji\n";
-            $res = mysql_query("SELECT kx.kanji_id, kx.kanji_id AS id, k.kanji, kx.prons, kx.meaning_english, k.njlpt FROM learning_set_kanji ls LEFT JOIN kanjis k ON k.id = ls.kanji_id LEFT JOIN kanjis_ext kx ON kx.kanji_id = ls.kanji_id WHERE ls.set_id = $this->setID ORDER BY k.njlpt DESC, k.strokes ASC");
+            $res = mysql_query("SELECT kx.kanji_id, kx.kanji_id AS id, k.kanji, kx.prons, kx.meaning_english, k.njlpt FROM learning_set_kanji ls LEFT JOIN kanjis k ON k.id = ls.kanji_id LEFT JOIN kanjis_ext kx ON kx.kanji_id = ls.kanji_id WHERE ls.set_id = $this->id ORDER BY k.njlpt DESC, k.strokes ASC");
         } else {
             $ret = "# KB vocab\n";
-            $res = mysql_query("SELECT jx.jmdict_id, jx.jmdict_id AS id, j.word, j.njlpt, j.njlpt_r, j.reading, jx.gloss_english, j.usually_kana, j.katakana, ls.set_id FROM learning_set_vocab ls LEFT JOIN jmdict j ON j.id = ls.jmdict_id LEFT JOIN jmdict_ext jx ON jx.jmdict_id = j.id WHERE ls.set_id = $this->setID ORDER BY j.njlpt DESC, j.njlpt_r DESC");
+            $res = mysql_query("SELECT jx.jmdict_id, jx.jmdict_id AS id, j.word, j.njlpt, j.njlpt_r, j.reading, jx.gloss_english, j.usually_kana, j.katakana, ls.set_id FROM learning_set_vocab ls LEFT JOIN jmdict j ON j.id = ls.jmdict_id LEFT JOIN jmdict_ext jx ON jx.jmdict_id = j.id WHERE ls.set_id = $this->id ORDER BY j.njlpt DESC, j.njlpt_r DESC");
         }
 
-        $ret .= "# KanjiBox Set export downloaded from: " . SERVER_URL . 'sets/' . $this->setID . "/\n#\n";
+        $ret .= "# KanjiBox Set export downloaded from: " . SERVER_URL . 'sets/' . $this->id . "/\n#\n";
         $ret .= "# " . $this->getName() . "\n# " . $this->getDescription() . "\n#\n";
         if (!$res) {
             return mysql_error();
@@ -606,7 +619,7 @@ class LearningSet
                 }
             }
         }
-        $ret .= "#\n# KanjiBox Set export downloaded from: " . SERVER_URL . 'sets/' . $this->setID . "/\n";
+        $ret .= "#\n# KanjiBox Set export downloaded from: " . SERVER_URL . 'sets/' . $this->id . "/\n";
 
         return $ret;
     }
@@ -622,9 +635,9 @@ class LearningSet
         }
 
         if ($val) {
-            $query = 'INSERT INTO learning_set_tags SET set_id = ' . $this->setID . ', tag_id = ' . (int) $tag_id;
+            $query = 'INSERT INTO learning_set_tags SET set_id = ' . $this->id . ', tag_id = ' . (int) $tag_id;
         } else {
-            $query = 'DELETE FROM learning_set_tags WHERE set_id = ' . $this->setID . ' AND tag_id = ' . (int) $tag_id . ' LIMIT 1';
+            $query = 'DELETE FROM learning_set_tags WHERE set_id = ' . $this->id . ' AND tag_id = ' . (int) $tag_id . ' LIMIT 1';
         }
 
         mysql_query($query);
@@ -633,7 +646,7 @@ class LearningSet
 
     public function showTagCheckboxes()
     {
-        $query = 'SELECT tags.tag, tags.tag_id, IF(lst.set_id, 1, 0) AS checked FROM tags LEFT JOIN learning_set_tags lst ON tags.tag_id = lst.tag_id AND lst.set_id = ' . $this->setID . ' ORDER BY tags.tag';
+        $query = 'SELECT tags.tag, tags.tag_id, IF(lst.set_id, 1, 0) AS checked FROM tags LEFT JOIN learning_set_tags lst ON tags.tag_id = lst.tag_id AND lst.set_id = ' . $this->id . ' ORDER BY tags.tag';
         $res = mysql_query($query) or print_r(mysql_error());
 
         $str = '';
@@ -645,7 +658,7 @@ class LearningSet
 
             $str .= '<span class="tag_box" id="tag_' . $row->tag_id . '">';
             if ($this->canEdit()) {
-                $str .= '<input type="checkbox" ' . ($row->checked ? 'checked' : '') . ' id="check_tag_' . $row->tag_id . '" onclick="update_tag(' . $this->setID . ', ' . $row->tag_id . ', this.checked)"></input>&nbsp;';
+                $str .= '<input type="checkbox" ' . ($row->checked ? 'checked' : '') . ' id="check_tag_' . $row->tag_id . '" onclick="update_tag(' . $this->id . ', ' . $row->tag_id . ', this.checked)"></input>&nbsp;';
             }
 
             $str .= '<label for="check_tag_' . $row->tag_id . '">' . $row->tag . '</label></span>';
@@ -663,16 +676,19 @@ class LearningSet
     public static function getAllTagCheckboxes()
     {
         $query = 'SELECT tags.tag, tags.tag_id FROM tags ORDER BY tags.tag';
-        $res = mysql_query($query) or print_r(mysql_error());
-
         $str = '';
-
-        while ($row = mysql_fetch_object($res)) {
-            $str .= '<span class="tag_box">';
-            $str .= '<input type="checkbox" id="tags[' . $row->tag_id . ']" name="tags[' . $row->tag_id . ']" value="' . $row->tag_id . '"></input> ';
-            $str .= '<label for="tags[' . $row->tag_id . ']">' . $row->tag . '</label></span>';
+        try {
+            $stmt = DB::getConnection()->prepare($query);
+            $stmt->execute();
+            while ($row = $stmt->fetchObject()) {
+                $str .= '<span class="tag_box">';
+                $str .= '<input type="checkbox" id="tags[' . $row->tag_id . ']" name="tags[' . $row->tag_id . ']" value="' . $row->tag_id . '"></input> ';
+                $str .= '<label for="tags[' . $row->tag_id . ']">' . $row->tag . '</label></span>';
+            }
+            $stmt = null;
+        } catch (PDOException $e) {
+            log_db_error($query, $e->getMessage(), false, true);
         }
-
         return $str;
     }
 
@@ -711,7 +727,7 @@ class LearningSet
 
     public function getSubsCount()
     {
-        $res = mysql_query('SELECT COUNT(*) AS c FROM learning_set_subs WHERE set_id = ' . $this->setID) or die(mysql_error());
+        $res = mysql_query('SELECT COUNT(*) AS c FROM learning_set_subs WHERE set_id = ' . $this->id) or die(mysql_error());
         $row = mysql_fetch_object($res);
         return $row->c;
     }
@@ -724,9 +740,9 @@ class LearningSet
 
         $this->entryData = NULL;
 
-        mysql_query('DELETE FROM learning_set_' . $this->getType() . ' WHERE set_id = ' . $this->setID) or die(mysql_error());
-        mysql_query('DELETE FROM learning_set_subs WHERE set_id = ' . $this->setID) or die(mysql_error());
-        mysql_query('UPDATE learning_sets SET deleted = 1 WHERE set_id = ' . $this->setID . ' LIMIT 1') or die(mysql_error());
+        mysql_query('DELETE FROM learning_set_' . $this->getType() . ' WHERE set_id = ' . $this->id) or die(mysql_error());
+        mysql_query('DELETE FROM learning_set_subs WHERE set_id = ' . $this->id) or die(mysql_error());
+        mysql_query('UPDATE learning_sets SET deleted = 1 WHERE set_id = ' . $this->id . ' LIMIT 1') or die(mysql_error());
         $this->valid = false;
     }
 
@@ -739,7 +755,7 @@ class LearningSet
             return 'Set must be public';
         }
 
-        mysql_query('UPDATE learning_sets SET user_id = -1, editable = 1, public = 1 WHERE set_id = ' . $this->setID . ' LIMIT 1') or die(mysql_error());
+        mysql_query('UPDATE learning_sets SET user_id = -1, editable = 1, public = 1 WHERE set_id = ' . $this->id . ' LIMIT 1') or die(mysql_error());
 
         $this->data->user_id = -1;
         $this->data->editable = 1;

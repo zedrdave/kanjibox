@@ -1,5 +1,4 @@
 <?php
-define('ADDING', true);
-require_once('../../index.php');
 
-?>
+define('ADDING', true);
+require_once '../../index.php';

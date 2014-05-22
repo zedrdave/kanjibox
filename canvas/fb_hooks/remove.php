@@ -1,10 +1,7 @@
 <?php
-
 // this defines some of our basic setup
 require_once '../../libs/lib.php';
 require_once ABS_PATH . get_mode() . '.config.php';
-
-//include_once '../../api/facebook.php';
 require_once ABS_PATH . '/vendor/autoload.php';
 
 $facebook = new Facebook($api_key, $secret);

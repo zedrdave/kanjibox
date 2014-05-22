@@ -16,7 +16,7 @@ if ($_SESSION['user']->getPwdHash() == 'need_to_reset') {
     echo '<div class="error_msg">Your password needs to be reset. Please use the <em>Change password</em> button below to set your access password.</div>';
 }
 
-if ($_SESSION['user']->get_pref('notif', 'post_news') && $_SESSION['user']->getFbID() > 0) {
+if ($_SESSION['user']->getPreference('notif', 'post_news') && $_SESSION['user']->getFbID() > 0) {
     global $facebook;
     try {
         if (fb_connect_init()) {
@@ -49,14 +49,14 @@ if (defined('ADDING') || !$_SESSION['user'] || !$_SESSION['user']->isLoggedIn())
     <?php
 }
 ?>
-<p>News, updates, community and other cool stuff: head out to <a href="//www.facebook.com/kanjibox">KanjiBox's application page on Facebook</a> ('Become a fan' if you want automatic notifications in your feed).</p>
+<p>News, updates, community and other cool stuff: head out to <a href="http://www.facebook.com/kanjibox">KanjiBox's application page on Facebook</a> ('Become a fan' if you want automatic notifications in your feed).</p>
 <p>Got questions? <a href="<?php echo get_page_url('faq') ?>">We got answers</a>....</p>
-<p>For more questions (and random banter), head out to <a href="http://kanjibox.net/forum/">KanjiBox's Discussion Board</a>. Use the <a href="//kanjibox.net/forum/categories/kanjibox-online">KB Online section</a> for questions/bug-reports specifically about this part of the site, but feel free to use other sections as well.</p>
-<p>In addition to the in-game custom Study Set sections for <a href="/page/play/type/vocab/mode/sets/">Kanji</a> or <a href="//kanjibox.net/kb/page/play/type/kanji/mode/sets/">Vocab</a>, there is now a publicly accessible <a href="//kanjibox.net/kb/sets/">page for browsing and exploring the Study Sets</a> that other users have shared. If you find a set you like, one click is all it takes to bookmark it and start drilling it in KanjiBox.</p>
+<p>For more questions (and random banter), head out to <a href="/forum/">KanjiBox's Discussion Board</a>. Use the <a href="/forum/categories/kanjibox-online">KB Online section</a> for questions/bug-reports specifically about this part of the site, but feel free to use other sections as well.</p>
+<p>In addition to the in-game custom Study Set sections for <a href="/page/play/type/vocab/mode/sets/">Kanji</a> or <a href="/page/play/type/kanji/mode/sets/">Vocab</a>, there is now a publicly accessible <a href="/sets/">page for browsing and exploring the Study Sets</a> that other users have shared. If you find a set you like, one click is all it takes to bookmark it and start drilling it in KanjiBox.</p>
 
 <?php
-$lang_vocab = $_SESSION['user']->get_pref('lang', 'vocab_lang');
-$lang_kanji = $_SESSION['user']->get_pref('lang', 'kanji_lang');
+$lang_vocab = $_SESSION['user']->getPreference('lang', 'vocab_lang');
+$lang_kanji = $_SESSION['user']->getPreference('lang', 'kanji_lang');
 
 if ($_SESSION['user']->isOnTranslatorProbation()) {
     ?>
@@ -68,18 +68,18 @@ if ($_SESSION['user']->isOnTranslatorProbation()) {
 ?>
 
 <div style="padding: 5px; border: 1px solid #00A; background-color: #DDF;"><h3 style="margin:0 0 5px 0"><i>New:</i> <a href="/page/play/type/text/mode/grammar_sets/">Grammar Sets</a></h3>
-    A demo of all Grammar Sets available as add-ons in the <a href="//kanjibox.net/ios/">iOS version of KanjiBox</a> is now available online, <a href="/page/play/type/text/mode/grammar_sets/">in the Text section</a> of the site.<br/>Note: To access this section, you first need to upgrade your account to <a href="//kanjibox.net/kb/page/faq/#elite">Elite</a> status (reminder: all users of KanjiBox on iOS <a href="//kanjibox.net/kb/page/elite/special/ios/">are eligible for a free upgrade</a>).
+    A demo of all Grammar Sets available as add-ons in the <a href="//kanjibox.net/ios/">iOS version of KanjiBox</a> is now available online, <a href="/page/play/type/text/mode/grammar_sets/">in the Text section</a> of the site.<br/>Note: To access this section, you first need to upgrade your account to <a href="/page/faq/#elite">Elite</a> status (reminder: all users of KanjiBox on iOS <a href="/page/elite/special/ios/">are eligible for a free upgrade</a>).
 </div>
 
 <?php
 if ($lang_vocab != 'en') {
     $tot = DB::count('SELECT COUNT(*) FROM jmdict j WHERE j.njlpt = ?', [$_SESSION['user']->getLevel()]);
     $translated = DB::count('SELECT COUNT(*) FROM jmdict j LEFT JOIN jmdict_ext jx ON jx.jmdict_id = j.id WHERE j.njlpt = $level AND jx.gloss_' . Vocab::$langStrings[$lang_vocab] . ' IS NOT NULL AND jx.gloss_' . Vocab::$langStrings[$lang_vocab] . ' != \'\'', []);
-    $need_work = DB::count('SELECT COUNT(*) AS c FROM jmdict j LEFT JOIN jmdict_ext jx ON jx.jmdict_id = j.id WHERE j.njlpt = $level AND jx.gloss_' . Vocab::$langStrings[$lang_vocab] . ' LIKE \'(~)%\'', []);
+    $needWork = DB::count('SELECT COUNT(*) AS c FROM jmdict j LEFT JOIN jmdict_ext jx ON jx.jmdict_id = j.id WHERE j.njlpt = $level AND jx.gloss_' . Vocab::$langStrings[$lang_vocab] . ' LIKE \'(~)%\'', []);
 
-    $translated -= $need_work;
+    $translated -= $needWork;
     $ratio_good = round(100 * $translated / $tot, 1);
-    $ratio_need_work = round(100 * $need_work / $tot, 1);
+    $ratio_need_work = round(100 * $needWork / $tot, 1);
 
     echo '<div style="margin:5px;">';
     echo "<img src=\"" . SERVER_URL . "/img/flags/$lang_vocab.png\" style=\"float:left;margin-right:10px;\" alt=\"flag\" /> <div style=\"float:left;margin:4px 6px 0 0; width:210px;\">N$level Vocab Translation progress: </div>";
@@ -90,16 +90,16 @@ if ($lang_vocab != 'en') {
 
 if ($lang_kanji != 'en') {
     $tot = DB::count('SELECT COUNT(*) FROM kanjis k WHERE k.njlpt = ?', [$_SESSION['user']->getLevel()]);
-    $translated = DB::count('SELECT COUNT(*) FROM kanjis k LEFT JOIN kanjis_ext kx ON kx.kanji_id = k.id WHERE k.njlpt = $level AND kx.meaning_' . Kanji::$langStrings[$lang_kanji] . ' IS NOT NULL AND kx.meaning_' . Kanji::$langStrings[$lang_kanji] . ' != \'\'', []);
-    $need_work = DB::count('SELECT COUNT(*) FROM kanjis k LEFT JOIN kanjis_ext kx ON kx.kanji_id = k.id WHERE k.njlpt = $level AND kx.meaning_' . Kanji::$langStrings[$lang_kanji] . ' LIKE \'(~)%\'', []);
+    $translated = DB::count('SELECT COUNT(*) FROM kanjis k LEFT JOIN kanjis_ext kx ON kx.kanji_id = k.id WHERE k.njlpt = :level AND kx.meaning_' . Kanji::$langStrings[$lang_kanji] . ' IS NOT NULL AND kx.meaning_' . Kanji::$langStrings[$lang_kanji] . ' != \'\'', [':level' => $_SESSION['user']->getLevel()]);
+    $needWork = DB::count('SELECT COUNT(*) FROM kanjis k LEFT JOIN kanjis_ext kx ON kx.kanji_id = k.id WHERE k.njlpt = :level AND kx.meaning_' . Kanji::$langStrings[$lang_kanji] . ' LIKE \'(~)%\'', [':level' => $_SESSION['user']->getLevel()]);
 
-    $translated -= $need_work;
+    $translated -= $needWork;
     $ratio_good = round(100 * $translated / $tot, 1);
-    $ratio_need_work = round(100 * $need_work / $tot, 1);
+    $ratio_need_work = round(100 * $needWork / $tot, 1);
 
     echo '<div style="margin:5px;">';
     $ratio = round(100 * $translated / $tot, 1);
-    echo "<img src=\"" . SERVER_URL . "/img/flags/$lang_kanji.png\" style=\"float:left;margin-right:10px;\" alt=\"flag\" /> <div style=\"float:left;margin:4px 6px 0 0; width:210px;\">N$level Kanji Translation progress: </div>";
+    echo "<img src=\"" . SERVER_URL . "/img/flags/$lang_kanji.png\" style=\"float:left;margin-right:10px;\" alt=\"flag\" /> <div style=\"float:left;margin:4px 6px 0 0; width:210px;\">N".$_SESSION['user']->getLevel()." Kanji Translation progress: </div>";
 
     echo get_progress_bar($ratio_good, 500, "$translated/$tot", $ratio_need_work);
     echo '</div>';

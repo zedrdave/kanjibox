@@ -1,6 +1,6 @@
 <?php
 if ($_SESSION['user']->getLoadCount() % 2 != 0) {
-    
+
 } else {
     ?>
     <div style="float:left; margin-top: 50px;">

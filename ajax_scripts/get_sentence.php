@@ -1,5 +1,5 @@
 <?php
-if (!@$_SESSION['user'] || !$_SESSION['user']->isElite())
+if (!$_SESSION['user'] || !$_SESSION['user']->isElite())
     die("elite only");
 mb_internal_encoding('UTF-8');
 
@@ -9,15 +9,15 @@ if (!empty($_REQUEST['word']))
     $url_args .= 'word=' . urlencode($_REQUEST['word']) . '&';
 if (!empty($_REQUEST['not_word']))
     $url_args .= 'not_word=' . urlencode($_REQUEST['not_word']) . '&';
-if (@$_REQUEST['njlpt'])
+if ($_REQUEST['njlpt'])
     $url_args .= 'njlpt=' . (int) $_REQUEST['njlpt'] . '&';
-if (@$_REQUEST['jmdict_id'])
+if ($_REQUEST['jmdict_id'])
     $url_args .= 'jmdict_id=' . (int) $_REQUEST['jmdict_id'] . '&';
-if (@$_REQUEST['display_done_editing'])
+if ($_REQUEST['display_done_editing'])
     $url_args .= 'display_done_editing=1&';
 
 $has_search_string = ($url_args != '');
-if (@$_REQUEST['container_selector'])
+if ($_REQUEST['container_selector'])
     $container_selector = strip_tags($_REQUEST['container_selector']);
 else
     $container_selector = '#sentences > .ajax-result';
@@ -50,10 +50,10 @@ if (isset($_REQUEST['id'])) {
 
     $tot_count = DB::count('SELECT COUNT(*) ' . $query_body . $query_where, [$searchWord]);
     $limit = ($tot_count < 10 ? $tot_count : 5);
-    $skip = (int) @$_REQUEST['skip'];
+    $skip = (int) $_REQUEST['skip'];
 
     $query_where .= ' ORDER BY ';
-    if (@$_REQUEST['njlpt']) {
+    if ($_REQUEST['njlpt']) {
         $query_where .= 'ABS(e.njlpt - ' . (int) $_REQUEST['njlpt'] . ') ASC, ABS(e.njlpt_r - ' . (int) $_REQUEST['njlpt'] . ') ASC, LENGTH(e.example_str) ASC, ';
     } else {
         $query_where .= 'e.njlpt DESC, e.njlpt_r DESC, LENGTH(e.example_str) ASC, ';
@@ -87,10 +87,10 @@ if ($count == 0) {
 if ($count == 1) {
     $sentence = mysql_fetch_object($res);
 
-    if (@$params['edit']) {
+    if ($params['edit']) {
         echo "<div class=\"db-group selected-item\">";
 
-        if (@$_REQUEST['display_done_editing'])
+        if ($_REQUEST['display_done_editing'])
             echo "<p style=\"margin-bottom:10px;\"><a href=\"#\" onclick=\"$('$container_selector').load('" . SERVER_URL . "ajax/get_sentence/?id=$sentence->example_id&$url_args'); return false;\">&laquo; done editing</a></p>";
 
         echo "<p>ID: $sentence->example_id</p>";
@@ -98,7 +98,7 @@ if ($count == 1) {
         $res_parts = mysql_query("SELECT ep.*, j.*, jx.gloss_english AS gloss, jd.id AS id_deleted, jd.word AS word_deleted, jd.reading AS reading_deleted, jxd.gloss_english AS gloss_deleted FROM example_parts ep LEFT JOIN jmdict j ON j.id = ep.jmdict_id LEFT JOIN jmdict_ext jx ON jx.jmdict_id = j.id LEFT JOIN jmdict_deleted jd ON jd.id = ep.jmdict_id LEFT JOIN jmdict_ext_deleted jxd ON jxd.jmdict_id = jd.id  WHERE example_id = " . $sentence->example_id . " AND (j.id IS NOT NULL OR jd.id IS NOT NULL) ORDER BY ep.pos_start") or die(mysql_error());
 
         $parsed_sent_jp = '';
-        if (@$params['show_vocab'])
+        if ($params['show_vocab'])
             $parts_html = "<ul id=\"parts_" . $sentence->example_id . "\"  class=\"example_parts\">";
         else
             $parts_html = "<a href=\"#\" onclick=\"$('#parts_" . $sentence->example_id . "').show(); $(this).hide(); return false;\"><i>Show vocab &raquo;</i></a><ul id=\"parts_" . $sentence->example_id . "\"  class=\"example_parts\" style=\"display:none;\">";
@@ -197,7 +197,7 @@ if ($count == 1) {
             echo '<br/><a href="#" onclick="confirm_delete_sentence(' . $sentence->example_id . '); return false;">[delete sentence]</a>';
             echo "</p>";
         }
-        // if($_SESSION['user']->is_admin() && @$_REQUEST['jmdict_id']) {
+        // if($_SESSION['user']->is_admin() && $_REQUEST['jmdict_id']) {
         // 	// print_r($_REQUEST);
         // 	$jmdict_id = (int) $_REQUEST['jmdict_id'];
         // 	$res = mysql_query("SELECT * FROM example_answers ea WHERE example_id = $sentence->example_id AND jmdict_id = $jmdict_id");
@@ -352,7 +352,7 @@ if ($count == 1) {
         <?php
     } else {
         if ($has_search_string) {
-            $url = SERVER_URL . "ajax/get_sentence/?" . $url_args . "&skip=" . (int) @$_REQUEST['skip'];
+            $url = SERVER_URL . "ajax/get_sentence/?" . $url_args . "&skip=" . (int) $_REQUEST['skip'];
 
             echo '<a href="#" onclick="$(\'' . $container_selector . '\').load(\'' . $url . '\'); return false;">[back to list of sentences]</a>';
         }

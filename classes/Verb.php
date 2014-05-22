@@ -40,15 +40,15 @@ define('I_STEM', $i++);
 class Verb
 {
 
-    function __construct($jmdict_id)
+    public function __construct($jmdictID)
     {
         
     }
 
-    function printAllForms($verb, $reading)
+    public function printAllForms($verb, $reading)
     {
-        $vc = $this->vClassForVerb($verb, $reading);
-        echo 'Form: ' . $this->vClassToString($vc) . '<br/>';
+        $vfc = $this->vClassForVerb($verb, $reading);
+        echo 'Form: ' . $this->vClassToString($vfc) . '<br/>';
 
         echo 'Masu: ', $this->getForm(VM_PRESENT, $verb, $reading) . '<br/>';
         echo 'Past: ', $this->getForm(VF_PAST, $verb, $reading) . '<br/>';
@@ -63,10 +63,10 @@ class Verb
         echo "'I' Stem: ", $this->getForm(I_STEM, $verb, $reading) . '<br/>';
     }
 
-    function getForm($form, $verb, $reading)
+    public function getForm($form, $verb, $reading)
     {
-        $vc = $this->vClassForVerb($verb, $reading);
-        if ($vc == V_UNKNOWN) {
+        $vfc = $this->vClassForVerb($verb, $reading);
+        if ($vfc == V_UNKNOWN) {
             return 'n/a';
         }
         switch ($form) {
@@ -135,12 +135,12 @@ class Verb
             }
         }
 
-        if ($vc == V_GODAN) {
+        if ($vfc == V_GODAN) {
             return mb_substr($verb, 0, -1) . $this->mixRecessiveKanaWithKana(mb_substr($verb, -1),
                     mb_substr($suffix, 0, 1)) . mb_substr($suffix, 1);
         }
 
-        if ($vc == V_ICHIDAN) {
+        if ($vfc == V_ICHIDAN) {
             return mb_substr($verb, 0, -2) . $this->mixDominantKanaWithKana(mb_substr($verb, -2, 1),
                     mb_substr($suffix, 0, 1)) . mb_substr($suffix, 1);
         }
@@ -148,27 +148,27 @@ class Verb
         return 'n/a';
     }
 
-    function mixDominantKanaWithKana($k1, $k2)
+    public function mixDominantKanaWithKana($kana1, $kana2)
     {
-        switch (mb_ord(mb_convert_encoding($k2, 'UTF-16', 'UTF-8'))) {
+        switch (mb_ord(mb_convert_encoding($kana2, 'UTF-16', 'UTF-8'))) {
             case 0x3042: // あ
             case 0x3046: // う
             case 0x3044: // い
             case 0x304a: // お
             case 0x3048: // え
-                return $k1;
+                return $kana1;
             default:
-                return $k1 . $k2;
+                return $kana1 . $kana2;
         }
     }
 
-    function mixRecessiveKanaWithKana($k1_char, $k2_char)
+    public function mixRecessiveKanaWithKana($k1Char, $k2Char)
     {
-        $k1 = mb_ord(mb_convert_encoding($k1_char, 'UTF-16', 'UTF-8'));
-        $k2 = mb_ord(mb_convert_encoding($k2_char, 'UTF-16', 'UTF-8'));
+        $kana1 = mb_ord(mb_convert_encoding($k1Char, 'UTF-16', 'UTF-8'));
+        $kana2 = mb_ord(mb_convert_encoding($k2Char, 'UTF-16', 'UTF-8'));
 
-        if ($k2 == 0x305f) { // た
-            switch ($k1) {
+        if ($kana2 == 0x305f) { // た
+            switch ($kana1) {
                 case 0x304f: // く
                     return 'いた';
                 case 0x3050: // ぐ
@@ -186,8 +186,8 @@ class Verb
             }
         }
 
-        if ($k2 == 0x3066) { // て
-            switch ($k1) {
+        if ($kana2 == 0x3066) { // て
+            switch ($kana1) {
                 case 0x304f: // く
                     return 'いて';
                 case 0x3050: // ぐ
@@ -205,22 +205,22 @@ class Verb
             }
         }
 
-        switch ($k1) {
+        switch ($kana1) {
             case 0x3046: // う
-                switch ($k2) {
+                switch ($kana2) {
                     case 0x3042: // あ
                         return 'わ';
                     case 0x3044: // い
                     case 0x304a: // お
                     case 0x3048: // え
-                        return $k2_char;
+                        return $k2Char;
                     case 0x3088: // よ
                         return 'お';
                     case 0x3089: // ら
                     case 0x308c: // れ
                     case 0x308b: // る
                     case 0x3055: // さ
-                        return "わ$k2_char";
+                        return "わ$k2Char";
                     default:
                         break;
                 }
@@ -234,37 +234,38 @@ class Verb
             case 0x3080: // む
             case 0x3076: // ぶ
             case 0x308b: // る
-                switch ($k2) {
+                switch ($kana2) {
                     case 0x3042: // あ
                     case 0x3044: // い
                     case 0x304a: // お
                     case 0x3048: // え
-                        return mb_convert_encoding(mb_chr($this->mixKana($k1, $k2)), 'UTF-8');
+                        return mb_convert_encoding(mb_chr($this->mixKana($kana1, $kana2)), 'UTF-8');
 
                     case 0x3088: // よ
                         //                    return @'お';
-                        return mb_convert_encoding(mb_chr($this->mixKana($k1, 0x304a)), 'UTF-8');
+                        return mb_convert_encoding(mb_chr($this->mixKana($kana1, 0x304a)), 'UTF-8');
 
                     case 0x3089: // ら
                     case 0x308c: // れ
                     case 0x308b: // る
                     case 0x3055: // さ
-                        return mb_convert_encoding(mb_chr($this->mixKana($k1, $this->getVowelForKana($k2))), 'UTF-8');
+                        return mb_convert_encoding(mb_chr($this->mixKana($kana1, $this->getVowelForKana($kana2))),
+                            'UTF-8');
                     default:
                         break;
                 }
                 break;
         }
 
-        echo("Unknown combination: $k1_char + $k2_char");
+        echo("Unknown combination: $k1Char + $k2Char");
         return '?';
     }
 
-    function mixKana($k1, $k2)
+    public function mixKana($kana1, $kana2)
     {
-        switch ($k1) {
+        switch ($kana1) {
             case 0x304f: // く
-                switch ($k2) {
+                switch ($kana2) {
                     case 0x3042: // あ
                         return 0x304b; // か
                     case 0x3044: // い
@@ -274,15 +275,15 @@ class Verb
                     case 0x3048: // え
                         return 0x3051; // け
                     default:
-                        return $k1;
+                        return $kana1;
                 }
                 break;
 
             case 0x3050: // ぐ
-                return $this->mixKana(0x304f, $k2) + 1; // く
+                return $this->mixKana(0x304f, $kana2) + 1; // く
 
             case 0x3059: // す
-                switch ($k2) {
+                switch ($kana2) {
                     case 0x3042: // あ
                         return 0x3055; // さ
                     case 0x3044: // い
@@ -292,13 +293,13 @@ class Verb
                     case 0x3048: // え
                         return 0x305b; // せ
                     default:
-                        return $k1;
+                        return $kana1;
                 }
                 break;
 
             case 0x3064: // つ
             case 0x306c: // ぬ
-                switch ($k2) {
+                switch ($kana2) {
                     case 0x3042: // あ
                         return 0x306a; // な
                     case 0x3044: // い
@@ -308,11 +309,11 @@ class Verb
                     case 0x3048: // え
                         return 0x306d; // ね
                     default:
-                        return $k1;
+                        return $kana1;
                 }
                 break;
             case 0x3080: // む
-                switch ($k2) {
+                switch ($kana2) {
                     case 0x3042: // あ
                         return 0x307e; // ま
                     case 0x3044: // い
@@ -322,12 +323,12 @@ class Verb
                     case 0x3048: // え
                         return 0x3081; // め
                     default:
-                        return $k1;
+                        return $kana1;
                 }
                 break;
 
             case 0x3076: // ぶ
-                switch ($k2) {
+                switch ($kana2) {
                     case 0x3042: // あ
                         return 0x3070; // ば
                     case 0x3044: // い
@@ -337,12 +338,12 @@ class Verb
                     case 0x3048: // え
                         return 0x3079; // べ
                     default:
-                        return $k1;
+                        return $kana1;
                 }
                 break;
 
             case 0x308b: // る
-                switch ($k2) {
+                switch ($kana2) {
                     case 0x3042: // あ
                         return 0x3089; // ら
                     case 0x3044: // い
@@ -352,7 +353,7 @@ class Verb
                     case 0x3048: // え
                         return 0x308c; // れ
                     default:
-                        return $k1;
+                        return $kana1;
                 }
                 break;
 
@@ -361,7 +362,7 @@ class Verb
         }
     }
 
-    function vClassForVerb($verb, $reading)
+    public function vClassForVerb($verb, $reading)
     {
         if (mb_strlen($verb) <= 1) {
             return V_UNKNOWN;
@@ -370,7 +371,6 @@ class Verb
             return V_UNKNOWN;
         }
 
-
         if ($verb == '来る') {
             return V_KAGYOU;
         }
@@ -378,13 +378,11 @@ class Verb
             return V_KAGYOU;
         }
 
-        $c_last = mb_ord(mb_convert_encoding(mb_substr($reading, -1), 'UTF-16'));
-        //    NSLog(@"%C: %d | %x", c_last, c_last, c_last);
+        $cLast = mb_ord(mb_convert_encoding(mb_substr($reading, -1), 'UTF-16'));
+        $cPenult = mb_ord(mb_convert_encoding(mb_substr($reading, -2, 1), 'UTF-16'));
+        $kPenult = mb_ord(mb_convert_encoding(mb_substr($verb, -2, -1), 'UTF-16', 'UTF-8'));
 
-        $c_penult = mb_ord(mb_convert_encoding(mb_substr($reading, -2, 1), 'UTF-16'));
-        $k_penult = mb_ord(mb_convert_encoding(mb_substr($verb, -2, -1), 'UTF-16', 'UTF-8'));
-
-        switch ($c_last) {
+        switch ($cLast) {
             case 0x3046: // う
             case 0x304f: // く
             case 0x3050: // ぐ
@@ -398,13 +396,13 @@ class Verb
                 return V_GODAN;
 
             case 0x308b: // る
-                switch ($this->getVowelForKana($c_penult)) {
+                switch ($this->getVowelForKana($cPenult)) {
                     case 0x3042: // あ
                     case 0x3046: // う
                     case 0x304a: // お
                         return V_GODAN;
                     case 0x3048: // え
-                        switch ($k_penult) {
+                        switch ($kPenult) {
                             case 0x5e30: // 帰
                             case 0x53cd: // 反
                             case 0x8986: // 覆
@@ -445,7 +443,7 @@ class Verb
 
                     case 0x3044: // い
                         // @"入る", @"煎る", @"参る", @"切る", @"走る", @"毟る", @"罵る", @"散る", @"嗇る", @"限る", @"握る", @"遮る", @"弄る", @"齧る", @"詰る", @"捻る", @"交る", @"捩る"
-                        switch ($k_penult) {
+                        switch ($kPenult) {
                             case 0x5165: // 入
                             case 0x714e: // 煎
                             case 0x53c2: // 参
@@ -489,9 +487,9 @@ class Verb
         return V_UNKNOWN;
     }
 
-    function vClassToString($vc)
+    public function vClassToString($vcs)
     {
-        switch ($vc) {
+        switch ($vcs) {
             case V_GODAN:
                 return 'godan (う-dropping)';
             case V_ICHIDAN:
@@ -507,9 +505,9 @@ class Verb
         }
     }
 
-    function getVowelForKana($c)
+    public function getVowelForKana($chr)
     {
-        switch ($c) {
+        switch ($chr) {
             case 0x3042: // あ
             case 0x304b: // か
             case 0x304c: // が
@@ -595,7 +593,7 @@ class Verb
         }
     }
 
-    function getConsonnant($kana)
+    public function getConsonnant($kana)
     {
         if ($kana <= 0x3040) {
             return '-';

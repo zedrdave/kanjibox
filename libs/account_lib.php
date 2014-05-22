@@ -1,6 +1,7 @@
 <?php
 
-function display_login_css() {
+function display_login_css()
+{
     ?>		
     <style type="text/css">
         body
@@ -85,11 +86,13 @@ function display_login_css() {
     <?php
 }
 
-function print_edit_line($label, $id, $type = 'edit') {
+function print_edit_line($label, $id, $type = 'edit')
+{
     echo '<label>' . $label . ': </label><input type="' . $type . '" name="' . $id . '" id="' . $id . '" value="' . htmlentities(@$_REQUEST[$id]) . '"></input><br/>';
 }
 
-function display_new_account_page() {
+function display_new_account_page()
+{
     ?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
     <html xmlns="http://www.w3.org/1999/xhtml" xmlns:fb="http://www.facebook.com/2008/fbml">
         <head>
@@ -138,28 +141,41 @@ function display_new_account_page() {
                     }
 
                     if ($no_error) {
-                        $query = 'SELECT * FROM users_ext ux WHERE ux.login_email = \'' . DB::getConnection()->quote($_REQUEST['login_mail']) . '\' AND ux.login_email != \'\' AND ux.login_email IS NOT NULL';
-                        $res = mysql_query($query) or die(mysql_error());
+                        $query = 'SELECT * FROM users_ext ux WHERE ux.login_email = :email AND ux.login_email != \'\' AND ux.login_email IS NOT NULL';
+                        try {
+                            $stmt = DB::getConnection()->prepare($query);
+                            $stmt->bindValue(':email', $_REQUEST['login_mail']);
+                            $stmt->execute();
+                            $row = $stmt->fetchObject();
 
-                        if ($row = mysql_fetch_object($res)) {
-                            log_public_error('This login email is already registered. Please use the <a href="' . SERVER_URL . '?pwd_reset=1">password recovery page</a> to access it.');
-                            $no_error = false;
+                            if (!empty($row)) {
+                                log_public_error('This login email is already registered. Please use the <a href="' . SERVER_URL . '?pwd_reset=1">password recovery page</a> to access it.');
+                                $no_error = false;
+                            }
+
+                            $stmt = null;
+                        } catch (PDOException $e) {
+                            log_db_error($query, $e->getMessage());
                         }
                     }
 
                     if ($no_error) {
-                        mysql_query("INSERT INTO users SET privileges = 0, device_id = NULL, fb_id = NULL") or die(mysql_error());
-
-                        $user_id = mysql_insert_id();
-                        mysql_query("INSERT INTO users_ext SET login_email = '" . DB::getConnection()->quote($_REQUEST['login_mail']) . "', login_pwd = MD5('" . DB::getConnection()->quote($_POST['password']) . "'), user_id = $user_id, first_name = '" . DB::getConnection()->quote($_REQUEST['first_name']) . "', last_name = '" . DB::getConnection()->quote($_REQUEST['last_name']) . "'") or die(mysql_error());
-
+                        $userID = DB::insert('INSERT INTO users SET privileges = 0, device_id = NULL, fb_id = NULL');
+                        DB::insert('INSERT INTO users_ext SET login_email = :email, login_pwd = MD5(:password), user_id = :userid, first_name = :firstname, last_name = :lastname',
+                            [
+                            ':email' => $_REQUEST['login_mail'],
+                            ':password' => $_POST['password'],
+                            ':userid' => $userID,
+                            ':firstname' => $_REQUEST['first_name'],
+                            ':lastname' => $_REQUEST['last_name'],
+                        ]);
                         echo '<div class="success_msg">Account successfully created for login <em>' . htmlentities($_REQUEST['login_mail']) . '</em>. You can now <a href="' . SERVER_URL . '">login from the main page</a>.</div>';
                     }
                 }
 
                 if (empty($_REQUEST['action']) || !$no_error) {
                     ?>
-                    <form method="post" action="<?php echo SERVER_URL ?>" style="text-align:center;">
+                    <form method="post" action="<?php echo SERVER_URL?>" style="text-align:center;">
 
                         <input type="hidden" name="action" value="new_account"></input>
                         <fieldset>
@@ -179,7 +195,7 @@ function display_new_account_page() {
 
                         <fieldset>
                             <legend>Spam Protection / Survival IQ Test</legend>
-                            <label>What is the capital of Assyria: </label><input type="edit" name="spam_question" id="spam_question" value="<?php echo htmlentities(@$_REQUEST['spam_question']) ?>"></input> <small>[<a href="http://lmgtfy.com/?q=What+is+the+capital+of+Assyria">hint</a>]</small><br/>
+                            <label>What is the capital of Assyria: </label><input type="edit" name="spam_question" id="spam_question" value="<?php echo htmlentities(@$_REQUEST['spam_question'])?>"></input> <small>[<a href="http://lmgtfy.com/?q=What+is+the+capital+of+Assyria">hint</a>]</small><br/>
                         </fieldset>
 
                         <label>&nbsp;</label><input type="submit" name="new_account" value="Create Account" style="margin:auto;" onclick="if ($('#password').val() != $('#password_2').val()) {
@@ -205,7 +221,8 @@ function display_new_account_page() {
     <?php
 }
 
-function display_log_out_page() {
+function display_log_out_page()
+{
     session_save_path('/var/lib/php5/web_kb_sessions');
     session_start();
     $_SESSION = [];
@@ -224,7 +241,7 @@ function display_log_out_page() {
         <body>
             <div id="loginbox">
                 <h2>Successfully logged-out!</h2>
-                <p><a href="<?php echo SERVER_URL ?>">Go back to main page</a></p>
+                <p><a href="<?php echo SERVER_URL?>">Go back to main page</a></p>
             </div>
 
         </body>

@@ -34,11 +34,11 @@ if (!empty($params['mode']) && $params['mode'] == 'search') {
 $all_tags = LearningSet::getAllTags(true);
 
 if (!empty($_REQUEST['set_id']) && is_numeric($_REQUEST['set_id'])) {
-    $set_id = (int) $_REQUEST['set_id'];
-    $set = new LearningSet($set_id);
+    $setID = (int) $_REQUEST['set_id'];
+    $set = new LearningSet($setID);
     $title = 'KanjiBox Study Set &raquo; ' . $set->getName();
 } else {
-    $set_id = null;
+    $setID = null;
     $set = null;
     $title = 'KanjiBox Japanese Study Sets';
 }
@@ -61,16 +61,16 @@ if (!empty($_REQUEST['set_id']) && is_numeric($_REQUEST['set_id'])) {
         <meta property="og:title" content="<?php
         echo ($set ? 'Study Set: ' . str_replace('"', '\"', mb_substr($set->getName(), 0, 50)) : 'KanjiBox Japanese Study Sets')
         ?>"/>
-        <meta property="og:url" content="<?php echo (SERVER_URL . ($set ? 'set/' . $set->setID . '/' : 'sets/'))?>"/>
+        <meta property="og:url" content="<?php echo (SERVER_URL . ($set ? 'set/' . $set->id . '/' : 'sets/'))?>"/>
         <meta property="og:type" content="article"/>
         <meta property="og:image" content="http://kanjibox.net/kb/img/kb_large.png"/>
         <meta property="og:site_name" content="KanjiBox"/>
         <meta property="og:description" content="<?php
-        if ($set && $set->isValid()) {
-            echo str_replace('"', '\"', strip_tags($set->getDescription()));
-        } else {
-            echo "Japanese study sets compiled by users of KanjiBox to help them study a particular aspect (textbook, exam, film, manga...) of Japanese.";
-        }
+              if ($set && $set->isValid()) {
+                  echo str_replace('"', '\"', strip_tags($set->getDescription()));
+              } else {
+                  echo "Japanese study sets compiled by users of KanjiBox to help them study a particular aspect (textbook, exam, film, manga...) of Japanese.";
+              }
         ?>"/>
     </head>
     <body>
@@ -136,8 +136,8 @@ if (!empty($_REQUEST['set_id']) && is_numeric($_REQUEST['set_id'])) {
                         <form action="<?php echo SERVER_URL;?>sets/mode/search/" method="get">
                             <p style="margin-bottom:10px;">
                                 <input type="text" size="40" name="filter_str" value="<?php
-                                echo htmlentities($search_str, ENT_COMPAT, 'UTF-8');
-                                ?>"></input> <?php
+            echo htmlentities($search_str, ENT_COMPAT, 'UTF-8');
+                ?>"></input> <?php
                                        echo get_select_menu(['kanji' => 'Kanji', 'vocab' => 'Vocab'], 'set_type',
                                            (isset($_REQUEST['set_type']) ? $_REQUEST['set_type'] : null), '', 'All')
                                        ?> <input type="submit" name="Search" value="search"></input>
@@ -149,29 +149,29 @@ if (!empty($_REQUEST['set_id']) && is_numeric($_REQUEST['set_id'])) {
                             }
                             ?>
                             <p>Browse: <?php
-                                foreach ($all_tags as $id => $tag) {
-                                    if (!isset($tags) || array_search($tag, $tags) === false) {
-                                        echo ' [<a href="' . SERVER_URL . 'sets/tags/' . $tag . '">' . $tag . '</a>]';
-                                    } else {
-                                        echo " [$tag] ";
-                                    }
-                                }
-                                ?></p>
+                        foreach ($all_tags as $id => $tag) {
+                            if (!isset($tags) || array_search($tag, $tags) === false) {
+                                echo ' [<a href="' . SERVER_URL . 'sets/tags/' . $tag . '">' . $tag . '</a>]';
+                            } else {
+                                echo " [$tag] ";
+                            }
+                        }
+                            ?></p>
                             <p>Popular: <?php
-                                foreach ($pop_types as $link => $name) {
-                                    if ($mode == 'popular' && $pop_type == $link) {
-                                        echo '[' . $name . '] ';
-                                    } else {
-                                        echo '[<a href="' . SERVER_URL . 'sets/popular/' . $link . '">' . $name . '</a>] ';
-                                    }
+                            foreach ($pop_types as $link => $name) {
+                                if ($mode == 'popular' && $pop_type == $link) {
+                                    echo '[' . $name . '] ';
+                                } else {
+                                    echo '[<a href="' . SERVER_URL . 'sets/popular/' . $link . '">' . $name . '</a>] ';
                                 }
-                                ?>
+                            }
+                            ?>
                         </form>
                     </fieldset>
                     <fieldset class="set-detail-frame">
                         <div id="ajax-results"></div>
                         <?php
-                        if ($set_id) {
+                        if ($setID) {
 
                             if (!$set->isValid()) {
                                 echo '<div class="error_msg">This set is private or has been deleted.</div>';
@@ -179,34 +179,34 @@ if (!empty($_REQUEST['set_id']) && is_numeric($_REQUEST['set_id'])) {
                                 echo "<legend>" . $set->getName() . "</legend>";
                                 ?>
                                 <p style="margin-bottom:10px;"><?php
-                                    if ($set->isOwner() || $set->isSubscribed()) {
-                                        if ($set->isOwner()) {
-                                            echo '<span class="subscribed-status">Author</span>';
-                                        } else {
-                                            echo '<span class="subscribed-status">Subscribed</span>';
-                                        }
+                    if ($set->isOwner() || $set->isSubscribed()) {
+                        if ($set->isOwner()) {
+                            echo '<span class="subscribed-status">Author</span>';
+                        } else {
+                            echo '<span class="subscribed-status">Subscribed</span>';
+                        }
 
-                                        echo "<button onclick=\"location.href ='" . SERVER_URL . "page/play/type/" . $set->getType() . "/mode/sets/set_id/" . $set->setID . "/'\">Play</button> ";
-                                        if ($set->canEdit()) {
-                                            echo "<button onclick=\"location.href ='" . SERVER_URL . "page/play/type/" . $set->getType() . "/mode/sets/view_set_id/" . $set->setID . "/'\">Edit</button> ";
-                                        }
-                                    } elseif ($_SESSION['user']->isLoggedIn()) {
-                                        echo" <button id=\"subscribe-to-set\" onclick=\"subscribe_to_set($set->setID, this); return false;\">Subscribe</button> ";
-                                    } else {
-                                        echo "<button onclick=\"location.href ='" . SERVER_URL . "?redirect=set_subscribe&set_id=" . $set->setID . "'\">Log in & Subscribe</button>";
-                                    }
+                        echo "<button onclick=\"location.href ='" . SERVER_URL . "page/play/type/" . $set->getType() . "/mode/sets/set_id/" . $set->id . "/'\">Play</button> ";
+                        if ($set->canEdit()) {
+                            echo "<button onclick=\"location.href ='" . SERVER_URL . "page/play/type/" . $set->getType() . "/mode/sets/view_set_id/" . $set->id . "/'\">Edit</button> ";
+                        }
+                    } elseif ($_SESSION['user']->isLoggedIn()) {
+                        echo" <button id=\"subscribe-to-set\" onclick=\"subscribe_to_set($set->id, this); return false;\">Subscribe</button> ";
+                    } else {
+                        echo "<button onclick=\"location.href ='" . SERVER_URL . "?redirect=set_subscribe&set_id=" . $set->id . "'\">Log in & Subscribe</button>";
+                    }
 
-                                    echo "<button onclick=\"location.href ='" . SERVER_URL . "export/set_export.php?set_id=" . $set->setID . "'\">Export as Text</button>";
+                    echo "<button onclick=\"location.href ='" . SERVER_URL . "export/set_export.php?set_id=" . $set->id . "'\">Export as Text</button>";
 
-                                    if ($set->canAdmin()) {
-                                        echo " (public: <input type=\"checkbox\" name=\"set_public\" id=\"set_public\" value=\"1\" onclick=\"update_set_public(" . $set->setID . ", this.checked)\"" . ($set->isPublic() ? ' checked' : '') . (!$set->canAdmin() ? ' disabled' : '') . "></input>" . (($set->isPublic() && $set->canAdmin() && $set->getSubsCount()) ? '<span style="color:red;">access</span>' : 'access') . ", <input type=\"checkbox\" name=\"set_editable\" id=\"set_editable\" value=\"1\" onclick=\"update_set_editable(" . $set->setID . ", this.checked)\"" . ($set->isEditable() ? ' checked' : '') . (!$set->canAdmin() ? ' disabled' : '') . "></input>edit)";
-                                    }
-                                    ?> <span style="margin-left:10px;" class="fb-like" data-href="<?php echo SERVER_URL . 'set/' . $set->setID . '/'?>" data-send="false" data-layout="button_count" data-width="100" data-show-faces="false"></span>
+                    if ($set->canAdmin()) {
+                        echo " (public: <input type=\"checkbox\" name=\"set_public\" id=\"set_public\" value=\"1\" onclick=\"update_set_public(" . $set->id . ", this.checked)\"" . ($set->isPublic() ? ' checked' : '') . (!$set->canAdmin() ? ' disabled' : '') . "></input>" . (($set->isPublic() && $set->canAdmin() && $set->getSubsCount()) ? '<span style="color:red;">access</span>' : 'access') . ", <input type=\"checkbox\" name=\"set_editable\" id=\"set_editable\" value=\"1\" onclick=\"update_set_editable(" . $set->id . ", this.checked)\"" . ($set->isEditable() ? ' checked' : '') . (!$set->canAdmin() ? ' disabled' : '') . "></input>edit)";
+                    }
+                                ?> <span style="margin-left:10px;" class="fb-like" data-href="<?php echo SERVER_URL . 'set/' . $set->id . '/'?>" data-send="false" data-layout="button_count" data-width="100" data-show-faces="false"></span>
                                 </p>
                                 <?php
                                 echo "<div class=\"description\">";
                                 if ($set->canEdit()) {
-                                    echo "<textarea id=\"set_description\" onchange=\"update_set_desc(" . $set->setID . ", this.value);\" style=\"display:none;\">" . $set->getDescription() . "</textarea><p id=\"set_description_static\" onclick=\"$(this).hide(); $('#set_description').show(); return false;\">" . ($set->getDescription() ? nl2br($set->getDescription()) : '...') . "</p>";
+                                    echo "<textarea id=\"set_description\" onchange=\"update_set_desc(" . $set->id . ", this.value);\" style=\"display:none;\">" . $set->getDescription() . "</textarea><p id=\"set_description_static\" onclick=\"$(this).hide(); $('#set_description').show(); return false;\">" . ($set->getDescription() ? nl2br($set->getDescription()) : '...') . "</p>";
                                 } else {
                                     echo '<p>' . nl2br($set->getDescription()) . '</p>';
                                 }
@@ -243,7 +243,7 @@ if (!empty($_REQUEST['set_id']) && is_numeric($_REQUEST['set_id'])) {
 
                                 if (!$params['show'] && count($rows) > 1000) {
                                     $rows = array_slice($rows, 0, 500);
-                                    echo "<div style=\"font-weight:bold;\">First " . count($rows) . ' <span class="minor">entries</span> [<a href="' . SERVER_URL . 'set/' . $set->setID . '/name/' . make_url_name($set->getName()) . '/show/all/' . '">show all</a>]';
+                                    echo "<div style=\"font-weight:bold;\">First " . count($rows) . ' <span class="minor">entries</span> [<a href="' . SERVER_URL . 'set/' . $set->id . '/name/' . make_url_name($set->getName()) . '/show/all/' . '">show all</a>]';
                                 } else {
                                     echo "<div style=\"font-weight:bold;\">" . count($rows) . ' <span class="minor">entries</span>';
                                 }
@@ -412,7 +412,7 @@ if (!empty($_REQUEST['set_id']) && is_numeric($_REQUEST['set_id'])) {
     }
 
     if (isset($_REQUEST['redirected_subscribe'])) {
-        echo "\nsubscribe_to_set(" . $set->setID . ", '#subscribe-to-set');\n";
+        echo "\nsubscribe_to_set(" . $set->id . ", '#subscribe-to-set');\n";
     }
     ?>
 

@@ -24,7 +24,6 @@
             <li><strong>頑張って！</strong><br/>Do not get scared by the seemingly endless number of rules and tips above: we all make mistakes and as long as you give it your honest best, all efforts are immensely appreciated!</li>
         </ol>
 
-        <p>
         <h3>Translations of common dictionary terms</h3>
         <em>Ongoing (please send for your language).</em>
         <ul>
@@ -36,7 +35,6 @@
                 </ul>
             </li>
         </ul>
-        </p>
 
         <h3>Can think of anything else? <a href="https://www.facebook.com/davedv">Contact me</a> about it!</h3>
     </div>

@@ -46,7 +46,7 @@ if ($cur_type == 'main') {
     echo '<div id="publish_ajax_result">';
 
     if (!empty($params['action']) && $params['action'] == 'publish_story' && fb_connect_init() && $params['publish_type']) {
-        echo $_SESSION['user']->publish_story($params['publish_type']);
+        echo $_SESSION['user']->publishStory($params['publish_type']);
     }
 
     echo '</div>';
@@ -54,7 +54,7 @@ if ($cur_type == 'main') {
     foreach (array(TYPE_KANJI, TYPE_VOCAB, TYPE_READING, TYPE_TEXT) as $type) {
         ?>
         <fieldset class="line">
-            <legend><?php echo ucfirst($type) ?></legend>
+            <legend><?php echo ucfirst($type)?></legend>
             <?php
             $game = $_SESSION['user']->getHighscore($level, $type);
             if ($game) {
@@ -76,33 +76,13 @@ if ($cur_type == 'main') {
         <?php
     }
     echo '</div>';
-    /*
-      $query = "DELETE FROM ranking WHERE level = '" . DB::getConnection()->quote($level) . "' AND type = '" . DB::getConnection()->quote($type) . "'";
-      mysql_query($query) or log_db_error($query, true, true);
-
-      $query = "INSERT INTO ranking (SELECT NULL, u.id as user_id, g.type as type, g.level as level, @rownum:=@rownum+1 as rank, g.id as game_id, NOW()
-      FROM (SELECT @rownum:=0) r, `users` u
-      JOIN `games` g ON g.`user_id` = u.id AND g.`level` = u.level AND g.type = '" . DB::getConnection()->quote($type) . "'
-      LEFT JOIN games g2 ON g.user_id = g2.user_id AND g2.`level` = g.level AND g2.type = g.type AND (g.score < g2.score OR (g.score = g2.score AND g.date_ended > g2.date_ended))
-      WHERE u.active = 1 AND u.level = '" . DB::getConnection()->quote($level) . "' AND g2.score IS NULL
-      ORDER BY g.score DESC, TIMEDIFF(g.date_ended, g.date_started) ASC)";
-      $res = mysql_query($query) or die(mysql_error());
-
-      echo mysql_affected_rows() . " updated rows for level: $level, type: $type";
-     */
-    /*
-      while($row = mysql_fetch_object($res))
-      {
-      echo $row->rank . ': ' . $row->user_id . ' - ' . $row->type . ' - '. $row->level . '<br/>';
-      }
-     */
 } elseif (!$fb_info = fb_connect_init()) {
     echo "Can't access FB data.";
 } else {
     $type_label = ucfirst($cur_type);
     ?>
     <fieldset class="stats">
-        <legend><?php echo $type_label . ' ' . $levels[$_SESSION['user']->getLevel()]; ?> Level High Scores</legend>
+        <legend><?php echo $type_label . ' ' . $levels[$_SESSION['user']->getLevel()];?> Level High Scores</legend>
         <table class="twocols">
             <tr>
                 <td>
@@ -112,7 +92,8 @@ if ($cur_type == 'main') {
                 </td>
                 <td>
                     <?php
-                    print_friendsboard($_SESSION['user'], $_SESSION['user']->getLevel(), $cur_type, 'Your Friends:', false);
+                    print_friendsboard($_SESSION['user'], $_SESSION['user']->getLevel(), $cur_type, 'Your Friends:',
+                        false);
                     ?>
                 </td>
             </tr>
@@ -130,7 +111,8 @@ if ($cur_type == 'main') {
                 </td>
                 <td>
                     <?php
-                    print_friendsboard($_SESSION['user'], $_SESSION['user']->getLevel(), $cur_type, 'Your friends:', true);
+                    print_friendsboard($_SESSION['user'], $_SESSION['user']->getLevel(), $cur_type, 'Your friends:',
+                        true);
                     ?>
                 </td>
             </tr>

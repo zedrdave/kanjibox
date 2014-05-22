@@ -46,20 +46,20 @@ class Kanji extends Question
         }
 
         echo '<div class="japanese" lang="ja" xml:lang="ja">' . $solution->prons . '</div>';
-        if ($this->isQuiz() || $_SESSION['user']->get_pref('drill', 'show_english')) {
+        if ($this->isQuiz() || $_SESSION['user']->getPreference('drill', 'show_english')) {
             if ($solution->missing_lang) {
                 echo '<div class="missing_lang meaning">' . $meanStr;
                 if (!$_SESSION['user']->isOnTranslatorProbation()) {
-                    echo ' <a class="" href="#" onclick="show_kanji_translate_dialog(\'' . SERVER_URL . '\', \'' . $solution->id . '\', \'' . $this->data['sid'] . '\'); return false;"><img src="' . SERVER_URL . 'img/flags/' . $_SESSION['user']->get_pref('lang',
+                    echo ' <a class="" href="#" onclick="show_kanji_translate_dialog(\'' . SERVER_URL . '\', \'' . $solution->id . '\', \'' . $this->data['sid'] . '\'); return false;"><img src="' . SERVER_URL . 'img/flags/' . $_SESSION['user']->getPreference('lang',
                         'kanji_lang') . '.png" class="missing_lang_icon' . ($this->isQuiz() ? ' disabled' : '') . '" /></a>';
                 }
                 echo '</div>';
-            } elseif ($_SESSION['user']->get_pref('lang', 'kanji_lang') != 'en' && substr($meanStr, 0, 3) == '(~)') {
+            } elseif ($_SESSION['user']->getPreference('lang', 'kanji_lang') != 'en' && substr($meanStr, 0, 3) == '(~)') {
                 if ($this->isQuiz()) {
-                    echo '<div class="missing_lang meaning">' . $solution->meaning_english . ($solution->traditional ? ' (旧)' : '') . ' <a class="" href="#" onclick="show_kanji_translate_dialog(\'' . SERVER_URL . '\', \'' . $solution->id . '\', \'' . $this->data['sid'] . '\'); return false;"><img src="' . SERVER_URL . 'img/flags/' . $_SESSION['user']->get_pref('lang',
+                    echo '<div class="missing_lang meaning">' . $solution->meaning_english . ($solution->traditional ? ' (旧)' : '') . ' <a class="" href="#" onclick="show_kanji_translate_dialog(\'' . SERVER_URL . '\', \'' . $solution->id . '\', \'' . $this->data['sid'] . '\'); return false;"><img src="' . SERVER_URL . 'img/flags/' . $_SESSION['user']->getPreference('lang',
                         'kanji_lang') . '.png" class="missing_lang_icon disabled" /></a>  <br/><small><em>(incomplete translation)</em></small></div>';
                 } else {
-                    echo '<div class="missing_lang meaning">' . substr($meanStr, 3) . ' <a class="" href="#" onclick="show_kanji_translate_dialog(\'' . SERVER_URL . '\', \'' . $solution->id . '\', \'' . $this->data['sid'] . '\'); return false;"><img src="' . SERVER_URL . 'img/flags/' . $_SESSION['user']->get_pref('lang',
+                    echo '<div class="missing_lang meaning">' . substr($meanStr, 3) . ' <a class="" href="#" onclick="show_kanji_translate_dialog(\'' . SERVER_URL . '\', \'' . $solution->id . '\', \'' . $this->data['sid'] . '\'); return false;"><img src="' . SERVER_URL . 'img/flags/' . $_SESSION['user']->getPreference('lang',
                         'kanji_lang') . '.png" class="missing_lang_icon" /></a> <br/><small><em>(translation may need improving)</em></small></div>';
                 }
             } else {
@@ -72,7 +72,7 @@ class Kanji extends Question
 
     public function displayCorrection($answerID)
     {
-        $showExamples = (!$this->isQuiz() && $_SESSION['user']->get_pref('drill', 'show_examples'));
+        $showExamples = (!$this->isQuiz() && $_SESSION['user']->getPreference('drill', 'show_examples'));
 
         $solution = $this->getSolution();
 
@@ -239,15 +239,15 @@ class Kanji extends Question
             }
         }
 
-        $translatorMode = (isset($_SESSION['user']) && $_SESSION['user']->get_pref('lang', 'kanji_lang') != 'en' && $_SESSION['user']->get_pref('lang',
+        $translatorMode = (isset($_SESSION['user']) && $_SESSION['user']->getPreference('lang', 'kanji_lang') != 'en' && $_SESSION['user']->getPreference('lang',
                 'translator_mode'));
 
         if ($translatorMode) {
             if ($_SESSION['user']->isOnTranslatorProbation()) {
-                $query .= ' AND kx.meaning_' . Kanji::$langStrings[$_SESSION['user']->get_pref('lang', 'kanji_lang')] . " LIKE '(~)%'";
+                $query .= ' AND kx.meaning_' . Kanji::$langStrings[$_SESSION['user']->getPreference('lang', 'kanji_lang')] . " LIKE '(~)%'";
             } else {
-                $query .= ' AND (kx.meaning_' . Kanji::$langStrings[$_SESSION['user']->get_pref('lang', 'kanji_lang')] . ' IS NULL OR kx.meaning_' . Kanji::$langStrings[$_SESSION['user']->get_pref('lang',
-                        'kanji_lang')] . " = '' OR kx.meaning_" . Kanji::$langStrings[$_SESSION['user']->get_pref('lang',
+                $query .= ' AND (kx.meaning_' . Kanji::$langStrings[$_SESSION['user']->getPreference('lang', 'kanji_lang')] . ' IS NULL OR kx.meaning_' . Kanji::$langStrings[$_SESSION['user']->getPreference('lang',
+                        'kanji_lang')] . " = '' OR kx.meaning_" . Kanji::$langStrings[$_SESSION['user']->getPreference('lang',
                         'kanji_lang')] . " LIKE '(~)%')";
             }
         }
@@ -286,11 +286,11 @@ class Kanji extends Question
 
     public function geSetWeightedKanjis($userID, $howMany = 1)
     {
-        $query = "SELECT  k.`id`, k.`kanji`, k.`traditional`, `prons`, " . Kanji::getQueryMeaning() . ", IF(l.curve IS NULL, 1000, curve)+1000*rand() as xcurve FROM learning_set_kanji ls LEFT JOIN kanjis k ON k.id = ls.kanji_id LEFT JOIN kanjis_ext kx ON kx.kanji_id = k.id left join learning l on l.user_id = '" . (int) $userID . "' AND k.id = l.kanji_id WHERE ls.set_id = $this->set_id ";
+        $query = "SELECT  k.`id`, k.`kanji`, k.`traditional`, `prons`, " . Kanji::getQueryMeaning() . ", IF(l.curve IS NULL, 1000, curve)+1000*rand() as xcurve FROM learning_set_kanji ls LEFT JOIN kanjis k ON k.id = ls.kanji_id LEFT JOIN kanjis_ext kx ON kx.kanji_id = k.id left join learning l on l.user_id = '" . (int) $userID . "' AND k.id = l.kanji_id WHERE ls.set_id = $this->id ";
 
         $translatorMode = false;
         if ($translatorMode) {
-            $query .= ' AND (kx.meaning_' . Kanji::$langStrings[$_SESSION['user']->get_pref('lang', 'kanji_lang')] . ' IS NULL OR kx.meaning_' . Kanji::$langStrings[$_SESSION['user']->get_pref('lang',
+            $query .= ' AND (kx.meaning_' . Kanji::$langStrings[$_SESSION['user']->getPreference('lang', 'kanji_lang')] . ' IS NULL OR kx.meaning_' . Kanji::$langStrings[$_SESSION['user']->getPreference('lang',
                     'kanji_lang')] . " = '')";
         }
 
@@ -567,11 +567,11 @@ k.`njlpt`
 
     public function editButtonLink()
     {
-        if ($_SESSION['user']->isOnTranslatorProbation() && !$_SESSION['user']->get_pref('lang', 'translator_mode')) {
+        if ($_SESSION['user']->isOnTranslatorProbation() && !$_SESSION['user']->getPreference('lang', 'translator_mode')) {
             return '';
         }
 
-        if ($_SESSION['user']->get_pref('lang', 'kanji_lang') != 'en' || $_SESSION['user']->isEditor()) {
+        if ($_SESSION['user']->getPreference('lang', 'kanji_lang') != 'en' || $_SESSION['user']->isEditor()) {
             $solution = $this->getSolution();
 
             return '<a class="icon-button ui-state-default ui-corner-all" title="Languages..." href="#" onclick="show_kanji_translate_dialog(\'' . SERVER_URL . '\', \'' . $solution->id . '\', \'' . $this->data['sid'] . '\'); return false;">✍</a>';
@@ -585,7 +585,7 @@ k.`njlpt`
         global $_SESSION;
 
         if (isset($_SESSION)) {
-            $lang = $_SESSION['user']->get_pref('lang', 'kanji_lang');
+            $lang = $_SESSION['user']->getPreference('lang', 'kanji_lang');
         } else {
             $lang = 'en';
         }

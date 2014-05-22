@@ -59,7 +59,7 @@ class Text extends Vocab
         $res = mysql_query_debug($query) or log_db_error($query);
 
 
-        $reading_pref = $_SESSION['user']->get_pref('drill', 'show_reading');
+        $reading_pref = $_SESSION['user']->getPreference('drill', 'show_reading');
         $level = $_SESSION['user']->getLevel();
 
         if ($hide_pos_start >= 0 && $hide_pos_end >= 0) {

@@ -1,5 +1,5 @@
 <?php
-$user_id = $_SESSION['user']->getID();
+$userID = $_SESSION['user']->getID();
 
 $type = @$_POST['filter_set_type'];
 
@@ -9,7 +9,7 @@ $tags = @$_POST['tags'];
 if(! $filter_str && !$tags)
 	die('<div class="error_msg">No search string</div>');
 
-$query = "SELECT ls.*, subs.user_id AS sub_user_id, COUNT(*) AS set_size FROM learning_sets ls LEFT JOIN learning_set_subs subs ON subs.user_id = $user_id AND subs.set_id = ls.set_id LEFT JOIN learning_set_$type lse ON lse.set_id = ls.set_id ";
+$query = "SELECT ls.*, subs.user_id AS sub_user_id, COUNT(*) AS set_size FROM learning_sets ls LEFT JOIN learning_set_subs subs ON subs.user_id = $userID AND subs.set_id = ls.set_id LEFT JOIN learning_set_$type lse ON lse.set_id = ls.set_id ";
 
 if($tags && count($tags)) {
 	$query .= "JOIN learning_set_tags lst ON lst.set_id = ls.set_id AND (0 ";
@@ -38,23 +38,23 @@ else {
 	while($row = mysql_fetch_object($res)) {
 		echo "<div class=\"set_line\">";
 		
-		if(!$row->sub_user_id && $row->user_id != $user_id)
-			echo"<button onclick=\"subscribe_to_set($row->setID, this); return false;\">subscribe</button> ";
+		if(!$row->sub_user_id && $row->user_id != $userID)
+			echo"<button onclick=\"subscribe_to_set($row->id, this); return false;\">subscribe</button> ";
 
 		if($_SESSION['user']->isAdministrator())
-			echo '<button onclick="do_load(\'' . SERVER_URL . 'ajax/edit_learning_set/?set_id=' . $row->setID . '\', \'set_details\'); return false;">edit</button> ';
+			echo '<button onclick="do_load(\'' . SERVER_URL . 'ajax/edit_learning_set/?set_id=' . $row->id . '\', \'set_details\'); return false;">edit</button> ';
 		else
-			echo '<button onclick="do_load(\'' . SERVER_URL . 'ajax/edit_learning_set/?set_id=' . $row->setID . '\', \'set_details\'); return false;">' . ($row->editable && $row->sub_user_id ? 'edit' : 'view')  . '</button> ';
+			echo '<button onclick="do_load(\'' . SERVER_URL . 'ajax/edit_learning_set/?set_id=' . $row->id . '\', \'set_details\'); return false;">' . ($row->editable && $row->sub_user_id ? 'edit' : 'view')  . '</button> ';
 			// echo"<button onclick=\"show_set_id($row->set_id); return false;\"". (!$row->sub_user_id ?  ' style="display:none;"' : '') . ">" . ($row->editable ? 'edit' : 'view') . "</button> ";
 		
-		echo "<span class=\"name\" id=\"set_name_$row->setID\">$row->name</span> <span class=\"size\">$row->set_size";
+		echo "<span class=\"name\" id=\"set_name_$row->id\">$row->name</span> <span class=\"size\">$row->set_size";
 		echo ($row->set_size == 1 ? ' entry' : ' entries');
 			
 		echo "</span>";
 		if($row->editable)
 			echo '<span class="prop">editable</span>';
 
-		$res_tag = mysql_query("SELECT t.* FROM learning_set_tags lst LEFT JOIN tags t ON t.tag_id = lst.tag_id WHERE lst.set_id = $row->setID");
+		$res_tag = mysql_query("SELECT t.* FROM learning_set_tags lst LEFT JOIN tags t ON t.tag_id = lst.tag_id WHERE lst.set_id = $row->id");
 		while($tag_row = mysql_fetch_object($res_tag))
 			echo "<span class=\"tag_box\">$tag_row->tag</span>";
 

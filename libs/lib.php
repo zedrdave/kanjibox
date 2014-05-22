@@ -67,7 +67,7 @@ function init_app($ajax = false)
         $_SESSION['user']->setLoggedIn(true);
         $levels = Session::$levelNames;
         if (!in_array($_SESSION['user']->getLevel(), $levels)) {
-            $_SESSION['user']->update_level($_SESSION['user']->getNJLPTLevel());
+            $_SESSION['user']->updateLevel($_SESSION['user']->getNJLPTLevel());
         }
 
         $fb_id = $_SESSION['user']->getFbID();
@@ -229,16 +229,16 @@ function force_logged_in_app()
 
 function print_prefs($cat)
 {
-    foreach (User::$pref_labels[$cat] as $pref => $label) {
+    foreach (User::$prefLabels[$cat] as $pref => $label) {
         if (is_array($label)) {
-            $cur_val = @$_SESSION['user']->get_pref($cat, $pref);
+            $cur_val = @$_SESSION['user']->getPreference($cat, $pref);
             echo '<p>' . $label['legend'];
             echo '<select id="prefs[' . $cat . '][' . $pref . ']" name="prefs[' . $cat . '][' . $pref . ']" onchange="show_and_blink(\'save_prefs\'); return true;">';
             foreach ($label['choices'] as $value => $name)
                 echo '<option value="' . $value . '"' . ($cur_val == $value ? ' selected' : '') . '>' . $name . '</option>';
             echo '</select></p>';
         } else
-            echo "<input type=\"checkbox\" name=\"prefs[$cat][$pref]\" id=\"prefs[$cat][$pref]\" value=\"1\" " . (@$_SESSION['user']->get_pref($cat,
+            echo "<input type=\"checkbox\" name=\"prefs[$cat][$pref]\" id=\"prefs[$cat][$pref]\" value=\"1\" " . (@$_SESSION['user']->getPreference($cat,
                 $pref) ? 'checked' : '') . " onclick=\"show_and_blink('save_prefs'); return true;\" /> $label ";
     }
 }
@@ -364,7 +364,7 @@ function display_editors_board()
     ?>
     <div class="search_form" style="background-color:#DDD;"><h3><a href="#"  onclick="$('textarea#editors_board').toggle();
             return false;">Editors Bulletin Board:</a></h3>
-                                                                   <?php
+            <?php
             if (file_exists(dirname(__FILE__) . '/../tools/notes.txt'))
                 $notes = file_get_contents(dirname(__FILE__) . '/../tools/notes.txt');
             else
@@ -372,7 +372,7 @@ function display_editors_board()
             ?>
         <textarea id="editors_board" style="width:98%;height:<?php
         echo min(max(5, strlen($notes) / 90) + count(explode("\n", $notes)), 15)
-            ?>em" onchange="save_board(this);"><?php echo $notes;?></textarea>
+        ?>em" onchange="save_board(this);"><?php echo $notes;?></textarea>
     </div>
     <script type="text/javascript">
         function save_board(txtobj) {
@@ -395,8 +395,9 @@ function get_query_hash($query)
 
 function execute_query_with_hash($query, $payload, $apply = true)
 {
-    if (get_query_hash($query) != $payload)
+    if (get_query_hash($query) != $payload) {
         die('Nonono...');
+    }
 
     execute_query($query, $apply);
 }
@@ -407,14 +408,16 @@ function execute_query($query, $apply = true, $force_run_again = false)
     $res = mysql_query('SELECT * FROM data_update_queries WHERE query_str = \'' . DB::getConnection()->quote($query) . "'") or die(mysql_error());
     if (mysql_num_rows($res) > 0) {
         $row = mysql_fetch_object($res);
-        if (!$force_run_again && ($row->applied || !$apply))
+        if (!$force_run_again && ($row->applied || !$apply)) {
             echo "Query already ran";
+        }
         else {
             echo "Query already ran but not applied. Applying.<br/>";
             mysql_query("UPDATE data_update_queries SET applied = 1 WHERE update_query_id = $row->update_query_id") or die(mysql_error());
         }
     } else {
-        mysql_query("INSERT INTO data_update_queries SET user_id = " . $_SESSION['user']->getID() . ", query_str = '" . DB::getConnection()->quote($query) . "', applied = " . (int) $apply) or die(mysql_error());
+        DB::insert('INSERT INTO data_update_queries SET user_id = :user_id, query_str = :query, applied = :applied',
+            [':user_id' => $_SESSION['user']->getID(), ':query' => $query, ':applied' => $apply]);
     }
     if ($apply) {
         mysql_query($query) or die(mysql_error());

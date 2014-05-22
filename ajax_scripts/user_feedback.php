@@ -18,7 +18,7 @@ if ((isset($params['type']) && $params['type'] != 'general') && !empty($_SESSION
 
     <?php
 
-    echo make_toggle_visibility("<ol class=\"feedback-instructions\"><li>This form is <em>not</em> for help requests: only for bugs and content errors.</li><li><a href=\"http://kanjibox.net/kb/page/faq/\">Read the FAQ first</a>.</li><li>Be as complete as possible in your report: select relevant entries and add comments if necessary.</li><li>For any content mistake, check first with an <a href=\"http://www.csse.monash.edu.au/~jwb/cgi-bin/wwwjdic.cgi?1C\">authoritative dictionary</a>.</li><li><a href=\"http://kanjibox.net/kb/page/faq/#quizlevels\">Read this</a> before reporting any level errors in Quiz mode.</li><li>Only report a specific problem once.</li><li><a href=\"http://kanjibox.net/kb/page/faq/#corrections\">Read the FAQ</a>.</li><li>If the issue if blocking game-play altogether, don't hesitate to <a href=\"mailto:support@kanjibox.net\">contact me</a> directly.</li><li>If you are an Elite user or reporting translation mistakes in French/Spanish/German, consider using the 'Edit' button (next to the feedback button) to make the correction directly.</li></ol>",
+    echo make_toggle_visibility("<ol class=\"feedback-instructions\"><li>This form is <em>not</em> for help requests: only for bugs and content errors.</li><li><a href=\"http://kanjibox.net/kb/page/faq/\">Read the FAQ first</a>.</li><li>Be as complete as possible in your report: select relevant entries and add comments if necessary.</li><li>For any content mistake, check first with an <a href=\"http://www.csse.monash.edu.au/~jwb/cgi-bin/wwwjdic.cgi?1C\">authoritative dictionary</a>.</li><li><a href=\"http://kanjibox.net/kb/page/faq/#quizlevels\">Read this</a> before reporting any level errors in Quiz mode.</li><li>Only report a specific problem once.</li><li><a href=\"http://kanjibox.net/kb/page/faq/#corrections\">Read the FAQ</a>.</li><li>If the issue if blocking game-play altogether, don't hesitate to <a href=\"mailto:supportkanjibox.net\">contact me</a> directly.</li><li>If you are an Elite user or reporting translation mistakes in French/Spanish/German, consider using the 'Edit' button (next to the feedback button) to make the correction directly.</li></ol>",
         0, 'Click <span style="color:blue">here</span> first if this is your first time sending feedback! &raquo;<br/>');
 
     foreach ($form_options as $id => $options) {
@@ -51,7 +51,7 @@ if ((isset($params['type']) && $params['type'] != 'general') && !empty($_SESSION
                 $forms .= $options['param_3_title'] . ' ' . get_select_menu($options['param_3'], 'param_3', '', '',
                         '...', ($options['param_3_required'] ? 'form_required' : ''));
             } else {
-                $forms .= $options['param_3_title'] . '<input type="hidden" id="form_' . $id . '_param_3" name="param_3" value="' . (int) $options['param_3'] . '" ' . (@$options['param_3_required'] ? 'class="form_required"' : '') . ' /> ';
+                $forms .= $options['param_3_title'] . '<input type="hidden" id="form_' . $id . '_param_3" name="param_3" value="' . (int) $options['param_3'] . '" ' . ($options['param_3_required'] ? 'class="form_required"' : '') . ' /> ';
             }
         }
 

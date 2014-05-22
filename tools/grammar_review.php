@@ -10,21 +10,21 @@ mb_internal_encoding("UTF-8");
 $res = mysql_query("SELECT gs.set_id, gs.name FROM grammar_sets gs");
 $grammar_sets = array(-1 => '[none]');
 while ($row = mysql_fetch_object($res))
-    $grammar_sets[$row->setID] = $row->name;
+    $grammar_sets[$row->id] = $row->name;
 
-$set_id = (int) @$_REQUEST['set_id'];
-if (!$set_id)
-    $set_id = (int) @$params['set_id'];
+$setID = (int) @$_REQUEST['set_id'];
+if (!$setID)
+    $setID = (int) @$params['set_id'];
 
 echo 'Set: ';
-display_select_menu($grammar_sets, 'set_id', $set_id,
+display_select_menu($grammar_sets, 'set_id', $setID,
     "window.location.href = 'https://kanjibox.net/kb/tools/grammar_review/set_id/' + this.value + '/';", '-');
 echo '<br/>';
 
 
-$res = mysql_query("SELECT sq.*, e.*, j.njlpt AS word_jlpt, ux.first_name, ux.last_name, ga.jmdict_id AS answer_jmdict_id, IF(j2.usually_kana, j2.reading, j2.word) AS decoy, r.status AS review_status, r.user_id AS reviewer_id FROM grammar_questions sq JOIN examples e ON sq.sentence_id = e.example_id JOIN jmdict j ON j.id = sq.jmdict_id JOIN jmdict_ext jg ON jg.jmdict_id = j.id LEFT JOIN users_ext ux ON ux.user_id = sq.user_id LEFT JOIN grammar_answers ga ON ga.question_id = sq.question_id LEFT JOIN jmdict j2 ON j2.id = ga.jmdict_id LEFT JOIN grammar_answer_reviews r ON r.question_id = sq.question_id AND r.jmdict_id = ga.jmdict_id WHERE " . (@$user_id ? "sq.user_id = $user_id" : "1") . ($set_id > 0 ? " AND sq.set_id = $set_id" : "") . ($set_id == -1 ? " AND (sq.set_id <= 0 OR sq.set_id IS NULL)" : "") . " ORDER BY (review_status IS NULL) DESC, in_demo DESC, set_id ASC") or die(mysql_error());
+$res = mysql_query("SELECT sq.*, e.*, j.njlpt AS word_jlpt, ux.first_name, ux.last_name, ga.jmdict_id AS answer_jmdict_id, IF(j2.usually_kana, j2.reading, j2.word) AS decoy, r.status AS review_status, r.user_id AS reviewer_id FROM grammar_questions sq JOIN examples e ON sq.sentence_id = e.example_id JOIN jmdict j ON j.id = sq.jmdict_id JOIN jmdict_ext jg ON jg.jmdict_id = j.id LEFT JOIN users_ext ux ON ux.user_id = sq.user_id LEFT JOIN grammar_answers ga ON ga.question_id = sq.question_id LEFT JOIN jmdict j2 ON j2.id = ga.jmdict_id LEFT JOIN grammar_answer_reviews r ON r.question_id = sq.question_id AND r.jmdict_id = ga.jmdict_id WHERE " . (@$userID ? "sq.user_id = $userID" : "1") . ($setID > 0 ? " AND sq.set_id = $setID" : "") . ($setID == -1 ? " AND (sq.set_id <= 0 OR sq.set_id IS NULL)" : "") . " ORDER BY (review_status IS NULL) DESC, in_demo DESC, set_id ASC") or die(mysql_error());
 
-$row_count = DB::count('SELECT COUNT(*) FROM grammar_questions sq LEFT JOIN grammar_answers ga ON ga.question_id = sq.question_id LEFT JOIN grammar_answer_reviews r ON r.question_id = sq.question_id AND r.jmdict_id = ga.jmdict_id WHERE r.question_id IS NULL ' . ($user_id ? "AND sq.user_id = $user_id" : '') . ($set_id > 0 ? " AND sq.set_id = $set_id" : '') . ($set_id == -1 ? ' AND (sq.set_id <= 0 OR sq.set_id IS NULL)' : ''),
+$row_count = DB::count('SELECT COUNT(*) FROM grammar_questions sq LEFT JOIN grammar_answers ga ON ga.question_id = sq.question_id LEFT JOIN grammar_answer_reviews r ON r.question_id = sq.question_id AND r.jmdict_id = ga.jmdict_id WHERE r.question_id IS NULL ' . ($userID ? "AND sq.user_id = $userID" : '') . ($setID > 0 ? " AND sq.set_id = $setID" : '') . ($setID == -1 ? ' AND (sq.set_id <= 0 OR sq.set_id IS NULL)' : ''),
         []);
 
 echo "<p><strong>Still need reviewing: $row_count->c sentences</strong> + Already reviewed: " . (mysql_num_rows($res) - $row_count->c) . " = Total: " . mysql_num_rows($res) . "</p>";

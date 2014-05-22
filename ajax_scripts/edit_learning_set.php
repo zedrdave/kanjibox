@@ -78,7 +78,7 @@ if(isset($_POST['subscribe_to_set'])) {
 		echo '<div class="error_msg">' . $err . '</div>';
 	else {
 		if($_REQUEST['return_play_btn']) {
-			echo "<span class=\"subscribed-status\">Subscribed</span> <button onclick=\"location.href ='" . SERVER_URL . "page/play/type/" . $set->getType() . "/mode/sets/set_id/" . $set->setID . "/'\">Play</button>";
+			echo "<span class=\"subscribed-status\">Subscribed</span> <button onclick=\"location.href ='" . SERVER_URL . "page/play/type/" . $set->getType() . "/mode/sets/set_id/" . $set->id . "/'\">Play</button>";
 		}
 		else
 			echo '<div class="success_msg">Suscribed to set</div>';
@@ -109,13 +109,13 @@ if(isset($_POST['search']) || isset($_FILES['add_to_set_file']['name'])) {
 			echo '<div class="error_msg">Nothing usable in search string...</div>';
 		else {
 			echo '<hr/>';
-			$import_line = '<h3><input type="checkbox" class="check_select_all" onclick="$(\'#set_results .set_content_line input:enabled\').prop(\'checked\', this.checked); $(\'.check_select_all\').prop(\'checked\', this.checked);"></input> <button class="import_button" onclick="add_new_entries();">Import entries &raquo;</button></h3><form id="set_results" name="set_results" method="post" action=""><input type="hidden" id="set_id" name="set_id" value="' . $set->setID . '"></input><input type="hidden" id="adding_to_set" name="adding_to_set" value="' . $set->setID . '"></input>';
+			$import_line = '<h3><input type="checkbox" class="check_select_all" onclick="$(\'#set_results .set_content_line input:enabled\').prop(\'checked\', this.checked); $(\'.check_select_all\').prop(\'checked\', this.checked);"></input> <button class="import_button" onclick="add_new_entries();">Import entries &raquo;</button></h3><form id="set_results" name="set_results" method="post" action=""><input type="hidden" id="set_id" name="set_id" value="' . $set->id . '"></input><input type="hidden" id="adding_to_set" name="adding_to_set" value="' . $set->id . '"></input>';
 			
 			echo $import_line;
 			
 			foreach($arr as $id => $row) {
 				echo "<div class=\"set_content_line";
-				if(@$row->setID)
+				if(@$row->id)
 					echo " added";
 				echo "\">";
 				
@@ -149,7 +149,7 @@ if(isset($_POST['search']) || isset($_FILES['add_to_set_file']['name'])) {
 
 
 
-echo '<em>Set id: <a href="' . get_page_url(PAGE_PLAY, ['type' => $set->getType(), 'mode' => SETS_MODE, 'view_set_id' => $set->setID]) . '">' . $set->setID . '</a></em>';
+echo '<em>Set id: <a href="' . get_page_url(PAGE_PLAY, ['type' => $set->getType(), 'mode' => SETS_MODE, 'view_set_id' => $set->id]) . '">' . $set->id . '</a></em>';
 if(! $set->isOwner()) {
 	echo ' (created by: ';
 
@@ -172,21 +172,21 @@ if(! $set->isOwner()) {
 		echo "Public Domain";
 	
 	if($set->isSubscribed())
-		echo " <form style=\"display:inline;\" action=\"". get_page_url(PAGE_PLAY, ['mode' => SETS_MODE, 'type' => $set->getType(), 'editor' => 'open']) ."\" method=\"post\"><input type=\"hidden\" name=\"unsubscribe_set_id\" value=\"$set->setID\"></input><input type=\"submit\" value=\"Unsubscribe\"></submit></form> ";	
+		echo " <form style=\"display:inline;\" action=\"". get_page_url(PAGE_PLAY, ['mode' => SETS_MODE, 'type' => $set->getType(), 'editor' => 'open']) ."\" method=\"post\"><input type=\"hidden\" name=\"unsubscribe_set_id\" value=\"$set->id\"></input><input type=\"submit\" value=\"Unsubscribe\"></submit></form> ";	
 	elseif($set->isPublic())
-		echo " <button onclick=\"subscribe_to_set($set->setID, this, '". str_replace("'", "\'", $set->getName()) . "'); return false;\">Subscribe</button> ";
+		echo " <button onclick=\"subscribe_to_set($set->id, this, '". str_replace("'", "\'", $set->getName()) . "'); return false;\">Subscribe</button> ";
 	
 }
 
 if($set->canAdmin()) {
-	echo " <form style=\"display:inline;\" action=\"". get_page_url(PAGE_PLAY, ['mode' => SETS_MODE, 'type' => $set->getType(), 'editor' => 'open']) ."\" onsubmit=\"return confirm('Are you sure you want to delete this set?')\" method=\"post\"><input type=\"hidden\" name=\"delete_set_id\" value=\"$set->setID\"></input><input class=\"delete\" type=\"submit\" value=\"Delete set\"></submit></form> ";
+	echo " <form style=\"display:inline;\" action=\"". get_page_url(PAGE_PLAY, ['mode' => SETS_MODE, 'type' => $set->getType(), 'editor' => 'open']) ."\" onsubmit=\"return confirm('Are you sure you want to delete this set?')\" method=\"post\"><input type=\"hidden\" name=\"delete_set_id\" value=\"$set->id\"></input><input class=\"delete\" type=\"submit\" value=\"Delete set\"></submit></form> ";
 }
 
 if(@$_SESSION['user']->isAdministrator() && !$set->isPublicDomain()) {
-	echo " <form style=\"display:inline;\" action=\"". get_page_url(PAGE_PLAY, ['mode' => SETS_MODE, 'type' => $set->getType(), 'editor' => 'open']) ."\" method=\"post\"><input type=\"hidden\" name=\"public_domain_set_id\" value=\"$set->setID\"></input><input type=\"submit\" value=\"Make public domain\"></submit></form> ";
+	echo " <form style=\"display:inline;\" action=\"". get_page_url(PAGE_PLAY, ['mode' => SETS_MODE, 'type' => $set->getType(), 'editor' => 'open']) ."\" method=\"post\"><input type=\"hidden\" name=\"public_domain_set_id\" value=\"$set->id\"></input><input type=\"submit\" value=\"Make public domain\"></submit></form> ";
 }
 
-echo '<a href="' . APP_URL . "export/set_export.php?set_id=" . $set->setID . '" target="_blank"><button id="set_export_btn">Export</button></a> ';
+echo '<a href="' . APP_URL . "export/set_export.php?set_id=" . $set->id . '" target="_blank"><button id="set_export_btn">Export</button></a> ';
 
 $subs_count = $set->getSubsCount();
 if($subs_count)
@@ -196,15 +196,15 @@ echo '<br/>';
 
 echo "<p>";
 if($set->canAdmin())
-	echo "Name: <input type=\"text\" id=\"edit_set_name\" value=\"" . htmlspecialchars($set->getName(),  ENT_QUOTES, 'UTF-8') . "\" size=\"40\" onchange=\"update_set_name(". $set->setID . ", this.value)\"></input>";
+	echo "Name: <input type=\"text\" id=\"edit_set_name\" value=\"" . htmlspecialchars($set->getName(),  ENT_QUOTES, 'UTF-8') . "\" size=\"40\" onchange=\"update_set_name(". $set->id . ", this.value)\"></input>";
 else
 	echo "<hr/><span class=\"name\">" . $set->getName() . "</span>";
 	
-echo " (public: <input type=\"checkbox\" name=\"set_public\" id=\"set_public\" value=\"1\" onclick=\"update_set_public(" . $set->setID . ", this.checked)\"" . ($set->isPublic() ? ' checked' : '') . (!$set->canAdmin() || ($set->isPublic() && $subs_count) ? ' disabled' : '') . "></input>access, <input type=\"checkbox\" name=\"set_editable\" id=\"set_editable\" value=\"1\" onclick=\"update_set_editable(" . $set->setID . ", this.checked)\"" . ($set->isEditable() ? ' checked' : '') . (!$set->canAdmin() ? ' disabled' : '') . "></input>edit)</p>";
+echo " (public: <input type=\"checkbox\" name=\"set_public\" id=\"set_public\" value=\"1\" onclick=\"update_set_public(" . $set->id . ", this.checked)\"" . ($set->isPublic() ? ' checked' : '') . (!$set->canAdmin() || ($set->isPublic() && $subs_count) ? ' disabled' : '') . "></input>access, <input type=\"checkbox\" name=\"set_editable\" id=\"set_editable\" value=\"1\" onclick=\"update_set_editable(" . $set->id . ", this.checked)\"" . ($set->isEditable() ? ' checked' : '') . (!$set->canAdmin() ? ' disabled' : '') . "></input>edit)</p>";
 
 
 if($set->canEdit())
-	echo "<p>Description:<br/><textarea id=\"tag_description\" onchange=\"update_set_desc(". $set->setID . ", this.value)\">" . $set->getDescription() . "</textarea></p>";
+	echo "<p>Description:<br/><textarea id=\"tag_description\" onchange=\"update_set_desc(". $set->id . ", this.value)\">" . $set->getDescription() . "</textarea></p>";
 else
 	echo '<p class="description">' . $set->getDescription() . '</p>';
 	
@@ -220,10 +220,10 @@ if($set->canEdit()) {
 		echo '<div style="color:red;font-weight:bold;">This set contains the maximum possible of entries (' . MAX_VOCAB_ENTRIES . '). Please remove some entries if you want to add more.</div>';
 	}
 	
-?><button id="set_search_button" onclick="search_entries(<?php echo $set->setID ?>); return false;">Add new entries from text field:</button> <br/><textarea id="add_to_set_search" name="add_to_set_search" onchange="search_entries(<?php echo $set->setID ?>);"></textarea>
+?><button id="set_search_button" onclick="search_entries(<?php echo $set->id ?>); return false;">Add new entries from text field:</button> <br/><textarea id="add_to_set_search" name="add_to_set_search" onchange="search_entries(<?php echo $set->id ?>);"></textarea>
 <form id="add_to_set_file_upload" enctype="multipart/form-data" action="<?php echo SERVER_URL ?>ajax/edit_learning_set/" method="post">
 	<input type="hidden" name="MAX_FILE_SIZE" value="<?php echo MAX_UPLOAD_SIZE ?>" />
-	<input type="hidden" name="set_id" value="<?php echo $set->setID ?>" />
+	<input type="hidden" name="set_id" value="<?php echo $set->id ?>" />
 <div style="font-style:italic; text-align: center;">- Or -</div> <input name="add_to_set_file" type="file" /> <input type="submit" value="Upload File" />
 
 </form>

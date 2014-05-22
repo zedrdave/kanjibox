@@ -18,7 +18,7 @@
     <li><a href="#donations-upgrade">Upgrading - Donating</a><ol>
             <li><a href="#elite">What is the 'Elite' status?</a></li>
             <li><a href="#elite-more">Other ways to join the 'Elite'...</a></li>
-            <li><a href="#contributing">Contributing...</a></li>	
+            <li><a href="#contributing">Contributing...</a></li>
             <li><a href="#roadmap">Roadmap and future updates...</a></li>
             <li><a href="#donations"><big>Donations...</big></a></li>
         </ol></li>
@@ -77,13 +77,13 @@
 
             <li><h2 class="anchor"><a name="acknowledgements">Licenses and acknowledgements</a></h2>
                 <p>
-                    This application uses the 
+                    This application uses the
                     <a href="http://www.csse.monash.edu.au/~jwb/edict.html">EDICT</a> and
                     <a href="http://www.csse.monash.edu.au/~jwb/kanjidic.html">KANJIDIC</a> dictionary files.
-                    These files are the property of the 
-                    <a href="http://www.edrdg.org/"> Electronic Dictionary 
+                    These files are the property of the
+                    <a href="http://www.edrdg.org/"> Electronic Dictionary
                         Research and Development Group</a>, and are used in
-                    conformance with the Group's 
+                    conformance with the Group's
                     <a href="http://www.edrdg.org/edrdg/licence.html">licence</a>.
                 </p>
                 <p>It also uses data from the <a href="http://hispadic.byethost3.com/">HispaDic</a> project, in conformance with its <a href="http://creativecommons.org/licenses/by-sa/3.0/">CC license</a>.</p>

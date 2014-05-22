@@ -1,13 +1,13 @@
+Options -Indexes -MultiViews
 
-Options -indexes
-
-RewriteEngine on
-RewriteRule ^page/([^/]*)/(.*)?$ index.php?page=$1&params=$2 [L,QSA]
+RewriteEngine On
+RewriteBase /
 RewriteRule ^ajax/([^/]*)/(.*)?$ ajax.php?script=$1&params=$2 [L,QSA]
+RewriteRule ^page/([^/]*)/(.*)?$ index.php?page=$1&params=$2 [L,QSA]
 RewriteRule ^admin/([^/]*)/?(.*)?$ admin.php?script=$1&params=$2 [L,QSA]
-RewriteRule ^tools/([^/]*)/?(.*)?$ tools.php?script=$1&params=$2 [L,QSA]
+RewriteRule ^tools/?([^/]*)/?(.*)?$ tools.php?script=$1&params=$2 [L,QSA]
 RewriteRule ^audio/([^/]*)/?(.*)?$ audio.php?string=$1&hash=$2 [L,QSA]
-RewriteRule ^set/([^/]*)/(.*)?$ set.php?set_id=$1&params=$2 [L,QSA]
+RewriteRule ^set/([^/]*)/?(.*)?$ set.php?set_id=$1&params=$2 [L,QSA]
 RewriteRule ^sets/?(.*)?$ set.php?params=$1 [L,QSA]
 RewriteRule ^decks/(.*)?$ decks.php?$1 [L,QSA]
 

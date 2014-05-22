@@ -4,14 +4,12 @@ if (empty($_SESSION['user'])) {
     log_error('You need to be logged-in to access this function.', false, true);
 }
 
-$query = 'UPDATE `messages` SET msg_read = 1 WHERE user_id_to = ? AND message_id = ?';
-try {
-    $stmt = DB::getConnection()->prepare($query);
-    $stmt->bindValue(':userid', $_SESSION['user']->getID(), PDO::PARAM_INT);
-    $stmt->bindValue(':messageid', $params['id'], PDO::PARAM_INT);
-    $stmt = null;
-
+$update = DB::update('UPDATE `messages` SET msg_read = 1 WHERE :user_id_to = :userid_to AND message_id = :message_id',
+        [
+        'user_id_to' => $_SESSION['user']->getID(),
+        'messageid' => $params['id']
+        ]
+);
+if ($update) {
     echo 'Marked as read!';
-} catch (PDOException $e) {
-    log_db_error($query, $e->getMessage(), false, true);
 }

@@ -12,7 +12,8 @@ foreach ($levels as $level => $level_name) {
     echo get_rank_pop_table($level);
 }
 
-function get_rank_pop_table($level) {
+function get_rank_pop_table($level)
+{
     $is_admin = $_SESSION['user']->isAdministrator();
 
 
@@ -45,21 +46,22 @@ function get_rank_pop_table($level) {
     return $table;
 }
 
-function get_rank_population($total) {
+function get_rank_population($total)
+{
     foreach (User::getRanks() as $rank => $rank_long) {
         $pops[$rank] = 0;
     }
 
     $last_cutoff = 0;
 
-    foreach (User::$ranks_abs as $cutoff => $rank) {
+    foreach (User::$ranksAbs as $cutoff => $rank) {
         if ($last_cutoff <= $total) {
             $pops[$rank[0]] = min($cutoff, $total) - $last_cutoff;
         }
         $last_cutoff = $cutoff;
     }
 
-    foreach (User::$ranks_rel as $rank) {
+    foreach (User::$ranksRel as $rank) {
         $cutoff = floor((float) $rank[2] * $total);
 
         if ($cutoff > $last_cutoff) {
@@ -71,7 +73,7 @@ function get_rank_population($total) {
     }
 
     if ($last_cutoff < $total) {
-        $pops[User::$default_rank[0]] = $total - $last_cutoff;
+        $pops[User::$defaultRank[0]] = $total - $last_cutoff;
     }
 
     return $pops;

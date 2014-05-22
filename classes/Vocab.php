@@ -26,8 +26,8 @@ class Vocab extends Question
             $anticheat = '';
         }
 
-        $readingPref = $_SESSION['user']->get_pref('drill', 'show_reading');
-        $hideRareKanjiPref = $_SESSION['user']->get_pref('general', 'hide_rare_kanji');
+        $readingPref = $_SESSION['user']->getPreference('drill', 'show_reading');
+        $hideRareKanjiPref = $_SESSION['user']->getPreference('general', 'hide_rare_kanji');
         foreach ($choices as $choice) {
             // if($_SESSION['user']->is_admin())
             if (($choice->usually_kana == 1) && $hideRareKanjiPref) {
@@ -55,17 +55,17 @@ class Vocab extends Question
         if (@$solution->missing_lang) {
             echo '<div class="missing_lang">' . $solution->fullgloss;
             if (!$_SESSION['user']->isOnTranslatorProbation()) {
-                echo ' <a class="" href="#" onclick="show_vocab_translate_dialog(\'' . SERVER_URL . '\', \'' . $solution->id . '\', \'' . $this->data['sid'] . '\'); return false;"><img src="' . SERVER_URL . 'img/flags/' . $_SESSION['user']->get_pref('lang',
+                echo ' <a class="" href="#" onclick="show_vocab_translate_dialog(\'' . SERVER_URL . '\', \'' . $solution->id . '\', \'' . $this->data['sid'] . '\'); return false;"><img src="' . SERVER_URL . 'img/flags/' . $_SESSION['user']->getPreference('lang',
                     'vocab_lang') . '.png" class="missing_lang_icon' . ($this->isQuiz() ? ' disabled' : '') . '" /></a>';
             }
             echo '</div>';
         } else {
-            if ($_SESSION['user']->get_pref('lang', 'vocab_lang') != 'en' && substr($solution->fullgloss, 0, 3) == '(~)') {
+            if ($_SESSION['user']->getPreference('lang', 'vocab_lang') != 'en' && substr($solution->fullgloss, 0, 3) == '(~)') {
                 if ($this->isQuiz()) {
-                    echo '<div class="missing_lang">' . $solution->gloss_english . ' <a class="" href="#" onclick="show_vocab_translate_dialog(\'' . SERVER_URL . '\', \'' . $solution->id . '\', \'' . $this->data['sid'] . '\'); return false;"><img src="' . SERVER_URL . 'img/flags/' . $_SESSION['user']->get_pref('lang',
+                    echo '<div class="missing_lang">' . $solution->gloss_english . ' <a class="" href="#" onclick="show_vocab_translate_dialog(\'' . SERVER_URL . '\', \'' . $solution->id . '\', \'' . $this->data['sid'] . '\'); return false;"><img src="' . SERVER_URL . 'img/flags/' . $_SESSION['user']->getPreference('lang',
                         'vocab_lang') . '.png" class="missing_lang_icon disabled" /></a></div>' . ' <small><em>(incomplete translation)</em></small>';
                 } else {
-                    echo '<div class="missing_lang">' . substr($solution->fullgloss, 3) . ' <a class="" href="#" onclick="show_vocab_translate_dialog(\'' . SERVER_URL . '\', \'' . $solution->id . '\', \'' . $this->data['sid'] . '\'); return false;"><img src="' . SERVER_URL . 'img/flags/' . $_SESSION['user']->get_pref('lang',
+                    echo '<div class="missing_lang">' . substr($solution->fullgloss, 3) . ' <a class="" href="#" onclick="show_vocab_translate_dialog(\'' . SERVER_URL . '\', \'' . $solution->id . '\', \'' . $this->data['sid'] . '\'); return false;"><img src="' . SERVER_URL . 'img/flags/' . $_SESSION['user']->getPreference('lang',
                         'vocab_lang') . '.png" class="missing_lang_icon" /></a></div>  <small><em>(translation may need improving)</em></small>';
                 }
             } else {
@@ -96,7 +96,7 @@ class Vocab extends Question
             }
         }
 
-        $hideRareKanjiPref = $_SESSION['user']->get_pref('general', 'hide_rare_kanji');
+        $hideRareKanjiPref = $_SESSION['user']->getPreference('general', 'hide_rare_kanji');
 
         if ($solution->usually_kana && $hideRareKanjiPref) {
             $displayWordSolution = $solution->reading;
@@ -110,7 +110,7 @@ class Vocab extends Question
         echo '<span class="main" lang="ja" xml:lang="ja">' . $displayWordSolution . "</span> " . (($solution->reading != $solution->word && !$solution->katakana && $displayWordSolution != $solution->reading) ? " [" . $solution->reading . "]" : '') . ' <a href="#" onclick="play_tts(\'' . $audioLookup . '\', \'' . get_audio_hash($audioLookup) . '\'); return false;" class="tts-link"><img src="' . SERVER_URL . '/img/speaker.png" alt="play"/></a>' . " - " . $solution->fullgloss;
 
         if ($this->isLearningSet() && $this->set->canEdit()) {
-            echo '<a class="remove-from-set" title="Remove from set" href="#" onclick="remove_entry_from_set(\'' . SERVER_URL . 'ajax/edit_learning_set/\', ' . $this->set_id . ', ' . $this->getSolution()->id . ', \'#ajax-result\'); return false;">【×】</a>' . "\n";
+            echo '<a class="remove-from-set" title="Remove from set" href="#" onclick="remove_entry_from_set(\'' . SERVER_URL . 'ajax/edit_learning_set/\', ' . $this->id . ', ' . $this->getSolution()->id . ', \'#ajax-result\'); return false;">【×】</a>' . "\n";
         }
 
         //Example sentence:
@@ -269,7 +269,7 @@ class Vocab extends Question
 
         $glossQuery = Vocab::getQueryGloss();
 
-        $translatorMode = ($_SESSION['user']->get_pref('lang', 'vocab_lang') != 'en' && $_SESSION['user']->get_pref('lang',
+        $translatorMode = ($_SESSION['user']->getPreference('lang', 'vocab_lang') != 'en' && $_SESSION['user']->getPreference('lang',
                 'translator_mode'));
 
         if ($translatorMode) {
@@ -290,12 +290,12 @@ class Vocab extends Question
 
         if ($translatorMode) {
             if ($_SESSION['user']->isOnTranslatorProbation()) {
-                $query .= $queryWhere . " AND jx.gloss_" . Vocab::$langStrings[$_SESSION['user']->get_pref('lang',
+                $query .= $queryWhere . " AND jx.gloss_" . Vocab::$langStrings[$_SESSION['user']->getPreference('lang',
                         'vocab_lang')] . " LIKE '(~)%'";
             } else {
-                $query .= $queryWhere . " AND (jx.gloss_" . Vocab::$langStrings[$_SESSION['user']->get_pref('lang',
-                        'vocab_lang')] . ' IS NULL OR jx.gloss_' . Vocab::$langStrings[$_SESSION['user']->get_pref('lang',
-                        'vocab_lang')] . " = '' OR jx.gloss_" . Vocab::$langStrings[$_SESSION['user']->get_pref('lang',
+                $query .= $queryWhere . " AND (jx.gloss_" . Vocab::$langStrings[$_SESSION['user']->getPreference('lang',
+                        'vocab_lang')] . ' IS NULL OR jx.gloss_' . Vocab::$langStrings[$_SESSION['user']->getPreference('lang',
+                        'vocab_lang')] . " = '' OR jx.gloss_" . Vocab::$langStrings[$_SESSION['user']->getPreference('lang',
                         'vocab_lang')] . " LIKE '(~)%')";
             }
         }
@@ -331,7 +331,7 @@ class Vocab extends Question
 
     public function getSetWeightedVocab($userID, $howMany = 1)
     {
-        $queryWhere = ' WHERE lse.set_id = ' . $this->set_id;
+        $queryWhere = ' WHERE lse.set_id = ' . $this->id;
 
         $glossQuery = Vocab::getQueryGloss();
         $translatorMode = false;
@@ -353,9 +353,9 @@ class Vocab extends Question
         $query .= 'LEFT JOIN jmdict_confusing conf ON conf.jmdict_id = j.id LEFT JOIN jmdict_ext jx ON jx.jmdict_id = j.id LEFT JOIN jmdict_audio_lookup jal ON jal.jmdict_id = j.id';
 
         if ($translatorMode) {
-            $query .= $queryWhere . " AND (jx.gloss_" . Vocab::$langStrings[$_SESSION['user']->get_pref('lang',
-                    'vocab_lang')] . ' IS NULL OR jx.gloss_' . Vocab::$langStrings[$_SESSION['user']->get_pref('lang',
-                    'vocab_lang')] . " = '' OR jx.gloss_" . Vocab::$langStrings[$_SESSION['user']->get_pref('lang',
+            $query .= $queryWhere . " AND (jx.gloss_" . Vocab::$langStrings[$_SESSION['user']->getPreference('lang',
+                    'vocab_lang')] . ' IS NULL OR jx.gloss_' . Vocab::$langStrings[$_SESSION['user']->getPreference('lang',
+                    'vocab_lang')] . " = '' OR jx.gloss_" . Vocab::$langStrings[$_SESSION['user']->getPreference('lang',
                     'vocab_lang')] . " LIKE '(~)%')";
         }
 
@@ -519,11 +519,11 @@ class Vocab extends Question
 
     public function editButtonLink()
     {
-        if ($_SESSION['user']->isOnTranslatorProbation() && !$_SESSION['user']->get_pref('lang', 'translator_mode')) {
+        if ($_SESSION['user']->isOnTranslatorProbation() && !$_SESSION['user']->getPreference('lang', 'translator_mode')) {
             return '';
         }
 
-        if ($_SESSION['user']->get_pref('lang', 'vocab_lang') != 'en' || $_SESSION['user']->isEditor()) {
+        if ($_SESSION['user']->getPreference('lang', 'vocab_lang') != 'en' || $_SESSION['user']->isEditor()) {
             $solution = $this->getSolution();
 
             return '<a class="icon-button ui-state-default ui-corner-all" title="Languages..." href="#" onclick="show_vocab_translate_dialog(\'' . SERVER_URL . '\', \'' . $solution->id . '\', \'' . $this->data['sid'] . '\'); return false;">✍</a>';
@@ -534,7 +534,7 @@ class Vocab extends Question
 
     public static function getQueryGloss()
     {
-        $lang = $_SESSION['user']->get_pref('lang', 'vocab_lang');
+        $lang = $_SESSION['user']->getPreference('lang', 'vocab_lang');
 
         if ($lang == 'en') {
             $glossQuery = 'jx.gloss_english AS `fullgloss`, 0 AS missing_lang';

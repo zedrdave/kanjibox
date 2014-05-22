@@ -5,7 +5,7 @@ if(!@$_SESSION['user'] || !$_SESSION['user']->isEditor())
 mb_internal_encoding("UTF-8");
 
 if(@$_REQUEST['answer_ids']) {
-	$set_id = (int) @$_REQUEST['set_id'];
+	$setID = (int) @$_REQUEST['set_id'];
 	$answer_ids = array_keys(@$_REQUEST['answer_ids']);
 	
 	if(count($answer_ids) < 4) {
@@ -21,7 +21,7 @@ if(@$_REQUEST['answer_ids']) {
 			if($id != $id_2)
 				$preferences[$id][$id_2] = 0;
 	
-	$query = "SELECT sq.question_id, sq.jmdict_id AS answer_id, gar.jmdict_id, gar.status FROM grammar_questions sq LEFT JOIN grammar_answer_reviews gar ON gar.question_id = sq.question_id WHERE sq.set_id = $set_id AND sq.jmdict_id IN (" . implode(',', $answer_ids) . ")";
+	$query = "SELECT sq.question_id, sq.jmdict_id AS answer_id, gar.jmdict_id, gar.status FROM grammar_questions sq LEFT JOIN grammar_answer_reviews gar ON gar.question_id = sq.question_id WHERE sq.set_id = $setID AND sq.jmdict_id IN (" . implode(',', $answer_ids) . ")";
 	$res = mysql_query($query) or die(mysql_error());
 	while($row = mysql_fetch_object($res)) {
 		@$reviews[$row->question_id][$row->jmdict_id] = $row->status;
@@ -32,7 +32,7 @@ if(@$_REQUEST['answer_ids']) {
 	}
 	
 	
-	$query = "SELECT sq.question_id, sq.jmdict_id AS right_answer, GROUP_CONCAT(ga.jmdict_id) AS wrong_answers FROM grammar_questions sq LEFT JOIN grammar_answers ga ON ga.question_id = sq.question_id WHERE sq.set_id = $set_id AND sq.jmdict_id IN (" . implode(',', $answer_ids) . ") GROUP BY sq.question_id";
+	$query = "SELECT sq.question_id, sq.jmdict_id AS right_answer, GROUP_CONCAT(ga.jmdict_id) AS wrong_answers FROM grammar_questions sq LEFT JOIN grammar_answers ga ON ga.question_id = sq.question_id WHERE sq.set_id = $setID AND sq.jmdict_id IN (" . implode(',', $answer_ids) . ") GROUP BY sq.question_id";
 	
 	$res = mysql_query($query) or die(mysql_error());
 	
@@ -72,7 +72,7 @@ if(@$_REQUEST['answer_ids']) {
 	// }
 	
 	if($min_wrong_answers >= 5) {
-		echo "<p>This selection already has at least 5 Wrong Answers per question. You can see the set's details <a href=\"/kb/tools/grammar_list/set_id/". $set_id . "/\">over here</a>.</p>";
+		echo "<p>This selection already has at least 5 Wrong Answers per question. You can see the set's details <a href=\"/kb/tools/grammar_list/set_id/". $setID . "/\">over here</a>.</p>";
 	}
 	
    function shuffle_assoc(&$array) {

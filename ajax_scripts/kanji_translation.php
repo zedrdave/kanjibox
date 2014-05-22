@@ -11,7 +11,7 @@ if(isset($_REQUEST['update'])) {
 		die('no kanji id');
 		
 	$kanji_id = (int) $_REQUEST['kanji_id'];
-	$new_gloss = $_REQUEST['new_gloss'];
+	$newGloss = $_REQUEST['new_gloss'];
 	
 	if(!isset($_REQUEST['lang']) || !isset(Vocab::$langStrings[$_REQUEST['lang']]))
 		return;
@@ -19,14 +19,14 @@ if(isset($_REQUEST['update'])) {
 	$lang = $_REQUEST['lang'];
 	
 	
-	$ret = post_db_correction('kanjis_ext', 'kanji_id', $kanji_id, 'meaning_' . Vocab::$langStrings[$lang], $new_gloss, true);
+	$ret = post_db_correction('kanjis_ext', 'kanji_id', $kanji_id, 'meaning_' . Vocab::$langStrings[$lang], $newGloss, true);
 	
 	if(@$_SESSION['cur_session'] && $q = $_SESSION['cur_session']->getQuestion(@$_REQUEST['sid']))
-		$q->updateMeaningStr($new_gloss);
+		$q->updateMeaningStr($newGloss);
 	
 	echo '<div>';
 	if($ret != 'Value unchanged')
-		echo "Updating " . ucwords(Vocab::$langStrings[$lang]) . " translation to: <span id=\"newtranslation\">$new_gloss" . (@$_REQUEST['traditional'] ? ' (旧)' : '') . "</span><br/>";
+		echo "Updating " . ucwords(Vocab::$langStrings[$lang]) . " translation to: <span id=\"newtranslation\">$newGloss" . (@$_REQUEST['traditional'] ? ' (旧)' : '') . "</span><br/>";
 	echo $ret;
 	echo '</div>';
 	
@@ -41,7 +41,7 @@ if(@$params['kanji_id']) {
 	$row = mysql_fetch_object($res);
 	
 	if($row) {
-		$pref_lang = $_SESSION['user']->get_pref('lang', 'kanji_lang');
+		$pref_lang = $_SESSION['user']->getPreference('lang', 'kanji_lang');
 		
 		echo  '<p style="font-style:italic;"><strong>Important:</strong> Please <a href="http://kanjibox.net/kb/page/international/" target="_new" style="font-weight:bold;color:#006;">read this brief message</a> if this is your first time submitting a translation.</p>';
 		
@@ -52,13 +52,13 @@ if(@$params['kanji_id']) {
 				
 		// echo "<p><img src=\"" . SERVER_URL . "/img/flags/en.png\" alt=\"uk-flag\" style=\"vertical-align:bottom; margin:0 3px 0 0;\" /> <i>$row->gloss_english</i></p>";
 		
-		foreach(Vocab::$langStrings as $lang => $full_lang) {
-			$meaning_col = "meaning_$full_lang";
+		foreach(Vocab::$langStrings as $lang => $fullLang) {
+			$meaning_col = "meaning_$fullLang";
 			if($pref_lang == $lang) {
 				if(substr($row->$meaning_col, 0, 3) == '(~)')
 					$row->$meaning_col = substr($row->$meaning_col, 3);
 
-				echo "<p><img src=\"" . SERVER_URL . "/img/flags/$lang.png\" alt=\"$lang-flag\" style=\"vertical-align:bottom; margin:0 3px 0 0;\" /> " . ucwords($full_lang) . ":</p>";
+				echo "<p><img src=\"" . SERVER_URL . "/img/flags/$lang.png\" alt=\"$lang-flag\" style=\"vertical-align:bottom; margin:0 3px 0 0;\" /> " . ucwords($fullLang) . ":</p>";
 				echo "<p style=\"border: 1px solid black; padding: 2px;\">";
 				echo "<input type=\"text\" name=\"new_gloss\" id=\"new_gloss\" value=\"" . htmlentities($row->$meaning_col, ENT_COMPAT, 'UTF-8') . "\" size=\"60\" /><br/>";
 				

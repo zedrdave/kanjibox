@@ -28,12 +28,48 @@ class DB
     public static function count($query, $params = [])
     {
         try {
-            $stmt = DB::getConnection()->prepare($query);
+            $stmt = self::getConnection()->prepare($query);
             $stmt->execute($params);
             return (int) $stmt->fetchColumn();
         } catch (PDOException $e) {
-            log_db_error($query, $e->getMessage(), false);
-            return 0;
+            log_db_error($query, $e->getMessage(), false, true);
+            return false;
+        }
+    }
+
+    public static function insert($query, $params = [])
+    {
+        try {
+            $stmt = self::getConnection()->prepare($query);
+            $stmt->execute($params);
+            return self::getConnection()->lastInsertId();
+        } catch (PDOException $e) {
+            log_db_error($query, $e->getMessage(), false, true);
+            return false;
+        }
+    }
+
+    public static function update($query, $params = [])
+    {
+        try {
+            $stmt = self::getConnection()->prepare($query);
+            $stmt->execute($params);
+            return $stmt->rowCount();
+        } catch (PDOException $e) {
+            log_db_error($query, $e->getMessage(), false, true);
+            return false;
+        }
+    }    
+    
+    public static function delete($query, $params = [])
+    {
+        try {
+            $stmt = self::getConnection()->prepare($query);
+            $stmt->execute($params);
+            return $stmt->rowCount();
+        } catch (PDOException $e) {
+            log_db_error($query, $e->getMessage(), false, true);
+            return false;
         }
     }
 
@@ -43,7 +79,7 @@ class DB
      */
     protected function __construct()
     {
-
+        
     }
 
     /**
@@ -54,7 +90,7 @@ class DB
      */
     private function __clone()
     {
-
+        
     }
 
     /**
@@ -65,6 +101,6 @@ class DB
      */
     private function __wakeup()
     {
-
+        
     }
 }

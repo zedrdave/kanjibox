@@ -44,21 +44,21 @@ class Reading extends Question
         echo '<div class="japanese" lang="ja" xml:lang="ja">' . $solution->word . '</div>';
 
         if (!$this->isQuiz()) {
-            if ($_SESSION['user']->get_pref('drill', 'show_reading_translation')) {
+            if ($_SESSION['user']->getPreference('drill', 'show_reading_translation')) {
                 if ($solution->missing_lang) {
                     echo '<div class="missing_lang">' . $solution->fullgloss;
                     if (!$_SESSION['user']->isOnTranslatorProbation()) {
-                        echo ' <a class="" href="#" onclick="show_vocab_translate_dialog(\'' . SERVER_URL . '\', \'' . $solution->id . '\', \'' . $this->data['sid'] . '\'); return false;"><img src="' . SERVER_URL . 'img/flags/' . $_SESSION['user']->get_pref('lang',
+                        echo ' <a class="" href="#" onclick="show_vocab_translate_dialog(\'' . SERVER_URL . '\', \'' . $solution->id . '\', \'' . $this->data['sid'] . '\'); return false;"><img src="' . SERVER_URL . 'img/flags/' . $_SESSION['user']->getPreference('lang',
                             'vocab_lang') . '.png" class="missing_lang_icon' . ($this->isQuiz() ? ' disabled' : '') . '" /></a>';
                     }
                     echo '</div>';
                 } else {
-                    if ($_SESSION['user']->get_pref('lang', 'vocab_lang') != 'en' && substr($solution->fullgloss, 0, 3) == '(~)') {
+                    if ($_SESSION['user']->getPreference('lang', 'vocab_lang') != 'en' && substr($solution->fullgloss, 0, 3) == '(~)') {
                         if ($this->isQuiz()) {
-                            echo '<div class="missing_lang">' . $solution->gloss_english . ' <a class="" href="#" onclick="show_vocab_translate_dialog(\'' . SERVER_URL . '\', \'' . $solution->id . '\', \'' . $this->data['sid'] . '\'); return false;"><img src="' . SERVER_URL . 'img/flags/' . $_SESSION['user']->get_pref('lang',
+                            echo '<div class="missing_lang">' . $solution->gloss_english . ' <a class="" href="#" onclick="show_vocab_translate_dialog(\'' . SERVER_URL . '\', \'' . $solution->id . '\', \'' . $this->data['sid'] . '\'); return false;"><img src="' . SERVER_URL . 'img/flags/' . $_SESSION['user']->getPreference('lang',
                                 'vocab_lang') . '.png" class="missing_lang_icon disabled" /></a></div>' . ' <small><em>(incomplete translation)</em></small>';
                         } else {
-                            echo '<div class="missing_lang">' . substr($solution->fullgloss, 3) . ' <a class="" href="#" onclick="show_vocab_translate_dialog(\'' . SERVER_URL . '\', \'' . $solution->id . '\', \'' . $this->data['sid'] . '\'); return false;"><img src="' . SERVER_URL . 'img/flags/' . $_SESSION['user']->get_pref('lang',
+                            echo '<div class="missing_lang">' . substr($solution->fullgloss, 3) . ' <a class="" href="#" onclick="show_vocab_translate_dialog(\'' . SERVER_URL . '\', \'' . $solution->id . '\', \'' . $this->data['sid'] . '\'); return false;"><img src="' . SERVER_URL . 'img/flags/' . $_SESSION['user']->getPreference('lang',
                                 'vocab_lang') . '.png" class="missing_lang_icon" /></a></div>  <small><em>(translation may need improving)</em></small>';
                         }
                     } else {
@@ -112,7 +112,7 @@ class Reading extends Question
         if ($solution->missing_lang) {
             echo '<div class="missing_lang">' . $solution->fullgloss;
             if (!$_SESSION['user']->isOnTranslatorProbation()) {
-                echo ' <a class="" href="#" onclick="show_vocab_translate_dialog(\'' . SERVER_URL . '\', \'' . $solution->id . '\', \'' . $this->data['sid'] . '\'); return false;"><img src="' . SERVER_URL . 'img/flags/' . $_SESSION['user']->get_pref('lang',
+                echo ' <a class="" href="#" onclick="show_vocab_translate_dialog(\'' . SERVER_URL . '\', \'' . $solution->id . '\', \'' . $this->data['sid'] . '\'); return false;"><img src="' . SERVER_URL . 'img/flags/' . $_SESSION['user']->getPreference('lang',
                     'vocab_lang') . '.png" class="missing_lang_icon' . ($this->isQuiz() ? ' disabled' : '') . '" /></a>';
             }
             echo '</div>';
@@ -329,7 +329,7 @@ class Reading extends Question
         $query = "SELECT j.*, jx.pos, " . Vocab::getQueryGloss() . " FROM (SELECT j.`id` AS `id`, j.`word` AS `word`, j.`reading` AS `reading`, `j`.`njlpt` AS `njlpt`, `j`.`njlpt_r` AS `njlpt_r`, IF(l.curve IS NULL, 1000, l.curve)+1000*rand() as xcurve
 		FROM learning_set_vocab ls LEFT JOIN `jmdict` j ON j.id = ls.jmdict_id
 		LEFT JOIN " . $this->tableLearning . " l on l.user_id = '" . (int) $_SESSION['user']->getID() . "' AND j.id = l." . $this->tableLearningIndex . "
-		WHERE ls.set_id = $this->set_id AND j.word != j.reading AND j.katakana = '0' AND j.usually_kana = 0 ";
+		WHERE ls.set_id = ". $this->id ." AND j.word != j.reading AND j.katakana = '0' AND j.usually_kana = 0 ";
 
         $query .= '  ORDER BY xcurve DESC';
         $query .= '  LIMIT ' . $howMany . ') AS j LEFT JOIN jmdict_ext jx ON jx.jmdict_id = j.id';
@@ -881,11 +881,11 @@ class Reading extends Question
 
     public function editButtonLink()
     {
-        if ($_SESSION['user']->isOnTranslatorProbation() && !$_SESSION['user']->get_pref('lang', 'translator_mode')) {
+        if ($_SESSION['user']->isOnTranslatorProbation() && !$_SESSION['user']->getPreference('lang', 'translator_mode')) {
             return '';
         }
 
-        if ($_SESSION['user']->get_pref('lang', 'vocab_lang') != 'en' || $_SESSION['user']->isEditor()) {
+        if ($_SESSION['user']->getPreference('lang', 'vocab_lang') != 'en' || $_SESSION['user']->isEditor()) {
             $solution = $this->getSolution();
             return '<a class="icon-button ui-state-default ui-corner-all" title="Languages..." href="#" onclick="show_vocab_translate_dialog(\'' . SERVER_URL . '\', \'' . $solution->jmdict_id . '\', \'' . $this->data['sid'] . '\'); return false;">✍</a>';
         } else {

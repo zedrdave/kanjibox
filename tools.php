@@ -3,13 +3,18 @@ require_once 'libs/lib.php';
 require_once get_mode() . '.config.php';
 
 if (!init_app()) {
-   die("<div class=\"error_msg\">Non-logged in users cannot access this page directly. You need to be <a href=\"" . get_page_url('home') . "\">logged in</a> first.</div>");
+    die("<div class=\"error_msg\">Non-logged in users cannot access this page directly. You need to be <a href=\"" . get_page_url('home') . "\">logged in</a> first.</div>");
 }
 ?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en"  xmlns:fb="http://www.facebook.com/2008/fbml">
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-        <title>KB Editor Tools<?php if (!empty($_REQUEST['script'])) echo ": " . $_REQUEST['script'];?></title>
+        <title>KB Editor Tools
+            <?php
+            if (!empty($_REQUEST['script'])) {
+                echo ': ' . $_REQUEST['script'];
+            }
+            ?></title>
         <script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>
         <script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/jqueryui/1.10.3/jquery-ui.min.js"></script>
         <link rel="stylesheet" href="//ajax.googleapis.com/ajax/libs/jqueryui/1.10.2/themes/flick/jquery-ui.css" type="text/css" />
@@ -32,13 +37,14 @@ if (!init_app()) {
             <?php
             try {
                 ini_set('display_errors', true);
-
-                if (!empty($_SESSION['user']) || !$_SESSION['user']->isEditor()) {
+                
+                if (!empty($_SESSION['user']) && !$_SESSION['user']->isEditor()) {
                     die('Editors only');
                 }
 
                 define('EDITOR_MODE', true);
 
+                print_r($_REQUEST);
                 if (empty($_REQUEST['script'])) {
                     echo '<ul>';
                     if ($handle = opendir('tools')) {

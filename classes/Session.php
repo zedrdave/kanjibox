@@ -135,7 +135,7 @@ class Session
 
             foreach (array_reverse($myQuestions) as $array)
                 $array[0]->displayQuestion(($i++ == 0), $array[1],
-                    ($_SESSION['user']->get_pref('quiz', 'show_prog_bar') ? $extraPref . '<div class="wave ongoing" style="width: ' . ((int) ($skipped + $i - 1) * $scale) . 'px" ></div>' . '<div class="wave pending" style="width: ' . ((int) (count($this->questions) - $skipped - $i + 1) * $scale) . 'px"></div>' . $extraSuf : ''));
+                    ($_SESSION['user']->getPreference('quiz', 'show_prog_bar') ? $extraPref . '<div class="wave ongoing" style="width: ' . ((int) ($skipped + $i - 1) * $scale) . 'px" ></div>' . '<div class="wave pending" style="width: ' . ((int) (count($this->questions) - $skipped - $i + 1) * $scale) . 'px"></div>' . $extraSuf : ''));
         } else {
             foreach (array_reverse($myQuestions) as $array) {
                 $array[0]->displayQuestion(($i++ == 0), $array[1]);
@@ -206,8 +206,8 @@ class Session
             }
 
             if ($newRank->rank > 0 && ($this->curRank->short_name != $newRank->short_name)) {
-                if ($_SESSION['user']->get_pref('notif', 'post_news')) {
-                    $_SESSION['user']->publish_rank_story($this->getType(), $newRank);
+                if ($_SESSION['user']->getPreference('notif', 'post_news')) {
+                    $_SESSION['user']->publishRankStory($this->getType(), $newRank);
                 }
 
                 if ($newRank->rank == 1) {
@@ -572,7 +572,7 @@ class Session
 
     public function getSetID()
     {
-        return $this->questionLoader->setID;
+        return $this->questionLoader->id;
     }
 
     public function getNiceType()

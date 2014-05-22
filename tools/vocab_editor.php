@@ -7,7 +7,7 @@ $pretty_numbers = array(1 => '①', 2 => '②', 3 => '③', 4 => '④', 5 => '�
 
 $pretty_num_regex = implode('|', array_slice($pretty_numbers, 0, 21));
 
-$lang_vocab = Vocab::$langStrings[$_SESSION['user']->get_pref('lang', 'vocab_lang')];
+$lang_vocab = Vocab::$langStrings[$_SESSION['user']->getPreference('lang', 'vocab_lang')];
 
 if(isset($_REQUEST['submit'])) {
 	$query = "SELECT * FROM jmdict j LEFT JOIN jmdict_ext jx ON jx.jmdict_id = j.id WHERE 1 ";
@@ -81,13 +81,13 @@ else {
 			
 			$english_sense_count = count(preg_split("/$pretty_num_regex/", $word->gloss_english));
 			
-			foreach(Vocab::$langStrings as $lang => $full_lang) {
-				if(@$_REQUEST['translator'] && $full_lang != 'english' && $full_lang != $lang_vocab)
+			foreach(Vocab::$langStrings as $lang => $fullLang) {
+				if(@$_REQUEST['translator'] && $fullLang != 'english' && $fullLang != $lang_vocab)
 					continue;
 				
-				$gloss = "gloss_$full_lang";
+				$gloss = "gloss_$fullLang";
 				echo "<p><a href=\"#\" id=\"static_lang_$lang" . "_$word->id\" onclick=\"$('#edit_lang_$lang" . "_$word->id').show(); return false;\"><img src=\"" . SERVER_URL . "/img/flags/$lang.png\" alt=\"$lang-flag\" style=\"vertical-align:bottom; margin:0 3px 0 0;\" /><span class=\"gloss\" style=\"font-style:italic;\">" . $word->$gloss . "</span></a></p>";
-				echo "<form class=\"lang_edit\" action=\"" . SERVER_URL . "/ajax/vocab_translation/type/general/\" id=\"edit_lang_$lang" . "_$word->id\" style=\"border: 1px solid black; padding: 2px; ". (@$_REQUEST['translator'] && $full_lang != 'english'  ? '' : 'display:none;') . "\">";
+				echo "<form class=\"lang_edit\" action=\"" . SERVER_URL . "/ajax/vocab_translation/type/general/\" id=\"edit_lang_$lang" . "_$word->id\" style=\"border: 1px solid black; padding: 2px; ". (@$_REQUEST['translator'] && $fullLang != 'english'  ? '' : 'display:none;') . "\">";
 				echo '<input type="checkbox" name="set_null" /> Erase<br/>';
 				$senses = preg_split("/$pretty_num_regex/", $word->$gloss);
 				$i = 1;
@@ -132,8 +132,8 @@ else {
 
 			$english_sense_count = count(preg_split("/$pretty_num_regex/", $word->gloss_english));
 						
-			foreach(Vocab::$langStrings as $lang => $full_lang) {
-				$gloss = "gloss_$full_lang";
+			foreach(Vocab::$langStrings as $lang => $fullLang) {
+				$gloss = "gloss_$fullLang";
 				echo "<p><img src=\"" . SERVER_URL . "/img/flags/$lang.png\" alt=\"$lang-flag\" style=\"vertical-align:bottom; margin:0 3px 0 0;\" /><span class=\"gloss\" style=\"font-style:italic;\">" . $word->$gloss . "</span></p>";
 			}
 

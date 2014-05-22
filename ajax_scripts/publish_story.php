@@ -34,4 +34,4 @@ if (!fb_connect_init()) {
     die();
 }
 
-echo $_SESSION['user']->publish_story($type);
+echo $_SESSION['user']->publishStory($type);

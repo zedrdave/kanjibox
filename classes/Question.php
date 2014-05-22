@@ -22,11 +22,11 @@ abstract class Question
         $this->level = $level;
 
         if ($this->mode == SETS_MODE) {
-            $this->set_id = $gradeOrSetID;
-            $this->set = new LearningSet($this->set_id);
+            $this->id = $gradeOrSetID;
+            $this->set = new LearningSet($this->id);
             $this->grade = $this->levelToGrade($this->level);
         } elseif ($this->mode == GRAMMAR_SETS_MODE) {
-            $this->set_id = $gradeOrSetID;
+            $this->id = $gradeOrSetID;
             $this->grade = $this->levelToGrade($this->level);
         } else {
             if ($gradeOrSetID >= -1) {
@@ -178,7 +178,7 @@ abstract class Question
             $questions = [];
             foreach ($items as $item) {
                 $questions[$item['sid']] = new $className($this->mode, $this->level,
-                    (($this->isLearningSet() || $this->isGrammarSet()) ? $this->set_id : $grade), $item);
+                    (($this->isLearningSet() || $this->isGrammarSet()) ? $this->id : $grade), $item);
             }
             return $questions;
         } else {

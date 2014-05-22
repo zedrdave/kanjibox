@@ -5,7 +5,7 @@ if (!$_SESSION['user']) {
     log_error('You need to be logged to access this function.', false, true);
 }
 
-if (!$_SESSION['user']->get_pref('drill', 'show_learning_stats')) {
+if (!$_SESSION['user']->getPreference('drill', 'show_learning_stats')) {
     die(' - ');
 }
 
@@ -17,7 +17,7 @@ if ($_SESSION['cur_session']) {
 
 require_once ABS_PATH . 'libs/stats_lib.php';
 
-if ($params['mode'] == SETS_MODE) {
+if (!empty($params['mode']) && $params['mode'] == SETS_MODE) {
     $count = $_SESSION['cur_session']->getSetCount();
     if ($count > 1200) {
         return;
@@ -26,7 +26,7 @@ if ($params['mode'] == SETS_MODE) {
 
 switch ($params['type']) {
     case 'kanji':
-        if ($params['mode'] == SETS_MODE) {
+        if (!empty($params['mode']) && $params['mode'] == SETS_MODE) {
             echo print_kanji_set_stats($_SESSION['user']->getID(), $_SESSION['cur_session']->getSetID(), 720, ' ');
         } elseif ($grade[0] == 'N') {
             echo printJLPTLevels($_SESSION['user']->getID(), (int) $grade[1], 600, ' ');
@@ -37,7 +37,7 @@ switch ($params['type']) {
 
     case 'vocab':
     case 'text':
-        if ($params['mode'] == SETS_MODE) {
+        if (!empty($params['mode']) && $params['mode'] == SETS_MODE) {
             echo print_vocab_set_stats($_SESSION['user']->getID(), $_SESSION['cur_session']->getSetID(), 720, ' ');
         } elseif ($grade[0] == 'N') {
             echo print_vocab_jlpt_levels($_SESSION['user']->getID(), (int) $grade[1], 600, ' ');
@@ -45,7 +45,7 @@ switch ($params['type']) {
         break;
 
     case 'reading':
-        if ($params['mode'] == SETS_MODE) {
+        if (!empty($params['mode']) && $params['mode'] == SETS_MODE) {
             echo print_reading_set_stats($_SESSION['user']->getID(), $_SESSION['cur_session']->getSetID(), 720, ' ');
         } elseif ($grade[0] == 'N') {
             echo printReadingJLPTLevels($_SESSION['user']->getID(), (int) $grade[1], 600, ' ');
