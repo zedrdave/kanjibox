@@ -10,19 +10,19 @@ $levels = Session::$levelNames;
 <div class="subtabs">
     <?php
     if (!empty($params['type'])) {
-        $cur_type = $params['type'];
+        $curType = $params['type'];
     } else {
-        $cur_type = 'main';
+        $curType = 'main';
     }
 
     $subtabs = ['main' => 'Summary', TYPE_KANA => 'Kana stats', TYPE_KANJI => 'Kanji stats', TYPE_VOCAB => 'Vocab stats', TYPE_READING => 'Reading stats'];
-    if (!$subtabs[$cur_type]) {
-        log_error('Unknown stats type: ' . $cur_type, true, true);
+    if (!$subtabs[$curType]) {
+        log_error('Unknown stats type: ' . $curType, true, true);
     }
 
     $width = (int) (800 / count($subtabs)) - 8;
     foreach ($subtabs as $type => $label) {
-        echo '<a href="' . get_page_url(PAGE_STATS, ['type' => $type]) . '" class="' . ($cur_type == $type ? "selected" : '') . '" onclick="do_load(\'' . SERVER_URL . 'ajax/stats/type/' . $type . '\', \'frame-stats\'); $(this).addClass(\'loading\');$(this).css(\'backgroundImage\', \'url(' . SERVER_URL . 'img/small-ajax-loader.gif)\'); return false;" style="width: ' . $width . 'px">' . $label . '</a>';
+        echo '<a href="' . get_page_url(PAGE_STATS, ['type' => $type]) . '" class="' . ($curType == $type ? "selected" : '') . '" onclick="do_load(\'' . SERVER_URL . 'ajax/stats/type/' . $type . '\', \'frame-stats\'); $(this).addClass(\'loading\');$(this).css(\'backgroundImage\', \'url(' . SERVER_URL . 'img/small-ajax-loader.gif)\'); return false;" style="width: ' . $width . 'px">' . $label . '</a>';
     }
     ?>
 </div>
@@ -70,7 +70,7 @@ require_once ABS_PATH . 'libs/stats_lib.php';
         }
     }
 
-    switch ($cur_type) {
+    switch ($curType) {
         case 'kanji':
             ?>
             <legend>Kanjis</legend>
@@ -216,14 +216,14 @@ require_once ABS_PATH . 'libs/stats_lib.php';
     }
 
     // For now: only allow resetting each category at a time
-    if ($cur_type != 'main') {
+    if ($curType != 'main') {
         ?>
         <a href="#" class="reset" onclick="$(this).hide();
                     $('input.reset').show('bounce', {}, 200);
                     return false;">Reset Stats ▷</a>
         <form action="<?php get_page_url(PAGE_STATS, ['type' => $type])?>" method="POST">
-            <input type="hidden" name="reset-stats" value="<?php echo $cur_type?>" />
-            <input type="submit" class="reset" style="display:none;" onclick="return (confirm('Are you SURE your want to erase <?php echo ($cur_type == 'main') ? 'ALL your stats' : 'all your ' . $cur_type . ' stats'?>? This cannot be recovered.'));" value="Reset Stats"/>
+            <input type="hidden" name="reset-stats" value="<?php echo $curType?>" />
+            <input type="submit" class="reset" style="display:none;" onclick="return (confirm('Are you SURE your want to erase <?php echo ($curType == 'main') ? 'ALL your stats' : 'all your ' . $curType . ' stats'?>? This cannot be recovered.'));" value="Reset Stats"/>
         </form>
         <?php
     }

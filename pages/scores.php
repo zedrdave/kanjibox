@@ -18,19 +18,19 @@ $levels = Session::$levelNames;
 <div class="subtabs">
     <?php
     if (!empty($params['type'])) {
-        $cur_type = $params['type'];
+        $curType = $params['type'];
     } else {
-        $cur_type = 'main';
+        $curType = 'main';
     }
 
-    $subtabs = array('main' => 'Summary', TYPE_KANJI => 'Kanji scores', TYPE_VOCAB => 'Vocab scores', TYPE_READING => 'Reading scores', TYPE_TEXT => 'Text Scores');
-    if (!$subtabs[$cur_type]) {
-        log_error('Unknown score type: ' . $cur_type, true, true);
+    $subtabs = ['main' => 'Summary', TYPE_KANJI => 'Kanji scores', TYPE_VOCAB => 'Vocab scores', TYPE_READING => 'Reading scores', TYPE_TEXT => 'Text Scores'];
+    if (!$subtabs[$curType]) {
+        log_error('Unknown score type: ' . $curType, true, true);
     }
 
     $width = (int) (800 / count($subtabs)) - 8;
     foreach ($subtabs as $type => $label) {
-        echo '<a href="' . get_page_url(PAGE_SCORES, array('type' => $type)) . '" class="' . ($cur_type == $type ? "selected" : '') . '" onclick="do_load(\'' . SERVER_URL . 'ajax/scores/type/' . $type . '\', \'frame-highscores\');$(this).addClass(\'loading\');$(this).css(\'backgroundImage\', \'url(' . SERVER_URL . 'img/small-ajax-loader.gif)\');return false;" style="width: ' . $width . 'px">' . $label . '</a>';
+        echo '<a href="' . get_page_url(PAGE_SCORES, ['type' => $type]) . '" class="' . ($curType == $type ? "selected" : '') . '" onclick="do_load(\'' . SERVER_URL . 'ajax/scores/type/' . $type . '\', \'frame-highscores\');$(this).addClass(\'loading\');$(this).css(\'backgroundImage\', \'url(' . SERVER_URL . 'img/small-ajax-loader.gif)\');return false;" style="width: ' . $width . 'px">' . $label . '</a>';
     }
     ?>
 </div>
@@ -38,7 +38,7 @@ $levels = Session::$levelNames;
 <div style="clear:both;" ></div>
 
 <?php
-if ($cur_type == 'main') {
+if ($curType == 'main') {
     $level = $_SESSION['user']->getLevel();
 
     echo '<div class="summary">';
@@ -51,7 +51,7 @@ if ($cur_type == 'main') {
 
     echo '</div>';
 
-    foreach (array(TYPE_KANJI, TYPE_VOCAB, TYPE_READING, TYPE_TEXT) as $type) {
+    foreach ([TYPE_KANJI, TYPE_VOCAB, TYPE_READING, TYPE_TEXT] as $type) {
         ?>
         <fieldset class="line">
             <legend><?php echo ucfirst($type)?></legend>
@@ -76,10 +76,10 @@ if ($cur_type == 'main') {
         <?php
     }
     echo '</div>';
-} elseif (!$fb_info = fb_connect_init()) {
+} elseif ($fb_info = fb_connect_init()) {
     echo 'Can\'t access FB data.';
 } else {
-    $type_label = ucfirst($cur_type);
+    $type_label = ucfirst($curType);
     ?>
     <fieldset class="stats">
         <legend><?php echo $type_label . ' ' . $levels[$_SESSION['user']->getLevel()];?> Level High Scores</legend>
@@ -87,12 +87,12 @@ if ($cur_type == 'main') {
             <tr>
                 <td>
                     <?php
-                    print_globalboard($_SESSION['user'], $_SESSION['user']->getLevel(), $cur_type, 'The World:');
+                    printGlobalboard($_SESSION['user'], $_SESSION['user']->getLevel(), $curType, 'The World:');
                     ?>
                 </td>
                 <td>
                     <?php
-                    print_friendsboard($_SESSION['user'], $_SESSION['user']->getLevel(), $cur_type, 'Your Friends:',
+                    printFriendsboard($_SESSION['user'], $_SESSION['user']->getLevel(), $curType, 'Your Friends:',
                         false);
                     ?>
                 </td>
@@ -106,13 +106,12 @@ if ($cur_type == 'main') {
             <tr>
                 <td>
                     <?php
-                    $_SESSION['user']->printHighscores($cur_type, "You:");
+                    $_SESSION['user']->printHighscores($curType, "You:");
                     ?>
                 </td>
                 <td>
                     <?php
-                    print_friendsboard($_SESSION['user'], $_SESSION['user']->getLevel(), $cur_type, 'Your friends:',
-                        true);
+                    printFriendsboard($_SESSION['user'], $_SESSION['user']->getLevel(), $curType, 'Your friends:', true);
                     ?>
                 </td>
             </tr>

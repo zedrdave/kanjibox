@@ -38,7 +38,7 @@ switch ($params['type']) {
     case 'vocab':
     case 'text':
         if (!empty($params['mode']) && $params['mode'] == SETS_MODE) {
-            echo print_vocab_set_stats($_SESSION['user']->getID(), $_SESSION['cur_session']->getSetID(), 720, ' ');
+            echo printVocabSetStats($_SESSION['user']->getID(), $_SESSION['cur_session']->getSetID(), 720, ' ');
         } elseif ($grade[0] == 'N') {
             echo print_vocab_jlpt_levels($_SESSION['user']->getID(), (int) $grade[1], 600, ' ');
         }

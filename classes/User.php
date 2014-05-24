@@ -810,7 +810,7 @@ class User
 
     public function getFriends()
     {
-        if ($this->friends) {
+        if (!empty($this->friends)) {
             return $this->friends;
         }
 
@@ -908,7 +908,12 @@ class User
 
     public function getFbID()
     {
-        return $this->data->fb_id;
+        if (!empty($this->data->fb_id)) {
+
+            return $this->data->fb_id;
+        } else {
+            return 0;
+        }
     }
 
     public function getID()

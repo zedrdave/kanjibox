@@ -124,36 +124,34 @@ function init_app($ajax = false)
 
 function fb_connect_init($test_query = true)
 {
-    global $facebook, $api_key, $secret, $session;
+    global $facebook, $api_key, $secret;
 
     // xdebug_get_function_stack();
     //Fixing FB's API:
-    if (isset($_SESSION["fb_" . $api_key . "_code"]) && isset($_REQUEST['code']))
+    if (!empty($_SESSION['fb_' . $api_key . '_code']) && isset($_REQUEST['code'])) {
         unset($_REQUEST['code']);
-
+    }
 
     //require_once ABS_PATH . 'api/facebook.php';
     require_once ABS_PATH . 'vendor/autoload.php';
     try {
-        if (!is_object($facebook))
+        if (!is_object($facebook)) {
             $facebook = new Facebook(array('appId' => $api_key, 'secret' => $secret, 'cookie' => true));
+        }
 
         if ($fb_id = $facebook->getUser()) {
-            if (!$test_query)
+            if (!$test_query) {
                 return $fb_id;
-        }
-        else {
+            }
+        } else {
             return false;
         }
     } catch (Exception $e) {
-        // print_r($session);
         if ($_SESSION['user']->isAdministrator()) {
             echo "EXCEPTION ###";
             echo $fb_id;
             echo($e->getMessage());
         }
-        // die();
-        // PROBABLY AN EXPIRED SESSION
         return false;
     }
 
@@ -361,8 +359,8 @@ function display_editors_board()
 {
     ?>
     <div class="search_form" style="background-color:#DDD;"><h3><a href="#"  onclick="$('textarea#editors_board').toggle();
-            return false;">Editors Bulletin Board:</a></h3>
-            <?php
+                return false;">Editors Bulletin Board:</a></h3>
+                                                                   <?php
             if (file_exists(dirname(__FILE__) . '/../tools/notes.txt'))
                 $notes = file_get_contents(dirname(__FILE__) . '/../tools/notes.txt');
             else
@@ -370,7 +368,7 @@ function display_editors_board()
             ?>
         <textarea id="editors_board" style="width:98%;height:<?php
         echo min(max(5, strlen($notes) / 90) + count(explode("\n", $notes)), 15)
-        ?>em" onchange="save_board(this);"><?php echo $notes;?></textarea>
+            ?>em" onchange="save_board(this);"><?php echo $notes;?></textarea>
     </div>
     <script type="text/javascript">
         function save_board(txtobj) {
@@ -408,8 +406,7 @@ function execute_query($query, $apply = true, $force_run_again = false)
         $row = mysql_fetch_object($res);
         if (!$force_run_again && ($row->applied || !$apply)) {
             echo "Query already ran";
-        }
-        else {
+        } else {
             echo "Query already ran but not applied. Applying.<br/>";
             mysql_query("UPDATE data_update_queries SET applied = 1 WHERE update_query_id = $row->update_query_id") or die(mysql_error());
         }
