@@ -77,7 +77,7 @@ if ($cur_type == 'main') {
     }
     echo '</div>';
 } elseif (!$fb_info = fb_connect_init()) {
-    echo "Can't access FB data.";
+    echo 'Can\'t access FB data.';
 } else {
     $type_label = ucfirst($cur_type);
     ?>

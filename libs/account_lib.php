@@ -117,8 +117,6 @@ function display_new_account_page()
                 $no_error = true;
 
                 if (!empty($_REQUEST['action']) && $_REQUEST['action'] == 'new_account') {
-                    get_db_conn();
-
                     $riddle = str_replace(' ', '', strtolower($_REQUEST['spam_question']));
                     if ($riddle != 'assur' && $riddle != 'dursarukin' && $riddle != 'nimrud' && $riddle != 'nineveh' && $riddle != 'caleh') {
                         log_public_error('Failed the basic Spam Protection / Survival IQ Test.<br/>Come on, <a href="http://lmgtfy.com/?q=What+is+the+capital+of+Assyria">it\'s not that hard</a> (a few different answers are acceptable).');

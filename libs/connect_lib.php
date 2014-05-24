@@ -274,8 +274,6 @@ function display_pwd_reset_page() {
                             log_pwd_reset('This reset code has expired. Please request another one.</div>');
                         }
 
-                        get_db_conn();
-
                         $res = mysql_query('SELECT * FROM users u LEFT JOIN users_ext ux ON ux.user_id = u.id WHERE ux.login_email = \'' . DB::getConnection()->quote($login_email) . '\' AND ux.login_email != \'\' AND ux.login_email IS NOT NULL AND u.id = ' . (int) $user_id) or die('DB error');
 
                         if (!$row = mysql_fetch_object($res))

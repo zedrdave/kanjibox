@@ -48,8 +48,6 @@ function init_app($ajax = false)
     }
 
     // header('P3P: CP="IDC DSP COR CURa ADMa OUR IND PHY ONL COM STA"');
-
-    get_db_conn();
     $params = [];
     if (!empty($_REQUEST['params'])) {
         $arr = explode('/', $_REQUEST['params']);

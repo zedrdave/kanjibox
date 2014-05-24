@@ -3,24 +3,6 @@ define('MSG_ERROR', 'error');
 define('MSG_SUCCESS', 'success');
 define('MSG_NOTICE', 'notice');
 
-function get_db_conn()
-{
-    //mysql_connect($GLOBALS['db_ip'], $GLOBALS['db_user'], $GLOBALS['db_pass']) or log_error("Can't connect to DB: " . $GLOBALS['db_user'] . ':' . strlen($GLOBALS['db_pass']) . '@' . $GLOBALS['db_ip'], false, true) or log_db_error('mysql_connect()', '', true, true);
-    //mysql_select_db($GLOBALS['db_name']) or log_db_error('mysql_select_db()', '', true, true);
-    //mysql_query("SET NAMES 'utf8'") or log_db_error('SET NAMES \'utf8\'', '', true, true);
-
-    try {
-        global $dbh;
-        $dbh = new PDO('mysql:host=' . $GLOBALS['db_ip'] . ';dbname=' . $GLOBALS['db_name'] . ';charset=utf8',
-            $GLOBALS['db_user'], $GLOBALS['db_pass']);
-    } catch (PDOException $e) {
-        log_error("Can't connect to DB: " . $GLOBALS['db_user'] . ':' . strlen($GLOBALS['db_pass']) . '@' . $GLOBALS['db_ip'],
-            false, true);
-        log_db_error('mysql_connect()', '', true, true);
-        die();
-    }
-}
-
 function include_css($file)
 {
     $ts = filemtime(ABS_PATH . 'css/' . $file);
