@@ -13,13 +13,13 @@ if (isset($_REQUEST['delete_id'])) {
     }
     if ($_REQUEST['delete_jmdict_id']) {
         $sentID = (int) $_REQUEST['delete_id'];
-        $jmdict_id = (int) $_REQUEST['jmdict_id'];
+        $jmdictID = (int) $_REQUEST['jmdict_id'];
         DB::delete('DELETE FROM example_answers WHERE example_id = :example_id AND jmdict_id = :jmdict_id LIMIT 1',
-            [':example_id' => $sentID, ':jmdict_id' => $jmdict_id]);
+            [':example_id' => $sentID, ':jmdict_id' => $jmdictID]);
 
         DB::insert('INSERT INTO data_update_queries SET user_id = :user_id, query_str = :query, applied = 1',
             [':user_id' => $_SESSION['user']->getID(), ':query' => $query]);
-        echo '<div class="message">Deleted answer: (' . $sentID . ', ' . $jmdict_id . ')</div>';
+        echo '<div class="message">Deleted answer: (' . $sentID . ', ' . $jmdictID . ')</div>';
     } else {
         $sentID = (int) $_REQUEST['delete_id'];
         DB::insert('INSERT INTO data_update_queries SET user_id = :user_id, query_str = :query, applied = 1',

@@ -14,7 +14,7 @@ if (isset($_REQUEST['update'])) {
         die('no jmdict id');
     }
 
-    $jmdict_id = (int) $_REQUEST['jmdict_id'];
+    $jmdictID = (int) $_REQUEST['jmdict_id'];
 
     if (!isset($_REQUEST['lang']) || !isset(Vocab::$langStrings[$_REQUEST['lang']])) {
         return;
@@ -45,14 +45,14 @@ if (isset($_REQUEST['update'])) {
             echo 'Empty translation.';
         } else {
             DB::update('UPDATE jmdict_ext SET gloss_' . Vocab::$langStrings[$lang] . ' = NULL WHERE jmdict_id = :jmdict_id',
-                [':jmdict_id' => $jmdict_id]
+                [':jmdict_id' => $jmdictID]
             );
             echo "Set " . ucwords(Vocab::$langStrings[$lang]) . " translation to: Null<br/>";
         }
         return;
     }
 
-    $ret = post_db_correction('jmdict_ext', 'jmdict_id', $jmdict_id, 'gloss_' . Vocab::$langStrings[$lang], $newGloss,
+    $ret = post_db_correction('jmdict_ext', 'jmdict_id', $jmdictID, 'gloss_' . Vocab::$langStrings[$lang], $newGloss,
         true, '', '', false, '', $needWork);
     echo '<div>';
     if ($ret != 'Value unchanged') {
@@ -65,13 +65,13 @@ if (isset($_REQUEST['update'])) {
 }
 
 if ($params['jmdict_id']) {
-    $jmdict_id = (int) $params['jmdict_id'];
+    $jmdictID = (int) $params['jmdict_id'];
 
     $pretty_num_regex = implode('|', array_slice($pretty_numbers, 0, 21));
     $query = 'SELECT * FROM `jmdict` j LEFT JOIN jmdict_ext jx ON j.id = jx.jmdict_id WHERE id = :jmdict_id';
     try {
         $stmt = DB::getConnection()->prepare($query);
-        $stmt->bindValue(':jmdict_id', $jmdict_id, PDO::PARAM_INT);
+        $stmt->bindValue(':jmdict_id', $jmdictID, PDO::PARAM_INT);
         $stmt->execute();
         $row = $stmt->fetchObject();
         if (!empty($row)) {
@@ -113,7 +113,7 @@ if ($params['jmdict_id']) {
                         $i++;
                     }
 
-                    echo "<input type=\"hidden\" name=\"lang\" id=\"lang\" value=\"$lang\" /><input type=\"hidden\" name=\"jmdict_id\" id=\"jmdict_id\" value=\"$jmdict_id\" /></p>";
+                    echo "<input type=\"hidden\" name=\"lang\" id=\"lang\" value=\"$lang\" /><input type=\"hidden\" name=\"jmdict_id\" id=\"jmdict_id\" value=\"$jmdictID\" /></p>";
                 } else {
                     if ($row->$gloss) {
                         echo "<p><img src=\"" . SERVER_URL . "/img/flags/$lang.png\" alt=\"$lang-flag\" style=\"vertical-align:bottom; margin:0 3px 0 0;\" /> " . $row->$gloss . "</p>";

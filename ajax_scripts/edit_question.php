@@ -71,19 +71,19 @@ if (isset($params['question_id'])) {
     }
 
     if (isset($_REQUEST['add_wrong_answer'])) {
-        $jmdict_id = (int) $_REQUEST['add_wrong_answer'];
+        $jmdictID = (int) $_REQUEST['add_wrong_answer'];
 
-        if ($jmdict_id == $question->jmdict_id) {
+        if ($jmdictID == $question->jmdict_id) {
             echo '<div class="message">Can\'t add the right answer as a wrong choice...</div>';
         } else {
             $rowCount = DB::count('SELECT COUNT(*) FROM grammar_answers WHERE jmdict_id = ? AND question_id = ?',
-                    [$jmdict_id, $question->question_id]);
+                    [$jmdictID, $question->question_id]);
 
             if ($rowCount > 0) {
                 echo '<div class="message">Wrong answer has already been added...</div>';
             } else {
                 DB::insert('INSERT INTO grammar_answers SET jmdict_id = :jmdict_id, question_id = :question_id',
-                    [':jmdict_id' => $jmdict_id, ':question_id' => $question->question_id]);
+                    [':jmdict_id' => $jmdictID, ':question_id' => $question->question_id]);
                 mysql_query('UPDATE grammar_sets SET date_last = NOW() WHERE set_id = (SELECT set_id FROM grammar_questions WHERE question_id = ' . $question->question_id . ' LIMIT 1)') or die(mysql_error());
             }
 
