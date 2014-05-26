@@ -110,8 +110,8 @@ if(@$_REQUEST['answer_ids']) {
 		
 	$suggestions = [];
 	
-	foreach($questions_right_answers as $question_id => $answer_id) {
-		$wrong_answers = $preferences[$answer_id];
+	foreach($questions_right_answers as $question_id => $answerID) {
+		$wrong_answers = $preferences[$answerID];
 		shuffle_assoc($wrong_answers);
 		arsort($wrong_answers);
 				

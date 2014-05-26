@@ -142,8 +142,8 @@ if (isset($params['question_id'])) {
         }
         return;
     } elseif (isset($_REQUEST['delete_answer_id'])) {
-        $answer_id = (int) $_REQUEST['delete_answer_id'];
-        echo '<div class="message">Deleting answer: ' . $question->question_id . '-' . $answer_id . '...</div>';
+        $answerID = (int) $_REQUEST['delete_answer_id'];
+        echo '<div class="message">Deleting answer: ' . $question->question_id . '-' . $answerID . '...</div>';
 
         mysql_query("DELETE FROM grammar_answers WHERE jmdict_id = " . (int) $_REQUEST['delete_answer_id'] . " AND question_id = $question->question_id") or die(mysql_error());
         mysql_query('UPDATE grammar_sets SET date_last = NOW() WHERE set_id = (SELECT set_id FROM grammar_questions WHERE question_id = ' . $question->question_id . ' LIMIT 1)') or die(mysql_error());

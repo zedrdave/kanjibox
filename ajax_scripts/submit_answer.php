@@ -9,12 +9,11 @@ if (empty($_SESSION['cur_session'])) {
 }
 
 $sid = $_REQUEST['sid'];
-$answer_id = $_REQUEST['answer_id'];
+$answerID = $_REQUEST['answer_id'];
 $time = (int) min(30, $_REQUEST['countdown']);
 
 $div_id = 'sol_' . $sid;
-$class = $_SESSION['cur_session']->displaySolution($sid, $answer_id);
-
+$class = $_SESSION['cur_session']->displaySolution($sid, $answerID);
 
 switch ($class) {
     case 'correct':
@@ -33,31 +32,33 @@ switch ($class) {
         break;
 }
 
-if (!$_SESSION['user']->getPreference('general', 'auto_vanish'))
+if (!$_SESSION['user']->getPreference('general', 'auto_vanish')) {
     $timeout = 1000 * 120;
+}
 
-$_SESSION['cur_session']->registerAnswer($sid, $answer_id, $time);
-$load_next = $_SESSION['cur_session']->allAnswered();
+$_SESSION['cur_session']->registerAnswer($sid, $answerID, $time);
+$loadNext = $_SESSION['cur_session']->allAnswered();
 
-if ($load_next)
+if ($loadNext) {
     $timeout = min(5000, (int) ($timeout / 2));
+}
 
-$keep_last_n_sols = 2;
+$keepLastNSols = 2;
 ?>
 <script type="text/javascript">
 
 <?php
 if ($_SESSION['cur_session']->isQuiz()) {
     ?>
-        $('#score').html("<?php echo $_SESSION['cur_session']->getScoreStr() ?>");
+        $('#score').html("<?php echo $_SESSION['cur_session']->getScoreStr()?>");
 
     <?php
 }
 ?>
 
-    function hide_<?php echo $div_id ?>()
+    function hide_<?php echo $div_id?>()
     {
-        mydiv = $('#<?php echo $div_id ?>');
+        mydiv = $('#<?php echo $div_id?>');
         if (!mydiv)
             return;
 
@@ -65,10 +66,11 @@ if ($_SESSION['cur_session']->isQuiz()) {
         {
             mydiv.data('expired', true);
 <?php
-if ($load_next)
+if ($loadNext) {
     echo 'mydiv.prepend(\'<p class="dismiss-warning">- Click here to load next wave -</p>\');';
-else
+} else {
     echo 'mydiv.prepend(\'<p class="dismiss-warning">- Click to dismiss -</p>\');';
+}
 ?>
             return;
         }
@@ -76,28 +78,26 @@ else
         mydiv.hide(500);
 
 <?php
-if ($load_next)
+if ($loadNext) {
     echo "do_load('" . SERVER_URL . "ajax/load_next_wave/', 'session_frame');";
+}
 ?>
     }
 
 
     $(document).ready(function()
     {
-        mydiv = $('#<?php echo $div_id ?>');
+        mydiv = $('#<?php echo $div_id?>');
         if (!mydiv)
             return;
-        setTimeout(hide_<?php echo $div_id ?>, <?php echo (int) $timeout; ?>);
-
-        //	mydiv.mouseover(mouseover_<?php echo $div_id ?>);
-        //	mydiv.mouseout(mouseout_<?php echo $div_id ?>);
+        setTimeout(hide_<?php echo $div_id?>, <?php echo (int) $timeout;?>);
         mydiv.click(function() {
             if ($(this).data('keep_onscreen'))
             {
                 $(this).removeClass('keep-on-screen');
                 $(this).data('keep_onscreen', false);
                 if ($(this).data('expired'))
-                    hide_<?php echo $div_id ?>();
+                    hide_<?php echo $div_id?>();
             }
             else
             {
@@ -137,6 +137,6 @@ if ($load_next)
 <?php
 flush();
 
-if ($load_next) {
+if ($loadNext) {
     $_SESSION['cur_session']->loadNextWave();
 }
