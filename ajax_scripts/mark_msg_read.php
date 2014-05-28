@@ -10,6 +10,6 @@ $update = DB::update('UPDATE `messages` SET msg_read = 1 WHERE :user_id_to = :us
         'messageid' => $params['id']
         ]
 );
-if ($update) {
+if (!empty($update)) {
     echo 'Marked as read!';
 }

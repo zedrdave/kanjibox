@@ -22,7 +22,7 @@ function get_mode()
 
 function init_app($ajax = false)
 {
-    global $facebook, $fb_id, $api_key, $secret, $params, $ajax;
+    global $facebook, $fb_id, $apiKey, $secret, $params, $ajax;
 
     if (isset($_REQUEST['sign_out'])) {
         require_once ABS_PATH . 'libs/account_lib.php';
@@ -124,11 +124,11 @@ function init_app($ajax = false)
 
 function fb_connect_init($test_query = true)
 {
-    global $facebook, $api_key, $secret;
+    global $facebook, $apiKey, $secret;
 
     // xdebug_get_function_stack();
     //Fixing FB's API:
-    if (!empty($_SESSION['fb_' . $api_key . '_code']) && isset($_REQUEST['code'])) {
+    if (!empty($_SESSION['fb_' . $apiKey . '_code']) && isset($_REQUEST['code'])) {
         unset($_REQUEST['code']);
     }
 
@@ -136,7 +136,7 @@ function fb_connect_init($test_query = true)
     require_once ABS_PATH . 'vendor/autoload.php';
     try {
         if (!is_object($facebook)) {
-            $facebook = new Facebook(array('appId' => $api_key, 'secret' => $secret, 'cookie' => true));
+            $facebook = new Facebook(array('appId' => $apiKey, 'secret' => $secret, 'cookie' => true));
         }
 
         if ($fb_id = $facebook->getUser()) {

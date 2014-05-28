@@ -1,7 +1,7 @@
 <?php
 
 // Get these from http://developers.facebook.com
-$api_key = '5132078849';
+$apiKey = '5132078849';
 $secret = '7a566465283321ab2df0b2187090e1a1';
 
 // The IP address of your database

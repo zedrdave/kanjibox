@@ -75,7 +75,7 @@ if ($params['jmdict_id']) {
         $stmt->execute();
         $row = $stmt->fetchObject();
         if (!empty($row)) {
-            $pref_lang = $_SESSION['user']->getPreference('lang', 'vocab_lang');
+            $prefLang = $_SESSION['user']->getPreference('lang', 'vocab_lang');
 
             echo '<p style="font-style:italic;"><strong>Important:</strong> Please <a href="http://kanjibox.net/kb/page/international/" target="_new" style="font-weight:bold;color:#006;">read this brief message</a> if this is your first time submitting a translation.</p>';
             echo '<form id="translation_form">';
@@ -87,7 +87,7 @@ if ($params['jmdict_id']) {
             $english_sense_count = count(preg_split("/$pretty_num_regex/", $row->gloss_english));
             foreach (Vocab::$langStrings as $lang => $fullLang) {
                 $gloss = "gloss_$fullLang";
-                if ($pref_lang == $lang) {
+                if ($prefLang == $lang) {
                     echo "<p><img src=\"" . SERVER_URL . "/img/flags/$lang.png\" alt=\"$lang-flag\" style=\"vertical-align:bottom; margin:0 3px 0 0;\" /> " . ucwords($fullLang) . ":</p>";
                     echo "<p style=\"border: 1px solid black; padding: 2px;\">";
 

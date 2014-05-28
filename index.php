@@ -37,7 +37,7 @@ if (isset($_REQUEST['new_account'])) {
 
 stopwatch(); // Start bench timer
 
-global $api_key, $page;
+global $apiKey, $page;
 
 $page = isset($_REQUEST['page']) ? $_REQUEST['page'] : null;
 $pages = ['main' => 'main.php', PAGE_PLAY => 'play.php', PAGE_SCORES => 'scores.php', PAGE_STATS => 'stats.php', PAGE_FAQ => 'faq.php', PAGE_RANKS => 'ranks.php', PAGE_DONATE => 'donate.php', PAGE_ELITE => 'elite.php', PAGE_INTERNATIONAL => 'international.php'];
@@ -236,7 +236,7 @@ if ($redirect_to_url = (isset($_REQUEST['redirect_to_url']) ? $_REQUEST['redirec
                 window.fbAsyncInit = function() {
 
                     FB.init({
-                        appId: '<?php echo $api_key?>',
+                        appId: '<?php echo $apiKey?>',
                         cookie: true,
                         xfbml: true,
                         oauth: true

@@ -4,7 +4,7 @@ require_once '../../libs/lib.php';
 require_once ABS_PATH . get_mode() . '.config.php';
 require_once ABS_PATH . '/vendor/autoload.php';
 
-$facebook = new Facebook($api_key, $secret);
+$facebook = new Facebook($apiKey, $secret);
 $fb_id = $facebook->get_loggedin_user();
 
 if (!$fb_id) {

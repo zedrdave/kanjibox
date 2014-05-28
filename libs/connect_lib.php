@@ -62,7 +62,7 @@ function display_login_css() {
 }
 
 function display_login_page($redirect_to_url = '', $header_msg = 'In order to use <a href="https://www.facebook.com/kanjibox/">KanjiBox Online</a>: ') {
-    global $api_key, $secret, $facebook;
+    global $apiKey, $secret, $facebook;
     ?>
     <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
     <html xmlns="http://www.w3.org/1999/xhtml" xmlns:fb="http://www.facebook.com/2008/fbml">

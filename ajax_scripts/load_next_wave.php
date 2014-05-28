@@ -21,5 +21,5 @@ if (!$_SESSION['cur_session']->isQuiz() && $_SESSION['user']->isLoggedIn() && $_
 
 if (!$_SESSION['cur_session']->displayWave()) {
     $_SESSION['cur_session']->cleanupBeforeDestroy();
-    $_SESSION['cur_session'] = NULL;
+    $_SESSION['cur_session'] = null;
 }

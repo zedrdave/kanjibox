@@ -5,16 +5,16 @@
     }
 
     if (!empty($params['id'])) {
-        $kanji_id = $params['id'];
+        $kanjiID = $params['id'];
 
         if ($_SESSION['user']->isEditor()) {
 
             if (isset($_REQUEST['njlpt'])) {
-                echo post_db_correction('kanjis', 'id', $kanji_id, 'njlpt', (int) $_REQUEST['njlpt'], true);
+                echo post_db_correction('kanjis', 'id', $kanjiID, 'njlpt', (int) $_REQUEST['njlpt'], true);
             }
 
             if (isset($_REQUEST['grade'])) {
-                echo post_db_correction('kanjis', 'id', $kanji_id, 'grade', (int) $_REQUEST['grade'], true);
+                echo post_db_correction('kanjis', 'id', $kanjiID, 'grade', (int) $_REQUEST['grade'], true);
             }
         }
     } else {

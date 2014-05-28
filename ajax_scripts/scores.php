@@ -6,7 +6,7 @@ if (!empty($_SESSION['user']) && !$_SESSION['user']->isLoggedIn()) {
 
 require_once ABS_PATH . 'pages/scores.php';
 
-global $api_key;
+global $apiKey;
 ?>
 <script type="text/javascript">
     $(document).ready(function()

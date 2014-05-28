@@ -64,10 +64,10 @@ if (!empty($query)) {
                     continue;
                 }
 
-                $meaning_col = 'meaning_' . $fullLang;
-                echo "<p style=\"padding:0; margin:2px;\"><a href=\"#\" onclick=\"$('#meaning_$kanji->id" . "_$lang" . "_edit').toggle(); $('#meaning_$kanji->id" . "_$lang').toggle(); return false;\"><img src=\"" . SERVER_URL . "/img/flags/$lang.png\" alt=\"$lang-flag\" style=\"vertical-align:bottom; margin:0 3px 0 0;\" /> " . ucwords($fullLang) . ": <span id=\"meaning_$kanji->id" . "_$lang\" style=\"font-style:italic;" . ($fullLang == $pref_lang_kanji ? 'display:none;' : '') . "\">" . $kanji->$meaning_col . "</span></a>";
+                $meaningCol = 'meaning_' . $fullLang;
+                echo "<p style=\"padding:0; margin:2px;\"><a href=\"#\" onclick=\"$('#meaning_$kanji->id" . "_$lang" . "_edit').toggle(); $('#meaning_$kanji->id" . "_$lang').toggle(); return false;\"><img src=\"" . SERVER_URL . "/img/flags/$lang.png\" alt=\"$lang-flag\" style=\"vertical-align:bottom; margin:0 3px 0 0;\" /> " . ucwords($fullLang) . ": <span id=\"meaning_$kanji->id" . "_$lang\" style=\"font-style:italic;" . ($fullLang == $pref_lang_kanji ? 'display:none;' : '') . "\">" . $kanji->$meaningCol . "</span></a>";
                 echo "<input type=\"text\" name=\"new_gloss\" id=\"meaning_$kanji->id" . "_$lang" . "_edit\" value=\"" . str_replace('"',
-                    '\"', $kanji->$meaning_col) . "\" style=\"width:600px;" . ($fullLang == $pref_lang_kanji ? '' : 'display:none;') . "\" onchange=\"update_kanji_lang($kanji->id, '$lang', this.value);\" /><br/>";
+                    '\"', $kanji->$meaningCol) . "\" style=\"width:600px;" . ($fullLang == $pref_lang_kanji ? '' : 'display:none;') . "\" onchange=\"update_kanji_lang($kanji->id, '$lang', this.value);\" /><br/>";
 
                 echo "<input type=\"hidden\" name=\"traditional\" id=\"traditional\" value=\"$kanji->traditional\" /><input type=\"hidden\" name=\"lang\" id=\"lang\" value=\"$lang\" /><input type=\"hidden\" name=\"kanji_id\" id=\"kanji_id\" value=\"$kanji->id\" /></p>";
             }

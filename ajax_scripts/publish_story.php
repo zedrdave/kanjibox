@@ -10,12 +10,11 @@ if (!empty($params['type'])) {
 }
 
 if (!fb_connect_init()) {
-    global $facebook, $api_key, $secret;
+    global $facebook, $apiKey, $secret;
 
-    //require_once ABS_PATH . 'api/facebook.php';
     require_once ABS_PATH . 'vendor/autoload.php';
     if (!is_object($facebook)) {
-        $facebook = new Facebook(['appId' => $api_key, 'secret' => $secret, 'cookie' => true]);
+        $facebook = new Facebook(['appId' => $apiKey, 'secret' => $secret, 'cookie' => true]);
     }
 
     $loginUrl = $facebook->getLoginUrl(
