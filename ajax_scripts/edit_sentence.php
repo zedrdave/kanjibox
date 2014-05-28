@@ -109,9 +109,13 @@ if (isset($_REQUEST['id'])) {
         echo "Changed position to: (" . (int) $_REQUEST['new_pos_start'] . ", " . (int) $_REQUEST['new_pos_end'] . ")";
     }
     if (isset($_REQUEST['pos_start']) && isset($_REQUEST['delete_jmdict_id'])) {
-
-        mysql_query("DELETE FROM example_parts WHERE example_id = " . (int) $_REQUEST['id'] . " AND pos_start = " . (int) $_REQUEST['pos_start'] . " LIMIT 1") or die(mysql_error());
-        echo "Deleted fragment at position: " . (int) $_REQUEST['pos_start'];
+        DB::delete('DELETE FROM example_parts WHERE example_id = :example_id AND pos_start = :pos_start LIMIT 1',
+            [
+            ':example_id' => $_REQUEST['id'],
+            ':pos_start' => $_REQUEST['pos_start']
+            ]
+        );
+        echo 'Deleted fragment at position: ' . (int) $_REQUEST['pos_start'];
     } elseif (isset($_REQUEST['pos_start']) && isset($_REQUEST['split_at_pos'])) {
 
         $res = mysql_query("SELECT ep.*, SUBSTRING(e.example_str, ep.pos_start+1, ep.pos_end-ep.pos_start) AS fragment FROM example_parts ep LEFT JOIN examples e ON e.example_id = ep.example_id WHERE ep.example_id = " . (int) $_REQUEST['id'] . " AND ep.pos_start = " . (int) $_REQUEST['pos_start']) or die(mysql_error());

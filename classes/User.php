@@ -484,10 +484,10 @@ class User
     {
         $query = 'FROM `games` WHERE `user_id` = \'' . $this->getID() . '\'';
         if ($level) {
-            $query .= ' AND `level` = \'' . DB::getConnection()->quote($level) . '\' ';
+            $query .= ' AND `level` = ' . DB::getConnection()->quote($level) . ' ';
         }
         if ($type) {
-            $query .= ' AND `type` = \'' . DB::getConnection()->quote($type) . '\'';
+            $query .= ' AND `type` = ' . DB::getConnection()->quote($type) . '';
         }
 
         $query = 'SELECT COUNT(*) as c ' . $query;

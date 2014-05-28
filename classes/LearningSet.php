@@ -445,19 +445,13 @@ class LearningSet
 
         $this->entryData = null;
 
-        $query = 'DELETE FROM learning_set_' . $this->getType() . ' WHERE set_id = :setid AND ' . $this->getSetEntryIndex() . ' = :entryindex LIMIT 1';
-        try {
-            $stmt = DB::getConnection()->prepare($query);
-            $stmt->bindValue(':setid', $this->id, PDO::PARAM_INT);
-            $stmt->bindValue(':entryindex', $id, PDO::PARAM_INT);
-            $stmt->execute();
-            $this->markSetUpdated();
-            $stmt = null;
-
-            return '';
-        } catch (PDOException $e) {
-            log_db_error($query, $e->getMessage(), true, true);
-        }
+        DB::delete('DELETE FROM learning_set_' . $this->getType() . ' WHERE set_id = :setid AND ' . $this->getSetEntryIndex() . ' = :entryindex LIMIT 1',
+            [
+            ':setid' => $this->id,
+            ':entryindex' => $id,
+            ]
+        );
+        return '';
     }
 
     public function removeLevelFromSet($level)
@@ -466,13 +460,16 @@ class LearningSet
             return 'This set is not publicly editable.';
         }
 
-        $this->entryData = NULL;
+        $this->entryData = null;
 
-        $query = "DELETE ls.* FROM learning_set_" . $this->getType() . " ls LEFT JOIN " . $this->getSetJoinTable() . " t ON t.id = ls." . $this->getSetEntryIndex() . " WHERE ls.set_id = $this->id AND t.njlpt = " . (int) $level;
-        mysql_query($query);
+        DB::delete('DELETE ls.* FROM learning_set_' . $this->getType() . ' ls LEFT JOIN ' . $this->getSetJoinTable() . ' t ON t.id = ls.' . $this->getSetEntryIndex() . ' WHERE ls.set_id = :setid AND t.njlpt = :level',
+            [
+            ':setid' => $this->id,
+            ':level' => $level,
+            ]
+        );
 
         $this->markSetUpdated();
-        return mysql_error();
     }
 
     public function removeOtherSetFromSet($setID)
@@ -481,13 +478,16 @@ class LearningSet
             return 'This set is not publicly editable.';
         }
 
-        $this->entryData = NULL;
+        $this->entryData = null;
 
-        $query = 'DELETE ls.* FROM learning_set_' . $this->getType() . ' ls LEFT JOIN learning_set_' . $this->getType() . ' ls2 ON ls.' . $this->getSetEntryIndex() . ' = ls2.' . $this->getSetEntryIndex() . " WHERE ls.set_id = $this->id AND ls2.set_id = " . (int) $setID . " AND ls2.set_id IS NOT NULL";
-        mysql_query($query);
+        DB::delete('DELETE ls.* FROM learning_set_' . $this->getType() . ' ls LEFT JOIN learning_set_' . $this->getType() . ' ls2 ON ls.' . $this->getSetEntryIndex() . ' = ls2.' . $this->getSetEntryIndex() . ' WHERE ls.set_id = :id AND ls2.set_id = :setid AND ls2.set_id IS NOT NULL',
+            [
+            ':id' => $this->id,
+            ':setid' => $setID,
+            ]
+        );
 
         $this->markSetUpdated();
-        return mysql_error();
     }
 
     public function subscribeToSet()
@@ -637,7 +637,12 @@ class LearningSet
         if ($val) {
             $query = 'INSERT INTO learning_set_tags SET set_id = ' . $this->id . ', tag_id = ' . (int) $tag_id;
         } else {
-            $query = 'DELETE FROM learning_set_tags WHERE set_id = ' . $this->id . ' AND tag_id = ' . (int) $tag_id . ' LIMIT 1';
+            DB::delete('DELETE FROM learning_set_tags WHERE set_id = :setid AND tag_id = :tagid LIMIT 1',
+                [
+                ':setid' => $this->id,
+                ':tagid' => $tag_id
+                ]
+            );
         }
 
         mysql_query($query);

@@ -39,7 +39,7 @@ try {
     if ($stmt->rowCount() > 0) {
         while ($msg = $stmt->fetchObject()) {
             ?>
-            <div id="kb-msg-<?php echo $msg->message_id ?>" class="kb-msg kb-msg-<?php echo $msg->msg_class ?>">
+            <div id="kb-msg-<?php echo $msg->message_id?>" class="kb-msg kb-msg-<?php echo $msg->msg_class?>">
                 <?php
                 if ($msg->user_id_from == $_SESSION['user']->getID()) {
                     if ($msg->user_to_first_name || $msg->user_to_last_name) {
@@ -50,10 +50,10 @@ try {
                     echo '<div class="msg-to">to: ' . $to . '</div>';
                 }
                 ?>
-                <div class="date"><?php echo $msg->date_created ?></div>
+                <div class="date"><?php echo $msg->date_created?></div>
                 <div style="clear:both;"></div>
-                <div class="msg-title"><?php echo $msg->msg_title ?></div>
-                <p><?php echo $msg->msg_text ?></p>
+                <div class="msg-title"><?php echo $msg->msg_title?></div>
+                <p><?php echo $msg->msg_text?></p>
                 <?php
                 if ($msg->user_id_from == 5) {
                     echo '<div class="signature"><a href="mailto:dave@kanjibox.net">Dave</a></div>';
@@ -61,12 +61,12 @@ try {
 
                 if (!$msg->msg_read && ($msg->user_id_to == $_SESSION['user']->getID())) {
                     ?>
-                    <a class="dismiss" href="#" onclick="do_load('<?php echo SERVER_URL ?>ajax/mark_msg_read/id/<?php echo $msg->message_id ?>/', '');
-                            $('#kb-msg-<?php echo $msg->message_id ?>').fadeOut();
-                            return false;">[dismiss]</a>
+                    <a class="dismiss" href="#" onclick="do_load('<?php echo SERVER_URL;?>ajax/mark_msg_read/id/<?php echo $msg->message_id?>/', '');
+                                            $('#kb-msg-<?php echo $msg->message_id?>').fadeOut();
+                                            return false;">[dismiss]</a>
                        <?php
                    } else {
-                       echo "<div class=\"dismiss\">" . ($msg->msg_read ? 'Read' : 'Unread') . "</div>";
+                       echo '<div class="dismiss">' . ($msg->msg_read ? 'Read' : 'Unread') . '</div>';
                    }
                    ?>
             </div>
