@@ -42,30 +42,29 @@ require_once ABS_PATH . 'libs/stats_lib.php';
 <fieldset class="stats">
     <?php
     if (!empty($_POST['reset-stats'])) {
-        $sql = 'DELETE FROM ';
+        $query = 'DELETE FROM ';
         switch ($_POST['reset-stats']) {
             case 'kanji':
-                $sql .= 'learning';
+                $query .= 'learning';
                 break;
             case 'vocab':
-                $sql .= 'jmdict_learning';
+                $query .= 'jmdict_learning';
                 break;
             case 'reading':
-                $sql .= 'reading_learning';
+                $query .= 'reading_learning';
                 break;
             case 'kana':
-                $sql .= 'kana_learning';
+                $query .= 'kana_learning';
                 break;
             default:
                 die('Unknown reset category');
                 break;
         }
 
-        $sql .= ' WHERE user_id = ' . (int) $_SESSION['user']->getID();
+        $query .= ' WHERE user_id = :userid';
 
-        if (!mysql_query($sql)) {
-            echo '<div class="error_msg">SQL error: ' . mysql_error() . '</div>';
-        } else {
+        $rows = DB::delete($query, [':userid' => $_SESSION['user']->getID()]);
+        if (!empty($rows)) {
             echo '<div class="success_msg">All ' . ($_POST['reset-stats'] == 'main' ? 'your' : $_POST['reset-stats']) . ' stats have been reset</div>';
         }
     }
@@ -219,8 +218,8 @@ require_once ABS_PATH . 'libs/stats_lib.php';
     if ($curType != 'main') {
         ?>
         <a href="#" class="reset" onclick="$(this).hide();
-                    $('input.reset').show('bounce', {}, 200);
-                    return false;">Reset Stats ▷</a>
+                $('input.reset').show('bounce', {}, 200);
+                return false;">Reset Stats ▷</a>
         <form action="<?php get_page_url(PAGE_STATS, ['type' => $type])?>" method="POST">
             <input type="hidden" name="reset-stats" value="<?php echo $curType?>" />
             <input type="submit" class="reset" style="display:none;" onclick="return (confirm('Are you SURE your want to erase <?php echo ($curType == 'main') ? 'ALL your stats' : 'all your ' . $curType . ' stats'?>? This cannot be recovered.'));" value="Reset Stats"/>

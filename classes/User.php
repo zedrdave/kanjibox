@@ -495,8 +495,7 @@ class User
         $row = mysql_fetch_object($res);
         display_user_msg('Deleting ' . $row->c . ' records');
 
-        $query = 'DELETE ' . $query;
-        mysql_query_debug($query) or log_db_error($query, false, true);
+        DB::delete('DELETE ' . $query);
     }
 
     public function getFriendsranking($score, $level, $type)
@@ -769,17 +768,28 @@ class User
 
     public function unarchiveDbrecords()
     {
-        foreach (['kana_learning', 'learning', 'jmdict_learning', 'reading_learning'] as $tableName) {
-            mysql_query_debug('INSERT IGNORE INTO ' . $tableName . ' (SELECT * FROM _purge_' . $tableName . ' pl WHERE pl.user_id = ' . $this->getID() . ')');
-            mysql_query_debug('DELETE pl.* FROM _purge_' . $tableName . ' pl WHERE pl.user_id = ' . $this->getID());
+        try {
+            DB::getConnection()->beginTransaction();
+
+            foreach (['kana_learning', 'learning', 'jmdict_learning', 'reading_learning'] as $tableName) {
+                DB::insert('INSERT IGNORE INTO ' . $tableName . ' (SELECT * FROM _purge_' . $tableName . ' pl WHERE pl.user_id = :userid)',
+                    [':userid' => $this->getID()]);
+                DB::delete('DELETE pl.* FROM _purge_' . $tableName . ' pl WHERE pl.user_id = :userid',
+                    [':userid' => $this->getID()]);
+            }
+
+            DB::insert('INSERT IGNORE INTO games (SELECT * FROM _purge_games pl WHERE pl.user_id = :userid',
+                [':userid' => $this->getID()]);
+            DB::delete('DELETE pl.* FROM _purge_games pl WHERE pl.user_id = :userid', [':userid' => $this->getID()]);
+
+            $this->data->purged = 0;
+            DB::update('UPDATE users SET purged = \'0\' WHERE id = :userid', [':userid' => $this->getID()]);
+
+            DB::getConnection()->commit();
+        } catch (PDOException $e) {
+            DB::getConnection()->rollBack();
+            log_error($e->getMessage(), false, true);
         }
-
-        mysql_query_debug('INSERT IGNORE INTO games (SELECT * FROM _purge_games pl WHERE pl.user_id = ' . $this->getID() . ')');
-        mysql_query_debug('DELETE pl.* FROM _purge_games pl WHERE pl.user_id = ' . $this->getID());
-
-
-        $this->data->purged = 0;
-        mysql_query_debug("UPDATE users SET purged = '0' WHERE id = " . $this->getID());
     }
 
     public function storeFbfriends()
@@ -797,12 +807,20 @@ class User
 
         if (is_array($friends) && count($friends)) {
             $fbID = (int) $this->getFbID();
-            mysql_query_debug('BEGIN');
-            mysql_query_debug('DELETE FROM fb_friends WHERE fb_id_1 = ' . $fbID);
-            foreach ($friends as $friend) {
-                mysql_query_debug('INSERT INTO fb_friends SET fb_id_1 = ' . $fbID . ', fb_id_2 = ' . $friend);
+
+            try {
+                DB::getConnection()->beginTransaction();
+
+                DB::delete('DELETE FROM fb_friends WHERE fb_id_1 = :fbID', [':fbID' => $fbID]);
+                foreach ($friends as $friend) {
+                    DB::insert('INSERT INTO fb_friends SET fb_id_1 = :fbID, fb_id_2 = :friendID',
+                        [':fbID' => $fbID, ':friendID' => $friend]);
+                }
+                DB::getConnection()->commit();
+            } catch (PDOException $e) {
+                DB::getConnection()->rollBack();
+                log_error($e->getMessage(), false, true);
             }
-            mysql_query_debug('COMMIT');
         }
 
         return true;

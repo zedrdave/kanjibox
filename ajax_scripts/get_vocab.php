@@ -32,7 +32,7 @@ try {
                 DB::getConnection()->commit();
             } catch (PDOException $ex) {
                 DB::getConnection()->rollBack();
-                log_error($e->getMessage(), false, true);
+                log_error($ex->getMessage(), false, true);
             }
         }
         if (!empty($_REQUEST['learn_vocab'])) {
@@ -43,7 +43,7 @@ try {
                 DB::getConnection()->commit();
             } catch (PDOException $ex) {
                 DB::getConnection()->rollBack();
-                log_error($e->getMessage(), false, true);
+                log_error($ex->getMessage(), false, true);
             }
         }
         echo (!empty($_REQUEST['word']) ? $_REQUEST['word'] : ($row->usually_kana ? $row->reading : $row->word)) . '<span class="definition">' . ($row->usually_kana ? $row->reading : $row->word . ($row->katakana || $row->word == $row->reading ? '' : ' 「' . $row->reading . '」')) . '<br/>' . $row->fullgloss . '<br/><span class="level">JLPT: N' . $row->njlpt . ' (Reading: N' . $row->njlpt_r . ')</span></span>';

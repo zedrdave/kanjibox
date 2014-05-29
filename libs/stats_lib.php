@@ -367,18 +367,12 @@ function make_charts($verybad, $bad, $unknown, $neutral, $good, $verygood, $tot_
 
 function resetRankings($level, $type)
 {
-    $deleteQuery = 'DELETE FROM ranking WHERE level = :level AND type = :type';
     try {
-        $stmt = DB::getConnection()->prepare($deleteQuery);
-        $stmt->bindValue(':level', $level);
-        $stmt->bindValue(':type', $type);
-        $stmt->execute();
-        $stmt = null;
-    } catch (PDOException $e) {
-        log_db_error($deleteQuery, $e->getMessage(), true, true);
-    }
+        DB::getConnection()->beginTransaction();
 
-    $query = 'INSERT INTO ranking (SELECT NULL, user_id, type, level, @rownum:=@rownum+1 as rank, game_id, NOW()
+        DB::delete('DELETE FROM ranking WHERE level = :level AND type = :type', [':level' => $level, ':type' => $type]);
+
+        $query = 'INSERT INTO ranking (SELECT NULL, user_id, type, level, @rownum:=@rownum+1 as rank, game_id, NOW()
 	FROM (SELECT @rownum:=0) r,
 			(SELECT u.id as user_id, g.type as type, g.level as level, g.id as game_id
 				FROM games g
@@ -393,15 +387,12 @@ function resetRankings($level, $type)
 	WHERE g2.user_id IS NULL AND g.type = :type AND g.level = :level
 	GROUP BY g.user_id
 	ORDER BY g.score DESC, TIMEDIFF(g.date_ended, g.date_started) ASC) temp)';
+        DB::insert($query, [':level' => $level, ':type' => $type]);
 
-    try {
-        $stmt = DB::getConnection()->prepare($query);
-        $stmt->bindValue(':level', $level);
-        $stmt->bindValue(':type', $type);
-        $stmt->execute();
-        $stmt = null;
+        DB::getConnection()->commit();
     } catch (PDOException $e) {
-        log_db_error($query, $e->getMessage());
+        DB::getConnection()->rollBack();
+        log_error($e->getMessage(), false, true);
     }
 }
 

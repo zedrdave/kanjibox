@@ -118,9 +118,9 @@ if ($mode == GRAMMAR_SETS_MODE) {
         }
 
         if (!empty($_POST['unsubscribe_set_id'])) {
-            $res = DB::delete('DELETE FROM learning_set_subs WHERE user_id = :userid AND set_id = :set_id',
+            $rows = DB::delete('DELETE FROM learning_set_subs WHERE user_id = :userid AND set_id = :set_id',
                     [':userid' => $_SESSION['user']->getID(), ':set_id' => $_POST['unsubscribe_set_id']]);
-            if ($res) {
+            if ($rows) {
                 echo '<div class="success_msg">Unsubscribed from set.</div>';
             }
         }

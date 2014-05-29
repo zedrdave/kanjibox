@@ -427,8 +427,9 @@ class LearningSet
 
         $query = substr($query, 0, -2);
 
-        if (!mysql_query($query))
+        if (!mysql_query($query)) {
             return mysql_error();
+        }
 
         $this->markSetUpdated();
 
@@ -492,17 +493,14 @@ class LearningSet
 
     public function subscribeToSet()
     {
-        $query = 'INSERT IGNORE INTO learning_set_subs SET user_id = :userid, set_id = :setid';
-        try {
-            $stmt = DB::getConnection()->prepare($query);
-            $stmt->bindValue(':setid', $this->id, PDO::PARAM_INT);
-            $stmt->bindValue(':userid', $_SESSION['user']->getID(), PDO::PARAM_INT);
-            $stmt->execute();
-            $stmt = null;
-            return '';
-        } catch (PDOException $e) {
-            log_db_error($query, $e->getMessage(), true, true);
-        }
+        DB::insert('INSERT IGNORE INTO learning_set_subs SET user_id = :userid, set_id = :setid',
+            [
+            ':setid' => $this->id,
+            ':userid' => $_SESSION['user']->getID()
+            ]
+        );
+
+        return '';
     }
 
     private function loadEntryData()
@@ -634,8 +632,9 @@ class LearningSet
             return 'invalid tag ID';
         }
 
-        if ($val) {
-            $query = 'INSERT INTO learning_set_tags SET set_id = ' . $this->id . ', tag_id = ' . (int) $tag_id;
+        if (!empty($val)) {
+            DB::insert('INSERT INTO learning_set_tags SET set_id = :setid, tag_id = :tagid',
+                [':setid' => $this->id, ':tagid' => $tag_id]);
         } else {
             DB::delete('DELETE FROM learning_set_tags WHERE set_id = :setid AND tag_id = :tagid LIMIT 1',
                 [
@@ -644,9 +643,6 @@ class LearningSet
                 ]
             );
         }
-
-        mysql_query($query);
-        return mysql_error();
     }
 
     public function showTagCheckboxes()
@@ -732,9 +728,7 @@ class LearningSet
 
     public function getSubsCount()
     {
-        $res = mysql_query('SELECT COUNT(*) AS c FROM learning_set_subs WHERE set_id = ' . $this->id) or die(mysql_error());
-        $row = mysql_fetch_object($res);
-        return $row->c;
+        return DB::count('SELECT COUNT(*) FROM learning_set_subs WHERE set_id = :setid', [':setid' => $this->id]);
     }
 
     function deleteSet()
@@ -743,11 +737,20 @@ class LearningSet
             return 'Not allowed to delete this set';
         }
 
-        $this->entryData = NULL;
+        $this->entryData = null;
 
-        mysql_query('DELETE FROM learning_set_' . $this->getType() . ' WHERE set_id = ' . $this->id) or die(mysql_error());
-        mysql_query('DELETE FROM learning_set_subs WHERE set_id = ' . $this->id) or die(mysql_error());
-        mysql_query('UPDATE learning_sets SET deleted = 1 WHERE set_id = ' . $this->id . ' LIMIT 1') or die(mysql_error());
+        try {
+            DB::getConnection()->beginTransaction();
+            DB::delete('DELETE FROM learning_set_' . $this->getType() . ' WHERE set_id = :setid',
+                [':setid' => $this->id]);
+            DB::delete('DELETE FROM learning_set_subs WHERE set_id = :setid', [':setid' => $this->id]);
+            DB::update('UPDATE learning_sets SET deleted = 1 WHERE set_id = :setid LIMIT 1', [':setid' => $this->id]);
+            DB::getConnection()->commit();
+        } catch (PDOException $e) {
+            DB::getConnection()->rollBack();
+            log_error($e->getMessage(), false, true);
+        }
+
         $this->valid = false;
     }
 
