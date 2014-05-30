@@ -418,18 +418,16 @@ class LearningSet
             $error_msg = '';
         }
 
-        $this->entryData = NULL;
+        $this->entryData = null;
 
         $query = 'INSERT IGNORE INTO learning_set_' . $this->getType() . ' (set_id, ' . $this->getSetEntryIndex() . ') VALUES ';
         foreach ($arr as $entry_id) {
-            $query .= "($this->id, " . (int) $entry_id . "), ";
+            $query .= '(' . $this->id . ', ' . (int) $entry_id . '), ';
         }
 
         $query = substr($query, 0, -2);
 
-        if (!mysql_query($query)) {
-            return mysql_error();
-        }
+        DB::insert($query);
 
         $this->markSetUpdated();
 

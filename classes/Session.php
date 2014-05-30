@@ -287,7 +287,7 @@ class Session
         <table id="quiz-header" class="twocols">
             <tr><td>
                     <div class="info">Level: <?php echo Session::$levelNames[$this->sessionLevel]?> - Wave: <?php echo ($this->curWave + 1);?> <a href="#" onclick="do_load('<?php echo SERVER_URL?>ajax/stop_quiz/', 'session_frame');
-                                    return false;">[stop]</a></div></td>
+                            return false;">[stop]</a></div></td>
                 <td style="text-align: right; padding: 0; margin: 0;">
                     <div id="countdown" name="countdown" ></div>
                     <?php
@@ -445,34 +445,21 @@ class Session
             return false;
         }
 
-        if ($this->scoreID) {
-            $query = 'UPDATE `games` SET ';
-        } else {
-            $query = 'INSERT INTO `games` SET `user_id`=' . $_SESSION['user']->getID() . ', `level` = \'' . DB::getConnection()->quote($this->sessionLevel) . '\', `date_started` = \'' . date("Y-m-d H:i:s",
-                    $this->startTime) . '\', ';
-        }
-
-        $query .= '`score` = ' . ((int) $this->totScore) . ', `date_ended` = \'' . date("Y-m-d H:i:s") . '\'';
-        $query .= ", `type` = '" . $this->getType() . "'";
+        $clause = '`score` = ' . ((int) $this->totScore);
+        $clause .= ', `date_ended` = \'' . date("Y-m-d H:i:s") . '\'';
+        $clause .= ", `type` = '" . $this->getType() . "'";
 
         if ($this->scoreID) {
-            $query .= ' WHERE `id` = ' . (int) $this->scoreID;
-            mysql_query_debug($query) or log_db_error($query);
+            DB::update('UPDATE `games` SET ' . $clause . ' WHERE `id` = :scoreid', [':scoreid' => $this->scoreID]);
         } else {
-            mysql_query_debug($query) or log_db_error($query);
-            $this->scoreID = mysql_insert_id();
+            $this->scoreID = DB::insert('INSERT INTO `games` SET `user_id`=:userid, `level` = :level, `date_started` = :starttime, ' . $clause,
+                    [':userid' => $_SESSION['user']->getID(), ':level' => $this->sessionLevel, ':starttime' => date('Y-m-d H:i:s',
+                        $this->startTime)]);
         }
 
         if ($this->scoreID && $this->isHighscore()) {
-            $query = 'UPDATE users SET ' . $this->getType() . '_highscore_id = :scoreid WHERE id = :id';
-            try {
-                $stmt = DB::getConnection()->prepare($query);
-                $stmt->bindValue(':scoreid', $this->scoreID, PDO::PARAM_INT);
-                $stmt->bindValue(':id', $_SESSION['user']->getID(), PDO::PARAM_INT);
-                $stmt->execute();
-            } catch (PDOException $e) {
-                log_db_error($query, $e->getMessage());
-            }
+            DB::update('UPDATE users SET ' . $this->getType() . '_highscore_id = :scoreid WHERE id = :id',
+                [':scoreid' => $this->scoreID, ':id' => $_SESSION['user']->getID()]);
             return true;
         } else {
             return false;

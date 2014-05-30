@@ -303,7 +303,6 @@ function post_db_correction($table_name, $id_name, $id_value, $col_name, $new_va
     $col_name = DB::getConnection()->quote($col_name);
     $id_name = DB::getConnection()->quote($id_name);
     $_table_name = "`" . str_replace("`", "", $table_name) . "`";
-    $_col_name = "`" . str_replace("`", "", $col_name) . "`";
     $_id_name = "`" . str_replace("`", "", $id_name) . "`";
     $id_value = (int) $id_value;
     $new_value = DB::getConnection()->quote($new_value);
@@ -318,36 +317,51 @@ function post_db_correction($table_name, $id_name, $id_value, $col_name, $new_va
         $insert_id_2 = '';
     }
     $res = mysql_query("SELECT $col_name AS old_value FROM $_table_name WHERE $_id_name = $id_value" . $select_id_2);
-    if (!$res)
+    if (!$res) {
         return 'Invalid params: ' . mysql_error();
-    if (mysql_num_rows($res) == 0)
+    }
+    if (mysql_num_rows($res) == 0) {
         return 'No matching db row';
-    if (mysql_num_rows($res) > 1)
+    }
+    if (mysql_num_rows($res) > 1) {
         return 'More than one matching db row';
+    }
 
     $row = mysql_fetch_object($res);
     $old_value = DB::getConnection()->quote($row->old_value);
-    if ($old_value == $new_value)
+    if ($old_value == $new_value) {
         return 'Value unchanged';
+    }
 
     $user_id = (int) $_SESSION['user']->getID();
 
-    $res = mysql_query("INSERT INTO data_updates SET user_id = $user_id, table_name = '$table_name', id_name = '$id_name', id_value = $id_value, col_name = '$col_name', old_value = '$old_value', new_value = '$new_value', applied = 0, usr_cmt = '$user_cmt' $insert_id_2, need_work = $need_work");
-    if (!$res)
-        return 'Invalid params for data_updates insert: ' . mysql_error();
+    $updateID = DB::insert('INSERT INTO data_updates SET user_id = :userid, table_name = :tablename, id_name = :idname, id_value = :idvalue, col_name = :colname, old_value = :oldvalue, new_value = :newvalue, applied = 0, usr_cmt = :usercomment ' . $insert_id_2 . ', need_work = :needwork',
+            [
+            ':user_id' => $user_id,
+            ':tablename' => $table_name,
+            ':idname' => $id_name,
+            ':idvalue' => $id_value,
+            ':colname' => $col_name,
+            ':oldvalue' => $old_value,
+            ':newvalue' => $new_value,
+            ':usercomment' => $user_cmt,
+            ':needwork' => $need_work
+            ]
+    );
 
     if ($apply) {
-        $update_id = mysql_insert_id();
         $res = mysql_query("UPDATE $_table_name SET $col_name = '" . ($need_work ? '(~)' : '') . "$new_value' WHERE $_id_name = $id_value" . $select_id_2);
-        if (!$res)
+        if (!$res) {
             return 'Can\'t apply: ' . mysql_error();
+        }
 
         $reviewed = (int) ($_SESSION['user'] && $_SESSION['user']->isEditor());
-        mysql_query("UPDATE data_updates SET applied = 1, reviewed = $reviewed, need_work = $need_work WHERE update_id = $update_id") or die(mysql_error());
+        mysql_query("UPDATE data_updates SET applied = 1, reviewed = $reviewed, need_work = $need_work WHERE update_id = $updateID") or die(mysql_error());
 
         return 'Update successfully logged and applied';
-    } else
+    } else {
         return 'Update successfully logged';
+    }
 }
 
 function get_audio_hash($str)
@@ -359,16 +373,17 @@ function display_editors_board()
 {
     ?>
     <div class="search_form" style="background-color:#DDD;"><h3><a href="#"  onclick="$('textarea#editors_board').toggle();
-                return false;">Editors Bulletin Board:</a></h3>
-                                                                   <?php
-            if (file_exists(dirname(__FILE__) . '/../tools/notes.txt'))
+            return false;">Editors Bulletin Board:</a></h3>
+            <?php
+            if (file_exists(dirname(__FILE__) . '/../tools/notes.txt')) {
                 $notes = file_get_contents(dirname(__FILE__) . '/../tools/notes.txt');
-            else
+            } else {
                 $notes = '';
+            }
             ?>
         <textarea id="editors_board" style="width:98%;height:<?php
         echo min(max(5, strlen($notes) / 90) + count(explode("\n", $notes)), 15)
-            ?>em" onchange="save_board(this);"><?php echo $notes;?></textarea>
+        ?>em" onchange="save_board(this);"><?php echo $notes;?></textarea>
     </div>
     <script type="text/javascript">
         function save_board(txtobj) {
@@ -416,9 +431,9 @@ function execute_query($query, $apply = true, $force_run_again = false)
     }
     if ($apply) {
         mysql_query($query) or die(mysql_error());
-        echo "Ran query: $query";
+        echo 'Ran query: ' . $query;
     } else {
-        echo "Wrote query";
+        echo 'Wrote query';
     }
 }
 
@@ -440,19 +455,15 @@ function old_to_new_jlpt($level)
         case LEVEL_1:
         case LEVEL_J4:
             return LEVEL_N5;
-            break;
         case LEVEL_2:
         case LEVEL_J3:
             return LEVEL_N4;
-            break;
         case LEVEL_3:
         case LEVEL_J2:
             return LEVEL_N2;
-            break;
         case LEVEL_SENSEI:
         case LEVEL_J1:
             return LEVEL_N1;
-            break;
         case LEVEL_N5:
         case LEVEL_N4:
         case LEVEL_N3:
@@ -460,7 +471,6 @@ function old_to_new_jlpt($level)
         case LEVEL_N1:
         default:
             return $level;
-            break;
     }
 }
 

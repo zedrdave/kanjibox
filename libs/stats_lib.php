@@ -371,8 +371,7 @@ function resetRankings($level, $type)
         DB::getConnection()->beginTransaction();
 
         DB::delete('DELETE FROM ranking WHERE level = :level AND type = :type', [':level' => $level, ':type' => $type]);
-
-        $query = 'INSERT INTO ranking (SELECT NULL, user_id, type, level, @rownum:=@rownum+1 as rank, game_id, NOW()
+        DB::insert('INSERT INTO ranking (SELECT NULL, user_id, type, level, @rownum:=@rownum+1 as rank, game_id, NOW()
 	FROM (SELECT @rownum:=0) r,
 			(SELECT u.id as user_id, g.type as type, g.level as level, g.id as game_id
 				FROM games g
@@ -386,8 +385,7 @@ function resetRankings($level, $type)
 				JOIN users u ON g.user_id = u.id AND g.level = u.level AND u.active = 1
 	WHERE g2.user_id IS NULL AND g.type = :type AND g.level = :level
 	GROUP BY g.user_id
-	ORDER BY g.score DESC, TIMEDIFF(g.date_ended, g.date_started) ASC) temp)';
-        DB::insert($query, [':level' => $level, ':type' => $type]);
+	ORDER BY g.score DESC, TIMEDIFF(g.date_ended, g.date_started) ASC) temp)', [':level' => $level, ':type' => $type]);
 
         DB::getConnection()->commit();
     } catch (PDOException $e) {

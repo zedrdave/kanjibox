@@ -38,38 +38,43 @@ if (isset($_REQUEST['create'])) {
     if (empty($_REQUEST['example_str'])) {
         echo '<div class="message">Error: please provide at least Japanese text.</div>';
         return;
-    } elseif (mysql_query("INSERT INTO examples SET example_str = '" . DB::getConnection()->quote($_REQUEST['example_str']) . "', english = '" . DB::getConnection()->quote($_REQUEST['english']) . '\', status = \'kanjibox\'')) {
-        $example_id = mysql_insert_id();
-
-        echo '<div class="message">Created new sentence ID: ' . $example_id . '</div>';
-
-        $sentence = $_REQUEST['example_str'];
-
-        require_once ABS_PATH . 'libs/mecab_lib.php';
-
-        $queries = parse_jp_sentence($sentence, true, true, $example_id);
-
-        array_walk($queries, function(&$n) {
-            $n = '(' . implode(',', $n) . ')';
-        });
-
-        $query = "INSERT INTO example_parts (example_id, jmdict_id, part_num, pos_start, pos_end, need_furi, proper_noun) VALUES " . implode(',',
-                $queries);
-        mysql_query($query) or die(mysql_error());
-        echo '<div class="message">Inserted : ' . count($queries) . ' sentence parts <a href="#" onclick="$(\'.debug\').show(); return false;">[show debug]</a></div>';
-
-        $query = "UPDATE examples e SET e.njlpt = (SELECT MIN(j.njlpt) FROM example_parts ep LEFT JOIN jmdict j ON j.id = ep.jmdict_id WHERE ep.example_id = $example_id), e.njlpt_r = (SELECT IFNULL(MIN(j.njlpt_r), 5) FROM example_parts ep LEFT JOIN jmdict j ON j.id = ep.jmdict_id  WHERE ep.example_id = $example_id AND need_furi = 1) WHERE e.example_id = $example_id LIMIT 1";
-        mysql_query($query) or die(mysql_error());
-
-        $_REQUEST['id'] = $example_id;
-        $params['edit'] = true;
-        $params['show_vocab'] = true;
-        require_once('get_sentence.php');
-        return;
     } else {
-        echo '<div class="message">DB Error: ' . mysql_error() . '</div>';
+        $exampleID = DB::insert('INSERT INTO examples SET example_str = :example_str, english = :english, status = \'kanjibox\'',
+                [
+                ':example_str' => $_REQUEST['example_str'],
+                ':english' => $_REQUEST['english']
+                ]
+        );
+
+        if (!empty($exampleID)) {
+            echo '<div class="message">Created new sentence ID: ' . $exampleID . '</div>';
+
+            $sentence = $_REQUEST['example_str'];
+
+            require_once ABS_PATH . 'libs/mecab_lib.php';
+
+            $queries = parse_jp_sentence($sentence, true, true, $exampleID);
+
+            array_walk($queries, function(&$n) {
+                $n = '(' . implode(',', $n) . ')';
+            });
+
+            DB::insert('INSERT INTO example_parts (example_id, jmdict_id, part_num, pos_start, pos_end, need_furi, proper_noun) VALUES ' . implode(',',
+                    $queries));
+            echo '<div class="message">Inserted : ' . count($queries) . ' sentence parts <a href="#" onclick="$(\'.debug\').show(); return false;">[show debug]</a></div>';
+
+            $query = "UPDATE examples e SET e.njlpt = (SELECT MIN(j.njlpt) FROM example_parts ep LEFT JOIN jmdict j ON j.id = ep.jmdict_id WHERE ep.example_id = $exampleID), e.njlpt_r = (SELECT IFNULL(MIN(j.njlpt_r), 5) FROM example_parts ep LEFT JOIN jmdict j ON j.id = ep.jmdict_id  WHERE ep.example_id = $exampleID AND need_furi = 1) WHERE e.example_id = $exampleID LIMIT 1";
+            mysql_query($query) or die(mysql_error());
+
+            $_REQUEST['id'] = $exampleID;
+            $params['edit'] = true;
+            $params['show_vocab'] = true;
+            require_once 'get_sentence.php';
+            return;
+        }
     }
 }
+
 
 if (isset($_REQUEST['id'])) {
     $changes = 0;

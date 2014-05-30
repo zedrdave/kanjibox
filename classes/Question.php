@@ -240,7 +240,7 @@ abstract class Question
         $dbh = DB::getConnection();
         try {
             $dbh->beginTransaction();
-            $dbh->exec('INSERT IGNORE INTO ' . $this->table_learning . ' (user_id, ' . $this->table_learning_index . ', date_first) VALUES ' . implode(',',
+            DB::insert('INSERT IGNORE INTO ' . $this->table_learning . ' (user_id, ' . $this->table_learning_index . ', date_first) VALUES ' . implode(',',
                     $initValues));
 
             if (count($badIDs)) {
@@ -261,29 +261,6 @@ abstract class Question
             log_db_error(null, $e->getMessage(), false, true);
         }
 
-        /*
-
-          mysql_query_debug('BEGIN');
-          $query = 'INSERT IGNORE INTO ' . $this->table_learning . " (user_id, " . $this->table_learning_index . ", date_first) VALUES " . implode(',',
-          $init_values);
-
-          mysql_query_debug($query) or log_db_error($query, false, true);
-
-          if (count($bad_ids)) {
-          $query = "UPDATE " . $this->table_learning . " SET total = total+1, curve = LEAST(2000, tan(atan(curve/1000-1)+0.15)*1000+1000) where `user_id` = '" . $user_id . "' AND " . $this->table_learning_index . " IN (" . implode(',',
-          $bad_ids) . ")";
-          mysql_query_debug($query) or log_db_error($query, false, true);
-          }
-
-          if (count($good_ids)) {
-          $query = "UPDATE " . $this->table_learning . " SET total = total+1, curve = GREATEST(100, tan(atan(curve/1000-1)-0.2)*1000+1000) where `user_id` = '" . $user_id . "' AND " . $this->table_learning_index . " IN (" . implode(',',
-          $good_ids) . ")";
-          mysql_query_debug($query) or log_db_error($query, false, true);
-          }
-
-          mysql_query_debug('COMMIT');
-         *
-         */
         return true;
     }
 

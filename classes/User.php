@@ -68,19 +68,12 @@ class User
                 log_db_error($query, $e->getMessage(), false, true);
             }
 
-            // missing users_ext record
+            // Missing users_ext record
             if (!$this->data->user_id) {
-                $query = 'INSERT INTO `users_ext` SET `user_id` = :id';
-                try {
-                    $stmt = DB::getConnection()->prepare($query);
-                    $stmt->bindValue(':id', $this->getID(), PDO::PARAM_INT);
-                    $stmt->execute();
-                } catch (PDOException $e) {
-                    log_db_error($query, $e->getMessage(), false, true);
-                }
+                DB::insert('INSERT INTO `users_ext` SET `user_id` = :id', [':id' => $this->getID()]);
             }
         } elseif ($idParams['fb_id']) {
-            $this->data = $this->create_account($idParams['fb_id'], $loggedIn);
+            $this->data = $this->createAccount($idParams['fb_id'], $loggedIn);
         } else {
             die('incorrect login/pwd');
         }
@@ -181,15 +174,13 @@ class User
             log_error("User::create_account: invalid fb_id: '$fbID'");
         }
 
-        $query = 'INSERT INTO `users` SET `fb_id` = \'' . ((int) $fbID) . '\', `date_joined` = NOW(), `last_played` = NOW(), active = \'' . (int) $loggedIn . '\', level=\'' . LEVEL_N3 . '\'';
-        mysql_query_debug($query) or log_db_error($query, false, true);
-        $userID = mysql_insert_id();
+        $userID = DB::insert('INSERT INTO `users` SET `fb_id` = :fbID, `date_joined` = NOW(), `last_played` = NOW(), active = :active, level=:level',
+                [':fbID' => $fbID, ':active' => $loggedIn, ':level' => LEVEL_N3]);
 
         $query = 'SELECT * FROM `users` u LEFT JOIN users_ext ux ON ux.user_id = u.id  WHERE u.id = \'' . (int) $userID . '\'';
         $rec = mysql_query_debug($query) or log_db_error($query, false, true);
         if ($newUser = mysql_fetch_object($rec)) {
-            $query = 'INSERT INTO `users_ext` SET `user_id` = ' . ((int) $newUser->id);
-            mysql_query_debug($query) or log_db_error($query, false, true);
+            DB::insert('INSERT INTO `users_ext` SET `user_id` = :userid', [':userid' => $newUser->id]);
             return $newUser;
         } else {
             log_error('User::create_account creation failed', true, true);
@@ -557,19 +548,14 @@ class User
                             true, true);
                     }
 
-                    $query = 'INSERT INTO ranking SET last_updated = NOW(), user_id = :userid, game_id = :gameid, type = :type, level=:level, rank = :rank';
-                    try {
-                        $stmt = DB::getConnection()->prepare($query);
-                        $stmt->bindValue(':userid', $this->getID(), PDO::PARAM_INT);
-                        $stmt->bindValue(':gameid', (isset($rank->game_id) ? $rank->game_id : 0), PDO::PARAM_INT);
-                        $stmt->bindValue(':type', $rank->type, PDO::PARAM_STR);
-                        $stmt->bindValue(':level', (isset($rank->level) ? $rank->level : 0), PDO::PARAM_INT);
-                        $stmt->bindValue(':rank', $rank->rank, PDO::PARAM_INT);
-                        $stmt->execute();
-                        $stmt = null;
-                    } catch (PDOException $e) {
-                        log_db_error($query, $e->getMessage(), true, true);
-                    }
+                    DB::insert('INSERT INTO ranking SET last_updated = NOW(), user_id = :userid, game_id = :gameid, type = :type, level=:level, rank = :rank',
+                        [
+                        ':userid' => $this->getID(),
+                        ':gameid' => (isset($rank->game_id) ? $rank->game_id : 0),
+                        ':type' => $rank->type,
+                        ':level' => (isset($rank->level) ? $rank->level : 0),
+                        ':rank' => $rank->rank
+                    ]);
                 }
             } else {
                 resetRankings($this->getLevel(), $type);
