@@ -148,9 +148,8 @@ class LearningSet
             return 'Only owner can edit this.';
         }
 
-        $query = 'UPDATE learning_sets SET name = \'' . DB::getConnection()->quote($newName) . '\' WHERE set_id = ' . $this->id;
-        $res = mysql_query($query) or log_db_error($query, '', false, true);
-
+        DB::update('UPDATE learning_sets SET name = :name WHERE set_id = :setID',
+            [':name' => $newName, ':setID' => $this->id]);
         $this->data->name = $newName;
     }
 
@@ -178,19 +177,14 @@ class LearningSet
             die('This set is not publicly editable.');
         }
 
-        $query = 'UPDATE learning_sets SET ' . $name . ' = :propvalue WHERE set_id = :setid';
-        try {
-            $stmt = DB::getConnection()->prepare($query);
-            $stmt->bindValue(':propvalue', $value, PDO::PARAM_STR);
-            $stmt->bindValue(':setid', $this->id, PDO::PARAM_INT);
-            $stmt->execute();
-            $stmt = null;
-
-            $this->data->$name = $value;
-            return 'Updated ' . $name . ' to .' . $value;
-        } catch (PDOException $e) {
-            log_db_error($query, $e->getMessage(), false, true);
-        }
+        DB::update('UPDATE learning_sets SET ' . $name . ' = :propvalue WHERE set_id = :setid',
+            [
+            ':propvalue' => $value,
+            ':setid' => $this->id
+            ]
+        );
+        $this->data->$name = $value;
+        return 'Updated ' . $name . ' to .' . $value;
     }
 
     public function updateDesc($newDesc)
@@ -201,18 +195,13 @@ class LearningSet
 
         $newDesc = trim(strip_tags($newDesc, '<a><br><p><em><strong>'));
 
-        $query = 'UPDATE learning_sets SET description = :newdescription WHERE set_id = :setid';
-        try {
-            $stmt = DB::getConnection()->prepare($query);
-            $stmt->bindValue(':newdescription', $newDesc, PDO::PARAM_STR);
-            $stmt->bindValue(':setid', $this->id, PDO::PARAM_INT);
-            $stmt->execute();
-
-            $this->data->description = $newDesc;
-            $stmt = null;
-        } catch (PDOException $e) {
-            log_db_error($query, $e->getMessage(), false, true);
-        }
+        DB::update('UPDATE learning_sets SET description = :newdescription WHERE set_id = :setid',
+            [
+            ':newdescription' => $newDesc,
+            ':setid' => $this->id
+            ]
+        );
+        $this->data->description = $newDesc;
     }
 
     public function showTags()
@@ -349,7 +338,7 @@ class LearningSet
                         "','") . '\') OR j.reading IN (\'' . implode($words, "','") . "') ORDER BY j.njlpt DESC, j.njlpt_r DESC";
             }
 
-            if (@$query) {
+            if ($query) {
                 $res = mysql_query($query) or die(mysql_error());
 
                 while ($row = mysql_fetch_object($res)) {
@@ -363,15 +352,7 @@ class LearningSet
 
     public function markSetUpdated()
     {
-        $query = 'UPDATE learning_sets SET date_modified = NOW() WHERE set_id = :setid';
-        try {
-            $stmt = DB::getConnection()->prepare($query);
-            $stmt->bindValue(':setid', $this->id, PDO::PARAM_INT);
-            $stmt->execute();
-            $stmt = null;
-        } catch (PDOException $e) {
-            log_db_error($query, $e->getMessage(), true, true);
-        }
+        DB::update('UPDATE learning_sets SET date_modified = NOW() WHERE set_id = :setid', [':setid' => $this->id]);
     }
 
     public function getDateModified()
@@ -761,7 +742,8 @@ class LearningSet
             return 'Set must be public';
         }
 
-        mysql_query('UPDATE learning_sets SET user_id = -1, editable = 1, public = 1 WHERE set_id = ' . $this->id . ' LIMIT 1') or die(mysql_error());
+        DB::update('UPDATE learning_sets SET user_id = -1, editable = 1, public = 1 WHERE set_id = :setID LIMIT 1',
+            [':setID' => $this->id]);
 
         $this->data->user_id = -1;
         $this->data->editable = 1;

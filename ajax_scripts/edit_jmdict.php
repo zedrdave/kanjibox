@@ -6,7 +6,7 @@
 
     if ($_REQUEST['delete_id']) {
         if (!$_SESSION['user']->isAdministrator()) {
-            die("admins only");
+            die('admins only');
         }
 
         $deleteID = (int) $_REQUEST['delete_id'];
@@ -49,33 +49,52 @@
         DB::delete('DELETE FROM jmdict WHERE id = :archiveID', [':archiveID' => $archiveID]);
         echo '<br/>';
         if (isset($_REQUEST['replace_id'])) {
-            execute_query("UPDATE IGNORE  `learning_set_vocab` SET jmdict_id = " . $_REQUEST['replace_id'] . " WHERE  `jmdict_id` = $archiveID");
-            echo '<br/>';
-            DB::delete('DELETE FROM `learning_set_vocab` WHERE `jmdict_id` = :archiveID', [':archiveID' => $archiveID]);
-            execute_query("UPDATE IGNORE `jmdict_learning` SET jmdict_id = " . $_REQUEST['replace_id'] . " WHERE jmdict_id = $archiveID");
-            echo '<br/>';
+            try {
+                DB::getConnection()->beginTransaction();
+                DB::update('UPDATE IGNORE `learning_set_vocab` SET jmdict_id = :replaceid WHERE `jmdict_id` = :jmdictid',
+                    [
+                    ':replaceid' => $_REQUEST['replace_id'],
+                    ':jmdictid' => $archiveID
+                    ]
+                );
+                echo '<br/>';
+                DB::delete('DELETE FROM `learning_set_vocab` WHERE `jmdict_id` = :archiveID',
+                    [':archiveID' => $archiveID]);
+                DB::update('UPDATE IGNORE `jmdict_learning` SET jmdict_id = :replaceid WHERE jmdict_id = :jmdictid',
+                    [
+                    ':replaceid' => $_REQUEST['replace_id'],
+                    ':jmdictid' => $archiveID
+                    ]
+                );
+                echo '<br/>';
+
+                DB::getConnection()->commit();
+            } catch (PDOException $ex) {
+                DB::getConnection()->rollBack();
+                log_error($ex->getMessage(), false, true);
+            }
         }
     } elseif (isset($_REQUEST['jmdict_id'])) {
         if (isset($_REQUEST['njlpt'])) {
             echo post_db_correction('jmdict', 'id', (int) $_REQUEST['jmdict_id'], 'njlpt', (int) $_REQUEST['njlpt'],
-                $_SESSION['user']->isEditor(), '', '', false, @$_REQUEST['user_cmt']);
+                $_SESSION['user']->isEditor(), '', '', false, $_REQUEST['user_cmt']);
         } elseif (isset($_REQUEST['njlpt_r'])) {
             echo post_db_correction('jmdict', 'id', (int) $_REQUEST['jmdict_id'], 'njlpt_r', (int) $_REQUEST['njlpt_r'],
-                $_SESSION['user']->isEditor(), '', '', false, @$_REQUEST['user_cmt']);
+                $_SESSION['user']->isEditor(), '', '', false, $_REQUEST['user_cmt']);
         } elseif (isset($_REQUEST['katakana'])) {
             echo post_db_correction('jmdict', 'id', (int) $_REQUEST['jmdict_id'], 'katakana',
                 (int) ($_REQUEST['katakana'] == 'true'), $_SESSION['user']->isEditor(), '', '', false,
-                @$_REQUEST['user_cmt']);
+                $_REQUEST['user_cmt']);
         } elseif (isset($_REQUEST['usually_kana'])) {
             echo post_db_correction('jmdict', 'id', (int) $_REQUEST['jmdict_id'], 'usually_kana',
                 (int) ($_REQUEST['usually_kana'] == 'true'), $_SESSION['user']->isEditor(), '', '', false,
-                @$_REQUEST['user_cmt']);
+                $_REQUEST['user_cmt']);
         } elseif (isset($_REQUEST['word'])) {
             echo post_db_correction('jmdict', 'id', (int) $_REQUEST['jmdict_id'], 'word', $_REQUEST['word'],
-                $_SESSION['user']->isEditor(), '', '', false, @$_REQUEST['user_cmt']);
+                $_SESSION['user']->isEditor(), '', '', false, $_REQUEST['user_cmt']);
         } elseif (isset($_REQUEST['reading'])) {
             echo post_db_correction('jmdict', 'id', (int) $_REQUEST['jmdict_id'], 'reading', $_REQUEST['reading'],
-                $_SESSION['user']->isEditor(), '', '', false, @$_REQUEST['user_cmt']);
+                $_SESSION['user']->isEditor(), '', '', false, $_REQUEST['user_cmt']);
         } else {
             echo 'Need a jlpt/jlp_r/katakana value';
         }
@@ -84,7 +103,7 @@
             die('editors only');
         }
 
-        if ((int) @$_POST['new_jmdict_id']) {
+        if ((int) $_POST['new_jmdict_id']) {
             $id = (int) $_POST['new_jmdict_id'];
         } else {
             $id = (int) $_POST['copy_jmdict_id'];

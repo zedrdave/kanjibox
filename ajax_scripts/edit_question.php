@@ -1,17 +1,24 @@
 <?php
 if (!$_SESSION['user'] || !$_SESSION['user']->isEditor()) {
-    die("editors only");
+    die('editors only');
 }
 
 if (!empty($_REQUEST['delete_id'])) {
-    $deleteID = (int) $_REQUEST['delete_id'];
-    mysql_query('UPDATE grammar_sets SET date_last = NOW() WHERE set_id = (SELECT set_id FROM grammar_questions WHERE question_id = ' . $deleteID . ' LIMIT 1)') or die(mysql_error());
+    try {
+        $deleteID = (int) $_REQUEST['delete_id'];
 
-    DB::delete('DELETE FROM grammar_answers WHERE question_id = :deleteID', [':deleteID' => $deleteID]);
-    DB::delete('DELETE FROM grammar_questions WHERE question_id = :deleteID LIMIT 1', [':deleteID' => $deleteID]);
-
-    echo '<div class="message">Deleted question ID: ' . $deleteID . '</div>';
-    return;
+        DB::getConnection()->beginTransaction();
+        DB::update('UPDATE grammar_sets SET date_last = NOW() WHERE set_id = (SELECT set_id FROM grammar_questions WHERE question_id = :deleteID LIMIT 1)',
+            [':deleteID' => $deleteID]);
+        DB::delete('DELETE FROM grammar_answers WHERE question_id = :deleteID', [':deleteID' => $deleteID]);
+        DB::delete('DELETE FROM grammar_questions WHERE question_id = :deleteID LIMIT 1', [':deleteID' => $deleteID]);
+        DB::getConnection()->commit();
+        echo '<div class="message">Deleted question ID: ' . $deleteID . '</div>';
+        return;
+    } catch (PDOException $ex) {
+        DB::getConnection()->rollBack();
+        log_error($ex->getMessage(), false, true);
+    }
 }
 
 if (isset($_REQUEST['sentence_id']) && !empty($_REQUEST['jmdict_id'])) {
@@ -51,17 +58,25 @@ if (isset($_REQUEST['sentence_id']) && !empty($_REQUEST['jmdict_id'])) {
             $pos_start = 0;
         }
 
-        $params['question_id'] = DB::insert('INSERT INTO grammar_questions SET sentence_id = :example_id, jmdict_id = :jmdict_id, pos_start = :pos_start, pos_end = :pos_end, njlpt = :njlpt, user_id = :user_id',
-                [
-                ':example_id' => $sent->example_id,
-                ':jmdict_id' => (int) $word->id,
-                ':pos_start' => (int) $pos_start,
-                ':pos_end' => (int) $pos_end,
-                ':njlpt' => $word->njlpt,
-                ':user_id' => $_SESSION['user']->getID(),
-        ]);
+        try {
+            DB::getConnection()->beginTransaction();
+            $params['question_id'] = DB::insert('INSERT INTO grammar_questions SET sentence_id = :example_id, jmdict_id = :jmdict_id, pos_start = :pos_start, pos_end = :pos_end, njlpt = :njlpt, user_id = :user_id',
+                    [
+                    ':example_id' => $sent->example_id,
+                    ':jmdict_id' => (int) $word->id,
+                    ':pos_start' => (int) $pos_start,
+                    ':pos_end' => (int) $pos_end,
+                    ':njlpt' => $word->njlpt,
+                    ':user_id' => $_SESSION['user']->getID(),
+            ]);
 
-        mysql_query('UPDATE grammar_sets SET date_last = NOW() WHERE set_id = (SELECT set_id FROM grammar_questions WHERE question_id = ' . $params['question_id'] . ' LIMIT 1)') or die(mysql_error());
+            DB::update('UPDATE grammar_sets SET date_last = NOW() WHERE set_id = (SELECT set_id FROM grammar_questions WHERE question_id = :questionID LIMIT 1)',
+                [ ':questionID' => $params['question_id']]);
+            DB::getConnection()->commit();
+        } catch (PDOException $ex) {
+            DB::getConnection()->rollBack();
+            log_error($ex->getMessage(), false, true);
+        }
     }
 }
 
@@ -86,9 +101,17 @@ if (isset($params['question_id'])) {
             if ($rowCount > 0) {
                 echo '<div class="message">Wrong answer has already been added...</div>';
             } else {
-                DB::insert('INSERT INTO grammar_answers SET jmdict_id = :jmdict_id, question_id = :question_id',
-                    [':jmdict_id' => $jmdictID, ':question_id' => $question->question_id]);
-                mysql_query('UPDATE grammar_sets SET date_last = NOW() WHERE set_id = (SELECT set_id FROM grammar_questions WHERE question_id = ' . $question->question_id . ' LIMIT 1)') or die(mysql_error());
+                try {
+                    DB::getConnection()->beginTransaction();
+                    DB::insert('INSERT INTO grammar_answers SET jmdict_id = :jmdict_id, question_id = :question_id',
+                        [':jmdict_id' => $jmdictID, ':question_id' => $question->question_id]);
+                    DB::update('UPDATE grammar_sets SET date_last = NOW() WHERE set_id = (SELECT set_id FROM grammar_questions WHERE question_id = :questionID LIMIT 1)',
+                        [':questionID' => $question->question_id]);
+                    DB::getConnection()->commit();
+                } catch (PDOException $ex) {
+                    DB::getConnection()->rollBack();
+                    log_error($ex->getMessage(), false, true);
+                }
             }
 
             if ($_REQUEST['no_content']) {
@@ -103,40 +126,48 @@ if (isset($params['question_id'])) {
             $njlpt = 5;
             echo '<div class="message">JLPT level must be between 5 and 0...</div>';
         }
-        $query = 'UPDATE grammar_questions SET pos_start = ' . (int) $_REQUEST['pos_start'] . ', pos_end = ' . (int) $_REQUEST['pos_end'] . ', njlpt = ' . $njlpt;
-        if ($_REQUEST['user_id']) {
-            $query .= ', user_id = ' . (int) $_REQUEST['user_id'];
-        } else {
-            $query .= ', user_id = ' . (int) $_SESSION['user']->getID();
-        }
-
+        $query = 'UPDATE grammar_questions SET pos_start = :pos_start, pos_end = :pos_end, njlpt = :njlpt, user_id = :userid';
         if ($_REQUEST['set_id']) {
             $query .= ', set_id = ' . (int) $_REQUEST['set_id'];
         }
+        $query .= ' WHERE question_id = :questionID';
 
-        $query .= ' WHERE question_id = ' . (int) $params['question_id'];
-
-        mysql_query($query) or die(mysql_error());
+        DB::update($query,
+            [
+            ':pos_start' => $_REQUEST['pos_start'],
+            ':pos_end' => $_REQUEST['pos_end'],
+            ':njlpt' => $njlpt,
+            ':userid' => (!empty($_REQUEST['user_id']) ? $_REQUEST['user_id'] : $_SESSION['user']->getID()),
+            ':questionID' => $params['question_id']
+            ]
+        );
 
         $res = mysql_query("SELECT * FROM grammar_questions WHERE question_id = " . (int) $params['question_id']);
         $question = mysql_fetch_object($res);
 
-        mysql_query('UPDATE grammar_sets SET date_last = NOW() WHERE set_id = (SELECT set_id FROM grammar_questions WHERE question_id = ' . (int) $params['question_id'] . ' LIMIT 1)') or die(mysql_error());
+        DB::update('UPDATE grammar_sets SET date_last = NOW() WHERE set_id = (SELECT set_id FROM grammar_questions WHERE question_id = :questionID LIMIT 1)',
+            [':questionID' => $params['question_id']]);
     } elseif (isset($_REQUEST['update_set_id'])) {
-        mysql_query('UPDATE grammar_sets SET date_last = NOW() WHERE set_id = (SELECT set_id FROM grammar_questions WHERE question_id = ' . (int) $params['question_id'] . ' LIMIT 1)') or die(mysql_error());
+        try {
+            DB::getConnection()->beginTransaction();
+            DB::update('UPDATE grammar_sets SET date_last = NOW() WHERE set_id = (SELECT set_id FROM grammar_questions WHERE question_id = :questionID LIMIT 1)',
+                [':questionID' => $params['question_id']]);
 
-        $query = 'UPDATE grammar_questions SET set_id = ' . (int) $_REQUEST['update_set_id'] . ' WHERE question_id = ' . (int) $params['question_id'];
-        mysql_query($query) or die(mysql_error());
+            DB::update('UPDATE grammar_questions SET set_id = :updateSetID WHERE question_id = :questionID',
+                [':updateSetID' => $_REQUEST['update_set_id'], ':questionID' => $params['question_id']]);
 
-        mysql_query('UPDATE grammar_sets SET date_last = NOW() WHERE set_id = ' . (int) $_REQUEST['update_set_id']) or die(mysql_error());
-
-        echo '<div class="message">Updated set for question id: ' . (int) $params['question_id'] . '</div>';
-
-
-        return;
+            DB::update('UPDATE grammar_sets SET date_last = NOW() WHERE set_id = :updateSetID',
+                [':updateSetID' => $_REQUEST['update_set_id']]);
+            DB::getConnection()->commit();
+            echo '<div class="message">Updated set for question id: ' . (int) $params['question_id'] . '</div>';
+            return;
+        } catch (PDOException $ex) {
+            DB::getConnection()->rollBack();
+            log_error($ex->getMessage(), false, true);
+        }
     } elseif (isset($_REQUEST['update_in_demo'])) {
-        $query = 'UPDATE grammar_questions SET in_demo = ' . (int) $_REQUEST['update_in_demo'] . ' WHERE question_id = ' . (int) $params['question_id'];
-        mysql_query($query) or die(mysql_error());
+        DB::update('UPDATE grammar_questions SET in_demo = :in_demo WHERE question_id = :questionID',
+            [':in_demo' => $_REQUEST['update_in_demo'], ':questionID' => $params['question_id']]);
         echo '<div class="message">Updated demo status for question id: ' . (int) $params['question_id'] . '</div>';
         return;
     } elseif (isset($_REQUEST['update_reviewed'])) {
@@ -147,23 +178,29 @@ if (isset($params['question_id'])) {
         }
         return;
     } elseif (isset($_REQUEST['delete_answer_id'])) {
-        $answerID = (int) $_REQUEST['delete_answer_id'];
-        echo '<div class="message">Deleting answer: ' . $question->question_id . '-' . $answerID . '...</div>';
+        try {
+            DB::getConnection()->beginTransaction();
+            $answerID = (int) $_REQUEST['delete_answer_id'];
+            echo '<div class="message">Deleting answer: ' . $question->question_id . '-' . $answerID . '...</div>';
 
-        DB::delete('DELETE FROM grammar_answers WHERE jmdict_id = :deleteAnswerID AND question_id = :questionID',
-            [
-            ':deleteAnswerID' => $_REQUEST['delete_answer_id'],
-            ':questionID' => $question->question_id
-            ]
-        );
-        mysql_query('UPDATE grammar_sets SET date_last = NOW() WHERE set_id = (SELECT set_id FROM grammar_questions WHERE question_id = ' . $question->question_id . ' LIMIT 1)') or die(mysql_error());
+            DB::delete('DELETE FROM grammar_answers WHERE jmdict_id = :deleteAnswerID AND question_id = :questionID',
+                [
+                ':deleteAnswerID' => $_REQUEST['delete_answer_id'],
+                ':questionID' => $question->question_id
+                ]
+            );
+            DB::update('UPDATE grammar_sets SET date_last = NOW() WHERE set_id = (SELECT set_id FROM grammar_questions WHERE question_id = :questionID LIMIT 1)',
+                [':questionID' => $question->question_id]);
 
-        if ($_REQUEST['no_content']) {
-            return;
+            DB::getConnection()->commit();
+            if ($_REQUEST['no_content']) {
+                return;
+            }
+        } catch (PDOException $ex) {
+            DB::getConnection()->rollBack();
+            log_error($ex->getMessage(), false, true);
         }
     }
-
-
 
     if (!isset($sent)) {
         $res = mysql_query('SELECT * FROM examples WHERE example_id = ' . (int) $question->sentence_id) or die(mysql_error());
@@ -183,7 +220,7 @@ if (isset($params['question_id'])) {
     ?>
     <form class="ajax-form" id="save-question-data-form" action="<?php echo SERVER_URL?>ajax/edit_question/question_id/<?php echo $question->question_id;?>/" method="post">
         <p><a class="delete-button" href="#" onclick="delete_question(<?php echo $question->question_id?>);
-                    return false;">×</a> ID: <span id="question-id"><?php echo $question->question_id?></span> 
+                return false;">×</a> ID: <span id="question-id"><?php echo $question->question_id?></span> 
             - Set: <select name="set_id" id="set_id" onchange="show_question_save_button();"><option value="0">Select a set...</option><?php
                 $res = mysql_query("SELECT * FROM grammar_sets");
                 while ($row = mysql_fetch_object($res)) {
@@ -194,14 +231,14 @@ if (isset($params['question_id'])) {
         <p id="question-str"><?php echo $sent->example_str?></p>
         <input type="hidden" name="update_data" value="1"/>
         <p>Answer position: <a href="#" onclick="move_selection(-1);
-                    highlight_text();
-                    return false;">←</a> <a href="#" onclick="extend_selection(-1);
-                            highlight_text();
-                            return false;">-</a> <input type="hidden" name="pos_start" id="pos_start" value="<?php echo $question->pos_start?>" />[<span id="pos_start_txt" /> ~ <span id="pos_end_txt" />]<input type="hidden" name="pos_end" id="pos_end" value="<?php echo $question->pos_end?>" onchange="show_question_save_button();" /> <a href="#" onclick="extend_selection(1);
-                                    highlight_text();
-                                    return false;">+</a> <a href="#" onclick="move_selection(1);
-                                            highlight_text();
-                                            return false;">→</a><?php
+                highlight_text();
+                return false;">←</a> <a href="#" onclick="extend_selection(-1);
+                        highlight_text();
+                        return false;">-</a> <input type="hidden" name="pos_start" id="pos_start" value="<?php echo $question->pos_start?>" />[<span id="pos_start_txt" /> ~ <span id="pos_end_txt" />]<input type="hidden" name="pos_end" id="pos_end" value="<?php echo $question->pos_end?>" onchange="show_question_save_button();" /> <a href="#" onclick="extend_selection(1);
+                                highlight_text();
+                                return false;">+</a> <a href="#" onclick="move_selection(1);
+                                        highlight_text();
+                                        return false;">→</a><?php
                                if ($question->pos_start == 0 && $question->pos_end == 0) {
                                    echo ' <span class="notice">(set answer position)</span>';
                                } else {

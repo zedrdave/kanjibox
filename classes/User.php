@@ -58,15 +58,11 @@ class User
         }
 
         if (!empty($this->data)) {
-            $query = 'UPDATE `users` SET `last_played` = NOW(), games_played = games_played + 1, `active` = :active WHERE `id` = :id';
-            try {
-                $stmt = DB::getConnection()->prepare($query);
-                $stmt->bindValue(':active', ($loggedIn ? '1' : '0'));
-                $stmt->bindValue(':id', $this->getID());
-                $stmt->execute();
-            } catch (PDOException $e) {
-                log_db_error($query, $e->getMessage(), false, true);
-            }
+            DB::update('UPDATE `users` SET `last_played` = NOW(), games_played = games_played + 1, `active` = :active WHERE `id` = :id',
+                [
+                ':active' => ($loggedIn ? '1' : '0'),
+                ':id' => $this->getID()
+            ]);
 
             // Missing users_ext record
             if (!$this->data->user_id) {
@@ -80,15 +76,11 @@ class User
 
         if (empty($this->data->inf_session_key) && !empty($_POST['fb_sig_session_key']) && ($_POST['fb_sig_expires'] == 0)) {
             $this->data->inf_session_key = $_POST['fb_sig_session_key'];
-            $query = 'UPDATE `users_ext` SET `inf_session_key` = :sessionid WHERE `user_id` = :userid';
-            try {
-                $stmt = DB::getConnection()->prepare($query);
-                $stmt->bindValue(':sessionid', $this->data->inf_session_key, PDO::PARAM_STR);
-                $stmt->bindValue(':userid', $this->getID(), PDO::PARAM_INT);
-                $stmt->execute();
-            } catch (PDOException $e) {
-                log_db_error($query, $e->getMessage());
-            }
+            DB::update('UPDATE `users_ext` SET `inf_session_key` = :sessionid WHERE `user_id` = :userid',
+                [
+                ':sessionid' => $this->data->inf_session_key,
+                ':userid' => $this->getID()
+            ]);
         }
 
         if ($info && isset($info['first_name']) && isset($info['last_name'])) {
@@ -96,15 +88,12 @@ class User
 
             if ($nameHidden != $this->isNameHidden()) {
                 $this->data->name_hidden = $nameHidden;
-                $query = 'UPDATE `users` SET  `name_hidden` = :name_hidden WHERE id = :userid';
-                try {
-                    $stmt = DB::getConnection()->prepare($query);
-                    $stmt->bindValue(':name_hidden', $nameHidden, PDO::PARAM_INT);
-                    $stmt->bindValue(':userid', $this->getID(), PDO::PARAM_INT);
-                    $stmt->execute();
-                } catch (PDOException $e) {
-                    log_db_error($query, $e->getMessage());
-                }
+                DB::update('UPDATE `users` SET `name_hidden` = :name_hidden WHERE id = :userid',
+                    [
+                    ':name_hidden' => $nameHidden,
+                    ':userid' => $this->getID()
+                    ]
+                );
             }
 
             if ($info['first_name'] != $this->data->first_name || $info['last_name'] != $this->data->last_name) {
@@ -115,16 +104,12 @@ class User
                     $this->data->last_name = $info['last_name'];
                 }
 
-                $query = 'UPDATE `users_ext` SET `first_name` = :firstname, `last_name` = :lastname WHERE user_id = :userid';
-                try {
-                    $stmt = DB::getConnection()->prepare($query);
-                    $stmt->bindValue(':firstname', $this->data->first_name, PDO::PARAM_STR);
-                    $stmt->bindValue(':lastname', $this->data->last_name, PDO::PARAM_STR);
-                    $stmt->bindValue(':userid', $this->getID(), PDO::PARAM_INT);
-                    $stmt->execute();
-                } catch (PDOException $e) {
-                    log_db_error($query, $e->getMessage());
-                }
+                DB::update('UPDATE `users_ext` SET `first_name` = :firstname, `last_name` = :lastname WHERE user_id = :userid',
+                    [
+                    ':firstname' => $this->data->first_name,
+                    ':lastname' => $this->data->last_name,
+                    ':userid' => $this->getID()
+                ]);
             }
         }
 
@@ -137,15 +122,11 @@ class User
             if ($rowCount == 0) {
                 $this->data->login_email = $email;
 
-                $query = 'UPDATE `users_ext` SET `login_email` = :email WHERE user_id = :userid';
-                try {
-                    $stmt = DB::getConnection()->prepare($query);
-                    $stmt->bindValue(':email', $info['email'], PDO::PARAM_STR);
-                    $stmt->bindValue(':userid', $this->getID(), PDO::PARAM_INT);
-                    $stmt->execute();
-                } catch (PDOException $e) {
-                    log_db_error($query, $e->getMessage());
-                }
+                DB::update('UPDATE `users_ext` SET `login_email` = :email WHERE user_id = :userid',
+                    [
+                    ':email' => $info['email'],
+                    ':userid' => $this->getID()
+                ]);
             }
         }
 
@@ -217,15 +198,12 @@ class User
 
     public function updateLevel($newLevel)
     {
-        $query = 'UPDATE `users` SET `level` = :level WHERE `id` = :id';
-        try {
-            $stmt = DB::getConnection()->prepare($query);
-            $stmt->bindValue(':level', $newLevel, PDO::PARAM_INT);
-            $stmt->bindValue(':id', $this->getID(), PDO::PARAM_INT);
-            $stmt->execute();
-        } catch (PDOException $e) {
-            log_db_error($query, true, true);
-        }
+        DB::update('UPDATE `users` SET `level` = :level WHERE `id` = :userid',
+            [
+            ':level' => $newLevel,
+            ':userid' => $this->getID()
+            ]
+        );
     }
 
     public function updatePreferences($newPrefs)
@@ -253,27 +231,20 @@ class User
     {
         /** mysql_query_debug formerly used: check if slow queries can be monitored by DB * */
         // Update level and status
-        $query = 'UPDATE `users` SET `level` = :level, `active` = :active WHERE `id` = :id';
-        try {
-            $stmt = DB::getConnection()->prepare($query);
-            $stmt->bindValue(':level', $this->getLevel(), PDO::PARAM_INT);
-            $stmt->bindValue(':active', (int) ($this->isLoggedIn()), PDO::PARAM_INT);
-            $stmt->bindValue(':id', $this->getID(), PDO::PARAM_INT);
-            $stmt->execute();
-        } catch (PDOException $e) {
-            log_db_error($query, true, true);
-        }
+        DB::update('UPDATE `users` SET `level` = :level, `active` = :active WHERE `id` = :userid',
+            [
+            ':level' => $this->getLevel(),
+            ':active' => $this->isLoggedIn(),
+            ':userid' => $this->getID()
+            ]
+        );
 
         // Update preferences
-        $query = 'UPDATE `users_ext` SET `prefs` = :preferences WHERE `user_id` = :id';
-        try {
-            $stmt = DB::getConnection()->prepare($query);
-            $stmt->bindValue(':preferences', serialize($this->prefs), PDO::PARAM_STR);
-            $stmt->bindValue(':id', $this->getID(), PDO::PARAM_INT);
-            $stmt->execute();
-        } catch (PDOException $e) {
-            log_db_error($query, true, true);
-        }
+        DB::update('UPDATE `users_ext` SET `prefs` = :preferences WHERE `user_id` = :userid',
+            [
+            ':preferences' => serialize($this->prefs),
+            ':userid' => $this->getID()
+        ]);
     }
 
     public function updateProfileBox($forceUpdate = false)
@@ -620,7 +591,7 @@ class User
     public function cacheHighscores()
     {
         foreach (['kanji', 'vocab', 'reading', 'text'] as $type) {
-            $query = "UPDATE `users` u
+            DB::update("UPDATE `users` u
 			SET ${type}_highscore_id =
 			IFNULL((
 			SELECT g.id AS g_id
@@ -631,17 +602,12 @@ class User
 			AND g.type = :type
 			ORDER BY g.score DESC, g.date_ended ASC
 			LIMIT 1
-			), 0) WHERE u.id = :id";
-
-            try {
-                $stmt = DB::getConnection()->prepare($query);
-                $stmt->bindValue(':level', $this->getLevel());
-                $stmt->bindValue(':type', $type);
-                $stmt->bindValue(':id', $this->getID());
-                $stmt->execute();
-            } catch (PDOException $e) {
-                log_db_error($query, false, true);
-            }
+			), 0) WHERE u.id = :id",
+                [':level' => $this->getLevel(),
+                ':type' => $type,
+                ':id', $this->getID()
+                ]
+            );
         }
     }
 
@@ -724,16 +690,24 @@ class User
     {
         if ($this->loggedIn != $loggedIn) {
             $this->loggedIn = $loggedIn;
-            $query = 'UPDATE `users` SET `last_played` = NOW(), `active` = ' . ($loggedIn ? '1' : '0') . ' WHERE `id` = ' . (int) $this->getID();
-            mysql_query_debug($query) or log_db_error($query, false, true);
+            DB::update('UPDATE `users` SET `last_played` = NOW(), `active` = :active WHERE `id` = :userid',
+                [
+                ':active' => ($loggedIn ? '1' : '0'),
+                ':userid' => $this->getID()
+                ]
+            );
         }
     }
 
     public function upgradeAccount($deviceID, $build, $kbCode)
     {
-        $query = 'UPDATE `users` SET `last_played` = NOW(), `active` = 1, build = ' . (int) $build . ', kb_code = \'' . DB::getConnection()->quote($kbCode) . '\', privileges = 1 WHERE `id` = ' . (int) $this->getID();
-        mysql_query_debug($query) or log_db_error($query, false, true);
-
+        DB::update('UPDATE `users` SET `last_played` = NOW(), `active` = 1, build = :build, kb_code = :kb_code, privileges = 1 WHERE `id` = :userid',
+            [
+            ':build' => $build,
+            ':kb_code' => $kbCode,
+            ':userid' => $this->getID()
+            ]
+        );
         $this->data->privileges = 1;
     }
 
@@ -847,15 +821,11 @@ class User
             return '<div class="error_msg">This login email is already taken.</div>';
         }
 
+        DB::update('UPDATE `users_ext` SET `login_email` = :loginEmail WHERE `user_id` = :userid',
+            [':loginEmail' => $login, ':userid' => $this->getID()]);
 
-        $query = 'UPDATE `users_ext` SET `login_email` = \'' . DB::getConnection()->quote($login) . '\' WHERE `user_id` = ' . (int) $this->getID();
-
-        if (mysql_query_debug($query)) {
-            $this->data->login_email = $login;
-            return '<div class="success_msg">Your login was updated</div>';
-        } else {
-            return '<div class="error_msg">Update failed: database error.</div>';
-        }
+        $this->data->login_email = $login;
+        return '<div class="success_msg">Your login was updated</div>';
     }
 
     public function updateName($firstName, $lastName)
@@ -866,8 +836,7 @@ class User
 
         if ($this->isNameHidden()) {
             $this->data->name_hidden = false;
-            $query = 'UPDATE `users` SET  `name_hidden` = \'0\' WHERE id = ' . $this->getID();
-            mysql_query_debug($query) or log_db_error($query);
+            DB::update('UPDATE `users` SET `name_hidden` = \'0\' WHERE id = :userid', [':userid' => $this->getID()]);
         }
 
         if ($firstName != $this->data->first_name || $lastName != $this->data->last_name) {
@@ -878,13 +847,11 @@ class User
                 $this->data->last_name = $lastName;
             }
 
-            $query = 'UPDATE `users_ext` SET  `first_name` = \'' . DB::getConnection()->quote($this->data->first_name) . '\',  `last_name` = \'' . DB::getConnection()->quote($this->data->last_name) . '\' WHERE user_id = ' . $this->getID();
-
-            if (mysql_query_debug($query)) {
-                return '<div class="success_msg">Your name was updated</div>';
-            } else {
-                return '<div class="error_msg">Update failed: database error.</div>';
-            }
+            DB::update('UPDATE `users_ext` SET  `first_name` = :firstname, `last_name` = :lastname WHERE user_id = :userid',
+                [':firstname' => $this->data->first_name,
+                ':lastname' => $this->data->last_name,
+                ':userid' => $this->getID()]);
+            return '<div class="success_msg">Your name was updated</div>';
         }
     }
 
@@ -894,15 +861,11 @@ class User
             return;
         }
 
-        $query = 'UPDATE `users_ext` SET `login_pwd` = MD5(\'' . DB::getConnection()->quote($pwd) . '\') WHERE `user_id` = ' . (int) $this->getID();
+        DB::update('UPDATE `users_ext` SET `login_pwd` = MD5(:password) WHERE `user_id` = :userid',
+            [':password' => $pwd, ':userid' => $this->getID()]);
 
-        if (mysql_query_debug($query)) {
-
-            $this->data->login_pwd = $pwd;
-            return '<div class="success_msg">Your password has been updated</div>';
-        } else {
-            return '<div class="error_msg">Update failed: database error.</div>';
-        }
+        $this->data->login_pwd = $pwd;
+        return '<div class="success_msg">Your password has been updated</div>';
     }
 
     public function getJLPTNumLevel()

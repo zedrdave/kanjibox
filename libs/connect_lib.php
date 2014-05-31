@@ -1,6 +1,7 @@
 <?php
 
-function display_login_css() {
+function display_login_css()
+{
     ?>		<style type="text/css">
         body
         {
@@ -61,7 +62,9 @@ function display_login_css() {
     <?php
 }
 
-function display_login_page($redirect_to_url = '', $header_msg = 'In order to use <a href="https://www.facebook.com/kanjibox/">KanjiBox Online</a>: ') {
+function display_login_page($redirect_to_url = '',
+    $header_msg = 'In order to use <a href="https://www.facebook.com/kanjibox/">KanjiBox Online</a>: ')
+{
     global $apiKey, $secret, $facebook;
     ?>
     <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
@@ -95,11 +98,11 @@ function display_login_page($redirect_to_url = '', $header_msg = 'In order to us
                     echo $header_msg;
                     ?></p>
                 <div id="connect-button">
-                    <a href="<?php echo $loginUrl; ?>" id="fb-login-button">Log in with Facebook</a>
+                    <a href="<?php echo $loginUrl;?>" id="fb-login-button">Log in with Facebook</a>
                 </div>
 
                 <h2 style="text-align:center; font-size:40px">OR</h2>
-                <form class="login-box" method="post" action="<?php echo SERVER_URL; ?>">
+                <form class="login-box" method="post" action="<?php echo SERVER_URL;?>">
                     <?php
                     if (!empty($params['login']) && $params['login'] === 'cancelled') {
                         echo '<div class="error_msg">Facebook seems to have cancelled the login. Please contact me if this error persists.</div>';
@@ -156,9 +159,9 @@ function display_login_page($redirect_to_url = '', $header_msg = 'In order to us
                     }
                     ?>
                     <div class="submit-btn"><input type="submit" name="Log in" value="Log in"></input></div>
-                    <p style="text-align:center; margin: 10px 0 0 0; padding: 0;"><a href="<?php echo SERVER_URL ?>?new_account=1">[Create new account]</a>&nbsp;&nbsp;&nbsp;<a href="<?php echo SERVER_URL ?>?pwd_reset=1">[Recover lost password]</a></p>
+                    <p style="text-align:center; margin: 10px 0 0 0; padding: 0;"><a href="<?php echo SERVER_URL?>?new_account=1">[Create new account]</a>&nbsp;&nbsp;&nbsp;<a href="<?php echo SERVER_URL?>?pwd_reset=1">[Recover lost password]</a></p>
                 </form>
-                <p>You can also consult <a href="<?php echo get_page_url('faq'); ?>">KanjiBox's FAQ</a>, browse <a href="<?php echo SERVER_URL; ?>sets/">public Japanese study sets</a> or check out the <a href="http://kanjibox.net/ios/">KanjiBox app for iOS (iPhone/iPod/iPad)</a>.</p>
+                <p>You can also consult <a href="<?php echo get_page_url('faq');?>">KanjiBox's FAQ</a>, browse <a href="<?php echo SERVER_URL;?>sets/">public Japanese study sets</a> or check out the <a href="http://kanjibox.net/ios/">KanjiBox app for iOS (iPhone/iPod/iPad)</a>.</p>
             </div>
             <script type="text/javascript">
                 if (top != self) {
@@ -206,7 +209,8 @@ function display_login_page($redirect_to_url = '', $header_msg = 'In order to us
     <?php
 }
 
-function display_pwd_reset_page() {
+function display_pwd_reset_page()
+{
     ?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
     <html xmlns="http://www.w3.org/1999/xhtml" xmlns:fb="http://www.facebook.com/2008/fbml">
         <head>
@@ -228,7 +232,7 @@ function display_pwd_reset_page() {
             </script>
             <div id="loginbox">
                 <h2>Recover existing KanjiBox account</h2>
-                <form method="post" action="<?php echo SERVER_URL ?>" style="text-align:center;">
+                <form method="post" action="<?php echo SERVER_URL?>" style="text-align:center;">
                     <input type="hidden" name="pwd_reset" value="1"></input>
                     <?php
                     if ((!empty($_REQUEST['action']) && $_REQUEST['action'] == 'send_email') && (!empty($_REQUEST['first_name']) && !empty($_REQUEST['login_mail']))) {
@@ -251,14 +255,17 @@ function display_pwd_reset_page() {
                         if ($row) {
                             $date = time();
                             $hash = md5($reset_salt . $date . $row->login_email . $row->login_pwd . $row->user_id);
-                            if (mail($row->login_email, 'KanjiBox Password Recovery', "Hello $row->first_name,\n\nYou recently requested a password reset on your KanjiBox account. Please click on the following link to set a new password for your account:\n" . SERVER_URL . "?pwd_reset=1&action=recover&mail=$row->login_email&uid=$row->user_id&t=$date&h=$hash\n\nGood luck with your kanji studying!\n-- \nKanjiBox")) {
+                            if (mail($row->login_email, 'KanjiBox Password Recovery',
+                                    "Hello $row->first_name,\n\nYou recently requested a password reset on your KanjiBox account. Please click on the following link to set a new password for your account:\n" . SERVER_URL . "?pwd_reset=1&action=recover&mail=$row->login_email&uid=$row->user_id&t=$date&h=$hash\n\nGood luck with your kanji studying!\n-- \nKanjiBox")) {
                                 echo '<div class="success_msg">A recovery email was sent to your account address: <strong>' . $row->login_email . '</strong>. Please check your inbox and follow the instructions in the email.</div>';
-                                log_pwd_reset('Recovery email sent to: ' . $row->login_email . ' (account: ' . $row->user_id . ')', false, false);
+                                log_pwd_reset('Recovery email sent to: ' . $row->login_email . ' (account: ' . $row->user_id . ')',
+                                    false, false);
                             } else {
                                 log_pwd_reset('There was an error sending the recovery email to your address: <strong>' . htmlentities($row->login_email) . '</strong>. Please contact us directly if you think this is a bug.');
                             }
                         } else {
-                            log_pwd_reset('No account with this email login and first name were found in the DB. Please consider <a href="' . SERVER_URL . '">logging using Facebook</a> to set your login/password directly or <a href="https://www.facebook.com/kanjibox">contact me</a> directly if the problem persists.', true, true, $query);
+                            log_pwd_reset('No account with this email login and first name were found in the DB. Please consider <a href="' . SERVER_URL . '">logging using Facebook</a> to set your login/password directly or <a href="https://www.facebook.com/kanjibox">contact me</a> directly if the problem persists.',
+                                true, true, $query);
                         }
                     } elseif (!empty($_REQUEST['action']) && $_REQUEST['action'] === 'recover') {
                         $date = $_REQUEST['t'];
@@ -276,29 +283,34 @@ function display_pwd_reset_page() {
 
                         $res = mysql_query('SELECT * FROM users u LEFT JOIN users_ext ux ON ux.user_id = u.id WHERE ux.login_email = \'' . DB::getConnection()->quote($login_email) . '\' AND ux.login_email != \'\' AND ux.login_email IS NOT NULL AND u.id = ' . (int) $user_id) or die('DB error');
 
-                        if (!$row = mysql_fetch_object($res))
+                        if (!$row = mysql_fetch_object($res)) {
                             log_pwd_reset('Cannot find account for this email.');
+                        }
 
-                        if ($hash != md5($reset_salt . $date . $login_email . $row->login_pwd . $row->user_id))
+                        if ($hash != md5($reset_salt . $date . $login_email . $row->login_pwd . $row->user_id)) {
                             log_pwd_reset('Invalid recovery code.');
+                        }
 
                         if (!empty($_REQUEST['pwd']) && $_REQUEST['pwd']) {
-                            if (mysql_query('UPDATE users_ext SET login_pwd = MD5(\'' . DB::getConnection()->quote($_REQUEST['pwd']) . '\') WHERE user_id = ' . (int) $user_id)) {
-                                echo "<h3>Your password has been successfully reset!</h3>";
+                            $res = DB::update('UPDATE users_ext SET login_pwd = MD5(:password) WHERE user_id = :userid',
+                                    [':password' => $_REQUEST['pwd'], ':userid' => $user_id]);
+
+                            if (!empty($res)) {
+                                echo '<h3>Your password has been successfully reset!</h3>';
                                 echo '<a href="' . SERVER_URL . '">Play &raquo;</a>';
-                                log_pwd_reset('Password reset for account: ' . $user_id . ' (email: ' . $login_email . ')', false, false);
+                                log_pwd_reset('Password reset for account: ' . $user_id . ' (email: ' . $login_email . ')',
+                                    false, false);
                             } else {
                                 log_pwd_reset('DB Error.');
                             }
-                        }
-                        else {
+                        } else {
                             ?>
-                            <input type="hidden" name="mail" id="mail" value="<?php echo htmlentities($login_email); ?>"></input>
-                            <input type="hidden" name="uid" id="uid" value="<?php echo (int) $user_id; ?>"></input>
-                            <input type="hidden" name="h" id="hash" value="<?php echo $hash; ?>"></input>
-                            <input type="hidden" name="t" id="date" value="<?php echo $date; ?>"></input>
+                            <input type="hidden" name="mail" id="mail" value="<?php echo htmlentities($login_email);?>"></input>
+                            <input type="hidden" name="uid" id="uid" value="<?php echo (int) $user_id;?>"></input>
+                            <input type="hidden" name="h" id="hash" value="<?php echo $hash;?>"></input>
+                            <input type="hidden" name="t" id="date" value="<?php echo $date;?>"></input>
                             <input type="hidden" name="action" id="action" value="recover"></input>
-                            <p>Enter the new password for your account (login: <strong><?php echo $login_email ?></strong>):</p>
+                            <p>Enter the new password for your account (login: <strong><?php echo $login_email?></strong>):</p>
                             <label>Password: </label><input type="password" name="pwd" id="pwd"></input><br/>
                             <label>Password (again): </label><input type="password" name="pwd2" id="pwd2"></input><br/><br/>
 

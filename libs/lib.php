@@ -22,7 +22,7 @@ function get_mode()
 
 function init_app($ajax = false)
 {
-    global $facebook, $fb_id, $apiKey, $secret, $params, $ajax;
+    global $facebook, $fbID, $apiKey, $secret, $params, $ajax;
 
     if (isset($_REQUEST['sign_out'])) {
         require_once ABS_PATH . 'libs/account_lib.php';
@@ -68,7 +68,7 @@ function init_app($ajax = false)
             $_SESSION['user']->updateLevel($_SESSION['user']->getNJLPTLevel());
         }
 
-        $fb_id = $_SESSION['user']->getFbID();
+        $fbID = $_SESSION['user']->getFbID();
 
         return true;
     } elseif (!$ajax) {
@@ -105,13 +105,13 @@ function init_app($ajax = false)
             if (!$fb_info = fb_connect_init(true)) {
                 return false;
             }
-            $fb_id = $fb_info['id'];
-            if (!$fb_id) {
+            $fbID = $fb_info['id'];
+            if (!$fbID) {
                 die(print_r($fb_info, true));
                 return false;
             }
 
-            $_SESSION['user'] = new User(array('fb_id' => $fb_id), true, $fb_info);
+            $_SESSION['user'] = new User(array('fb_id' => $fbID), true, $fb_info);
 
             if (empty($_SESSION['user'])) {
                 log_error('User class creation failed', true, true);
@@ -350,13 +350,15 @@ function post_db_correction($table_name, $id_name, $id_value, $col_name, $new_va
     );
 
     if ($apply) {
-        $res = mysql_query("UPDATE $_table_name SET $col_name = '" . ($need_work ? '(~)' : '') . "$new_value' WHERE $_id_name = $id_value" . $select_id_2);
-        if (!$res) {
-            return 'Can\'t apply: ' . mysql_error();
-        }
+        DB::update('UPDATE ' . $_table_name . ' SET ' . $col_name . ' = :colname WHERE ' . $_id_name . ' = :idvalue' . $select_id_2,
+            [
+            ':idvalue' => $id_value,
+            ':colname' => ($need_work ? '(~)' : '') . $new_value,
+        ]);
 
         $reviewed = (int) ($_SESSION['user'] && $_SESSION['user']->isEditor());
-        mysql_query("UPDATE data_updates SET applied = 1, reviewed = $reviewed, need_work = $need_work WHERE update_id = $updateID") or die(mysql_error());
+        DB::update('UPDATE data_updates SET applied = 1, reviewed = :reviewed, need_work = :needwork WHERE update_id = :updateID',
+            [':reviewed' => $reviewed, ':needwork' => $need_work, ':updateID' => $updateID]);
 
         return 'Update successfully logged and applied';
     } else {
@@ -415,15 +417,15 @@ function execute_query_with_hash($query, $payload, $apply = true)
 
 function execute_query($query, $apply = true, $force_run_again = false)
 {
-
     $res = mysql_query('SELECT * FROM data_update_queries WHERE query_str = \'' . DB::getConnection()->quote($query) . "'") or die(mysql_error());
     if (mysql_num_rows($res) > 0) {
         $row = mysql_fetch_object($res);
         if (!$force_run_again && ($row->applied || !$apply)) {
-            echo "Query already ran";
+            echo 'Query already ran';
         } else {
-            echo "Query already ran but not applied. Applying.<br/>";
-            mysql_query("UPDATE data_update_queries SET applied = 1 WHERE update_query_id = $row->update_query_id") or die(mysql_error());
+            echo 'Query already ran but not applied. Applying.<br/>';
+            DB::update('UPDATE data_update_queries SET applied = 1 WHERE update_query_id = :updateQueryID',
+                [':updateQueryID' => $row->update_query_id]);
         }
     } else {
         DB::insert('INSERT INTO data_update_queries SET user_id = :user_id, query_str = :query, applied = :applied',

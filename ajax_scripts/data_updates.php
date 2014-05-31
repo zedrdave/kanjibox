@@ -49,27 +49,12 @@ if (!empty($_REQUEST['validate']) && !empty($_REQUEST['update_id'])) {
                     $select_id_2 = '';
                 }
 
-                $query = 'UPDATE ' . $_table_name . ' SET ' . $_col_name . ' = :newvalue' . ' WHERE ' . $_id_name . ' = .' . $id_value . ' ' . $select_id_2;
-                try {
-                    $stmt = DB::getConnection()->prepare($query);
-                    $stmt->bindValue(':newvalue', ($needWork ? '(~)' : '') . $row->new_value);
-                    $stmt->execute();
-                    $stmt = null;
-                } catch (PDOException $e) {
-                    log_db_error($query, $e->getMessage());
-                }
+                DB::update('UPDATE ' . $_table_name . ' SET ' . $_col_name . ' = :newvalue' . ' WHERE ' . $_id_name . ' = .' . $id_value . ' ' . $select_id_2,
+                    [':newvalue' => ($needWork ? '(~)' : '') . $row->new_value]);
             }
 
-            $query = 'UPDATE data_updates SET applied = 1, reviewed = 1, need_work = :needwork WHERE update_id IN (' . implode(',',
-                    $updateIDs) . ')';
-            try {
-                $stmt = DB::getConnection()->prepare($query);
-                $stmt->bindValue(':needwork', $needWork);
-                $stmt->execute();
-                $stmt = null;
-            } catch (PDOException $e) {
-                log_db_error($query, $e->getMessage());
-            }
+            DB::update('UPDATE data_updates SET applied = 1, reviewed = 1, need_work = :needwork WHERE update_id IN (' . implode(',',
+                    $updateIDs) . ')', [':needwork' => $needWork]);
             echo '<div><div id="data_update_success">Validated ' . $c . ' update(s).</div></div>';
         }
     } catch (PDOException $e) {
@@ -175,13 +160,11 @@ if ($_REQUEST['revert'] && $_REQUEST['update_id']) {
             $select_id_2 = '';
         }
 
-        $query = "UPDATE $_table_name SET $_col_name = '" . DB::getConnection()->quote($restored_value) . "' WHERE $_id_name = $id_value $select_id_2";
-        $res = mysql_query($query) or die(mysql_error());
+        DB::update('UPDATE ' . $_table_name . ' SET ' . $_col_name . ' = :restored_value WHERE ' . $_id_name . ' = :idvalue ' . $select_id_2,
+            [':restoredvalue' => $restored_value, ':idvalue' => $id_value]);
+        DB::update('UPDATE data_updates SET applied = 0 WHERE update_id IN (' . implode(',', $updateIDs) . ')');
 
-        $query = "UPDATE data_updates SET applied = 0 WHERE update_id IN (" . implode(',', $updateIDs) . ")";
-        $res = mysql_query($query) or die(mysql_error());
-
-        echo "<div><div id=\"data_update_success\">Reverted $c update(s).</div><br/>Restored to value: <i>$restored_value</i></div>";
+        echo '<div><div id="data_update_success">Reverted ' . $c . ' update(s).</div><br/>Restored to value: <i>' . $restored_value . '</i></div>';
     }
 }
 

@@ -244,15 +244,13 @@ abstract class Question
                     $initValues));
 
             if (count($badIDs)) {
-                $stmt = $dbh->prepare('UPDATE ' . $this->table_learning . ' SET total = total+1, curve = LEAST(2000, tan(atan(curve/1000-1)+0.15)*1000+1000) where `user_id` = ? AND ' . $this->table_learning_index . ' IN (' . implode(',',
-                        $badIDs) . ')');
-                $stmt->execute([$userID]);
+                DB::update('UPDATE ' . $this->table_learning . ' SET total = total+1, curve = LEAST(2000, tan(atan(curve/1000-1)+0.15)*1000+1000) where `user_id` = :userid AND ' . $this->table_learning_index . ' IN (' . implode(',',
+                        $badIDs) . ')', [':userid' => $userID]);
             }
 
             if (count($goodIDs)) {
-                $stmt = $dbh->prepare('UPDATE ' . $this->table_learning . ' SET total = total+1, curve = GREATEST(100, tan(atan(curve/1000-1)-0.2)*1000+1000) where `user_id` = ? AND ' . $this->table_learning_index . ' IN (' . implode(',',
-                        $goodIDs) . ')');
-                $stmt->execute([$userID]);
+                DB::update('UPDATE ' . $this->table_learning . ' SET total = total+1, curve = GREATEST(100, tan(atan(curve/1000-1)-0.2)*1000+1000) where `user_id` = :userid AND ' . $this->table_learning_index . ' IN (' . implode(',',
+                        $goodIDs) . ')', [':userid' => $userID]);
             }
 
             $dbh->commit();

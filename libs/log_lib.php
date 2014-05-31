@@ -8,11 +8,11 @@ function log_public_error($msg, $fatal = false) {
 }
 
 function log_error($msg, $details = false, $fatal = false) {
-    global $no_file_log, $fb_id;
+    global $no_file_log, $fbID;
     if (!empty($_SESSION['user'])) {
         $user_id = $_SESSION['user']->getID();
-    } elseif ($fb_id) {
-        $user_id = $fb_id;
+    } elseif ($fbID) {
+        $user_id = $fbID;
     } else {
         $user_id = 'unknown user';
     }
@@ -69,11 +69,11 @@ function log_exception($e, $extra = '', $details = false, $fatal = false) {
 }
 
 function log_pwd_reset($msg, $error = true, $fatal = true, $private_msg = '', $details = true) {
-    global $fb_id;
+    global $fbID;
     if (!empty($_SESSION['user'])) {
         $user_id = $_SESSION['user']->getID();
-    } elseif ($fb_id) {
-        $user_id = $fb_id;
+    } elseif ($fbID) {
+        $user_id = $fbID;
     } else {
         $user_id = 'unknown user';
     }

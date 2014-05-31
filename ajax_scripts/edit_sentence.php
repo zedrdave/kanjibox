@@ -63,8 +63,8 @@ if (isset($_REQUEST['create'])) {
                     $queries));
             echo '<div class="message">Inserted : ' . count($queries) . ' sentence parts <a href="#" onclick="$(\'.debug\').show(); return false;">[show debug]</a></div>';
 
-            $query = "UPDATE examples e SET e.njlpt = (SELECT MIN(j.njlpt) FROM example_parts ep LEFT JOIN jmdict j ON j.id = ep.jmdict_id WHERE ep.example_id = $exampleID), e.njlpt_r = (SELECT IFNULL(MIN(j.njlpt_r), 5) FROM example_parts ep LEFT JOIN jmdict j ON j.id = ep.jmdict_id  WHERE ep.example_id = $exampleID AND need_furi = 1) WHERE e.example_id = $exampleID LIMIT 1";
-            mysql_query($query) or die(mysql_error());
+            DB::update('UPDATE examples e SET e.njlpt = (SELECT MIN(j.njlpt) FROM example_parts ep LEFT JOIN jmdict j ON j.id = ep.jmdict_id WHERE ep.example_id = $exampleID), e.njlpt_r = (SELECT IFNULL(MIN(j.njlpt_r), 5) FROM example_parts ep LEFT JOIN jmdict j ON j.id = ep.jmdict_id  WHERE ep.example_id = :exampleID AND need_furi = 1) WHERE e.example_id = :exampleID LIMIT 1',
+                [':exampleID' => $exampleID]);
 
             $_REQUEST['id'] = $exampleID;
             $params['edit'] = true;
@@ -74,7 +74,6 @@ if (isset($_REQUEST['create'])) {
         }
     }
 }
-
 
 if (isset($_REQUEST['id'])) {
     $changes = 0;
@@ -95,23 +94,31 @@ if (isset($_REQUEST['id'])) {
     }
 
     if (isset($_REQUEST['pos_end']) && isset($_REQUEST['merge_until_pos_end'])) {
-
-        DB::delete('DELETE FROM example_parts WHERE example_id = :example_id AND pos_start >= :pos_start AND pos_start < :merge_until_pos_end LIMIT 1',
-            [
-            ':example_id' => $_REQUEST['id'],
-            'pos_start' => $_REQUEST['pos_end'],
-            'merge_until_pos_end' => $_REQUEST['merge_until_pos_end']
-            ]
-        );
-
-        mysql_query("UPDATE example_parts SET pos_end = " . (int) $_REQUEST['merge_until_pos_end'] . " WHERE example_id = " . (int) $_REQUEST['id'] . " AND pos_end = " . (int) $_REQUEST['pos_end']);
-
-        echo 'Fragments merged';
+        try {
+            DB::getConnection()->beginTransaction();
+            DB::delete('DELETE FROM example_parts WHERE example_id = :example_id AND pos_start >= :pos_start AND pos_start < :merge_until_pos_end LIMIT 1',
+                [
+                ':example_id' => $_REQUEST['id'],
+                'pos_start' => $_REQUEST['pos_end'],
+                'merge_until_pos_end' => $_REQUEST['merge_until_pos_end']
+                ]
+            );
+            DB::update('UPDATE example_parts SET pos_end = :mergeUntilPosEnd WHERE example_id = :exampleID AND pos_end = :posEnd',
+                [':mergeUntilPosEnd' => $_REQUEST['merge_until_pos_end'],
+                ':exampleID' => $_REQUEST['id'],
+                ':posEnd' => $_REQUEST['pos_end']
+            ]);
+            DB::getConnection()->commit();
+            echo 'Fragments merged';
+        } catch (PDOException $ex) {
+            DB::getConnection()->rollBack();
+            log_error($ex->getMessage(), false, true);
+        }
     }
     if (isset($_REQUEST['pos_start']) && isset($_REQUEST['new_pos_start']) && isset($_REQUEST['new_pos_end'])) {
-
-        mysql_query("UPDATE example_parts SET pos_start = " . (int) $_REQUEST['new_pos_start'] . ", pos_end = " . (int) $_REQUEST['new_pos_end'] . " WHERE example_id = " . (int) $_REQUEST['id'] . " AND pos_start = " . (int) $_REQUEST['pos_start']) or die(mysql_error());
-        echo "Changed position to: (" . (int) $_REQUEST['new_pos_start'] . ", " . (int) $_REQUEST['new_pos_end'] . ")";
+        DB::update('UPDATE example_parts SET pos_start = :newPosStart, pos_end = :newPosEnd WHERE example_id = :exampleID AND pos_start = :posStart',
+            [':newPosStart' => $_REQUEST['new_pos_start'], ':newPosEnd' => $_REQUEST['new_pos_end'], ':exampleID' => $_REQUEST['id'], ':posStart' => $_REQUEST['pos_start']]);
+        echo 'Changed position to: (' . (int) $_REQUEST['new_pos_start'] . ', ' . (int) $_REQUEST['new_pos_end'] . ')';
     }
     if (isset($_REQUEST['pos_start']) && isset($_REQUEST['delete_jmdict_id'])) {
         DB::delete('DELETE FROM example_parts WHERE example_id = :example_id AND pos_start = :pos_start LIMIT 1',
@@ -133,11 +140,11 @@ if (isset($_REQUEST['id'])) {
             $need_furi_2 = (int) !(preg_match('/[^\p{Hiragana}\p{Katakana}ー・〜？！。０-９0-9a-zA-Z＝「」]/u',
                     mb_substr($word, $_REQUEST['split_at_pos']), $matches) == 0);
 
-            $query = "UPDATE example_parts SET part_num = part_num+1 WHERE example_id = $row->example_id AND part_num > $row->part_num";
-            mysql_query($query) or die(mysql_error());
+            DB::update('UPDATE example_parts SET part_num = part_num+1 WHERE example_id = :exampleID AND part_num > :partNum',
+                [':exampleID' => $row->example_id, ':partNum' => $row->part_num]);
 
-            $query = "UPDATE example_parts SET pos_end = " . (int) ($row->pos_start + $_REQUEST['split_at_pos']) . ", need_furi = $need_furi_1 WHERE example_id = $row->example_id AND pos_start = $row->pos_start";
-            mysql_query($query) or die(mysql_error());
+            DB::update('UPDATE example_parts SET pos_end = :posEnd, need_furi = :needFuri1 WHERE example_id = :exampleID AND pos_start = :>posStart',
+                [':posEnd' => ($row->pos_start + $_REQUEST['split_at_pos']), ':needFuri1' => $need_furi_1, ':exampleID' => $row->example_id, ':posStart' => $row->pos_start]);
 
             DB::insert('INSERT INTO example_parts SET example_id = :example_id, jmdict_id = :jmdict_id, part_num = :part_num, pos_start = :pos_start, pos_end = :pos_end, need_furi = :need_furi_2',
                 [
@@ -149,7 +156,6 @@ if (isset($_REQUEST['id'])) {
                 'need_furi_2' => $need_furi_2
                 ]
             );
-
             echo 'Fragment split.';
         } else {
             echo 'Can\'t find this fragment.';
