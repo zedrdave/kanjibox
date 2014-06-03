@@ -9,13 +9,12 @@ $ranks = User::getRanks();
 $levels = Session::$levelNames;
 
 foreach ($levels as $level => $level_name) {
-    echo get_rank_pop_table($level);
+    echo getRankPopTable($level);
 }
 
-function get_rank_pop_table($level)
+function getRankPopTable($level)
 {
     $is_admin = $_SESSION['user']->isAdministrator();
-
 
     $table = '<br/><table class="rankstats"><caption>' . Session::$levelNames[$level] . '</caption>';
     $table .= '<tr class="header"><th style="border:none;"></th>';
@@ -25,7 +24,7 @@ function get_rank_pop_table($level)
     foreach ($types as $type) {
         $table .= '<th>' . $type . '</th>';
         $tot = getTotalRankCounts($level, $type);
-        $pops[$type] = get_rank_population($tot);
+        $pops[$type] = getRankPopulation($tot);
     }
 
     $table .= '</tr>';
@@ -46,7 +45,7 @@ function get_rank_pop_table($level)
     return $table;
 }
 
-function get_rank_population($total)
+function getRankPopulation($total)
 {
     foreach (User::getRanks() as $rank => $rank_long) {
         $pops[$rank] = 0;

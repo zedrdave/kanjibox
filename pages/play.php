@@ -87,7 +87,7 @@ if ($mode == GRAMMAR_SETS_MODE) {
 
         $selectedSet = $params['set_id'];
         while ($row = $stmt->fetchObject()) {
-            $array[$row->set_id] = $row->name . ' (demo)';
+            $menu[$row->set_id] = $row->name . ' (demo)';
             if (!$selectedSet) {
                 $selectedSet = $row->set_id;
             }
@@ -98,7 +98,7 @@ if ($mode == GRAMMAR_SETS_MODE) {
         log_db_error($query, $e->getMessage(), false, true);
     }
 
-    $currentSetMenu = 'Current grammar set: ' . get_select_menu($array, '', $selectedSet,
+    $currentSetMenu = 'Current grammar set: ' . get_select_menu($menu, '', $selectedSet,
             'if(this.value) location.href=\'' . get_page_url(PAGE_PLAY, ['type' => $type, 'mode' => GRAMMAR_SETS_MODE]) . "set_id/' + this.value + '/'");
 
     echo '<div id="sets_settings">' . $currentSetMenu . '</div>';
@@ -160,13 +160,13 @@ if ($mode == GRAMMAR_SETS_MODE) {
             $stmt->bindValue(':settype', $set_type, PDO::PARAM_STR);
             $stmt->execute();
 
-            $array = [];
+            $menu = [];
             if ($stmt->rowCount() > 0) {
 
                 while ($row = $stmt->fetchObject()) {
                     if (!empty($params['editor']) && $params['editor'] != 'open' && $row->size < 4) {
                         if ($selectedSet == $row->set_id) {
-                            if ($keys = array_keys($array)) {
+                            if ($keys = array_keys($menu)) {
                                 $selectedSet = $keys[0];
                             } else {
                                 $selectedSet = 0;
@@ -176,10 +176,10 @@ if ($mode == GRAMMAR_SETS_MODE) {
                     } elseif (!$selectedSet) {
                         $selectedSet = $row->set_id;
                     }
-                    $array[$row->set_id] = ($row->sub ? '' : '• ') . $row->name . " ($row->size)";
+                    $menu[$row->set_id] = ($row->sub ? '' : '• ') . $row->name . " ($row->size)";
                 }
 
-                $currentSetMenu = 'Current learning set: ' . get_select_menu($array, '', $selectedSet,
+                $currentSetMenu = 'Current learning set: ' . get_select_menu($menu, '', $selectedSet,
                         'if(this.value) location.href=\'' . get_page_url(PAGE_PLAY,
                             ['type' => $type, 'mode' => SETS_MODE]) . "set_id/' + this.value + '/'");
             } else {
@@ -189,7 +189,7 @@ if ($mode == GRAMMAR_SETS_MODE) {
             log_db_error($query, $e->getMessage(), false, true);
         }
 
-        if (!count($array)) {
+        if (!count($menu)) {
             echo '<em>No sets available</em> ';
         }
 
@@ -229,7 +229,7 @@ if ($mode == GRAMMAR_SETS_MODE) {
             </fieldset>
 
             <fieldset><legend>Edit set <?php
-                    echo get_select_menu($array, 'edit_set_select', 0,
+                    echo get_select_menu($menu, 'edit_set_select', 0,
                         "if(this.value > 0) do_load('" . SERVER_URL . "ajax/edit_learning_set/?set_id=' + this.value, 'set_details'); return false;",
                         'Select a set...');
                     ?></legend>
@@ -336,9 +336,9 @@ if ($mode == GRAMMAR_SETS_MODE) {
                         <select id="options" name="options" onchange="if (this.value != '')
                                                 window.location = this.value;">
                                 <?php
-                                foreach ($options as $array) {
+                                foreach ($options as $menu) {
                                     echo '<option value="' . get_page_url(PAGE_PLAY, $params,
-                                        '?grade=' . $array['grade']) . '"' . ($array['selected'] ? ' selected="selected"' : '') . '>' . $array['label'] . '</option>';
+                                        '?grade=' . $menu['grade']) . '"' . ($menu['selected'] ? ' selected="selected"' : '') . '>' . $menu['label'] . '</option>';
                                 }
                                 ?>
                         </select>

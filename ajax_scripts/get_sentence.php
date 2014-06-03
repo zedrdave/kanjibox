@@ -32,35 +32,35 @@ if (isset($_REQUEST['id'])) {
         exit;
     }
 
-    $query_body = 'FROM examples e ';
+    $queryBody = 'FROM examples e ';
     if ($_REQUEST['jmdict_id']) {
-        $query_body .= ' JOIN example_parts p ON p.example_id = e.example_id AND p.jmdict_id = ' . (int) $_REQUEST['jmdict_id'];
+        $queryBody .= ' JOIN example_parts p ON p.example_id = e.example_id AND p.jmdict_id = ' . (int) $_REQUEST['jmdict_id'];
     }
 
-    $query_where = ' WHERE 1 ';
+    $queryWhere = ' WHERE 1 ';
 
     if ($_REQUEST['word']) {
         $searchWord = $_REQUEST['word'];
-        $query_where .= ' AND e.example_str LIKE \'%?%\'';
+        $queryWhere .= ' AND e.example_str LIKE \'%?%\'';
     }
     if ($_REQUEST['not_word']) {
         $searchWord = $_REQUEST['not_word'];
-        $query_where .= ' AND e.example_str NOT LIKE \'%?%\'';
+        $queryWhere .= ' AND e.example_str NOT LIKE \'%?%\'';
     }
 
-    $tot_count = DB::count('SELECT COUNT(*) ' . $query_body . $query_where, [$searchWord]);
+    $tot_count = DB::count('SELECT COUNT(*) ' . $queryBody . $queryWhere, [$searchWord]);
     $limit = ($tot_count < 10 ? $tot_count : 5);
     $skip = (int) $_REQUEST['skip'];
 
-    $query_where .= ' ORDER BY ';
+    $queryWhere .= ' ORDER BY ';
     if ($_REQUEST['njlpt']) {
-        $query_where .= 'ABS(e.njlpt - ' . (int) $_REQUEST['njlpt'] . ') ASC, ABS(e.njlpt_r - ' . (int) $_REQUEST['njlpt'] . ') ASC, LENGTH(e.example_str) ASC, ';
+        $queryWhere .= 'ABS(e.njlpt - ' . (int) $_REQUEST['njlpt'] . ') ASC, ABS(e.njlpt_r - ' . (int) $_REQUEST['njlpt'] . ') ASC, LENGTH(e.example_str) ASC, ';
     } else {
-        $query_where .= 'e.njlpt DESC, e.njlpt_r DESC, LENGTH(e.example_str) ASC, ';
+        $queryWhere .= 'e.njlpt DESC, e.njlpt_r DESC, LENGTH(e.example_str) ASC, ';
     }
-    $query_where .= 'e.has_prime_example DESC';
+    $queryWhere .= 'e.has_prime_example DESC';
 
-    $query = 'SELECT e.* ' . $query_body . $query_where . ' LIMIT ' . $skip . ',' . $limit;
+    $query = 'SELECT e.* ' . $queryBody . $queryWhere . ' LIMIT ' . $skip . ',' . $limit;
     $res = mysql_query($query) or die(mysql_error());
 
 

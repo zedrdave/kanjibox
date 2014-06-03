@@ -8,16 +8,16 @@ mb_internal_encoding("UTF-8");
 // $user_id = $_SESSION['user']->get_id();
 
 $res = mysql_query("SELECT gs.set_id, gs.name FROM grammar_sets gs");
-$grammar_sets = array(-1 => '[none]');
+$grammarSets = array(-1 => '[none]');
 while ($row = mysql_fetch_object($res))
-    $grammar_sets[$row->id] = $row->name;
+    $grammarSets[$row->id] = $row->name;
 
 $setID = (int) @$_REQUEST['set_id'];
 if (!$setID)
     $setID = (int) @$params['set_id'];
 
 echo 'Set: ';
-display_select_menu($grammar_sets, 'set_id', $setID,
+display_select_menu($grammarSets, 'set_id', $setID,
     "window.location.href = 'https://kanjibox.net/kb/tools/grammar_review/set_id/' + this.value + '/';", '-');
 echo '<br/>';
 
