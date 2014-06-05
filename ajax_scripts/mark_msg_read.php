@@ -6,8 +6,8 @@ if (empty($_SESSION['user'])) {
 
 $update = DB::update('UPDATE `messages` SET msg_read = 1 WHERE :user_id_to = :userid_to AND message_id = :message_id',
         [
-        'user_id_to' => $_SESSION['user']->getID(),
-        'messageid' => $params['id']
+        ':user_id_to' => $_SESSION['user']->getID(),
+        ':messageid' => $params['id']
         ]
 );
 if (!empty($update)) {

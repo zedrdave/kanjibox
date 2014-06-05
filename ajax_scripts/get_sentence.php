@@ -48,8 +48,8 @@ if (isset($_REQUEST['id'])) {
         $queryWhere .= ' AND e.example_str NOT LIKE \'%?%\'';
     }
 
-    $tot_count = DB::count('SELECT COUNT(*) ' . $queryBody . $queryWhere, [$searchWord]);
-    $limit = ($tot_count < 10 ? $tot_count : 5);
+    $totCount = DB::count('SELECT COUNT(*) ' . $queryBody . $queryWhere, [$searchWord]);
+    $limit = ($totCount < 10 ? $totCount : 5);
     $skip = (int) $_REQUEST['skip'];
 
     $queryWhere .= ' ORDER BY ';
@@ -67,12 +67,12 @@ if (isset($_REQUEST['id'])) {
     $navig = '';
 
 
-    if ($limit < $tot_count) {
+    if ($limit < $totCount) {
         $url = SERVER_URL . "ajax/get_sentence/?" . $url_args . "skip=";
         if ($skip > 0)
             $navig .= '<a href="#" onclick="$(\'' . $container_selector . '\').load(\'' . $url . ($skip - $limit) . '\'); return false;">&laquo;</a>';
-        $navig .= ' [' . ($skip + 1) . '~' . ($skip + $limit) . ']/' . $tot_count . ' ';
-        if ($skip + $limit < $tot_count)
+        $navig .= ' [' . ($skip + 1) . '~' . ($skip + $limit) . ']/' . $totCount . ' ';
+        if ($skip + $limit < $totCount)
             $navig .= '<a href="#" onclick="$(\'' . $container_selector . '\').load(\'' . $url . ($skip + $limit) . '\'); return false;">&raquo;</a>';
     }
     echo $navig;
@@ -140,14 +140,16 @@ if ($count == 1) {
             while ($alt_part = mysql_fetch_object($res_alt))
                 $parts_html .= "<li id=\"alt_part_$sentence->example_id" . "_$part->pos_start" . "_$alt_part->id\" style=\"display:none;\"><a href=\"#\" onclick=\"update_sentence_part($sentence->example_id, $part->pos_start, $alt_part->id); return false;\">Replace by:</a> $alt_part->word 【" . $alt_part->reading . "】[N$alt_part->njlpt, R-N$alt_part->njlpt_r]: $alt_part->gloss</li>";
 
-            if ($_SESSION['user']->isEditor())
+            if ($_SESSION['user']->isEditor()) {
                 $parts_html .= "<li style=\"display:none;\" id=\"alt_part_free_text_" . $sentence->example_id . "_" . $part->pos_start . "\">Replace by <input type=\"text\" size=\"10\" onchange=\"add_alt_sentence_part(this.value, " . $sentence->example_id . "," . $part->pos_start . ");\"/> <div id=\"replace_sel_$sentence->example_id" . "_$part->pos_start\"></div></li>";
+            }
             $parts_html .= '</ul>';
 
             $parts_html .= "<ul style=\"\"><lh><a href=\"#\" onclick=\"\$(this).parent().siblings().show(); $(this).parent().hide(); return false;\">Change range &raquo;</a></lh>";
 
-            if ($part->pos_start >= 1)
+            if ($part->pos_start >= 1) {
                 $parts_html .= "<li style=\"display:none;\"><a href=\"#\" onclick=\"change_sentence_part($sentence->example_id, $part->pos_start, $part->pos_end, " . ($part->pos_start - 1) . ", $part->pos_end, '#part_" . $sentence->example_id . "_" . $part->pos_start . "'); return false;\">Extend left by one character</a></li>";
+            }
 
             if (mb_strlen($sent_part) > 1) {
                 $parts_html .= "<li style=\"display:none;\"><a href=\"#\" onclick=\"change_sentence_part($sentence->example_id, $part->pos_start, $part->pos_end, " . ($part->pos_start + 1) . ", $part->pos_end, '#part_" . $sentence->example_id . "_" . $part->pos_start . "'); return false;\">Shrink left by one character</a></li>";

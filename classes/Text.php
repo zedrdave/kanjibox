@@ -6,9 +6,9 @@ mb_internal_encoding('UTF-8');
 class Text extends Vocab
 {
 
-    public $table_learning = 'jmdict_learning';
-    public $table_learning_index = 'jmdict_id';
-    public $quiz_type = 'text';
+    public $tableLearning = 'jmdict_learning';
+    public $tableLearningIndex = 'jmdict_id';
+    public $quizType = 'text';
 
     function __construct($_mode, $_level, $_grade = 0, $_data = NULL)
     {
@@ -25,39 +25,39 @@ class Text extends Vocab
         $solution = $this->getSolution();
 
         if (!isset($solution->hint_str)) {
-            if ($this->isGrammarSet())
+            if ($this->isGrammarSet()) {
                 $strings = Text::getSentenceWithHints($solution, $this->isQuiz(), $solution->pos_start,
                         $solution->pos_end, $solution->id);
-            else
+            } else {
                 $strings = Text::getSentenceWithHints($solution, $this->isQuiz(), -1, -1, $solution_id = $solution->id);
-
+            }
             $solution->hint_str = $strings[0];
             $solution->answer_str = $strings[1];
-            if (!$strings[2])
+            if (!$strings[2]) {
                 log_error('Invalid question: Ex ID: ' . $solution->example_id . ' jmdict_id: ' . $solution->id, false,
                     true);
+            }
         }
 
         echo '<span lang="ja" xml:lang="ja">' . $solution->hint_str . '</span>';
 
         if (!$this->isQuiz()) {
             echo make_toggle_visibility("<span class=\"meaning\">" . $solution->example_english . "</span><br/>");
-        } else
+        } else {
             echo make_toggle_visibility("<span class=\"meaning\">" . $solution->example_english . "</span><br/>", 3000);
-
-        //echo $solution->fullgloss;
+        }
     }
 
-    static function getSentenceWithHints($sentence, $is_quiz = false, $hide_pos_start = -1, $hide_pos_end = -1,
+    public static function getSentenceWithHints($sentence, $is_quiz = false, $hide_pos_start = -1, $hide_pos_end = -1,
         $solution_id = -1)
     {
 
-        if (!$sentence || !$sentence->example_id)
-            return array('', '', true);
+        if (!$sentence || !$sentence->example_id) {
+            return ['', '', true];
+        }
 
         $query = 'SELECT ep.*, k.id, j.word, j.reading, j.njlpt, j.njlpt_r, jx.gloss_english AS fullgloss, j.katakana, j.usually_kana, k.kanji, k.njlpt AS kanji_jlpt FROM example_parts ep LEFT JOIN jmdict j ON j.id = ep.jmdict_id LEFT JOIN jmdict_ext jx ON jx.jmdict_id = j.id LEFT JOIN kanjis k ON k.id = ep.kanji_id WHERE ep.example_id = ' . (int) $sentence->example_id . ' ORDER BY pos_end DESC';
         $res = mysql_query_debug($query) or log_db_error($query);
-
 
         $reading_pref = $_SESSION['user']->getPreference('drill', 'show_reading');
         $level = $_SESSION['user']->getLevel();
@@ -157,11 +157,9 @@ class Text extends Vocab
         $encoding = mb_detect_encoding($solution->word);
 
         if ($answer_id != SKIP_ID && !$this->isSolution($answer_id)) {
-            if (!$wrong = $this->getVocabID((int) $answer_id))
+            if (!$wrong = $this->getVocabID((int) $answer_id)) {
                 log_error('Unknown Vocab ID: ' . $answer_id, true, true);
-
-            // for($i = 0; $i < mb_strlen($wrong->word, $encoding); $i++)
-            // 	$kanjis[] = mb_substr($wrong->word, $i, 1, $encoding);
+            }
         }
 
         echo '<div class="main" lang="ja" xml:lang="ja">' . $solution->answer_str . '</div><div class="secondary">' . $solution->example_english . '</div>';
@@ -172,7 +170,7 @@ class Text extends Vocab
 
         echo '<br/><span class="" lang="ja" xml:lang="ja">' . $display_word_solution . "</span> " . ($solution->katakana || $solution->word == $solution->reading ? '' : "[" . $solution->reading . "]") . " - " . $solution->fullgloss;
 
-        if (@$wrong) {
+        if ($wrong) {
             $display_word_wrong = preg_replace('/([^\\x{3040}-\\x{30FF}])/ue',
                 "'<span class=\"kanji_detail\" href=\"#\" onclick=\"show_kanji_details(\'\\1\', \''. SERVER_URL . 'ajax/kanji_details/kanji/'.urlencode('\\1').'\');  return false;\">\\1</span>'",
                 $wrong->word);
@@ -183,8 +181,9 @@ class Text extends Vocab
 
     function getDBData($how_many, $grade, $user_id = -1)
     {
-        if ($grade == -1)
+        if ($grade == -1) {
             $grade = 'N1';
+        }
 
         if ($this->isGrammarSet()) {
             $picks = $this->get_grammar_set_questions($user_id, $how_many);

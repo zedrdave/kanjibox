@@ -19,7 +19,7 @@ try {
 }
 
 if (empty($_REQUEST['set_id'])) {
-    $setID = (int) $params['set_id'];
+    $setID = (!empty($params['set_id']) ? $params['set_id'] : 0);
 } else {
     $setID = (int) $_REQUEST['set_id'];
 }
@@ -33,12 +33,12 @@ if (!empty($setID)) {
     $answers = [];
     ?>
     <form id="make-wrong-answers-form" action="/kb/ajax/grammar_robot_step_2/" method="post" onsubmit="if ($('.choice > input:checked').length >= 4) {
-                    return true;
-                } else {
-                    alert('Please first at least 4 answers in this set.');
-                    return false;
-                }
-                ;">
+                return true;
+            } else {
+                alert('Please first at least 4 answers in this set.');
+                return false;
+            }
+            ;">
         <div style="margin-top:20px;">
             <?php
             try {
@@ -55,8 +55,8 @@ if (!empty($setID)) {
             }
             ?>
         </div><p style="clear:both;"><a href="#" onclick="$('.choice > input:not(:checked)').prop('checked', true).change();
-                    return false;">[select all]</a>&nbsp;&nbsp;&nbsp;<a href="#" onclick="$('.choice > input:checked').prop('checked', false).change();
-                            return false;">[deselect all]</a></p>
+                return false;">[select all]</a>&nbsp;&nbsp;&nbsp;<a href="#" onclick="$('.choice > input:checked').prop('checked', false).change();
+                        return false;">[deselect all]</a></p>
 
         <p><strong>Total Answers:</strong> <input type="text" id="answers_tot" disabled="disabled" value="0" size="3"/> | <strong>Total Questions:</strong> <input type="text" id="questions_tot" disabled="disabled" value="0" size="3"/></p>
         <input type="hidden" name="set_id" id="set_id" value="<?php echo $setID;?>"/>

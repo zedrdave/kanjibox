@@ -240,16 +240,16 @@ abstract class Question
         $dbh = DB::getConnection();
         try {
             $dbh->beginTransaction();
-            DB::insert('INSERT IGNORE INTO ' . $this->table_learning . ' (user_id, ' . $this->table_learning_index . ', date_first) VALUES ' . implode(',',
+            DB::insert('INSERT IGNORE INTO ' . $this->tableLearning . ' (user_id, ' . $this->tableLearningIndex . ', date_first) VALUES ' . implode(',',
                     $initValues));
 
             if (count($badIDs)) {
-                DB::update('UPDATE ' . $this->table_learning . ' SET total = total+1, curve = LEAST(2000, tan(atan(curve/1000-1)+0.15)*1000+1000) where `user_id` = :userid AND ' . $this->table_learning_index . ' IN (' . implode(',',
+                DB::update('UPDATE ' . $this->tableLearning . ' SET total = total+1, curve = LEAST(2000, tan(atan(curve/1000-1)+0.15)*1000+1000) where `user_id` = :userid AND ' . $this->tableLearningIndex . ' IN (' . implode(',',
                         $badIDs) . ')', [':userid' => $userID]);
             }
 
             if (count($goodIDs)) {
-                DB::update('UPDATE ' . $this->table_learning . ' SET total = total+1, curve = GREATEST(100, tan(atan(curve/1000-1)-0.2)*1000+1000) where `user_id` = :userid AND ' . $this->table_learning_index . ' IN (' . implode(',',
+                DB::update('UPDATE ' . $this->tableLearning . ' SET total = total+1, curve = GREATEST(100, tan(atan(curve/1000-1)-0.2)*1000+1000) where `user_id` = :userid AND ' . $this->tableLearningIndex . ' IN (' . implode(',',
                         $goodIDs) . ')', [':userid' => $userID]);
             }
 

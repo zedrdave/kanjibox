@@ -18,15 +18,6 @@ if (!empty($params['type']) && $params['type'] == 'kanji') {
     $langs = Vocab::$langStrings;
 }
 
-function my_mysql_query($query)
-{
-    $start = microtime();
-    $ret = mysql_query($query);
-    $took = (microtime() - $start);
-    // if($took > 0.001)
-    //     echo 'took: ' . $took . ' - ' . $query . '<br/>';
-    return $ret;
-}
 $tot = DB::count('SELECT COUNT(*) FROM ' . $table . ' j');
 $jtotals[0] = DB::count('SELECT COUNT(*) FROM ' . $table . ' j WHERE j.njlpt > 0');
 
@@ -43,45 +34,38 @@ foreach ($langs as $lang => $lang_full) {
         continue;
     }
 
-    $row_need_work = DB::count('SELECT COUNT(*) FROM ' . $table_ext . ' jx WHERE jx.' . $content_col . $lang_full . ' LIKE \'(~)%\'');
+    $rowNeedWork = DB::count('SELECT COUNT(*) FROM ' . $table_ext . ' jx WHERE jx.' . $content_col . $lang_full . ' LIKE \'(~)%\'');
+    $rowCount = DB::count('SELECT COUNT(*) FROM ' . $table_ext . ' jx WHERE jx.' . $content_col . $lang_full . ' != \'\'');
+    $rowCount -= (int) $rowNeedWork;
 
-    $res = my_mysql_query('SELECT COUNT(*) FROM ' . $table_ext . ' jx WHERE jx.' . $content_col . $lang_full . ' != \'\'');
-    $row = mysql_fetch_object($res);
+    $ratioGood = round(100 * $rowCount / $tot, 2);
+    $ratioNeedWork = round(100 * $rowNeedWork / $tot, 2);
 
-    $row->c -= (int) $row_need_work;
-
-    $ratio_good = round(100 * $row->c / $tot, 2);
-    $ratio_need_work = round(100 * $row_need_work / $tot, 2);
-
-    echo "<li style=\"margin:20px 0 0 0; list-style-type: none;\"><img src=\"" . SERVER_URL . "/img/flags/$lang.png\" style=\"float:left;margin-right:10px;\" alt=\"flag\" /> <div style=\"float:left;margin:4px 6px 0 0;\">$lang_full</div> " . get_progress_bar($ratio_good,
-        600, "$row->c/$tot", $ratio_need_work) . "</div>";
+    echo '<li style="margin:20px 0 0 0; list-style-type: none;"><img src="' . SERVER_URL . '/img/flags/' . $lang . '.png" style="float:left;margin-right:10px;" alt="flag"/><div style="float:left;margin:4px 6px 0 0;">' . $lang_full . '</div>' . get_progress_bar($ratioGood,
+        600, $rowCount . '/' . $tot . ', ' . $ratioNeedWork) . '</div>';
 
     echo '<ul>';
-    $res = my_mysql_query("SELECT COUNT(*) AS c FROM $table j LEFT JOIN $table_ext jx ON jx.$table_ext_idx = j.id WHERE j.njlpt > 0 AND jx.$content_col$lang_full LIKE '(~)%'");
-    $row_need_work = mysql_fetch_object($res);
 
-    $res = my_mysql_query("SELECT COUNT(*) AS c FROM $table j LEFT JOIN $table_ext jx ON jx.$table_ext_idx = j.id WHERE j.njlpt > 0 AND jx.$content_col$lang_full != ''");
-    $row = mysql_fetch_object($res);
-    $row->c -= (int) $row_need_work->c;
+    $rowNeedWork = DB::count('SELECT COUNT(*) FROM ' . $table . ' j LEFT JOIN ' . $table_ext . ' jx ON jx.' . $table_ext_idx . ' = j.id WHERE j.njlpt > 0 AND jx.' . $content_col . $lang_full . ' LIKE \'(~)%\'');
+    $rowCount = DB::count('SELECT COUNT(*) FROM ' . $table . ' j LEFT JOIN ' . $table_ext . ' jx ON jx.' . $table_ext_idx . ' = j.id WHERE j.njlpt > 0 AND jx.' . $content_col . $lang_full . ' != \'\'');
+    $rowCount -= (int) $rowNeedWork;
 
-    $ratio_good = round(100 * $row->c / $jtotals[0], 2);
-    $ratio_need_work = round(100 * $row_need_work->c / $jtotals[0], 2);
+    $ratioGood = round(100 * $rowCount / $jtotals[0], 2);
+    $ratioNeedWork = round(100 * $rowNeedWork / $jtotals[0], 2);
 
-    echo "<li style=\"margin:1px; list-style-type: none;\"> <div style=\"float:left;margin:4px 6px 0 0;\">JLPT</div> " . get_progress_bar($ratio_good,
-        550, "$row->c/$tot", $ratio_need_work) . "</div></li>";
+    echo '<li style="margin:1px; list-style-type: none;"> <div style="float:left;margin:4px 6px 0 0;">JLPT</div>' . get_progress_bar($ratioGood,
+        550, $rowCount . '/' . $tot . ', ' . $ratioNeedWork) . '</div></li>';
 
     for ($i = 5; $i > 0; $i--) {
-        $res = my_mysql_query("SELECT COUNT(*) AS c FROM $table j LEFT JOIN $table_ext jx ON jx.$table_ext_idx = j.id WHERE j.njlpt = $i AND jx.$content_col$lang_full LIKE '(~)%'");
-        $row_need_work = mysql_fetch_object($res);
-        $res = my_mysql_query("SELECT COUNT(*) AS c FROM $table j LEFT JOIN $table_ext jx ON jx.$table_ext_idx = j.id WHERE j.njlpt = $i AND jx.$content_col$lang_full != ''");
-        $row = mysql_fetch_object($res);
-        $row->c -= (int) $row_need_work->c;
+        $rowNeedWork = DB::count('SELECT COUNT(*) FROM ' . $table . ' j LEFT JOIN ' . $table_ext . ' jx ON jx.' . $table_ext_idx . ' = j.id WHERE j.njlpt = ' . $i . ' AND jx.' . $content_col . $lang_full . ' LIKE \'(~)%\'');
+        $rowCount = DB::count('SELECT COUNT(*) FROM ' . $table . ' j LEFT JOIN ' . $table_ext . ' jx ON jx.' . $table_ext_idx . ' = j.id WHERE j.njlpt = ' . $i . ' AND jx.' . $content_col . $lang_full . ' != \'\'');
+        $rowCount -= (int) $rowNeedWork;
 
-        $ratio_good = round(100 * $row->c / $jtotals[$i], 2);
-        $ratio_need_work = round(100 * $row_need_work->c / $jtotals[$i], 2);
+        $ratioGood = round(100 * $rowCount / $jtotals[$i], 2);
+        $ratioNeedWork = round(100 * $rowNeedWork / $jtotals[$i], 2);
 
-        echo "<li style=\"margin:1px; list-style-type: none;\"> <div style=\"float:left;margin:4px 6px 0 0;\">N$i</div> " . get_progress_bar($ratio_good,
-            500, "$row->c/" . $jtotals[$i], $ratio_need_work) . "</div></li>";
+        echo '<li style = "margin:1px; list-style-type: none;"><div style="float:left;margin:4px 6px 0 0;">N' . $i . '</div>' . get_progress_bar($ratioGood,
+            500, $rowCount . '/' . $jtotals[$i], $ratioNeedWork) . '</div></li>';
     }
 
     echo '</ul></li>';

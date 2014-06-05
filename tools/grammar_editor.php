@@ -1,16 +1,15 @@
 <?php
-if (!$_SESSION['user'] || !$_SESSION['user']->isEditor()) {
-    die("editors only");
+if (empty($_SESSION['user']) || !$_SESSION['user']->isEditor()) {
+    die('editors only');
 }
-
 mb_internal_encoding('UTF-8');
 ?>
 
 <fieldset class="section" id="word">
     <legend>Word</legend>
-    <form class="ajax-form" action="<?php echo SERVER_URL?>ajax/get_jmdict/" method="post">
+    <form class="ajax-form" action="<?php echo SERVER_URL;?>ajax/get_jmdict/" method="post">
         <input type="text" name="word" value="" size="12" />
-        <input type="submit" name="search" value="Search"/><br/><input type="checkbox" name="exact_match" /> Exact match
+        <input type="submit" name="search" value="Search"/><br/><input type="checkbox" name="exact_match" />Exact match
     </form>
     <hr/>
     <div class="ajax-result"></div>
@@ -19,7 +18,10 @@ mb_internal_encoding('UTF-8');
 <fieldset class="section" id="sentences">
     <legend>Sentence</legend>
     <div id="ajax-result"></div>
-    <form class="ajax-form" action="<?php echo SERVER_URL;?>ajax/get_sentence/" method="post">
+    <form class="ajax-form" action="<?php
+    echo SERVER_URL;
+    ;
+    ?>ajax/get_sentence/" method="post">
         <p>Contains: <input type="text" name="word" value="" size="12" /> (does <span style="color:#800">NOT</span> contain: <input type="text" name="not_word" value="" size="10" />)
             <small>Preferably JLPT: <?php echo get_jlpt_menu('njlpt', 5)?></small></p>
         <p style="text-align: center;"><input type="submit" name="search" value="Search" /></p>
@@ -71,8 +73,8 @@ mb_internal_encoding('UTF-8');
         });
 
 <?php
-if ($_REQUEST['edit_question_id']) {
-    echo "\n load_question(" . (int) $_REQUEST['edit_question_id'] . ");\n";
+if (!empty($_REQUEST['edit_question_id'])) {
+    echo PHP_EOL . ' load_question(' . (int) $_REQUEST['edit_question_id'] . ');' . PHP_EOL;
 }
 ?>
     });
@@ -84,13 +86,13 @@ if ($_REQUEST['edit_question_id']) {
     function delete_question(question_id) {
         if (confirm("Are you SURE you want to delete this question?")) {
             $('#question > .ajax-result').html('Loading...');
-            $('#question > .ajax-result').load('<?php echo SERVER_URL?>ajax/edit_question/?delete_id=' + question_id);
+            $('#question > .ajax-result').load('<?php echo SERVER_URL;?>ajax/edit_question/?delete_id=' + question_id);
         }
     }
 
     function delete_wrong_answer(question_id, answer_id) {
         $('#question > .ajax-result').html('Reloading...');
-        $('#question > .ajax-result').load('<?php echo SERVER_URL?>ajax/edit_question/question_id/' + question_id + '/?delete_answer_id=' + answer_id);
+        $('#question > .ajax-result').load('<?php echo SERVER_URL;?>ajax/edit_question/question_id/' + question_id + '/?delete_answer_id=' + answer_id);
     }
 
     function move_selection(offset) {
@@ -122,14 +124,14 @@ if ($_REQUEST['edit_question_id']) {
             alert('Select a word first...');
         else {
             $('#question > .ajax-result').html('Loading...');
-            $('#question > .ajax-result').load('<?php echo SERVER_URL?>ajax/edit_question/?sentence_id=' + sentence_id + '&jmdict_id=' + jmdict_id);
+            $('#question > .ajax-result').load('<?php echo SERVER_URL;?>ajax/edit_question/?sentence_id=' + sentence_id + '&jmdict_id=' + jmdict_id);
         }
     }
 
     function load_question(question_id)
     {
         $('#question > .ajax-result').html('Loading...');
-        $('#question > .ajax-result').load('<?php echo SERVER_URL?>ajax/edit_question/question_id/' + question_id);
+        $('#question > .ajax-result').load('<?php echo SERVER_URL;?>ajax/edit_question/question_id/' + question_id);
     }
 
     function add_wrong_answer(jmdict_id)
@@ -140,7 +142,7 @@ if ($_REQUEST['edit_question_id']) {
             return;
         }
         $('#question > .ajax-result').html('Loading...');
-        $('#question > .ajax-result').load('<?php echo SERVER_URL?>ajax/edit_question/question_id/' + question_id + "/?add_wrong_answer=" + jmdict_id);
+        $('#question > .ajax-result').load('<?php echo SERVER_URL;?>ajax/edit_question/question_id/' + question_id + "/?add_wrong_answer=" + jmdict_id);
     }
 
 </script>

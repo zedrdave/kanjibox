@@ -78,13 +78,13 @@ if ($lang_vocab != 'en') {
     $needWork = DB::count('SELECT COUNT(*) AS c FROM jmdict j LEFT JOIN jmdict_ext jx ON jx.jmdict_id = j.id WHERE j.njlpt = $level AND jx.gloss_' . Vocab::$langStrings[$lang_vocab] . ' LIKE \'(~)%\'', []);
 
     $translated -= $needWork;
-    $ratio_good = round(100 * $translated / $tot, 1);
-    $ratio_need_work = round(100 * $needWork / $tot, 1);
+    $ratioGood = round(100 * $translated / $tot, 1);
+    $ratioNeedWork = round(100 * $needWork / $tot, 1);
 
     echo '<div style="margin:5px;">';
     echo "<img src=\"" . SERVER_URL . "/img/flags/$lang_vocab.png\" style=\"float:left;margin-right:10px;\" alt=\"flag\" /> <div style=\"float:left;margin:4px 6px 0 0; width:210px;\">N$level Vocab Translation progress: </div>";
 
-    echo get_progress_bar($ratio_good, 500, "$translated/$tot", $ratio_need_work);
+    echo get_progress_bar($ratioGood, 500, "$translated/$tot", $ratioNeedWork);
     echo '</div>';
 }
 
@@ -94,14 +94,14 @@ if ($lang_kanji != 'en') {
     $needWork = DB::count('SELECT COUNT(*) FROM kanjis k LEFT JOIN kanjis_ext kx ON kx.kanji_id = k.id WHERE k.njlpt = :level AND kx.meaning_' . Kanji::$langStrings[$lang_kanji] . ' LIKE \'(~)%\'', [':level' => $_SESSION['user']->getLevel()]);
 
     $translated -= $needWork;
-    $ratio_good = round(100 * $translated / $tot, 1);
-    $ratio_need_work = round(100 * $needWork / $tot, 1);
+    $ratioGood = round(100 * $translated / $tot, 1);
+    $ratioNeedWork = round(100 * $needWork / $tot, 1);
 
     echo '<div style="margin:5px;">';
     $ratio = round(100 * $translated / $tot, 1);
     echo "<img src=\"" . SERVER_URL . "/img/flags/$lang_kanji.png\" style=\"float:left;margin-right:10px;\" alt=\"flag\" /> <div style=\"float:left;margin:4px 6px 0 0; width:210px;\">N".$_SESSION['user']->getLevel()." Kanji Translation progress: </div>";
 
-    echo get_progress_bar($ratio_good, 500, "$translated/$tot", $ratio_need_work);
+    echo get_progress_bar($ratioGood, 500, "$translated/$tot", $ratioNeedWork);
     echo '</div>';
 }
 ?>

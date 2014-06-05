@@ -1,34 +1,43 @@
 <?php
-if (!@$_SESSION['user'] || !$_SESSION['user']->isEditor())
-    die("editors only");
+if (!$_SESSION['user'] || !$_SESSION['user']->isEditor()) {
+    die('editors only');
+}
 
-if (@$_REQUEST['mode'] == 'wrong-answers')
+if (!empty($_REQUEST['mode']) && $_REQUEST['mode'] == 'wrong-answers') {
     $target_sel = '#wrong-answer-results';
-else
+} else {
     $target_sel = '#word > .ajax-result';
+}
 
 
-if (isset($_REQUEST['jmdict_id'])) {
+if (!empty($_REQUEST['jmdict_id'])) {
     $res = mysql_query('SELECT * FROM jmdict j LEFT JOIN jmdict_ext jx ON jx.jmdict_id = j.id WHERE j.id = ' . (int) $_REQUEST['jmdict_id']) or die(mysql_error());
 } else {
     if (empty($_REQUEST['word'])) {
         echo 'Need a search string';
         exit;
     }
-    if ($_REQUEST['exact_match']) {
+    if (!empty($_REQUEST['exact_match'])) {
         $where = 'j.word = ? OR j.reading = ?';
     } else {
         $where = 'j.word LIKE \'%?%\' OR j.reading LIKE \'%?%\'';
     }
 
-    $tot_count = DB::count('SELECT COUNT(*) FROM jmdict j LEFT JOIN jmdict_ext jx ON jx.jmdict_id = j.id WHERE ' . $where,
+    $totCount = DB::count('SELECT COUNT(*) FROM jmdict j LEFT JOIN jmdict_ext jx ON jx.jmdict_id = j.id WHERE ' . $where,
             [$_REQUEST['word']]);
-    $limit = ($tot_count < 7 ? $tot_count : 4);
-    $skip = (int) @$_REQUEST['skip'];
+    $limit = ($totCount < 7 ? $totCount : 4);
+    if (!empty($_REQUEST['skip'])) {
+        $skip = (int) $_REQUEST['skip'];
+    } else {
+        $skip = 0;
+    }
+
+
+
 
     $res = mysql_query('SELECT * FROM jmdict j LEFT JOIN jmdict_ext jx ON jx.jmdict_id = j.id WHERE ' . $where . ' LIMIT ' . $skip . ',' . $limit) or die(mysql_error());
 
-    if (@$_REQUEST['return_json']) {
+    if ($_REQUEST['return_json']) {
         $words = [];
         while ($word = mysql_fetch_object($res))
             $words[] = $word;
@@ -38,14 +47,16 @@ if (isset($_REQUEST['jmdict_id'])) {
         return;
     } else {
         $navig = '';
-        if ($limit < $tot_count) {
-            $url = SERVER_URL . "ajax/get_jmdict/?word=" . urlencode($_REQUEST['word']) . '&mode=' . @$_REQUEST['mode'] . "&exact_match=" . (int) (@$_REQUEST['exact_match'] != '') . "&skip=";
+        if ($limit < $totCount) {
+            $url = SERVER_URL . 'ajax/get_jmdict/?word=' . urlencode($_REQUEST['word']) . '&mode=' . $_REQUEST['mode'] . '&exact_match=' . (int) ($_REQUEST['exact_match'] != '') . '&skip=';
 
-            if ($skip > 0)
+            if ($skip > 0) {
                 $navig .= '<a href="#" onclick="$(\'' . $target_sel . '\').load(\'' . $url . ($skip - $limit) . '\'); return false;">&laquo;</a>';
-            $navig .= ' [' . ($skip + 1) . '~' . ($skip + $limit) . ']/' . $tot_count . ' ';
-            if ($skip + $limit < $tot_count)
+            }
+            $navig .= ' [' . ($skip + 1) . '~' . ($skip + $limit) . ']/' . $totCount . ' ';
+            if ($skip + $limit < $totCount) {
                 $navig .= '<a href="#" onclick="$(\'' . $target_sel . '\').load(\'' . $url . ($skip + $limit) . '\'); return false;">&raquo;</a>';
+            }
         }
         echo $navig;
     }
@@ -61,18 +72,20 @@ if ($count == 0) {
 if ($count == 1) {
     $word = mysql_fetch_object($res);
 
-    echo "<div class=\"db-group selected-item\">";
+    echo '<div class="db-group selected-item">';
 
     echo "<p class=\"db-info-jp\">" . ($word->katakana ? "<strong>$word->word</strong>" : (!$word->usually_kana && $word->word != $word->reading ? "<strong>$word->word</strong>【" . $word->reading . "】 " : "<strong>" . $word->reading . "</strong>")) . "<a href=\"#\" onclick=\"$(this).hide();$('#sels_$word->id').show();return false;\" id=\"jltp_$word->id\">(N$word->njlpt, R-N$word->njlpt_r)</a><span id=\"sels_$word->id\" style=\"display:none;\"><select id=\"njltp_sel_$word->id\" onchange=\"update_word_jlpt($word->id,this.value)\">";
-    for ($i = 5; $i >= 0; $i--)
-        echo "<option value=\"$i\"" . ($word->njlpt == $i ? ' selected' : '') . ">N$i</option>";
+    for ($i = 5; $i >= 0; $i--) {
+        echo '<option value="' . $i . '"' . ($word->njlpt == $i ? ' selected' : '') . '>N' . $i . '</option>';
+    }
     echo "</select><select id=\"njltp_r_sel_$word->id\" onchange=\"update_word_jlpt_r($word->id,this.value); return false;\">";
-    for ($i = 5; $i >= 0; $i--)
+    for ($i = 5; $i >= 0; $i--) {
         echo "<option value=\"$i\"" . ($word->njlpt_r == $i ? ' selected' : '') . ">N$i</option>";
+    }
     echo "</select></span></p>";
     echo "<p class=\"db-info-small\"><em>$word->gloss_english</em></p>";
 
-    if (@$_REQUEST['mode'] == 'wrong-answers') {
+    if ($_REQUEST['mode'] == 'wrong-answers') {
         echo "<p class=\"editor-choices\"><a href=\"#\" onclick=\"add_wrong_answer(" . $word->id . "); return false;\">[add as choice]</a></p>";
     } else {
         echo '<p>ID: <span id="jmdict-id">' . $word->jmdict_id . '</span></p>';
@@ -93,7 +106,7 @@ if ($count == 1) {
     echo "</div>";
 } else {
     while ($word = mysql_fetch_object($res)) {
-        echo "<div class=\"db-group ajax-clickable\" onclick=\"$('" . $target_sel . "').load('" . SERVER_URL . "ajax/get_jmdict/?jmdict_id=$word->id&mode=" . @$_REQUEST['mode'] . "');\">";
+        echo "<div class=\"db-group ajax-clickable\" onclick=\"$('" . $target_sel . "').load('" . SERVER_URL . "ajax/get_jmdict/?jmdict_id=$word->id&mode=" . $_REQUEST['mode'] . "');\">";
         echo "<p class=\"db-info-jp\">" . ($word->katakana ? "<strong>$word->word</strong>" : (!$word->usually_kana && $word->word != $word->reading ? "<strong>$word->word</strong>【" . $word->reading . "】 " : "<strong>" . $word->reading . "</strong>")) . " (N" . $word->njlpt . ", R-N" . $word->njlpt_r . ")</p>";
         echo "<p class=\"db-info-small\"><em>$word->gloss_english</em></p>";
         echo "</div>";
@@ -106,19 +119,19 @@ if ($count == 1) {
     function get_sentence_with_jmdict_id(id, njlpt)
     {
         $('#sentences > .ajax-result').html('<i>Loading...</i>');
-        $('#sentences > .ajax-result').load('<?php echo SERVER_URL?>ajax/get_sentence/?jmdict_id=' + id + '&njlpt=' + njlpt);
+        $('#sentences > .ajax-result').load('<?php echo SERVER_URL;?>ajax/get_sentence/?jmdict_id=' + id + '&njlpt=' + njlpt);
     }
 
     function update_word_jlpt(id, jlpt)
     {
-        $.get('<?php echo SERVER_URL?>ajax/edit_jmdict/?jmdict_id=' + id + '&njlpt=' + jlpt, function(data) {
+        $.get('<?php echo SERVER_URL;?>ajax/edit_jmdict/?jmdict_id=' + id + '&njlpt=' + jlpt, function(data) {
             $('#njltp_sel_' + id).css('border', '2px solid green')
         });
     }
 
     function update_word_jlpt_r(id, jlpt)
     {
-        $.get('<?php echo SERVER_URL?>ajax/edit_jmdict/?jmdict_id=' + id + '&njlpt_r=' + jlpt, function(data) {
+        $.get('<?php echo SERVER_URL;?>ajax/edit_jmdict/?jmdict_id=' + id + '&njlpt_r=' + jlpt, function(data) {
             $('#njltp_r_sel_' + id).css('border', '2px solid green')
         });
     }
